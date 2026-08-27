@@ -5,7 +5,7 @@
   import ListBlock from '$lib/components/ListBlock.svelte';
 
   let selectedComponent = $state('DataCard');
-  let viewMode = $state<'preview' | 'code' | 'compiled'>('preview');
+  let viewMode = $state('preview');
 
   const componentList = [
     { id: 'DataCard', name: 'DataCard', desc: 'KPI metric tile with vector SVG sparklines and change indicators', category: 'Analytics' },
