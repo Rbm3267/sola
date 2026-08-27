@@ -1,19 +1,11 @@
 <script lang="ts">
-  import { themeState, updateTheme } from '$lib/theme.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import InteractiveHero from '$lib/components/InteractiveHero.svelte';
   import SheetsDemo from '$lib/components/SheetsDemo.svelte';
+  import DesignEngineStudio from '$lib/components/DesignEngineStudio.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
-  
-  let selectedColor = $state('#0ea5e9'); // Default Sky
-
-  function handleColorChange(e: Event) {
-    const target = e.target as HTMLInputElement;
-    selectedColor = target.value;
-    updateTheme(selectedColor);
-  }
 </script>
 
 <div class="min-h-screen bg-[#fafafa] text-slate-950 font-sans selection:bg-slate-200 selection:text-slate-900 overflow-x-hidden relative">
@@ -29,59 +21,11 @@
     <!-- Google Sheets & Data Relay Interactive Section -->
     <SheetsDemo />
 
-    <!-- Interactive Demo section -->
-    <section class="w-full mt-24 md:mt-36 grid lg:grid-cols-2 gap-16 pb-32 items-center relative z-10">
-      
-      <!-- Theme Generator Card -->
-      <div class="bg-white border border-slate-200/60 rounded-3xl shadow-lg overflow-hidden flex flex-col group">
-        <!-- Window Header -->
-        <div class="h-12 border-b border-slate-100 flex items-center px-6 gap-2 bg-slate-50/50">
-          <div class="w-3.5 h-3.5 rounded-full bg-slate-300 group-hover:bg-red-400 transition-colors duration-150"></div>
-          <div class="w-3.5 h-3.5 rounded-full bg-slate-300 group-hover:bg-yellow-400 transition-colors duration-150"></div>
-          <div class="w-3.5 h-3.5 rounded-full bg-slate-300 group-hover:bg-green-400 transition-colors duration-150"></div>
-          <div class="ml-4 text-[11px] font-mono text-slate-400 tracking-widest font-semibold uppercase">theme.sola.ts</div>
-        </div>
+    <!-- Centered Full-Width Dynamic Design Studio -->
+    <DesignEngineStudio />
 
-        <div class="p-8 md:p-12">
-          <h2 class="text-3xl font-black text-slate-900 mb-4 tracking-tighter">Design Engine</h2>
-          <p class="text-slate-500 text-base leading-relaxed mb-10 font-medium">
-            Pick a single brand color. Sola's <code class="text-slate-700 font-mono text-[11px] bg-slate-100 px-2 py-1 rounded-md border border-slate-200 font-bold">chroma-js</code> engine calculates WCAG-safe contrasts, generating high-density, enterprise-grade data surfaces on the fly.
-          </p>
-
-          <div class="flex flex-col gap-4">
-            <label for="brand-color" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Brand Color</label>
-            <div class="flex items-center gap-5">
-              <input 
-                id="brand-color"
-                type="color" 
-                bind:value={selectedColor}
-                oninput={handleColorChange}
-                class="w-16 h-16 rounded-xl cursor-pointer border border-slate-200 bg-white p-1.5 shadow-sm" 
-              />
-              <div class="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-4 flex justify-between items-center">
-                <span class="text-slate-800 font-mono text-lg font-bold">{selectedColor.toUpperCase()}</span>
-                <span class="text-xs font-bold bg-white text-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">WCAG AA</span>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Color Palette Preview -->
-          <div class="mt-10 grid grid-cols-3 gap-6">
-            <div class="flex flex-col gap-3">
-              <div class="h-12 rounded-xl bg-brand-bg border border-slate-200"></div>
-              <span class="text-[11px] text-slate-400 font-bold uppercase tracking-widest">Background</span>
-            </div>
-            <div class="flex flex-col gap-3">
-              <div class="h-12 rounded-xl bg-brand-card border border-slate-200 shadow-sm"></div>
-              <span class="text-[11px] text-slate-400 font-bold uppercase tracking-widest">Surface</span>
-            </div>
-            <div class="flex flex-col gap-3">
-              <div class="h-12 rounded-xl bg-brand-accent border border-slate-200 shadow-sm"></div>
-              <span class="text-[11px] text-slate-400 font-bold uppercase tracking-widest">Accent</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Handcrafted Architecture Section -->
+    <section class="w-full pb-32 relative z-10">
 
       <!-- Components Showcase -->
       <div id="architecture" class="flex flex-col justify-center px-2 md:px-4 mt-20 lg:col-span-2">
