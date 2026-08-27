@@ -1,48 +1,115 @@
 <script>
-  export let title = '';
-  export let value = '';
-  export let trend = '';
-  export let icon = '';
+  let title = "METRIC";
+  let value = "$0.00";
+  let trend = "+0.0%";
 </script>
 
-<div class="data-card">
-  <div class="header">
-    <span class="title">{title}</span>
+<div class="sola-data-card">
+  <div class="card-glow"></div>
+  <div class="card-header">
+    <div class="title-wrap">
+      <span class="status-dot"></span>
+      <span class="card-title">{title}</span>
+    </div>
   </div>
-  <div class="value">{value}</div>
-  {#if trend}
-    <div class="trend">{trend}</div>
-  {/if}
+  <div class="card-value">{value}</div>
+  <div class="card-footer">
+    <span class="trend-badge">{trend}</span>
+    <span class="period-label">vs last period</span>
+  </div>
 </div>
 
 <style>
-  .data-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 20px;
+  .sola-data-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 18px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
   }
 
-  .title {
+  .sola-data-card:hover {
+    border-color: rgba(14, 165, 233, 0.6);
+    box-shadow: 0 8px 30px -6px rgba(14, 165, 233, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .card-glow {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .card-title {
     font-size: 11px;
     font-weight: 700;
-    color: #94a3b8;
+    color: #64748b;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 
-  .value {
-    font-size: 2rem;
-    font-weight: 800;
+  .card-value {
+    font-size: 2.25rem;
+    font-weight: 900;
     color: #0f172a;
-    margin-top: 8px;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 14px;
   }
 
-  .trend {
-    font-size: 13px;
-    font-weight: 600;
-    color: #10b981;
-    margin-top: 4px;
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .trend-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .period-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
   }
 </style>

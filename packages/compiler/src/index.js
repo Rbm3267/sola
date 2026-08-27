@@ -435,13 +435,15 @@ export function compile(source, filename = 'Component.sola') {
         domCode += `  createEffect(() => { ${id}.value = ${signalName}(); });\n`;
         domCode += `  ${id}.addEventListener('input', (e) => set_${signalName}(e.target.value));\n`;
       }
-      // Dynamic class
+      // Class attribute handling (merging with scoped CSS hash)
       else if (key === 'class') {
         if (value.includes('{')) {
           const expr = restoreExpressions(value).replace(/{([^}]+)}/g, "'+($1)+'");
-          domCode += `  createEffect(() => { ${id}.className = '${hash} ' + '${expr}'; });\n`;
+          const baseHash = scopedCSS ? `'${hash} ' + ` : '';
+          domCode += `  createEffect(() => { ${id}.className = ${baseHash}'${expr}'; });\n`;
         } else {
-          domCode += `  ${id}.setAttribute('class', '${value}');\n`;
+          const classVal = scopedCSS ? `${value} ${hash}` : value;
+          domCode += `  ${id}.setAttribute('class', '${classVal}');\n`;
         }
       }
       // Dynamic attributes with {expression}

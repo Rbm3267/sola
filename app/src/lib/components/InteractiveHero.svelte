@@ -159,7 +159,7 @@
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span> 0 Dependencies</span>
     <span>•</span>
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Native AI Intent</span>
-  </div></div>
+  </div>
 
   <!-- The Demo Canvas -->
   <div class="w-full max-w-5xl mx-auto relative px-4">
