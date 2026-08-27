@@ -479,14 +479,17 @@ export function compile(source, filename = 'Component.sola') {
   }
 
   output += `\nexport default function mount(__target, ${propsSignature}) {\n`;
+  output += `  if (typeof document === 'undefined' || !__target) return () => {};\n`;
   output += jsOutput + '\n';
 
   // Inject scoped styles
   if (scopedCSS) {
     output += `\n  // Scoped styles\n`;
-    output += `  const __style = document.createElement('style');\n`;
-    output += `  __style.textContent = ${JSON.stringify(scopedCSS)};\n`;
-    output += `  document.head.appendChild(__style);\n`;
+    output += `  if (typeof document !== 'undefined') {\n`;
+    output += `    const __style = document.createElement('style');\n`;
+    output += `    __style.textContent = ${JSON.stringify(scopedCSS)};\n`;
+    output += `    document.head.appendChild(__style);\n`;
+    output += `  }\n`;
   }
 
   output += '\n' + domCode;
