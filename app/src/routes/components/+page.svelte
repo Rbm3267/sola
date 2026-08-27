@@ -1,24 +1,107 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
+  import GaugeCard from '$lib/components/GaugeCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
+  import { fade, fly } from 'svelte/transition';
 
   let selectedComponent = $state('DataCard');
-  let viewMode = $state('preview');
+  let viewMode = $state('preview'); // 'preview' | 'embed' | 'code' | 'compiled'
+  let embedFramework = $state('react'); // 'react' | 'vue' | 'html' | 'svelte'
+
+  // Interactive component states
+  let isToggleOn = $state(true);
+  let isModalOpen = $state(false);
+  let toasts = $state<Array<{ id: number; text: string; type: string }>>([]);
+  let selectValue = $state('Production (us-east-1)');
+  let isSelectOpen = $state(false);
+  let gaugePercent = $state(78);
+  let streamEvents = $state([
+    { id: 1, text: 'Cluster node-iad-04 scaled to 8 replicas', time: 'Just now', type: 'info' },
+    { id: 2, text: 'Postgres primary failover healthcheck passed', time: '12s ago', type: 'success' },
+    { id: 3, text: 'Redis cache memory snapshot synchronized', time: '45s ago', type: 'info' }
+  ]);
+
+  function triggerToast() {
+    const id = Date.now();
+    toasts = [...toasts, { id, text: `Telemetry event ${id.toString().slice(-4)} emitted`, type: 'success' }];
+    setTimeout(() => {
+      toasts = toasts.filter(t => t.id !== id);
+    }, 3000);
+  }
+
+  function addStreamEvent() {
+    const actions = [
+      'Edge gateway cache hit ratio at 99.4%',
+      'Kubernetes worker provisioned successfully',
+      'API rate limit quota adjusted +500 req/s',
+      'SSL certificate renewal automated'
+    ];
+    const text = actions[Math.floor(Math.random() * actions.length)];
+    streamEvents = [{ id: Date.now(), text, time: 'Just now', type: 'success' }, ...streamEvents.slice(0, 4)];
+  }
 
   const componentList = [
     { id: 'DataCard', name: 'DataCard', desc: 'KPI metric tile with vector SVG sparklines and change indicators', category: 'Analytics' },
+    { id: 'GaugeCard', name: 'GaugeCard', desc: 'Circular SVG progress arc for memory, CPU, and hardware load', category: 'Telemetry' },
     { id: 'DynamicForm', name: 'DynamicForm', desc: 'Declarative auto-binding schema form with instant submit state', category: 'Inputs' },
     { id: 'ListBlock', name: 'ListBlock', desc: 'Real-time reactive server entity list with pulse status indicators', category: 'Data Display' },
-    { id: 'StatGrid', name: 'StatGrid', desc: 'Multi-metric analytical grid with responsive flex layouts', category: 'Analytics' },
     { id: 'StreamView', name: 'StreamView', desc: 'Live event stream viewer with animated delta feeds', category: 'Data Display' },
     { id: 'Toggle', name: 'Toggle', desc: 'Accessible two-state micro-switch with spring transition', category: 'Inputs' },
     { id: 'Select', name: 'Select', desc: 'Custom glass dropdown with search filtering and keyboard trap', category: 'Inputs' },
     { id: 'Modal', name: 'Modal', desc: 'High-focus backdrop overlay dialog with escape listener', category: 'Feedback' },
-    { id: 'Toast', name: 'Toast', desc: 'Floating notification stack with auto-dismiss timer', category: 'Feedback' },
-    { id: 'Card', name: 'Card', desc: 'Container primitive with frosted glass border and specular gradient', category: 'Layout' }
+    { id: 'Toast', name: 'Toast', desc: 'Floating notification stack with auto-dismiss timer', category: 'Feedback' }
   ];
+
+  const embedSnippets: Record<string, Record<string, string>> = {
+    DataCard: {
+      react: `// In any React / Next.js app:
+import { useSola } from '@sola/react';
+import DataCard from '@sola/ui/DataCard';
+
+export function Metric() {
+  const containerRef = useSola(DataCard, {
+    title: "Monthly Recurring Revenue",
+    value: "$148,200",
+    trend: "+24.8%"
+  });
+
+  return <div ref={containerRef} />;
+}`,
+      vue: `<!-- In any Vue 3 / Nuxt app: -->
+<script setup>
+import { vSola } from '@sola/vue';
+import DataCard from '@sola/ui/DataCard';
+</script>
+
+<template>
+  <div v-sola="[DataCard, { title: 'MRR', value: '$148,200', trend: '+24.8%' }]" />
+</template>`,
+      html: `<!-- In any HTML page, Webflow, or WordPress: -->
+<div id="mrr-card"></div>
+
+<script type="module">
+  import mount from 'https://esm.sh/@sola/ui/DataCard';
+  
+  mount(document.getElementById('mrr-card'), {
+    title: "Monthly Recurring Revenue",
+    value: "$148,200",
+    trend: "+24.8%"
+  });
+</script>`,
+      svelte: `<!-- In any Svelte app: -->
+<script>
+  import { onMount } from 'svelte';
+  import mountDataCard from '@sola/ui/DataCard';
+
+  let el;
+  onMount(() => mountDataCard(el, { title: "MRR", value: "$148,200" }));
+</script>
+
+<div bind:this={el} />`
+    }
+  };
 
   const solaCodeSamples: Record<string, string> = {
     DataCard: `<` + `script>
@@ -39,110 +122,85 @@
     <span class="sub">vs previous cycle</span>
   </div>
 </div>`,
-    DynamicForm: `<` + `script>
-  export let title = "Provision Cloud Node";
-  export let endpoint = "/api/v1/nodes";
-
-  let nodeName = $state("");
-  let memory = $state("16GB");
-  let isSubmitting = $state(false);
-
-  async function submit() {
-    isSubmitting = true;
-    await fetch(endpoint, {
-      method: "POST",
-      body: JSON.stringify({ nodeName, memory })
-    });
-    isSubmitting = false;
-  }
+    GaugeCard: `<` + `script>
+  export let title = "Memory Allocation";
+  export let value = "14.2 / 16 GB";
+  export let percentage = 78;
 </` + `script>
 
-<form onsubmit={submit}>
-  <h3>{title}</h3>
-  <input bind:value={nodeName} placeholder="node-us-east-01" required />
-  <button type="submit" disabled={isSubmitting}>
-    {isSubmitting ? "Deploying..." : "Launch Instance"}
-  </button>
-</form>`,
-    ListBlock: `<` + `script>
-  export let title = "Active Clusters";
-  export let items = [
-    { name: "core-router-01", region: "iad1", status: "online" },
-    { name: "redis-cache-eu", region: "fra1", status: "online" },
-    { name: "backup-vault", region: "sfo2", status: "syncing" }
-  ];
+<div class="gauge-card">
+  <h4>{title}</h4>
+  <div class="value">{value}</div>
+  <svg class="ring" viewBox="0 0 88 88">
+    <circle cx="44" cy="44" r="36" stroke-dashoffset={226 - (percentage / 100) * 226} />
+  </svg>
+</div>`,
+    Toggle: `<` + `script>
+  export let checked = $state(false);
+  function toggle() { checked = !checked; }
 </` + `script>
 
-<div class="list-container">
-  <div class="title-bar">
-    <h4>{title}</h4>
-    <span>{items.length} instances</span>
+<button class="sola-toggle {checked ? 'active' : ''}" onclick={toggle}>
+  <span class="thumb"></span>
+</button>`,
+    Modal: `<` + `script>
+  export let open = $state(false);
+</` + `script>
+
+{#if open}
+  <div class="sola-backdrop" onclick={() => open = false}>
+    <div class="sola-dialog" onclick={(e) => e.stopPropagation()}>
+      <h3>Dialog Title</h3>
+      <button onclick={() => open = false}>Close</button>
+    </div>
   </div>
-  <div class="items">
-    {#each items as item}
-      <div class="row">
-        <strong>{item.name}</strong>
-        <span class="badge {item.status}">{item.status}</span>
-      </div>
-    {/each}
-  </div>
-</div>`
-  };
-
-  const compiledDomSamples: Record<string, string> = {
-    DataCard: `// Compiled by @sola/compiler v0.2.0 (Zero Dependencies)
-import { createSignal, createEffect } from '@sola/core';
-
-export default function mount(__target, props = {}) {
-  const [title, set_title] = createSignal(props.title || "Monthly Recurring Revenue");
-  const [value, set_value] = createSignal(props.value || "$124,500");
-  const [change, set_change] = createSignal(props.change || "+18.2%");
-
-  const root = document.createElement('div');
-  root.className = 'sola-datacard_sola-d938a';
-
-  const valEl = document.createElement('div');
-  valEl.className = 'metric_sola-d938a';
-  createEffect(() => { valEl.textContent = value(); });
-
-  root.appendChild(valEl);
-  __target.appendChild(root);
-  return () => root.remove();
-}`
+{/if}`
   };
 </script>
 
 <div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-sky-200 selection:text-sky-900">
   <Navbar />
 
+  <!-- Live Floating Toasts Container -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none">
+    {#each toasts as toast (toast.id)}
+      <div 
+        transition:fly={{ y: 20, duration: 200 }}
+        class="bg-slate-950 text-white border border-slate-800 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs font-mono pointer-events-auto">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>{toast.text}</span>
+      </div>
+    {/each}
+  </div>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     
     <!-- Hero Header -->
     <div class="max-w-3xl mb-12">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200/60 text-sky-700 text-xs font-mono font-bold mb-3">
-        <span>@sola/ui • Core Primitive Suite</span>
+        <span>@sola/ui • Embeddable Primitives</span>
       </div>
       <h1 class="text-4xl sm:text-5xl font-black text-slate-950 tracking-tight mb-3">
         Component Library
       </h1>
-      <p class="text-lg text-slate-600 leading-relaxed font-normal">
-        Every component is authored in declarative <code class="text-xs font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200">.sola</code> syntax and compiles directly to direct DOM mutations with zero virtual DOM overhead.
+      <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+        Drop high-density, luxury UI components into <strong>React, Vue, Svelte, or Vanilla HTML</strong> with one line of code. Zero virtual DOM overhead.
       </p>
     </div>
 
-    <!-- Main Layout: Sidebar + Canvas -->
+    <!-- Main Grid: Sidebar + Canvas -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- Component List Sidebar -->
-      <aside class="lg:col-span-4 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm">
+      <!-- Primitives Sidebar -->
+      <aside class="lg:col-span-4 bg-white border border-slate-200/90 rounded-3xl p-4 shadow-sm">
         <div class="text-xs font-bold font-mono uppercase tracking-wider text-slate-400 px-3 py-2">
           Available Primitives
         </div>
-        <div class="flex flex-col gap-1 mt-2">
+        <div class="flex flex-col gap-1.5 mt-2">
           {#each componentList as comp}
             <button 
               onclick={() => selectedComponent = comp.id}
-              class="w-full text-left px-4 py-3 rounded-xl transition-all flex items-center justify-between group {selectedComponent === comp.id ? 'bg-slate-950 text-white shadow-md' : 'text-slate-700 hover:bg-slate-50'}">
+              class="w-full text-left px-4 py-3 rounded-2xl transition-all flex items-center justify-between group cursor-pointer {selectedComponent === comp.id ? 'bg-slate-950 text-white shadow-md' : 'text-slate-700 hover:bg-slate-50'}">
               <div>
                 <div class="text-sm font-bold {selectedComponent === comp.id ? 'text-white' : 'text-slate-900'} font-mono">{comp.name}</div>
                 <div class="text-xs {selectedComponent === comp.id ? 'text-slate-300' : 'text-slate-400'} line-clamp-1">{comp.desc}</div>
@@ -155,97 +213,226 @@ export default function mount(__target, props = {}) {
         </div>
       </aside>
 
-      <!-- Live Preview & Code Panel -->
+      <!-- Live Interactive Stage & Code Inspector -->
       <main class="lg:col-span-8 flex flex-col gap-6">
         
-        <!-- Component Title & Mode Toggle Bar -->
-        <div class="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <!-- Component Header & View Switcher Bar -->
+        <div class="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-black text-slate-950 font-mono flex items-center gap-2">
+            <h2 class="text-2xl font-black text-slate-950 font-mono flex items-center gap-2.5">
               <span>{selectedComponent}.sola</span>
-              <span class="text-xs font-sans font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">Reactive Signal</span>
+              <span class="text-xs font-sans font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full">Interactive Demo</span>
             </h2>
-            <p class="text-xs text-slate-500 mt-0.5">
+            <p class="text-xs text-slate-500 mt-1">
               {componentList.find(c => c.id === selectedComponent)?.desc}
             </p>
           </div>
 
           <!-- Segmented Control View Switcher -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60 self-start sm:self-auto">
+          <div class="flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/60 self-start sm:self-auto">
             <button 
               onclick={() => viewMode = 'preview'}
-              class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {viewMode === 'preview' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
+              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
               Live Preview
             </button>
             <button 
-              onclick={() => viewMode = 'code'}
-              class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {viewMode === 'code' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
-              .sola Markup
+              onclick={() => viewMode = 'embed'}
+              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'embed' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
+              1-Click Embed
             </button>
             <button 
-              onclick={() => viewMode = 'compiled'}
-              class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {viewMode === 'compiled' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
-              Compiled JS
+              onclick={() => viewMode = 'code'}
+              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'code' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
+              .sola Markup
             </button>
           </div>
         </div>
 
-        <!-- Display Area -->
-        <div class="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm min-h-[400px] flex items-center justify-center relative overflow-hidden">
+        <!-- Stage Area -->
+        <div class="bg-white border border-slate-200/90 rounded-3xl p-8 shadow-sm min-h-[420px] flex items-center justify-center relative overflow-hidden">
           
-          <!-- Background Grid Texture -->
-          <div class="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none"></div>
+          <!-- Subtle Grid Texture -->
+          <div class="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-35 pointer-events-none"></div>
 
           {#if viewMode === 'preview'}
-            <div class="w-full max-w-lg relative z-10">
-              {#if selectedComponent === 'DataCard' || selectedComponent === 'StatGrid'}
+            <div class="w-full max-w-md relative z-10 flex flex-col items-center gap-6">
+              
+              {#if selectedComponent === 'DataCard'}
                 <DataCard config={{
                   title: "Monthly Recurring Revenue",
                   value: "$148,200",
-                  change: "+24.8%",
-                  trend: "up"
+                  trend: "+24.8%",
+                  icon: "trending-up"
                 }} />
+              {:else if selectedComponent === 'GaugeCard'}
+                <div class="w-full flex flex-col gap-4">
+                  <GaugeCard config={{
+                    title: "Memory Allocation",
+                    value: `${(16 * (gaugePercent / 100)).toFixed(1)} / 16 GB`,
+                    percentage: gaugePercent,
+                    subtext: "Live Cluster Node Memory",
+                    color: gaugePercent > 85 ? 'amber' : 'emerald'
+                  }} />
+                  <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col gap-2">
+                    <div class="flex justify-between text-xs font-mono font-bold text-slate-600">
+                      <span>Simulate Load</span>
+                      <span>{gaugePercent}%</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="10" 
+                      max="100" 
+                      bind:value={gaugePercent}
+                      class="w-full accent-sky-500 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              {:else if selectedComponent === 'Toggle'}
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center justify-between w-full">
+                  <div>
+                    <div class="text-sm font-bold text-slate-900 font-mono">Ambient Auto-Healing</div>
+                    <div class="text-xs text-slate-500">Continuous background intent recovery</div>
+                  </div>
+                  <button 
+                    onclick={() => isToggleOn = !isToggleOn}
+                    class="w-14 h-8 rounded-full p-1 transition-all cursor-pointer flex items-center {isToggleOn ? 'bg-emerald-500 justify-end' : 'bg-slate-200 justify-start'}"
+                    aria-label="Toggle switch"
+                  >
+                    <span class="w-6 h-6 rounded-full bg-white shadow-md"></span>
+                  </button>
+                </div>
+              {:else if selectedComponent === 'Modal'}
+                <div class="flex flex-col items-center gap-4">
+                  <button 
+                    onclick={() => isModalOpen = true}
+                    class="bg-slate-950 text-white font-bold text-xs px-6 py-3.5 rounded-2xl hover:bg-slate-800 transition-all cursor-pointer shadow-md flex items-center gap-2">
+                    <span>Open Modal Dialog</span>
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </button>
+                  <span class="text-xs text-slate-400 font-mono">Click to trigger real backdrop overlay</span>
+                </div>
+
+                {#if isModalOpen}
+                  <div 
+                    transition:fade={{ duration: 200 }}
+                    onclick={() => isModalOpen = false}
+                    class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div 
+                      transition:fly={{ y: 20, duration: 250 }}
+                      onclick={(e) => e.stopPropagation()}
+                      class="bg-white border border-slate-200 rounded-3xl p-6 max-w-sm w-full shadow-2xl flex flex-col gap-4">
+                      <div class="flex justify-between items-center">
+                        <h3 class="font-black text-slate-950 font-mono text-base">Scale Cluster</h3>
+                        <button onclick={() => isModalOpen = false} class="text-slate-400 hover:text-slate-700">✕</button>
+                      </div>
+                      <p class="text-xs text-slate-600 leading-relaxed">
+                        Are you sure you want to deploy 12 additional worker instances to <code class="font-mono text-sky-600">us-east-1</code>?
+                      </p>
+                      <div class="flex gap-2 justify-end pt-2">
+                        <button onclick={() => isModalOpen = false} class="text-xs font-bold px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100">Cancel</button>
+                        <button onclick={() => { isModalOpen = false; triggerToast(); }} class="bg-slate-950 text-white font-bold text-xs px-4 py-2 rounded-xl">Confirm Scale</button>
+                      </div>
+                    </div>
+                  </div>
+                {/if}
+              {:else if selectedComponent === 'Toast'}
+                <div class="flex flex-col items-center gap-4">
+                  <button 
+                    onclick={triggerToast}
+                    class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs px-6 py-3.5 rounded-2xl transition-all cursor-pointer shadow-md flex items-center gap-2">
+                    <span>Trigger Notification Toast</span>
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </button>
+                  <span class="text-xs text-slate-400 font-mono">Spawns auto-dismissing toast in bottom-right</span>
+                </div>
+              {:else if selectedComponent === 'Select'}
+                <div class="w-full relative">
+                  <label class="block text-xs font-mono font-bold text-slate-500 uppercase mb-2">Target Cluster</label>
+                  <button 
+                    onclick={() => isSelectOpen = !isSelectOpen}
+                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-medium text-slate-900 flex items-center justify-between hover:bg-white transition-all cursor-pointer">
+                    <span>{selectValue}</span>
+                    <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  {#if isSelectOpen}
+                    <div class="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-20">
+                      {#each ['Production (us-east-1)', 'Staging (eu-central-1)', 'Edge Gateway (ap-southeast-1)'] as opt}
+                        <button 
+                          onclick={() => { selectValue = opt; isSelectOpen = false; }}
+                          class="w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-sky-50 hover:text-sky-700 transition-colors flex items-center justify-between">
+                          <span>{opt}</span>
+                          {#if selectValue === opt}
+                            <span class="text-sky-600 font-bold">✓</span>
+                          {/if}
+                        </button>
+                      {/each}
+                    </div>
+                  {/if}
+                </div>
+              {:else if selectedComponent === 'StreamView'}
+                <div class="w-full bg-slate-950 text-white rounded-3xl p-6 border border-slate-800 shadow-2xl flex flex-col gap-4">
+                  <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                      <span class="text-xs font-mono font-bold text-sky-300">Live Telemetry Feed</span>
+                    </div>
+                    <button 
+                      onclick={addStreamEvent}
+                      class="text-[11px] font-mono bg-sky-500/20 text-sky-300 hover:bg-sky-500/30 px-3 py-1 rounded-lg border border-sky-400/30 transition-all cursor-pointer">
+                      + Simulate Event
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-2 max-h-52 overflow-y-auto">
+                    {#each streamEvents as evt (evt.id)}
+                      <div class="flex items-center justify-between text-xs font-mono p-2.5 rounded-xl bg-slate-900 border border-slate-800/80">
+                        <span class="text-slate-300">{evt.text}</span>
+                        <span class="text-slate-500 text-[10px] shrink-0 ml-2">{evt.time}</span>
+                      </div>
+                    {/each}
+                  </div>
+                </div>
               {:else if selectedComponent === 'DynamicForm'}
                 <DynamicForm config={{
                   title: "Provision PostgreSQL Instance",
                   endpoint: "/api/database/create",
                   fields: [
                     { name: "db_name", label: "Database Identifier", type: "text", required: true },
-                    { name: "tier", label: "Compute Tier", type: "text", required: true },
-                    { name: "nodes", label: "Replica Count", type: "text", required: true }
+                    { name: "tier", label: "Compute Tier", type: "text", required: true }
                   ]
                 }} />
-              {:else if selectedComponent === 'ListBlock' || selectedComponent === 'StreamView'}
+              {:else}
                 <ListBlock config={{
                   title: "Active Edge Clusters",
                   items: [
                     { label: "sola-edge-iad1", description: "Washington DC • 99.99% Uptime", status: "Active" },
-                    { label: "sola-edge-fra1", description: "Frankfurt • 99.98% Uptime", status: "Active" },
-                    { label: "sola-edge-syd1", description: "Sydney • Performing Cache Sync", status: "Syncing" }
+                    { label: "sola-edge-fra1", description: "Frankfurt • 99.98% Uptime", status: "Active" }
                   ]
                 }} />
-              {:else}
-                <div class="bg-slate-900 text-white p-6 rounded-2xl border border-slate-800 shadow-xl">
-                  <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-mono font-bold text-sky-400">{selectedComponent} Primitive</span>
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  </div>
-                  <p class="text-sm text-slate-300 leading-relaxed font-sans mb-4">
-                    Interactive preview ready. Import and mount via <code class="text-xs font-mono bg-slate-800 px-1.5 py-0.5 rounded text-sky-300">@sola/ui/{selectedComponent}</code>.
-                  </p>
-                  <button class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg transition-all">
-                    Trigger Interaction
-                  </button>
-                </div>
               {/if}
+
             </div>
-          {:else if viewMode === 'code'}
+
+          {:else if viewMode === 'embed'}
+            <!-- 1-Click Framework Embed Codes -->
+            <div class="w-full relative z-10 flex flex-col gap-4">
+              <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold font-mono text-slate-400">Choose Target:</span>
+                {#each ['react', 'vue', 'html', 'svelte'] as fw}
+                  <button 
+                    onclick={() => embedFramework = fw}
+                    class="px-3 py-1 rounded-lg text-xs font-mono font-bold capitalize transition-all cursor-pointer {embedFramework === fw ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                    {fw === 'html' ? 'Vanilla HTML / CDN' : fw}
+                  </button>
+                {/each}
+              </div>
+
+              <pre class="bg-slate-950 text-sky-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{embedSnippets[selectedComponent]?.[embedFramework] || embedSnippets['DataCard'][embedFramework]}</code></pre>
+            </div>
+
+          {:else}
+            <!-- Raw .sola Markup -->
             <div class="w-full relative z-10">
               <pre class="bg-slate-950 text-sky-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{solaCodeSamples[selectedComponent] || solaCodeSamples['DataCard']}</code></pre>
-            </div>
-          {:else}
-            <div class="w-full relative z-10">
-              <pre class="bg-slate-950 text-emerald-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{compiledDomSamples[selectedComponent] || compiledDomSamples['DataCard']}</code></pre>
             </div>
           {/if}
 
