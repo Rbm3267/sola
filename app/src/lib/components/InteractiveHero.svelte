@@ -123,16 +123,16 @@
     <svg class="w-3 h-3 text-slate-400 group-hover:text-sky-500 group-hover:translate-x-0.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   </a>
 
-  <!-- Headline -->
-  <h1 class="text-5xl sm:text-6xl md:text-7xl font-black text-slate-950 tracking-tight leading-[1.08] mb-6">
+  <!-- Headline (High-Contrast Obsidian Typography) -->
+  <h1 class="text-5xl sm:text-6xl md:text-7xl font-black text-slate-950 tracking-[-0.04em] leading-[1.05] mb-6">
     Software that <br />
-    <span class="bg-gradient-to-r from-sky-500 via-blue-600 to-violet-600 bg-clip-text text-transparent drop-shadow-xs">builds itself.</span>
+    builds itself.
   </h1>
 
   <!-- Subheading -->
-  <p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
-    Sola compiles <code class="text-[14px] font-semibold font-mono text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200/60">.sola</code> components into zero-dependency DOM. 
-    Native <code class="text-[14px] font-semibold font-mono text-violet-600 bg-violet-50 px-2 py-0.5 rounded-md border border-violet-200/60">$intent</code> signals resolve generative UI at the framework level.
+  <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
+    Sola compiles <code class="text-[13px] font-semibold font-mono text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">.sola</code> components into zero-dependency native DOM. 
+    Native <code class="text-[13px] font-semibold font-mono text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">$intent</code> signals resolve generative UI at the framework level.
   </p>
 
   <!-- CTA Row -->

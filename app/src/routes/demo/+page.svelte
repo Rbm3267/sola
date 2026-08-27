@@ -124,11 +124,11 @@
   }
 </script>
 
-<div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-sky-200 selection:text-sky-900">
+<div class="min-h-screen bg-[#fafafa] text-slate-950 font-sans selection:bg-slate-200 selection:text-slate-900">
   <Navbar />
   
-  <!-- Subtle Ambient Glows -->
-  <div class="absolute top-16 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-gradient-to-b from-sky-100/50 to-transparent blur-[120px] rounded-full pointer-events-none"></div>
+  <!-- Precision Monochromatic Grid Texture -->
+  <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none"></div>
 
   <div class="w-full max-w-4xl mx-auto px-4 py-8 flex flex-col gap-8 z-10 relative">
     
