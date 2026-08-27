@@ -332,7 +332,9 @@ import DataCard from '@sola/ui/DataCard';
                       class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-7 max-w-sm w-full shadow-2xl flex flex-col gap-4">
                       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <h3 class="font-black text-slate-900 font-mono text-base">Scale Cluster</h3>
-                        <button onclick={() => isModalOpen = false} aria-label="Close dialog" class="text-slate-400 hover:text-slate-700">✕</button>
+                        <button onclick={() => isModalOpen = false} aria-label="Close dialog" class="text-slate-400 hover:text-slate-700 cursor-pointer p-1">
+                          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
                       </div>
                       <p class="text-xs text-slate-600 leading-relaxed">
                         Are you sure you want to deploy 12 additional worker instances to <code class="font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">us-east-1</code>?
@@ -375,10 +377,10 @@ import DataCard from '@sola/ui/DataCard';
                       {#each ['Production (us-east-1)', 'Staging (eu-central-1)', 'Edge Gateway (ap-southeast-1)'] as opt}
                         <button 
                           onclick={() => { selectValue = opt; isSelectOpen = false; }}
-                          class="w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-sky-50 hover:text-sky-700 transition-colors flex items-center justify-between">
+                          class="w-full text-left px-4 py-3 text-xs font-medium text-slate-700 hover:bg-amber-50/50 hover:text-amber-900 transition-all flex items-center justify-between cursor-pointer">
                           <span>{opt}</span>
                           {#if selectValue === opt}
-                            <span class="text-sky-600 font-bold">✓</span>
+                            <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                           {/if}
                         </button>
                       {/each}

@@ -365,18 +365,21 @@
         <span class="text-xs font-mono font-bold text-slate-400 uppercase mr-1">Presets:</span>
         <button 
           onclick={() => loadPreset('servicenow')}
-          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5">
-          <span>⚡ ServiceNow ITSM</span>
+          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-2">
+          <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span>ServiceNow ITSM</span>
         </button>
         <button 
           onclick={() => loadPreset('fitness')}
-          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
-          🏋️ Training
+          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-2">
+          <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <span>Athletic Training</span>
         </button>
         <button 
           onclick={() => loadPreset('cloud')}
-          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
-          ☁️ SaaS Cloud
+          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-2">
+          <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>SaaS Cloud</span>
         </button>
         <button 
           onclick={exportSolaCode}
@@ -393,14 +396,17 @@
       </div>
     </div>
 
-    <!-- Active Synthesizing Living Core Banner -->
+    <!-- Active Synthesizing Elegant Light Banner -->
     {#if isLoading}
       <div 
         transition:fly={{ y: 20, duration: 300 }}
-        class="bg-slate-950 text-white rounded-3xl p-8 sm:p-10 border border-slate-800 shadow-2xl flex flex-col items-center justify-center relative overflow-hidden"
+        class="bg-white/95 backdrop-blur-2xl rounded-3xl p-8 border border-amber-200/90 shadow-sm flex flex-col items-center justify-center relative overflow-hidden"
       >
-        <div class="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:20px_20px] opacity-30 pointer-events-none"></div>
-        <LivingSolaCore state="synthesizing" size={180} showTelemetry={true} />
+        <div class="flex items-center gap-3">
+          <div class="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-sm font-mono font-bold text-slate-800 uppercase tracking-wider">Synthesizing Reactive DOM Tree...</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500 mt-2">Zero-VDOM AST compilation via Gemini 3.6 Flash</span>
       </div>
     {/if}
 
@@ -448,16 +454,18 @@
             <button 
               onclick={() => editingWidget = widget}
               title="Configure widget data"
-              class="p-1 hover:text-amber-300 cursor-pointer">
-              ⚙️
+              aria-label="Configure widget"
+              class="p-1 hover:text-amber-300 cursor-pointer flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
 
             <!-- Delete -->
             <button 
               onclick={() => removeWidget(widget.id)}
               title="Remove widget"
-              class="p-1 hover:text-rose-400 cursor-pointer">
-              ✕
+              aria-label="Remove widget"
+              class="p-1 hover:text-rose-400 cursor-pointer flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
 
@@ -472,7 +480,9 @@
     <!-- Empty State -->
     {#if widgets.length === 0}
       <div class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-16 text-center max-w-lg mx-auto shadow-sm">
-        <div class="text-3xl mb-3">☀️</div>
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        </div>
         <h3 class="text-base font-black text-slate-900 font-mono mb-1">Canvas is Clean</h3>
         <p class="text-xs text-slate-500 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
         <button 
@@ -508,7 +518,9 @@
         <h3 class="font-black text-slate-900 font-mono text-base flex items-center gap-2">
           <span>Configure {editingWidget.component}</span>
         </h3>
-        <button onclick={() => editingWidget = null} aria-label="Close configuration dialog" class="text-slate-400 hover:text-slate-700">✕</button>
+        <button onclick={() => editingWidget = null} aria-label="Close configuration dialog" class="text-slate-400 hover:text-slate-700 cursor-pointer p-1">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
 
       <div class="flex flex-col gap-3">
