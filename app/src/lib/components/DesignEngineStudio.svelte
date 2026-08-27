@@ -91,7 +91,7 @@
 
           <!-- Presets Row -->
           <div class="mb-8">
-            <label class="block text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-3">Curated Palettes</label>
+            <span class="block text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-3">Curated Palettes</span>
             <div class="flex flex-wrap gap-2">
               {#each presets as p}
                 <button 
@@ -106,7 +106,7 @@
 
           <!-- Derived Tokens -->
           <div>
-            <label class="block text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-3">Synthesized CSS Tokens</label>
+            <span class="block text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-3">Synthesized CSS Tokens</span>
             <div class="grid grid-cols-3 gap-3">
               <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-1.5">
                 <div class="h-6 rounded-lg border border-slate-200/60" style="background-color: {selectedColor}15;"></div>

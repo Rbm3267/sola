@@ -47,6 +47,70 @@ class PostgresConnector {
   }
 }
 
+class GoogleSheetsConnector {
+  constructor(config) {
+    this.sheetId = config.sheetId || config.host || config.source;
+    this.apiKey = config.apiKey || null;
+  }
+
+  async connect() {
+    // Validate sheetId exists
+    if (!this.sheetId) throw new Error("Google Sheet ID is required for sheet:// relay");
+  }
+
+  async query(options = {}) {
+    const url = `https://docs.google.com/spreadsheets/d/${this.sheetId}/gviz/tq?tqx=out:csv`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to fetch Google Sheet (${res.status} ${res.statusText})`);
+    
+    const csvText = await res.text();
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim().length > 0);
+    if (lines.length === 0) return { rows: [], rowCount: 0 };
+
+    const parseCsvLine = (line) => {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"' && (i === 0 || line[i - 1] !== '\\')) {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim().replace(/^"|"$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      return result;
+    };
+
+    const headers = parseCsvLine(lines[0]);
+    const rows = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const values = parseCsvLine(lines[i]);
+      const row = {};
+      headers.forEach((header, idx) => {
+        const val = values[idx] || '';
+        const numVal = Number(val.replace(/[\$,]/g, ''));
+        row[header] = !isNaN(numVal) && val !== '' ? numVal : val;
+      });
+      rows.push(row);
+    }
+
+    return { rows, rowCount: rows.length, headers };
+  }
+
+  async schema() {
+    const { headers } = await this.query();
+    return { "sheet_data": headers.map(h => ({ name: h, type: 'inferred' })) };
+  }
+
+  async disconnect() {}
+}
+
 class MySQLConnector {
   constructor(config) {
     this.config = config;
@@ -112,6 +176,10 @@ function addConnection(name, type, config) {
       break;
     case 'mysql':
       connector = new MySQLConnector(config);
+      break;
+    case 'sheet':
+    case 'googlesheets':
+      connector = new GoogleSheetsConnector(config);
       break;
     default:
       throw new Error(`Unsupported connector type: ${type}`);

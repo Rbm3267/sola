@@ -11,30 +11,54 @@ export async function POST({ request }) {
       throw new Error('GEMINI_API_KEY is missing.');
     }
 
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-
-    if (typeof prompt !== 'string' || prompt.trim().length === 0 || prompt.length > 500) {
-      return json({ error: 'Invalid intent query. Maximum length is 500 characters.' }, { status: 400 });
+    if (typeof prompt !== 'string' || prompt.trim().length === 0 || prompt.length > 1000) {
+      return json({ error: 'Invalid intent query. Maximum length is 1000 characters.' }, { status: 400 });
     }
 
-    const cleanPrompt = prompt.replace(/[^\w\s.,?!'-]/gi, ' ').trim();
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const cleanPrompt = prompt.trim();
+
+    const systemInstruction = `You are Sola's generative UI intent compiler.
+You synthesize world-class, luxury UI surfaces (Linear, Stripe, Apple Fitness grade polish).
+Given a user intent, output a structured JSON array of components to render.
+
+Available Primitives:
+1. 'DataCard': KPI metric tile.
+   config: { title: string, value: string, trend: string, icon: 'activity' | 'trending-up' | 'check' | 'heart' }
+2. 'GaugeCard': Circular SVG progress arc for load, recovery, memory, or SLA.
+   config: { title: string, value: string, percentage: number (0-100), subtext: string, color: 'amber' | 'emerald' | 'sky' | 'violet' }
+3. 'DynamicForm': Schema-driven auto-binding form.
+   config: { title: string, endpoint: string, fields: Array<{ name: string, type: 'text' | 'number' | 'email' | 'password', label: string, required?: boolean }> }
+4. 'ListBlock': Real-time reactive entity list.
+   config: { title: string, items: Array<{ label: string, description: string, status: 'Active' | 'Completed' | 'Syncing' | 'Offline' }> }
+5. 'StreamView': Real-time telemetry log feed.
+   config: { title: string, events: Array<{ id: string, message: string, timestamp: string, type: 'info' | 'success' | 'warning' }> }
+
+Output format: Return ONLY a JSON Array of component objects with an optional colSpan (1, 2, or 3).
+Example:
+[
+  { "component": "DataCard", "colSpan": 1, "config": { "title": "Revenue", "value": "$48,200", "trend": "+12.4%", "icon": "trending-up" } },
+  { "component": "GaugeCard", "colSpan": 1, "config": { "title": "SLA Compliance", "value": "99.4%", "percentage": 99, "subtext": "MTTR < 15m", "color": "emerald" } }
+]`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-3.6-flash',
-      contents: "You are the Sola generative UI engine. You produce world-class, luxury cyber-fitness enterprise UI surfaces (Apple Fitness / Linear / Stripe grade polish). Based on the user's intent, respond with a valid JSON payload that dictates which UI component(s) to render.\nThe available components are:\n- 'DataCard': config needs: title, value, trend (e.g. '+14.2%'), icon ('activity' | 'trending-up' | 'check' | 'heart').\n- 'GaugeCard': for CPU, memory, load, or percentage gauges. config needs: title, value (e.g. '14.2 / 16 GB' or '78.4%'), percentage (number 0-100), subtext, color ('emerald' | 'sky' | 'violet' | 'amber').\n- 'DynamicForm': config needs: title, endpoint (string), fields (array of {name, type, label, required}).\n- 'ListBlock': config needs: title, items (array of {label, description, status ('Active' | 'Syncing' | 'Offline')}).\n\nOutput ONLY valid JSON matching: [ { component: string, config: object } ]. Return multi-component layouts when appropriate.\n\nUser Intent: " + cleanPrompt,
+      contents: systemInstruction + "\n\nUser Intent: " + cleanPrompt,
       config: {
         responseMimeType: "application/json",
-        temperature: 0.1
+        temperature: 0.2
       }
     });
 
-    return json(JSON.parse(response.text));
+    let parsed = JSON.parse(response.text || '[]');
+    if (!Array.isArray(parsed)) {
+      parsed = [parsed];
+    }
+
+    return json(parsed);
 
   } catch (err: any) {
-    console.error('AI Error:', err);
-    return json({ error: err.message || 'Failed to process intent' }, { status: 500 });
+    console.error('AI Intent Error:', err);
+    return json({ error: err.message || 'Failed to compile intent AST' }, { status: 500 });
   }
 }
-
-
-

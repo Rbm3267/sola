@@ -1,5 +1,6 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
+  import DataCard from '$lib/components/DataCard.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
 
@@ -7,6 +8,10 @@
   let askQuery = $state('');
   let askLoading = $state(false);
   let aiAnswer = $state('');
+
+  // Live Docs Sandbox State
+  let sandboxTitle = $state('Active Cluster Telemetry');
+  let sandboxValue = $state('1,420 RPS');
 
   const sections = [
     { id: 'quickstart', title: 'Quickstart & Installation' },
@@ -214,7 +219,44 @@ export function mount(__target, props = {}) {
             <p class="text-slate-600 text-base leading-relaxed mb-6">
               Sola components are single-file, declarative modules that combine logic, layout, and scoped styles without virtual DOM runtime overhead:
             </p>
-            <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-6"><code>{syntaxExample}</code></pre>
+            <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-8"><code>{syntaxExample}</code></pre>
+
+            <!-- Live Editable Component Sandbox -->
+            <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                  <h3 class="text-sm font-bold font-mono text-slate-900 uppercase tracking-wider">Live Sandbox Preview</h3>
+                </div>
+                <span class="text-xs font-mono bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-0.5 rounded-full font-bold">Synchronized DOM</span>
+              </div>
+
+              <!-- Live Playground Sandbox Controls -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                <div class="flex flex-col gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                  <label for="sandbox-metric-title" class="block text-xs font-mono font-bold text-slate-500 uppercase">Live Card Title</label>
+                  <input 
+                    id="sandbox-metric-title"
+                    type="text" 
+                    bind:value={sandboxTitle}
+                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:border-amber-400"
+                  />
+
+                  <label for="sandbox-metric-val" class="block text-xs font-mono font-bold text-slate-500 uppercase mt-2">Live Value</label>
+                  <input 
+                    id="sandbox-metric-val"
+                    type="text" 
+                    bind:value={sandboxValue}
+                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <!-- Synchronized Live Card -->
+                <div class="w-full">
+                  <DataCard config={{ title: sandboxTitle, value: sandboxValue, trend: "+18.4%", icon: "trending-up" }} />
+                </div>
+              </div>
+            </div>
           </div>
 
         {:else if activeSection === 'intent'}

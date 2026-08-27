@@ -76,6 +76,18 @@
 
   onMount(() => {
     if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('sola_dashboard_layout');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            widgets = parsed;
+          }
+        } catch (e) {
+          console.warn('Failed to restore saved layout', e);
+        }
+      }
+
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         speechSupported = true;
@@ -99,6 +111,16 @@
       }
     }
   });
+
+  function saveLayout() {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('sola_dashboard_layout', JSON.stringify(widgets));
+      } catch (e) {
+        console.warn('Could not save layout', e);
+      }
+    }
+  }
 
   function toggleSpeech() {
     if (!speechSupported || !recognition) {
@@ -157,6 +179,7 @@
       }));
 
       widgets = [...converted, ...widgets];
+      saveLayout();
       intentQuery = '';
     } catch (e: any) {
       console.error(e);
@@ -169,6 +192,7 @@
   // Widget Actions
   function removeWidget(id: string) {
     widgets = widgets.filter(w => w.id !== id);
+    saveLayout();
   }
 
   function moveWidget(index: number, direction: 'left' | 'right') {
@@ -177,10 +201,12 @@
     const temp = widgets[index];
     widgets[index] = widgets[targetIndex];
     widgets[targetIndex] = temp;
+    saveLayout();
   }
 
   function cycleColSpan(widget: DashboardWidget) {
     widget.colSpan = widget.colSpan === 1 ? 2 : widget.colSpan === 2 ? 3 : 1;
+    saveLayout();
   }
 
   function loadPreset(type: 'fitness' | 'cloud' | 'servicenow' | 'reset') {
@@ -215,6 +241,7 @@
     } else {
       widgets = [];
     }
+    saveLayout();
   }
 
   function exportSolaCode() {
@@ -465,16 +492,23 @@
   <div 
     transition:fade={{ duration: 150 }}
     onclick={() => editingWidget = null}
+    onkeydown={(e) => { if (e.key === 'Escape') editingWidget = null; }}
+    role="dialog"
+    aria-modal="true"
+    tabindex="-1"
     class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div 
       transition:fly={{ y: 20, duration: 200 }}
       onclick={(e) => e.stopPropagation()}
+      onkeydown={(e) => e.stopPropagation()}
+      role="document"
       class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
         <h3 class="font-black text-slate-900 font-mono text-base flex items-center gap-2">
           <span>Configure {editingWidget.component}</span>
         </h3>
-        <button onclick={() => editingWidget = null} class="text-slate-400 hover:text-slate-700">✕</button>
+        <button onclick={() => editingWidget = null} aria-label="Close configuration dialog" class="text-slate-400 hover:text-slate-700">✕</button>
       </div>
 
       <div class="flex flex-col gap-3">

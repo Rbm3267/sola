@@ -3,34 +3,58 @@
   import GaugeCard from './GaugeCard.svelte';
   import DynamicForm from './DynamicForm.svelte';
   import ListBlock from './ListBlock.svelte';
+  import StreamView from './StreamView.svelte';
 
   const props = $props<{
-    intentPayload?: { component: string; config: any } | null;
-    data?: { component: string; config: any } | null;
+    intentPayload?: any;
+    data?: any;
   }>();
 
   const payload = $derived(props.data || props.intentPayload || null);
 
   const componentRegistry: Record<string, any> = {
-    DataCard: DataCard,
-    GaugeCard: GaugeCard,
-    DynamicForm: DynamicForm,
-    ListBlock: ListBlock
+    DataCard,
+    GaugeCard,
+    DynamicForm,
+    ListBlock,
+    StreamView
   };
 
-  const ResolvedComponent = $derived(
-    payload && payload.component ? componentRegistry[payload.component] : null
+  const items = $derived<Array<{ component: string; config: any; colSpan?: number }>>(
+    Array.isArray(payload) ? payload : payload && payload.component ? [payload] : []
   );
 
-  function handleFormSubmit(data: any) {
-    console.log("Form submitted dynamically:", data);
+  function handleFormSubmit(formData: any) {
+    console.log("Sola dynamic form dispatched:", formData);
   }
 </script>
 
-{#if ResolvedComponent && payload}
-  <ResolvedComponent config={payload.config} onSubmit={handleFormSubmit} />
-{:else if payload}
-  <div class="p-4 text-red-400 border border-red-500 rounded-lg">
-    Unknown component requested: {payload.component}
-  </div>
+{#if items.length > 0}
+  {#if items.length === 1}
+    {@const item = items[0]}
+    {@const Comp = componentRegistry[item.component]}
+    {#if Comp}
+      <Comp config={item.config || {}} onSubmit={handleFormSubmit} />
+    {:else}
+      <div class="p-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-xs font-mono">
+        Unknown component primitive: {item.component}
+      </div>
+    {/if}
+  {:else}
+    <!-- Multi-Component Responsive Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+      {#each items as item}
+        {@const Comp = componentRegistry[item.component]}
+        <div class="{item.colSpan === 3 ? 'md:col-span-2 lg:col-span-3' : item.colSpan === 2 ? 'md:col-span-2' : 'col-span-1'} w-full">
+          {#if Comp}
+            <Comp config={item.config || {}} onSubmit={handleFormSubmit} />
+          {:else}
+            <div class="p-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-xs font-mono">
+              Unknown primitive: {item.component}
+            </div>
+          {/if}
+        </div>
+      {/each}
+    </div>
+  {/if}
 {/if}
