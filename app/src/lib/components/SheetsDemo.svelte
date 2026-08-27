@@ -1,20 +1,18 @@
 <script lang="ts">
   import DataCard from './DataCard.svelte';
   import GaugeCard from './GaugeCard.svelte';
-  import { fade, fly } from 'svelte/transition';
 
   let activeMode = $state<'personal' | 'enterprise'>('personal');
-  let sheetId = $state('1WwRxcYopR7nCVKiu3ZcYuPiqdeBASwkAtYAHjWV3x8w');
   let isSimulatingUpdate = $state(false);
 
-  // Personal Mock Sheet State (Reta Tracker)
-  let retaData = $state({
-    date: 'Today',
-    dose: 2.0,
-    weight: 168.4,
-    phase: 'Restart',
-    delta: '-3.2 lbs',
-    streak: 18
+  // Personal Mock Sheet State (Kettlebell & Athletic Performance Log)
+  let fitnessData = $state({
+    workout: 'Armor Building Complex',
+    volumeMoved: '14,800 lbs',
+    dailyVolumeDelta: '+1,200 lbs',
+    weeklyTargetPct: 88,
+    recoveryScore: 94,
+    readiness: 'Optimal'
   });
 
   // Enterprise Mock Data
@@ -26,17 +24,18 @@
     cpuLoad: 42
   });
 
-  function simulateNewWeighIn() {
+  function simulateNewSession() {
     isSimulatingUpdate = true;
     setTimeout(() => {
-      const newWeight = (retaData.weight - 0.4).toFixed(1);
-      retaData = {
-        ...retaData,
-        weight: parseFloat(newWeight),
-        delta: '-3.6 lbs'
+      fitnessData = {
+        ...fitnessData,
+        volumeMoved: '16,200 lbs',
+        dailyVolumeDelta: '+2,600 lbs',
+        weeklyTargetPct: 96,
+        recoveryScore: 96
       };
       isSimulatingUpdate = false;
-    }, 600);
+    }, 500);
   }
 </script>
 
@@ -53,7 +52,7 @@
           Connect any data source. In 1 line of code.
         </h2>
         <p class="text-slate-600 text-base max-w-xl mt-2 leading-relaxed">
-          Whether you're building a <strong>personal bio-tracker from Google Sheets</strong> or an <strong>enterprise SaaS dashboard from PostgreSQL</strong>, Sola turns raw data into reactive luxury UI.
+          Whether you're building a <strong>personal workout & volume tracker from Google Sheets</strong> or an <strong>enterprise SaaS dashboard from PostgreSQL</strong>, Sola turns raw data into reactive luxury UI.
         </p>
       </div>
 
@@ -63,7 +62,7 @@
           onclick={() => activeMode = 'personal'}
           class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'personal' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950'}">
           <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          <span>Personal Bio & Logs</span>
+          <span>Personal Training & Fitness</span>
         </button>
         <button 
           onclick={() => activeMode = 'enterprise'}
@@ -84,7 +83,7 @@
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span class="text-xs font-mono font-bold text-slate-300">
-                {activeMode === 'personal' ? 'App.sola (Personal Tracker)' : 'App.sola (Enterprise Cluster)'}
+                {activeMode === 'personal' ? 'App.sola (Kettlebell Training Log)' : 'App.sola (Enterprise Cluster)'}
               </span>
             </div>
             <span class="text-[10px] font-mono bg-slate-900 border border-slate-800 px-2 py-0.5 rounded text-sky-300">
@@ -94,19 +93,19 @@
 
           <pre class="font-mono text-xs sm:text-[13px] leading-relaxed text-slate-300 overflow-x-auto whitespace-pre"><code>{#if activeMode === 'personal'}&lt;script&gt;
   // 1 line Google Sheets reactive binding
-  const reta = $data("sheet://{sheetId}");
+  const training = $data("sheet://1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms");
 &lt;/script&gt;
 
 &lt;!-- Sola auto-mounts reactive UI --&gt;
 &lt;DataCard 
-  title="Weight" 
-  value="&#123;reta.latest.weight&#125; lbs" 
-  trend="&#123;reta.delta&#125;" 
+  title="Daily Volume" 
+  value="&#123;training.volume&#125;" 
+  trend="&#123;training.delta&#125;" 
 /&gt;
-&lt;DataCard 
-  title="Active Dose" 
-  value="&#123;reta.latest.dose&#125; mg" 
-  trend="&#123;reta.phase&#125;" 
+&lt;GaugeCard 
+  title="Recovery Index" 
+  value="&#123;training.recovery&#125; / 100" 
+  percentage=&#123;training.recovery&#125; 
 /&gt;{:else}&lt;script&gt;
   // Zero-knowledge DB connector (credentials stay local)
   const stats = $data("postgres://internal/metrics");
@@ -129,19 +128,19 @@
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-2">
               <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
-                {activeMode === 'personal' ? 'Google Sheet Stream: Retatrutide Log' : 'PostgreSQL Stream: Cloud Nodes'}
+                {activeMode === 'personal' ? 'Google Sheet Stream: Kettlebell Athletic Log' : 'PostgreSQL Stream: Cloud Nodes'}
               </span>
             </div>
             {#if activeMode === 'personal'}
               <button 
-                onclick={simulateNewWeighIn}
+                onclick={simulateNewSession}
                 disabled={isSimulatingUpdate}
                 class="text-xs font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl hover:bg-emerald-100 transition-all cursor-pointer flex items-center gap-1.5">
                 {#if isSimulatingUpdate}
                   <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                   <span>Syncing...</span>
                 {:else}
-                  <span>+ Log New Weigh-In</span>
+                  <span>+ Log Workout Set</span>
                 {/if}
               </button>
             {/if}
@@ -151,23 +150,23 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {#if activeMode === 'personal'}
               <DataCard config={{
-                title: "Weight (lbs)",
-                value: `${retaData.weight} lbs`,
-                trend: retaData.delta,
-                icon: "trending-up"
+                title: "Daily Volume Moved",
+                value: fitnessData.volumeMoved,
+                trend: fitnessData.dailyVolumeDelta,
+                icon: "activity"
               }} />
               <DataCard config={{
-                title: "Active Protocol",
-                value: `${retaData.dose} mg`,
-                trend: `${retaData.phase} Phase`,
-                icon: "activity"
+                title: "Primary Protocol",
+                value: fitnessData.workout,
+                trend: "Heavy Bell Cycles",
+                icon: "trending-up"
               }} />
               <div class="sm:col-span-2">
                 <GaugeCard config={{
-                  title: "Hydration & Recovery Index",
-                  value: "92 / 100",
-                  percentage: 92,
-                  subtext: `${retaData.streak}-Day Consistent Logging Streak`,
+                  title: "Recovery & Readiness Score",
+                  value: `${fitnessData.recoveryScore} / 100`,
+                  percentage: fitnessData.recoveryScore,
+                  subtext: `${fitnessData.readiness} State • HRV 78ms`,
                   color: "emerald"
                 }} />
               </div>
@@ -198,7 +197,7 @@
         </div>
 
         <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-mono">
-          <span>Source: {activeMode === 'personal' ? 'Google Sheets GID #922583776' : 'PostgreSQL Database pool'}</span>
+          <span>Source: {activeMode === 'personal' ? 'Google Sheets • Training Tab' : 'PostgreSQL Database pool'}</span>
           <span class="text-slate-900 font-bold">0 ms Latency</span>
         </div>
 
