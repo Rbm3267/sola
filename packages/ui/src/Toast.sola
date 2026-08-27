@@ -1,0 +1,70 @@
+<script>
+  let message = "Action completed successfully.";
+  let type = "success";
+  let visible = $state(true);
+</script>
+
+<div class="sola-toast {type} {visible() ? 'visible' : ''}">
+  <div class="toast-indicator"></div>
+  <div class="toast-message">{message}</div>
+  <button class="toast-close" on:click={() => visible.set(false)} aria-label="Dismiss">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+</div>
+
+<style>
+  .sola-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(16px);
+    color: #ffffff;
+    padding: 12px 18px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+    font-size: 13px;
+    font-weight: 500;
+    animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .sola-toast.visible {
+    display: flex;
+  }
+
+  .toast-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+  }
+
+  .sola-toast.error .toast-indicator {
+    background: #f43f5e;
+    box-shadow: 0 0 8px #f43f5e;
+  }
+
+  .toast-close {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+  }
+
+  .toast-close:hover {
+    color: #ffffff;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>

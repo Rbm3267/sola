@@ -1,0 +1,24 @@
+{
+  "name": "create-sola",
+  "version": "0.2.0",
+  "description": "Scaffold a new Sola application",
+  "type": "module",
+  "bin": {
+    "create-sola": "./src/cli.js"
+  },
+  "files": [
+    "src",
+    "templates"
+  ],
+  "keywords": [
+    "sola",
+    "create-sola",
+    "framework",
+    "compiler",
+    "ai",
+    "intent",
+    "scaffold"
+  ],
+  "author": "Sola Contributors",
+  "license": "MIT"
+}
