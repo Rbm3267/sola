@@ -96,7 +96,7 @@
               {#each presets as p}
                 <button 
                   onclick={() => setPreset(p.hex)}
-                  class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer flex items-center gap-2 {selectedColor.toLowerCase() === p.hex.toLowerCase() ? 'bg-slate-950 text-white border-slate-950 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
+                  class="px-3.5 py-2 rounded-2xl text-xs font-mono font-bold border transition-all cursor-pointer flex items-center gap-2 {selectedColor.toLowerCase() === p.hex.toLowerCase() ? 'bg-amber-500/10 text-amber-950 border-amber-500/30 shadow-xs font-black' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
                   <span class="w-2.5 h-2.5 rounded-full" style="background-color: {p.hex};"></span>
                   <span>{p.name}</span>
                 </button>

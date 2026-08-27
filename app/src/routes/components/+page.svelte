@@ -431,24 +431,24 @@ import DataCard from '@sola/ui/DataCard';
           {:else if viewMode === 'embed'}
             <!-- 1-Click Framework Embed Codes -->
             <div class="w-full relative z-10 flex flex-col gap-4">
-              <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+              <div class="flex flex-wrap items-center gap-2 border-b border-slate-200/80 pb-3">
                 <span class="text-xs font-bold font-mono text-slate-400">Choose Target:</span>
                 {#each ['react', 'vue', 'html', 'svelte'] as fw}
                   <button 
                     onclick={() => embedFramework = fw}
-                    class="px-3 py-1 rounded-lg text-xs font-mono font-bold capitalize transition-all cursor-pointer {embedFramework === fw ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                    class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold capitalize transition-all cursor-pointer {embedFramework === fw ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs font-black' : 'bg-slate-100/80 text-slate-600 hover:bg-slate-200/80 border border-transparent'}">
                     {fw === 'html' ? 'Vanilla HTML / CDN' : fw}
                   </button>
                 {/each}
               </div>
 
-              <pre class="bg-slate-950 text-sky-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{embedSnippets[selectedComponent]?.[embedFramework] || embedSnippets['DataCard'][embedFramework]}</code></pre>
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-3xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{embedSnippets[selectedComponent]?.[embedFramework] || embedSnippets['DataCard'][embedFramework]}</code></pre>
             </div>
 
           {:else}
             <!-- Raw .sola Markup -->
             <div class="w-full relative z-10">
-              <pre class="bg-slate-950 text-sky-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{solaCodeSamples[selectedComponent] || solaCodeSamples['DataCard']}</code></pre>
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-3xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 shadow-inner"><code>{solaCodeSamples[selectedComponent] || solaCodeSamples['DataCard']}</code></pre>
             </div>
           {/if}
 

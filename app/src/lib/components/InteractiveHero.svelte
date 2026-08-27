@@ -142,7 +142,7 @@
       href="/demo" 
       style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
       class="px-8 py-4 rounded-2xl font-bold transition-all duration-200 shadow-[0_6px_24px_rgba(245,158,11,0.35)] hover:shadow-[0_8px_32px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 text-center text-[15px] flex items-center justify-center gap-2.5">
-      <span class="text-white font-bold">Try the Playground</span>
+      <span class="text-white font-bold">Open Playground</span>
       <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
     

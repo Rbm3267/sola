@@ -385,7 +385,7 @@
           transition:fly={{ y: 20, duration: 250 }}
         >
           <!-- Floating Card Action Toolbar (Reorder, Span, Edit, Delete) -->
-          <div class="absolute -top-3.5 right-4 z-20 opacity-0 group-hover/widget:opacity-100 transition-all duration-150 flex items-center gap-1 bg-slate-950 text-white px-2 py-1 rounded-xl shadow-lg border border-slate-800 text-[11px] font-mono">
+          <div class="absolute -top-3.5 right-4 z-20 opacity-0 group-hover/widget:opacity-100 transition-all duration-150 flex items-center gap-1.5 bg-slate-900/90 backdrop-blur-md text-white px-3 py-1 rounded-2xl shadow-xl border border-slate-700/80 text-[11px] font-mono">
             
             <!-- Move Left / Up -->
             <button 
@@ -405,23 +405,23 @@
               →
             </button>
 
-            <span class="text-slate-700">|</span>
+            <span class="text-slate-600">|</span>
 
             <!-- Column Span Toggle -->
             <button 
               onclick={() => cycleColSpan(widget)}
               title="Toggle width (1x / 2x / 3x)"
-              class="px-1.5 py-0.5 hover:text-sky-300 font-bold cursor-pointer">
+              class="px-1.5 py-0.5 hover:text-amber-300 font-bold cursor-pointer">
               {widget.colSpan}x
             </button>
 
-            <span class="text-slate-700">|</span>
+            <span class="text-slate-600">|</span>
 
             <!-- Quick Edit Config -->
             <button 
               onclick={() => editingWidget = widget}
               title="Configure widget data"
-              class="p-1 hover:text-emerald-300 cursor-pointer">
+              class="p-1 hover:text-amber-300 cursor-pointer">
               ⚙️
             </button>
 
@@ -444,13 +444,14 @@
 
     <!-- Empty State -->
     {#if widgets.length === 0}
-      <div class="bg-white border border-slate-200 rounded-3xl p-16 text-center max-w-lg mx-auto shadow-sm">
+      <div class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-16 text-center max-w-lg mx-auto shadow-sm">
         <div class="text-3xl mb-3">☀️</div>
-        <h3 class="text-base font-black text-slate-950 font-mono mb-1">Canvas is Clean</h3>
+        <h3 class="text-base font-black text-slate-900 font-mono mb-1">Canvas is Clean</h3>
         <p class="text-xs text-slate-500 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
         <button 
           onclick={() => loadPreset('fitness')}
-          class="bg-slate-950 text-white font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-slate-800 transition-all cursor-pointer">
+          style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
+          class="font-bold text-xs text-white px-6 py-3 rounded-2xl transition-all cursor-pointer shadow-md">
           Load Starter Preset
         </button>
       </div>
@@ -464,13 +465,13 @@
   <div 
     transition:fade={{ duration: 150 }}
     onclick={() => editingWidget = null}
-    class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div 
       transition:fly={{ y: 20, duration: 200 }}
       onclick={(e) => e.stopPropagation()}
-      class="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
+      class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-        <h3 class="font-black text-slate-950 font-mono text-base flex items-center gap-2">
+        <h3 class="font-black text-slate-900 font-mono text-base flex items-center gap-2">
           <span>Configure {editingWidget.component}</span>
         </h3>
         <button onclick={() => editingWidget = null} class="text-slate-400 hover:text-slate-700">✕</button>
@@ -478,32 +479,35 @@
 
       <div class="flex flex-col gap-3">
         <div>
-          <label class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Title</label>
+          <label for="widget-title-input" class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Title</label>
           <input 
+            id="widget-title-input"
             type="text" 
             bind:value={editingWidget.config.title}
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none font-medium"
           />
         </div>
 
         {#if editingWidget.config.value !== undefined}
           <div>
-            <label class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Primary Value</label>
+            <label for="widget-val-input" class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Primary Value</label>
             <input 
+              id="widget-val-input"
               type="text" 
               bind:value={editingWidget.config.value}
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none font-medium"
             />
           </div>
         {/if}
 
         {#if editingWidget.config.trend !== undefined}
           <div>
-            <label class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Trend Badge</label>
+            <label for="widget-trend-input" class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Trend Badge</label>
             <input 
+              id="widget-trend-input"
               type="text" 
               bind:value={editingWidget.config.trend}
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-950 focus:outline-none"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none font-medium"
             />
           </div>
         {/if}
@@ -528,7 +532,8 @@
       <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
         <button 
           onclick={() => editingWidget = null}
-          class="bg-slate-950 text-white font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-slate-800 transition-all cursor-pointer">
+          style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
+          class="font-bold text-xs text-white px-6 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm">
           Done
         </button>
       </div>

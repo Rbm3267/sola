@@ -56,17 +56,17 @@
         </p>
       </div>
 
-      <!-- Mode Selector Tabs -->
-      <div class="flex items-center gap-1 bg-slate-200/70 p-1.5 rounded-2xl border border-slate-300/60 self-start md:self-auto">
+      <!-- Segmented Mode Switcher -->
+      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto">
         <button 
           onclick={() => activeMode = 'personal'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'personal' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950'}">
+          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'personal' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
           <span>Personal Training & Fitness</span>
         </button>
         <button 
           onclick={() => activeMode = 'enterprise'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'enterprise' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950'}">
+          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'enterprise' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           <span>Enterprise SaaS</span>
         </button>
