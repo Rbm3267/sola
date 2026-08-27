@@ -239,26 +239,19 @@
               {/each}
             </div>
           {:else if phase === 'resolving'}
-            <div class="flex flex-col items-center justify-center min-h-[200px] gap-3">
-              <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold">
+            <div class="flex flex-col items-center justify-center min-h-[220px] gap-3">
+              <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold shadow-xs">
                 <div class="w-3.5 h-3.5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
                 <span>Synthesizing zero-VDOM components...</span>
               </div>
             </div>
           {:else}
-            <!-- Default / Typing Preview State -->
-            <div class="grid gap-4 {scenarios[currentIndex].components.length > 1 ? 'md:grid-cols-2' : ''} opacity-80">
-              {#each scenarios[currentIndex].components as comp}
-                <div>
-                  {#if comp.type === 'DataCard'}
-                    <DataCard config={comp.config} />
-                  {:else if comp.type === 'DynamicForm'}
-                    <DynamicForm config={comp.config} onSubmit={() => {}} />
-                  {:else if comp.type === 'ListBlock'}
-                    <ListBlock config={comp.config} />
-                  {/if}
-                </div>
-              {/each}
+            <!-- Clean Ambient Listening / Typing State -->
+            <div class="flex flex-col items-center justify-center min-h-[220px] p-8 border border-dashed border-slate-200/90 rounded-3xl text-center bg-slate-50/40">
+              <div class="flex items-center gap-2 text-slate-400 text-xs font-mono">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span>{phase === 'typing' ? 'Listening to intent stream...' : 'Waiting for prompt...'}</span>
+              </div>
             </div>
           {/if}
         </div>
