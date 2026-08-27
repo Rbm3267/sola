@@ -2,6 +2,7 @@
   import { themeState, updateTheme } from '$lib/theme.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import InteractiveHero from '$lib/components/InteractiveHero.svelte';
+  import SheetsDemo from '$lib/components/SheetsDemo.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
@@ -25,8 +26,11 @@
 
     <InteractiveHero />
 
+    <!-- Google Sheets & Data Relay Interactive Section -->
+    <SheetsDemo />
+
     <!-- Interactive Demo section -->
-    <section class="w-full mt-32 md:mt-48 grid lg:grid-cols-2 gap-16 pb-32 items-center relative z-10">
+    <section class="w-full mt-24 md:mt-36 grid lg:grid-cols-2 gap-16 pb-32 items-center relative z-10">
       
       <!-- Theme Generator Card -->
       <div class="bg-white border border-slate-200/60 rounded-3xl shadow-lg overflow-hidden flex flex-col group">
