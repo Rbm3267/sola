@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://sola-ui.vercel.app"><b>Live Website & Playground →</b></a>
+  <a href="https://sola-air.dev"><b>Live Website & Playground (sola-air.dev) →</b></a>
 </p>
 
 ```bash
