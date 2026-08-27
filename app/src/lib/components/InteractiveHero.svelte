@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import LivingSolaCore from './LivingSolaCore.svelte';
   import DataCard from './DataCard.svelte';
   import DynamicForm from './DynamicForm.svelte';
   import ListBlock from './ListBlock.svelte';
@@ -235,21 +236,14 @@
               {/each}
             </div>
           {:else if phase === 'resolving'}
-            <div class="flex flex-col items-center justify-center h-[220px] gap-3">
-              <div class="flex gap-1.5">
-                <div class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-bounce" style="animation-delay: 0ms"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-bounce" style="animation-delay: 150ms"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-violet-400 animate-bounce" style="animation-delay: 300ms"></div>
-              </div>
-              <span class="text-sm text-slate-400 font-medium">Compiling intent to components...</span>
+            <div class="flex flex-col items-center justify-center min-h-[220px] py-4">
+              <LivingSolaCore state="synthesizing" size={160} showTelemetry={true} />
             </div>
           {:else}
-            <div class="flex items-center justify-center h-[220px]">
-              <div class="text-center">
-                <div class="text-slate-300 mb-2">
-                  <svg class="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg>
-                </div>
-                <span class="text-sm text-slate-400">Components will render here</span>
+            <div class="flex items-center justify-center min-h-[220px]">
+              <div class="text-center flex flex-col items-center">
+                <LivingSolaCore state="idle" size={120} showTelemetry={false} />
+                <span class="text-xs font-mono text-slate-400 mt-2">Ambient Intent Bus Listening</span>
               </div>
             </div>
           {/if}

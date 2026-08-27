@@ -1,5 +1,6 @@
 <script lang="ts">
   import DynamicRenderer from '$lib/components/DynamicRenderer.svelte';
+  import LivingSolaCore from '$lib/components/LivingSolaCore.svelte';
   import SolaLogo from '$lib/components/SolaLogo.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import { fly, fade } from 'svelte/transition';
@@ -361,6 +362,17 @@ ${widgets.map(w => `  <${w.component} class="col-span-${w.colSpan}" config={${JS
         </button>
       </div>
     </div>
+
+    <!-- Active Synthesizing Living Core Banner -->
+    {#if isLoading}
+      <div 
+        transition:fly={{ y: 20, duration: 300 }}
+        class="bg-slate-950 text-white rounded-3xl p-8 sm:p-10 border border-slate-800 shadow-2xl flex flex-col items-center justify-center relative overflow-hidden"
+      >
+        <div class="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:20px_20px] opacity-30 pointer-events-none"></div>
+        <LivingSolaCore state="synthesizing" size={180} showTelemetry={true} />
+      </div>
+    {/if}
 
     <!-- Active Interactive Production Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
