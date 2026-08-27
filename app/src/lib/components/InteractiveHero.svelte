@@ -143,9 +143,9 @@
     </a>
     
     <!-- Interactive CLI Copy Box -->
-    <div class="px-5 py-3.5 rounded-xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-slate-700 font-mono text-sm flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
+    <div class="px-5 py-3.5 rounded-xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-slate-800 font-mono text-sm flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
       <div class="flex items-center gap-2 select-all">
-        <span class="text-sky-500 font-bold select-none">$</span>
+        <span class="text-amber-500 font-bold select-none">$</span>
         <span>npm create sola@latest</span>
       </div>
       <button 
@@ -163,22 +163,19 @@
   </div>
 
   <!-- Micro Specs Line -->
-  <div class="flex items-center gap-4 text-xs font-semibold text-slate-400 mb-16">
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> 3.2 kB Core</span>
+  <div class="flex items-center gap-4 text-xs font-semibold text-slate-500 mb-16">
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 3.2 kB Core</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span> 0 Dependencies</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 0 Dependencies</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Native AI Intent</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Native AI Intent</span>
   </div>
 
   <!-- The Demo Canvas -->
   <div class="w-full max-w-5xl mx-auto relative px-4">
     
-    <!-- Ambient glow behind canvas -->
-    <div class="absolute -inset-8 bg-gradient-to-br from-sky-200/30 via-blue-100/20 to-violet-200/30 blur-[60px] rounded-[40px] pointer-events-none"></div>
-    
     <!-- Main canvas -->
-    <div class="relative bg-white/80 backdrop-blur-2xl border border-slate-200/70 rounded-[28px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.08),0_0_0_1px_rgba(0,0,0,0.03)] overflow-hidden">
+    <div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-[28px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
       
       <!-- Window chrome -->
       <div class="h-12 flex items-center px-5 gap-2 border-b border-slate-100 bg-slate-50/60">

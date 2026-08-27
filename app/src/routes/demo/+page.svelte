@@ -134,13 +134,13 @@
     
     <!-- Title Area -->
     <div class="text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200/60 text-sky-700 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold mb-3">
         <span>Sola Ambient Intent Engine • v0.2.0</span>
       </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-slate-950 tracking-tight mb-2">
+      <h1 class="text-3xl sm:text-5xl font-black text-slate-950 tracking-[-0.035em] mb-2">
         Ambient Intent Playground
       </h1>
-      <p class="text-slate-600 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+      <p class="text-slate-600 text-sm sm:text-base max-w-lg mx-auto leading-relaxed font-normal">
         Speak or type your intent. Sola's compiler synthesizes and mounts reactive zero-VDOM components in real time.
       </p>
     </div>
@@ -150,9 +150,9 @@
       <form class="flex items-center gap-2 sm:gap-3 w-full relative z-10" onsubmit={(e) => { e.preventDefault(); submitIntent(); }}>
         
         <!-- Left Sparkle / Active Status -->
-        <div class="pl-3 sm:pl-4 shrink-0 text-sky-500">
+        <div class="pl-3 sm:pl-4 shrink-0 text-amber-500">
           {#if isLoading}
-            <svg class="w-5 h-5 animate-spin text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4m-3.93 7.07l-2.83-2.83M7.76 7.76L4.93 4.93"/></svg>
+            <svg class="w-5 h-5 animate-spin text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4m-3.93 7.07l-2.83-2.83M7.76 7.76L4.93 4.93"/></svg>
           {:else if isListening}
             <div class="flex items-center gap-1">
               <span class="w-1.5 h-4 bg-rose-500 rounded-full animate-bounce"></span>
@@ -160,7 +160,7 @@
               <span class="w-1.5 h-3 bg-rose-500 rounded-full animate-bounce [animation-delay:0.3s]"></span>
             </div>
           {:else}
-            <svg class="w-5 h-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
+            <svg class="w-5 h-5 text-amber-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
           {/if}
         </div>
         

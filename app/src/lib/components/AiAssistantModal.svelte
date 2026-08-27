@@ -93,7 +93,7 @@
           <div>
             <h3 class="text-sm font-black text-slate-950 font-mono flex items-center gap-2">
               <span>Sola Ambient Assistant</span>
-              <span class="text-[10px] font-sans font-bold bg-sky-50 text-sky-700 px-2 py-0.5 rounded-full border border-sky-200/60">AI Assistant</span>
+              <span class="text-[10px] font-sans font-bold bg-amber-50 text-amber-900 px-2 py-0.5 rounded-full border border-amber-200/80">AI Assistant</span>
             </h3>
           </div>
         </div>
@@ -121,7 +121,7 @@
 
         {#if isLoading}
           <div class="flex items-center gap-2 text-slate-400 text-xs font-mono py-2" in:fade={{ duration: 150 }}>
-            <div class="w-3.5 h-3.5 border-2 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-3.5 h-3.5 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
             <span>Synthesizing answer...</span>
           </div>
         {/if}
@@ -133,7 +133,7 @@
           {#each quickPrompts as qp}
             <button 
               onclick={() => pickPrompt(qp)}
-              class="text-[11px] text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-lg hover:border-sky-300 hover:text-sky-700 hover:bg-sky-50/50 transition-all cursor-pointer">
+              class="text-[11px] text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-lg hover:border-amber-300 hover:text-amber-900 hover:bg-amber-50/50 transition-all cursor-pointer">
               {qp}
             </button>
           {/each}

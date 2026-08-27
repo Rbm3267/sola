@@ -96,7 +96,7 @@
       
       <div class="relative z-10 max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-mono font-bold mb-3">
-          <svg class="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
+          <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
           <span>Ask Sola • Generative Documentation</span>
         </div>
         <h2 class="text-2xl sm:text-3xl font-black tracking-tight mb-2">
@@ -117,7 +117,7 @@
           <button 
             type="submit" 
             disabled={askLoading || !askQuery.trim()}
-            class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs px-5 py-3 rounded-xl transition-all disabled:opacity-40 flex items-center gap-2 cursor-pointer shadow-md shrink-0">
+            class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs px-5 py-3 rounded-xl transition-all disabled:opacity-40 flex items-center gap-2 cursor-pointer shadow-md shrink-0">
             {#if askLoading}
               <div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div>
               <span>Synthesizing...</span>
@@ -129,7 +129,7 @@
         </form>
 
         {#if aiAnswer}
-          <div class="mt-6 p-5 bg-slate-950/80 border border-sky-500/30 rounded-2xl text-xs font-mono text-sky-200 whitespace-pre-wrap leading-relaxed shadow-lg">
+          <div class="mt-6 p-5 bg-slate-900 border border-slate-800 rounded-2xl text-xs font-mono text-slate-200 whitespace-pre-wrap leading-relaxed shadow-lg">
             {aiAnswer}
           </div>
         {/if}

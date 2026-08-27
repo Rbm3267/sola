@@ -177,10 +177,10 @@ import DataCard from '@sola/ui/DataCard';
     
     <!-- Hero Header -->
     <div class="max-w-3xl mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200/60 text-sky-700 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold mb-3">
         <span>@sola/ui • Embeddable Primitives</span>
       </div>
-      <h1 class="text-4xl sm:text-5xl font-black text-slate-950 tracking-tight mb-3">
+      <h1 class="text-4xl sm:text-5xl font-black text-slate-950 tracking-[-0.035em] mb-3">
         Component Library
       </h1>
       <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
@@ -205,7 +205,7 @@ import DataCard from '@sola/ui/DataCard';
                 <div class="text-sm font-bold {selectedComponent === comp.id ? 'text-white' : 'text-slate-900'} font-mono">{comp.name}</div>
                 <div class="text-xs {selectedComponent === comp.id ? 'text-slate-300' : 'text-slate-400'} line-clamp-1">{comp.desc}</div>
               </div>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded {selectedComponent === comp.id ? 'bg-slate-800 text-sky-300' : 'bg-slate-100 text-slate-500'}">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded {selectedComponent === comp.id ? 'bg-slate-800 text-amber-300' : 'bg-slate-100 text-slate-500'}">
                 {comp.category}
               </span>
             </button>
@@ -221,7 +221,7 @@ import DataCard from '@sola/ui/DataCard';
           <div>
             <h2 class="text-2xl font-black text-slate-950 font-mono flex items-center gap-2.5">
               <span>{selectedComponent}.sola</span>
-              <span class="text-xs font-sans font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full">Interactive Demo</span>
+              <span class="text-xs font-sans font-bold bg-slate-100 text-slate-800 border border-slate-200 px-2.5 py-0.5 rounded-full">Interactive Demo</span>
             </h2>
             <p class="text-xs text-slate-500 mt-1">
               {componentList.find(c => c.id === selectedComponent)?.desc}
