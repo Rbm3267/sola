@@ -318,14 +318,21 @@ import DataCard from '@sola/ui/DataCard';
                   <div 
                     transition:fade={{ duration: 200 }}
                     onclick={() => isModalOpen = false}
+                    onkeydown={(e) => { if (e.key === 'Escape') isModalOpen = false; }}
+                    role="dialog"
+                    aria-modal="true"
+                    tabindex="-1"
                     class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                     <div 
                       transition:fly={{ y: 20, duration: 250 }}
                       onclick={(e) => e.stopPropagation()}
+                      onkeydown={(e) => e.stopPropagation()}
+                      role="document"
                       class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-7 max-w-sm w-full shadow-2xl flex flex-col gap-4">
                       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <h3 class="font-black text-slate-900 font-mono text-base">Scale Cluster</h3>
-                        <button onclick={() => isModalOpen = false} class="text-slate-400 hover:text-slate-700">✕</button>
+                        <button onclick={() => isModalOpen = false} aria-label="Close dialog" class="text-slate-400 hover:text-slate-700">✕</button>
                       </div>
                       <p class="text-xs text-slate-600 leading-relaxed">
                         Are you sure you want to deploy 12 additional worker instances to <code class="font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">us-east-1</code>?
@@ -355,8 +362,9 @@ import DataCard from '@sola/ui/DataCard';
                 </div>
               {:else if selectedComponent === 'Select'}
                 <div class="w-full relative">
-                  <label class="block text-xs font-mono font-bold text-slate-500 uppercase mb-2">Target Cluster</label>
+                  <span class="block text-xs font-mono font-bold text-slate-500 uppercase mb-2">Target Cluster</span>
                   <button 
+                    id="select-button"
                     onclick={() => isSelectOpen = !isSelectOpen}
                     class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-medium text-slate-900 flex items-center justify-between hover:bg-white transition-all cursor-pointer">
                     <span>{selectValue}</span>

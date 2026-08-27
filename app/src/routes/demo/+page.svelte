@@ -218,13 +218,13 @@
   }
 
   function exportSolaCode() {
-    const code = `<script>
+    const code = `<` + `script>
   // Sola Production Dashboard Schema
   const dashboard = $data("sheet://production-telemetry");
-</script>
+</` + `script>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-${widgets.map(w => `  <${w.component} class="col-span-${w.colSpan}" config={${JSON.stringify(w.config)}} />`).join('\n')}
+` + widgets.map(w => `  <${w.component} class="col-span-${w.colSpan}" config={${JSON.stringify(w.config)}} />`).join('\n') + `
 </div>`;
     navigator.clipboard.writeText(code);
     copiedExport = true;
