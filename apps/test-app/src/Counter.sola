@@ -1,0 +1,64 @@
+<script>
+  export let label = 'Count';
+
+  let count = $state(0);
+  let doubled = $derived(() => count() * 2);
+
+  function increment() {
+    count++;
+  }
+</script>
+
+<div class="counter">
+  <span class="label">{label}</span>
+  <div class="value">{count()}</div>
+  <div class="derived">Doubled: {doubled()}</div>
+  <button on:click={increment}>+1</button>
+</div>
+
+<style>
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .label {
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  .value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .derived {
+    font-size: 0.875rem;
+    color: #0ea5e9;
+    font-weight: 600;
+  }
+
+  button {
+    padding: 8px 16px;
+    background: #0ea5e9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  button:hover {
+    background: #0284c7;
+  }
+</style>

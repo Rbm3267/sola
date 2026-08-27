@@ -1,0 +1,33 @@
+{
+	"name": "app",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"devDependencies": {
+		"@iconify-json/lucide": "^1.2.126",
+		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@types/chroma-js": "^3.1.2",
+		"@unocss/extractor-svelte": "^66.8.1",
+		"svelte": "^5.56.1",
+		"svelte-check": "^4.6.0",
+		"typescript": "^6.0.3",
+		"unocss": "^66.8.1",
+		"vite": "^8.0.16"
+	},
+	"dependencies": {
+		"@google/genai": "^2.19.0",
+		"@sveltejs/adapter-node": "^5.5.7",
+		"chroma-js": "^3.2.0",
+		"jsdom": "^30.0.1"
+	}
+}

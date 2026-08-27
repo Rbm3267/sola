@@ -1,0 +1,14 @@
+{
+  "name": "@sola/compiler",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "dependencies": {
+    "acorn": "^8.10.0",
+    "htmlparser2": "^9.0.0"
+  }
+}
+

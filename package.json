@@ -1,0 +1,14 @@
+{
+  "name": "sola-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "app", "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  }
+}
+
+
