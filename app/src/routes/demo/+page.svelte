@@ -178,7 +178,7 @@
           type="button"
           onclick={toggleSpeech}
           aria-label="Voice intent recognition"
-          class="p-3 rounded-xl transition-all flex items-center justify-center cursor-pointer {isListening ? 'bg-rose-500 text-white shadow-md animate-pulse' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}"
+          class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl transition-all flex items-center justify-center cursor-pointer {isListening ? 'bg-rose-500 text-white shadow-md animate-pulse' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}"
           title={isListening ? "Stop listening" : "Speak intent via microphone"}
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -188,12 +188,12 @@
           </svg>
         </button>
 
-        <!-- Submit Button -->
+        <!-- Submit Button (High Contrast & Always Visible) -->
         <button 
           type="submit" 
           disabled={isLoading || !intentQuery.trim()}
           aria-label="Submit intent"
-          class="bg-slate-950 text-white w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.97] disabled:opacity-40 flex items-center justify-center shadow-md shrink-0 cursor-pointer"
+          class="bg-slate-950 text-white w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.97] disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </button>

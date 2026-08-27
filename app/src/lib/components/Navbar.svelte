@@ -1,9 +1,22 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import SolaLogo from './SolaLogo.svelte';
+  import AiAssistantModal from './AiAssistantModal.svelte';
 
   let currentPath = $derived($page.url.pathname);
+  let isAiModalOpen = $state(false);
+
+  function handleKeydown(e: KeyboardEvent) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      isAiModalOpen = !isAiModalOpen;
+    }
+  }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
+
+<AiAssistantModal bind:isOpen={isAiModalOpen} />
 
 <header class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-slate-200/80 transition-all">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -45,14 +58,15 @@
 
     <!-- Right Utility Area -->
     <div class="flex items-center gap-3">
-      <!-- AI Ask Bar Trigger -->
-      <a 
-        href="/docs?ai=true" 
-        class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200/80 bg-slate-50/80 text-xs text-slate-500 hover:border-sky-300 hover:text-slate-900 transition-all cursor-pointer">
-        <svg class="w-3.5 h-3.5 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
-        <span>Ask Sola AI...</span>
-        <kbd class="text-[10px] font-mono bg-white border border-slate-200 px-1.5 py-0.5 rounded text-slate-400">⌘K</kbd>
-      </a>
+      <!-- AI Ask Bar Trigger Button -->
+      <button 
+        type="button"
+        onclick={() => isAiModalOpen = true}
+        class="hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-700 hover:border-sky-400 hover:bg-white hover:text-slate-950 transition-all cursor-pointer shadow-xs">
+        <svg class="w-4 h-4 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
+        <span>Ask Sola AI</span>
+        <kbd class="text-[10px] font-mono bg-white border border-slate-200 px-1.5 py-0.5 rounded text-slate-400 font-bold">⌘K</kbd>
+      </button>
 
       <!-- GitHub Link -->
       <a 

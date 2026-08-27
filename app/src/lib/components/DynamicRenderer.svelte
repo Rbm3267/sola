@@ -1,5 +1,6 @@
 <script lang="ts">
   import DataCard from './DataCard.svelte';
+  import GaugeCard from './GaugeCard.svelte';
   import DynamicForm from './DynamicForm.svelte';
   import ListBlock from './ListBlock.svelte';
 
@@ -12,6 +13,7 @@
 
   const componentRegistry: Record<string, any> = {
     DataCard: DataCard,
+    GaugeCard: GaugeCard,
     DynamicForm: DynamicForm,
     ListBlock: ListBlock
   };
