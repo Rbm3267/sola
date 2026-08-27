@@ -1,14 +1,14 @@
-﻿<script lang="ts">
+<script lang="ts">
   import DataCard from './DataCard.svelte';
   import DynamicForm from './DynamicForm.svelte';
   import ListBlock from './ListBlock.svelte';
 
-  const { intentPayload } = $props<{
-    intentPayload: {
-      component: string;
-      config: any;
-    } | null;
+  const props = $props<{
+    intentPayload?: { component: string; config: any } | null;
+    data?: { component: string; config: any } | null;
   }>();
+
+  const payload = $derived(props.data || props.intentPayload || null);
 
   const componentRegistry: Record<string, any> = {
     DataCard: DataCard,
@@ -17,7 +17,7 @@
   };
 
   const ResolvedComponent = $derived(
-    intentPayload ? componentRegistry[intentPayload.component] : null
+    payload && payload.component ? componentRegistry[payload.component] : null
   );
 
   function handleFormSubmit(data: any) {
@@ -25,10 +25,10 @@
   }
 </script>
 
-{#if ResolvedComponent && intentPayload}
-  <ResolvedComponent config={intentPayload.config} onSubmit={handleFormSubmit} />
-{:else if intentPayload}
+{#if ResolvedComponent && payload}
+  <ResolvedComponent config={payload.config} onSubmit={handleFormSubmit} />
+{:else if payload}
   <div class="p-4 text-red-400 border border-red-500 rounded-lg">
-    Unknown component requested: {intentPayload.component}
+    Unknown component requested: {payload.component}
   </div>
 {/if}
