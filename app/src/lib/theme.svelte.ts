@@ -1,7 +1,20 @@
 import chroma from 'chroma-js';
 
-// Handle CJS default import in Vite
-const chromaFn = typeof chroma === 'function' ? chroma : (chroma as any).default;
+// Safe chroma loader for both CJS and ESM
+function getChroma() {
+  if (typeof chroma === 'function') return chroma;
+  if (typeof (chroma as any)?.default === 'function') return (chroma as any).default;
+  return (hex: string) => ({
+    luminance: () => 0.5,
+    set: () => ({ set: () => ({ hex: () => '#090d19' }) }),
+    brighten: () => ({ alpha: () => ({ css: () => 'rgba(255,255,255,0.8)' }) }),
+    alpha: () => ({ css: () => 'rgba(14,165,233,0.2)' }),
+    contrast: () => 5.0,
+    hex: () => hex
+  });
+}
+
+const chromaFn = getChroma();
 
 export const themeState = $state({
     primary: '#10b981', // Default Cyber-Fitness Emerald
