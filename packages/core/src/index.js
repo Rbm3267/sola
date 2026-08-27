@@ -184,7 +184,7 @@ export function __flush_destroys() {
 const defaultIntentConfig = {
   provider: 'local',
   endpoint: '/api/intent',
-  model: 'gemini-2.5-flash'
+  model: 'gemini-3.6-flash'
 };
 
 let globalIntentConfig = { ...defaultIntentConfig };
