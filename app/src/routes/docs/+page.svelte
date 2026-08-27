@@ -52,6 +52,37 @@
       input?.focus();
     }
   });
+  const syntaxExample = `<` + `script>
+  export let title = "Cluster Dashboard";
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+
+  function increment() {
+    count += 1;
+  }
+</` + `script>
+
+<div class="dashboard-card">
+  <h3>{title}</h3>
+  <p>Active workers: {count} (Capacity: {doubled})</p>
+  <button onclick={increment}>Scale Node +1</button>
+</div>
+
+<style>
+  .dashboard-card {
+    padding: 24px;
+    border-radius: 16px;
+    background: white;
+  }
+</style>`;
+
+  const intentExample = `<` + `script>
+  // Sola compiles $intent into an ambient AI reactive pipeline
+  const view = $intent("Show active database clusters with latency sparklines");
+</` + `script>
+
+<!-- Automatically mounts the dynamically synthesized component tree -->
+<svelte:component this={view} />`;
 </script>
 
 <div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-sky-200 selection:text-sky-900">
@@ -146,29 +177,7 @@
             <p class="text-slate-600 text-base leading-relaxed mb-6">
               Sola components are single-file, declarative modules that combine logic, layout, and scoped styles without virtual DOM runtime overhead:
             </p>
-            <pre class="bg-slate-950 text-sky-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner mb-6"><code>&lt;script&gt;
-  export let title = "Cluster Dashboard";
-  let count = $state(0);
-  let doubled = $derived(count * 2);
-
-  function increment() {
-    count += 1;
-  }
-&lt;/script&gt;
-
-&lt;div class="dashboard-card"&gt;
-  &lt;h3&gt;{title}&lt;/h3&gt;
-  &lt;p&gt;Active workers: {count} (Capacity: {doubled})&lt;/p&gt;
-  &lt;button onclick={increment}&gt;Scale Node +1&lt;/button&gt;
-&lt;/div&gt;
-
-&lt;style&gt;
-  .dashboard-card {
-    padding: 24px;
-    border-radius: 16px;
-    background: white;
-  }
-&lt;/style&gt;</code></pre>
+            <pre class="bg-slate-950 text-sky-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner mb-6"><code>{syntaxExample}</code></pre>
           </div>
         {:else if activeSection === 'intent'}
           <div>
@@ -176,13 +185,7 @@
             <p class="text-slate-600 text-base leading-relaxed mb-6">
               Sola is the world's first framework with native ambient intent resolution. A <code class="font-mono text-xs bg-violet-50 text-violet-700 px-2 py-1 rounded font-bold border border-violet-200">$intent</code> signal allows the UI to describe <em>what</em> it needs in plain language, and Sola synthesizes and compiles matching UI components at the framework layer:
             </p>
-            <pre class="bg-slate-950 text-violet-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner"><code>&lt;script&gt;
-  // Sola compiles $intent into an ambient AI reactive pipeline
-  const view = $intent("Show active database clusters with latency sparklines");
-&lt;/script&gt;
-
-&lt;!-- Automatically mounts the dynamically synthesized component tree --&gt;
-&lt;svelte:component this={view} /&gt;</code></pre>
+            <pre class="bg-slate-950 text-violet-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner"><code>{intentExample}</code></pre>
           </div>
         {:else}
           <div>

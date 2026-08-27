@@ -21,12 +21,12 @@
   ];
 
   const solaCodeSamples: Record<string, string> = {
-    DataCard: `<script>
+    DataCard: `<` + `script>
   export let title = "Monthly Recurring Revenue";
   export let value = "$124,500";
   export let change = "+18.2%";
   export let trend = "up";
-</script>
+</` + `script>
 
 <div class="sola-datacard">
   <div class="header">
@@ -39,7 +39,7 @@
     <span class="sub">vs previous cycle</span>
   </div>
 </div>`,
-    DynamicForm: `<script>
+    DynamicForm: `<` + `script>
   export let title = "Provision Cloud Node";
   export let endpoint = "/api/v1/nodes";
 
@@ -55,7 +55,7 @@
     });
     isSubmitting = false;
   }
-</script>
+</` + `script>
 
 <form onsubmit={submit}>
   <h3>{title}</h3>
@@ -64,14 +64,14 @@
     {isSubmitting ? "Deploying..." : "Launch Instance"}
   </button>
 </form>`,
-    ListBlock: `<script>
+    ListBlock: `<` + `script>
   export let title = "Active Clusters";
   export let items = [
     { name: "core-router-01", region: "iad1", status: "online" },
     { name: "redis-cache-eu", region: "fra1", status: "online" },
     { name: "backup-vault", region: "sfo2", status: "syncing" }
   ];
-</script>
+</` + `script>
 
 <div class="list-container">
   <div class="title-bar">
