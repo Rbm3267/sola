@@ -1,5 +1,6 @@
 <script lang="ts">
   import { themeState, updateTheme } from '$lib/theme.svelte';
+  import SolaLogo from '$lib/components/SolaLogo.svelte';
   import InteractiveHero from '$lib/components/InteractiveHero.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
@@ -26,10 +27,7 @@
       
       <!-- Brand Logo + Wordmark -->
       <a href="/" class="flex items-center gap-3.5 group cursor-pointer text-decoration-none">
-        <div class="relative flex items-center justify-center">
-          <div class="absolute -inset-1 bg-gradient-to-r from-sky-400 to-violet-500 rounded-full blur-md opacity-25 group-hover:opacity-45 transition duration-300"></div>
-          <img src="/logo.png" alt="Sola Logo" class="w-10 h-10 object-contain relative z-10 drop-shadow-sm group-hover:scale-105 transition-transform duration-200" />
-        </div>
+        <SolaLogo size="sm" spinning={true} showGlow={true} />
         <div class="flex items-center gap-2">
           <span class="text-2xl font-extrabold text-slate-900 tracking-tight leading-none font-sans">Sola</span>
           <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600 bg-sky-50 border border-sky-200/60 px-2 py-0.5 rounded-full">v0.2.0</span>

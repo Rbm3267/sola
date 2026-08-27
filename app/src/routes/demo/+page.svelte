@@ -1,5 +1,6 @@
 <script lang="ts">
   import DynamicRenderer from '$lib/components/DynamicRenderer.svelte';
+  import SolaLogo from '$lib/components/SolaLogo.svelte';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   
@@ -69,10 +70,7 @@
   <header class="w-full max-w-5xl fixed top-4 z-50 px-4">
     <div class="w-full flex justify-between items-center bg-white/80 backdrop-blur-2xl border border-slate-200/80 px-5 sm:px-7 py-3.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       <a href="/" class="flex items-center gap-3.5 group cursor-pointer text-decoration-none">
-        <div class="relative flex items-center justify-center">
-          <div class="absolute -inset-1 bg-gradient-to-r from-sky-400 to-violet-500 rounded-full blur-md opacity-25 group-hover:opacity-45 transition duration-300"></div>
-          <img src="/logo.png" alt="Sola Logo" class="w-9 h-9 object-contain relative z-10 drop-shadow-sm group-hover:scale-105 transition-transform duration-200" />
-        </div>
+        <SolaLogo size="sm" spinning={true} showGlow={true} />
         <div class="flex items-center gap-2">
           <span class="text-xl font-extrabold text-slate-900 tracking-tight leading-none">Sola</span>
           <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600 bg-sky-50 border border-sky-200/60 px-2 py-0.5 rounded-full">Playground</span>
@@ -155,9 +153,9 @@
     <div class="w-full bg-white/90 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-6 md:p-10 shadow-[0_20px_60px_rgba(15,23,42,0.04)] relative overflow-hidden min-h-[360px] flex flex-col">
       <div class="relative z-10 w-full h-full flex flex-col gap-6">
         {#if isLoading}
-          <div class="w-full flex-1 min-h-[260px] flex flex-col items-center justify-center text-slate-500 gap-3" in:fade={{ duration: 300 }}>
-            <div class="w-8 h-8 rounded-full border-2 border-sky-400 border-t-transparent animate-spin"></div>
-            <span class="text-sm font-semibold text-slate-600 font-mono">Synthesizing Intent & Compiling UI...</span>
+          <div class="w-full flex-1 min-h-[260px] flex flex-col items-center justify-center text-slate-500 gap-4" in:fade={{ duration: 300 }}>
+            <SolaLogo size="lg" spinning={true} showGlow={true} />
+            <span class="text-xs font-bold text-slate-600 font-mono tracking-wider uppercase">Synthesizing Intent & Compiling UI...</span>
           </div>
         {:else if currentPayload}
           {#if Array.isArray(currentPayload)}
