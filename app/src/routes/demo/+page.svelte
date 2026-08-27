@@ -71,7 +71,7 @@
     "Add a CPU temperature gauge with 72% load",
     "Show Q3 revenue and churn rate for enterprise tier",
     "List all active deployments with their status",
-    "Add a workout volume card for heavy kettlebells"
+    "Connect live Google Sheets relay for cash runway & MRR"
   ];
 
   onMount(() => {
@@ -209,16 +209,16 @@
     saveLayout();
   }
 
-  function loadPreset(type: 'fitness' | 'cloud' | 'servicenow' | 'reset') {
-    if (type === 'fitness') {
+  function loadPreset(type: 'finance' | 'cloud' | 'servicenow' | 'reset') {
+    if (type === 'finance') {
       widgets = [
-        { id: 'f-1', component: 'DataCard', colSpan: 1, config: { title: 'Total Volume', value: '18,400 lbs', trend: '+2,400 lbs', icon: 'activity' } },
-        { id: 'f-2', component: 'GaugeCard', colSpan: 1, config: { title: 'Athletic Readiness', value: '96 / 100', percentage: 96, subtext: 'Optimal State', color: 'emerald' } },
-        { id: 'f-3', component: 'DataCard', colSpan: 1, config: { title: 'Heavy Sets Completed', value: '14 Sets', trend: 'Armor Building Complex', icon: 'trending-up' } },
-        { id: 'f-4', component: 'ListBlock', colSpan: 3, config: { title: 'Training Log Sessions', items: [
-          { label: 'Clean & Strict Press (2x24kg)', description: '5 sets of 2 reps • RPE 7.5', status: 'Completed' },
-          { label: 'Front Squats (2x24kg)', description: '5 sets of 3 reps • Solid depth', status: 'Completed' },
-          { label: 'Snatch Interval (24kg)', description: '10 mins EMOM • 100 reps total', status: 'Active' }
+        { id: 'fn-1', component: 'DataCard', colSpan: 1, config: { title: 'Monthly Recurring Revenue', value: '$184,200', trend: '+$14,800 this month', icon: 'trending-up' } },
+        { id: 'fn-2', component: 'GaugeCard', colSpan: 1, config: { title: 'Gross Margin Rate', value: '88%', percentage: 88, subtext: 'LTV/CAC Ratio: 4.8x', color: 'emerald' } },
+        { id: 'fn-3', component: 'DataCard', colSpan: 1, config: { title: 'Cash Runway', value: '24 Months', trend: 'Net Burn: $18.5k/mo', icon: 'activity' } },
+        { id: 'fn-4', component: 'ListBlock', colSpan: 3, config: { title: 'Google Sheet Live Transactions (sheet://finance-ops)', items: [
+          { label: 'Enterprise Contract Renewal • Acme Corp', description: '+$48,000 ARR • Net-30 Invoiced', status: 'Completed' },
+          { label: 'AWS Cloud Infrastructure Tier 2', description: '-$3,420 • Monthly Auto-settle', status: 'Completed' },
+          { label: 'Stripe Merchant Payout Batch #904', description: '+$12,840 • Clearing to SVB Treasury', status: 'Active' }
         ]} }
       ];
     } else if (type === 'servicenow') {
@@ -370,10 +370,10 @@
           <span>ServiceNow ITSM</span>
         </button>
         <button 
-          onclick={() => loadPreset('fitness')}
+          onclick={() => loadPreset('finance')}
           class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          <span>Athletic Training</span>
+          <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <span>Finance Operations</span>
         </button>
         <button 
           onclick={() => loadPreset('cloud')}

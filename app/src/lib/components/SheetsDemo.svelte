@@ -2,37 +2,36 @@
   import DataCard from './DataCard.svelte';
   import GaugeCard from './GaugeCard.svelte';
 
-  let activeMode = $state<'personal' | 'enterprise'>('personal');
+  let activeMode = $state<'sheets' | 'postgres'>('sheets');
   let isSimulatingUpdate = $state(false);
 
-  // Personal Mock Sheet State (Kettlebell & Athletic Performance Log)
-  let fitnessData = $state({
-    workout: 'Armor Building Complex',
-    volumeMoved: '14,800 lbs',
-    dailyVolumeDelta: '+1,200 lbs',
-    weeklyTargetPct: 88,
-    recoveryScore: 94,
-    readiness: 'Optimal'
+  // Financial Operations Sheet State
+  let financeData = $state({
+    mrr: '$184,200',
+    mrrDelta: '+$14,800 this month',
+    cashRunway: '24 Months',
+    burnRate: '$18,500 / mo',
+    ltvCac: 4.8,
+    grossMargin: 88
   });
 
-  // Enterprise Mock Data
-  let enterpriseData = $state({
-    mrr: '$148,200',
-    growth: '+24.8%',
-    activeNodes: '64 / 64',
+  // Enterprise Cluster PostgreSQL Data
+  let clusterData = $state({
+    activePods: '128 / 128',
+    podDelta: '100% healthy',
     clusterUptime: '99.99%',
-    cpuLoad: 42
+    cpuLoad: 42,
+    p99Latency: '14.2 ms'
   });
 
-  function simulateNewSession() {
+  function simulateNewEntry() {
     isSimulatingUpdate = true;
     setTimeout(() => {
-      fitnessData = {
-        ...fitnessData,
-        volumeMoved: '16,200 lbs',
-        dailyVolumeDelta: '+2,600 lbs',
-        weeklyTargetPct: 96,
-        recoveryScore: 96
+      financeData = {
+        ...financeData,
+        mrr: '$198,400',
+        mrrDelta: '+$29,000 this month',
+        grossMargin: 91
       };
       isSimulatingUpdate = false;
     }, 500);
@@ -48,27 +47,27 @@
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold mb-3">
           <span>$data • Zero-Backend Data Surfacing</span>
         </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-950 tracking-[-0.03em]">
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-[-0.03em]">
           Connect any data source. In 1 line of code.
         </h2>
         <p class="text-slate-600 text-base max-w-xl mt-2 leading-relaxed">
-          Whether you're building a <strong>personal workout & volume tracker from Google Sheets</strong> or an <strong>enterprise SaaS dashboard from PostgreSQL</strong>, Sola turns raw data into reactive luxury UI.
+          Whether you're building a <strong>financial operations dashboard from Google Sheets</strong> or an <strong>infrastructure telemetry monitor from PostgreSQL</strong>, Sola turns raw data into reactive luxury UI.
         </p>
       </div>
 
       <!-- Segmented Mode Switcher -->
       <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto">
         <button 
-          onclick={() => activeMode = 'personal'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'personal' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
-          <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          <span>Personal Training & Fitness</span>
+          onclick={() => activeMode = 'sheets'}
+          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'sheets' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
+          <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <span>Google Sheets Relay</span>
         </button>
         <button 
-          onclick={() => activeMode = 'enterprise'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'enterprise' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
-          <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span>Enterprise SaaS</span>
+          onclick={() => activeMode = 'postgres'}
+          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'postgres' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
+          <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+          <span>PostgreSQL Cluster</span>
         </button>
       </div>
     </div>
@@ -77,42 +76,42 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
       
       <!-- Code View Column -->
-      <div class="lg:col-span-5 bg-slate-950 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl flex flex-col justify-between">
+      <div class="lg:col-span-5 bg-slate-900 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span class="text-xs font-mono font-bold text-slate-300">
-                {activeMode === 'personal' ? 'App.sola (Kettlebell Training Log)' : 'App.sola (Enterprise Cluster)'}
+                {activeMode === 'sheets' ? 'App.sola (Financial Ops Sheet)' : 'App.sola (PostgreSQL Cluster)'}
               </span>
             </div>
-            <span class="text-[10px] font-mono bg-slate-900 border border-slate-800 px-2 py-0.5 rounded text-sky-300">
+            <span class="text-[10px] font-mono bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-amber-300">
               zero-vdom
             </span>
           </div>
 
-          <pre class="font-mono text-xs sm:text-[13px] leading-relaxed text-slate-300 overflow-x-auto whitespace-pre"><code>{#if activeMode === 'personal'}&lt;script&gt;
+          <pre class="font-mono text-xs sm:text-[13px] leading-relaxed text-slate-300 overflow-x-auto whitespace-pre"><code>{#if activeMode === 'sheets'}&lt;script&gt;
   // 1 line Google Sheets reactive binding
-  const training = $data("sheet://1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms");
+  const finance = $data("sheet://1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms");
 &lt;/script&gt;
 
 &lt;!-- Sola auto-mounts reactive UI --&gt;
 &lt;DataCard 
-  title="Daily Volume" 
-  value="&#123;training.volume&#125;" 
-  trend="&#123;training.delta&#125;" 
+  title="Monthly Recurring Revenue" 
+  value="&#123;finance.mrr&#125;" 
+  trend="&#123;finance.delta&#125;" 
 /&gt;
 &lt;GaugeCard 
-  title="Recovery Index" 
-  value="&#123;training.recovery&#125; / 100" 
-  percentage=&#123;training.recovery&#125; 
+  title="Gross Margin" 
+  value="&#123;finance.margin&#125;%" 
+  percentage=&#123;finance.margin&#125; 
 /&gt;{:else}&lt;script&gt;
   // Zero-knowledge DB connector (credentials stay local)
-  const stats = $data("postgres://internal/metrics");
+  const cluster = $data("postgres://internal/nodes");
 &lt;/script&gt;
 
-&lt;DataCard title="MRR" value="&#123;stats.mrr&#125;" trend="&#123;stats.growth&#125;" /&gt;
-&lt;GaugeCard title="Cluster CPU" value="&#123;stats.cpu&#125;%" /&gt;{/if}</code></pre>
+&lt;DataCard title="Active Pods" value="&#123;cluster.pods&#125;" trend="&#123;cluster.health&#125;" /&gt;
+&lt;GaugeCard title="Cluster CPU" value="&#123;cluster.cpu&#125;%" /&gt;{/if}</code></pre>
         </div>
 
         <div class="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
@@ -128,19 +127,20 @@
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-2">
               <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
-                {activeMode === 'personal' ? 'Google Sheet Stream: Kettlebell Athletic Log' : 'PostgreSQL Stream: Cloud Nodes'}
+                {activeMode === 'sheets' ? 'Google Sheet Stream: Finance Operations' : 'PostgreSQL Stream: Cloud Nodes'}
               </span>
             </div>
-            {#if activeMode === 'personal'}
+            {#if activeMode === 'sheets'}
               <button 
-                onclick={simulateNewSession}
+                onclick={simulateNewEntry}
                 disabled={isSimulatingUpdate}
-                class="text-xs font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl hover:bg-emerald-100 transition-all cursor-pointer flex items-center gap-1.5">
+                class="text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-3.5 py-2 rounded-xl hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5">
                 {#if isSimulatingUpdate}
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
                   <span>Syncing...</span>
                 {:else}
-                  <span>+ Log Workout Set</span>
+                  <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>Simulate Sheet Row Insert</span>
                 {/if}
               </button>
             {/if}
@@ -148,47 +148,47 @@
 
           <!-- Live Rendered Cards Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {#if activeMode === 'personal'}
+            {#if activeMode === 'sheets'}
               <DataCard config={{
-                title: "Daily Volume Moved",
-                value: fitnessData.volumeMoved,
-                trend: fitnessData.dailyVolumeDelta,
-                icon: "activity"
+                title: "Monthly Recurring Revenue",
+                value: financeData.mrr,
+                trend: financeData.mrrDelta,
+                icon: "trending-up"
               }} />
               <DataCard config={{
-                title: "Primary Protocol",
-                value: fitnessData.workout,
-                trend: "Heavy Bell Cycles",
-                icon: "trending-up"
+                title: "Cash Runway",
+                value: financeData.cashRunway,
+                trend: `Burn: ${financeData.burnRate}`,
+                icon: "activity"
               }} />
               <div class="sm:col-span-2">
                 <GaugeCard config={{
-                  title: "Recovery & Readiness Score",
-                  value: `${fitnessData.recoveryScore} / 100`,
-                  percentage: fitnessData.recoveryScore,
-                  subtext: `${fitnessData.readiness} State • HRV 78ms`,
-                  color: "emerald"
+                  title: "Gross Margin Rate",
+                  value: `${financeData.grossMargin}%`,
+                  percentage: financeData.grossMargin,
+                  subtext: `LTV/CAC Ratio: ${financeData.ltvCac}x (Healthy SaaS Unit Economics)`,
+                  color: "amber"
                 }} />
               </div>
             {:else}
               <DataCard config={{
-                title: "Monthly Recurring Revenue",
-                value: enterpriseData.mrr,
-                trend: enterpriseData.growth,
-                icon: "trending-up"
+                title: "Active Pods",
+                value: clusterData.activePods,
+                trend: clusterData.podDelta,
+                icon: "check"
               }} />
               <DataCard config={{
-                title: "Edge Availability",
-                value: enterpriseData.clusterUptime,
-                trend: "64 Nodes Online",
-                icon: "check"
+                title: "Cluster Uptime",
+                value: clusterData.clusterUptime,
+                trend: `p99: ${clusterData.p99Latency}`,
+                icon: "activity"
               }} />
               <div class="sm:col-span-2">
                 <GaugeCard config={{
-                  title: "Cluster Compute Utilization",
-                  value: `${enterpriseData.cpuLoad}%`,
-                  percentage: enterpriseData.cpuLoad,
-                  subtext: "Auto-scaled across 3 Availability Zones",
+                  title: "Global CPU Utilization",
+                  value: `${clusterData.cpuLoad}%`,
+                  percentage: clusterData.cpuLoad,
+                  subtext: "Distributed across 3 AWS Availability Zones",
                   color: "sky"
                 }} />
               </div>
@@ -196,9 +196,9 @@
           </div>
         </div>
 
-        <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-mono">
-          <span>Source: {activeMode === 'personal' ? 'Google Sheets • Training Tab' : 'PostgreSQL Database pool'}</span>
-          <span class="text-slate-900 font-bold">0 ms Latency</span>
+        <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-400">
+          <span>Zero VDOM • Direct DOM Mutator</span>
+          <span class="text-slate-600 font-bold">Latency: 0.2ms</span>
         </div>
 
       </div>

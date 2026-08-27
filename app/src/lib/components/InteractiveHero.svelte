@@ -61,27 +61,27 @@
       ]
     },
     {
-      id: 'fitness',
-      tabLabel: 'Training Volume',
-      prompt: 'Render kettlebell daily training volume and athletic readiness',
+      id: 'latency',
+      tabLabel: 'Edge Telemetry',
+      prompt: 'Monitor edge CDN request volume and p99 global latency',
       components: [
         {
           type: 'DataCard',
           config: {
-            title: 'Daily Training Volume',
-            value: '18,400 lbs',
-            trend: 'Armor Building Complex',
+            title: 'Global Edge Requests',
+            value: '42.8M / hr',
+            trend: '+12.4% vs baseline',
             icon: 'activity'
           }
         },
         {
           type: 'GaugeCard',
           config: {
-            title: 'Recovery Index',
-            value: '94 / 100',
-            percentage: 94,
-            subtext: 'High Readiness',
-            color: 'amber'
+            title: 'p99 Global Latency',
+            value: '18.4 ms',
+            percentage: 92,
+            subtext: 'Optimal Edge Routing',
+            color: 'emerald'
           }
         }
       ]
