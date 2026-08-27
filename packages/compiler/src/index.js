@@ -497,5 +497,9 @@ export function compile(source, filename = 'Component.sola') {
   output += '\n  return () => { __flush_destroys(); };\n';
   output += '}\n';
 
-  return output;
+  return {
+    code: output,
+    js: output,
+    css: scopedCSS
+  };
 }
