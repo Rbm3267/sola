@@ -27,19 +27,19 @@
       id: 'w-1',
       component: 'DataCard',
       colSpan: 1,
-      config: { title: 'Daily Volume Moved', value: '14,800 lbs', trend: '+1,200 lbs', icon: 'activity' }
+      config: { title: 'Global Edge Requests', value: '42.8M / hr', trend: '+12.4% vs baseline', icon: 'activity' }
     },
     {
       id: 'w-2',
       component: 'GaugeCard',
       colSpan: 1,
-      config: { title: 'Recovery Index', value: '94 / 100', percentage: 94, subtext: 'Readiness: Optimal', color: 'emerald' }
+      config: { title: 'p99 Latency SLA', value: '18.4 ms', percentage: 94, subtext: 'Optimal Edge Routing', color: 'emerald' }
     },
     {
       id: 'w-3',
       component: 'DataCard',
       colSpan: 1,
-      config: { title: 'Monthly SaaS MRR', value: '$148,200', trend: '+24.8%', icon: 'trending-up' }
+      config: { title: 'Monthly SaaS MRR', value: '$184,200', trend: '+$14,800 this month', icon: 'trending-up' }
     },
     {
       id: 'w-4',
@@ -486,7 +486,7 @@
         <h3 class="text-base font-black text-slate-900 font-mono mb-1">Canvas is Clean</h3>
         <p class="text-xs text-slate-500 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
         <button 
-          onclick={() => loadPreset('fitness')}
+          onclick={() => loadPreset('finance')}
           style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
           class="font-bold text-xs text-white px-6 py-3 rounded-2xl transition-all cursor-pointer shadow-md">
           Load Starter Preset
