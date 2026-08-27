@@ -1,20 +1,17 @@
-﻿import { json } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import { GoogleGenAI } from '@google/genai';
-import * as dotenv from 'dotenv';
-import path from 'path';
-
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+import { GEMINI_API_KEY } from '$env/static/private';
 
 export async function POST({ request }) {
   try {
     const data = await request.json();
     const prompt = data.intent;
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (!GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY is missing.');
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
       model: 'gemini-3.6-flash',
