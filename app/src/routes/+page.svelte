@@ -19,20 +19,42 @@
   <!-- Ambient Glow -->
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] bg-gradient-to-b from-sky-100/40 to-transparent blur-[100px] rounded-full pointer-events-none"></div>
   
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col pt-6 md:pt-10">
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col pt-6 md:pt-8">
     
-    <!-- Header / Nav -->
-    <header class="w-full flex justify-between items-center mb-8 md:mb-16 bg-white/70 backdrop-blur-xl border border-slate-200/60 px-6 py-4 rounded-2xl shadow-sm">
-      <div class="text-2xl font-black text-slate-900 flex items-center gap-3 tracking-tighter"><img src="/logo.png" alt="Sola Logo" class="w-12 h-12 object-contain drop-shadow-md -ml-1" /></div>
+    <!-- Top Navigation Bar -->
+    <header class="w-full flex justify-between items-center mb-10 md:mb-16 bg-white/80 backdrop-blur-2xl border border-slate-200/80 px-5 sm:px-7 py-3.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] sticky top-4 z-50">
       
-      <div class="hidden md:flex items-center gap-8">
-        <a href="https://github.com" class="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors duration-150">Documentation</a>
-        <a href="/demo" class="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors duration-150">Playground</a>
-      </div>
+      <!-- Brand Logo + Wordmark -->
+      <a href="/" class="flex items-center gap-3.5 group cursor-pointer text-decoration-none">
+        <div class="relative flex items-center justify-center">
+          <div class="absolute -inset-1 bg-gradient-to-r from-sky-400 to-violet-500 rounded-full blur-md opacity-25 group-hover:opacity-45 transition duration-300"></div>
+          <img src="/logo.png" alt="Sola Logo" class="w-10 h-10 object-contain relative z-10 drop-shadow-sm group-hover:scale-105 transition-transform duration-200" />
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-2xl font-extrabold text-slate-900 tracking-tight leading-none font-sans">Sola</span>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600 bg-sky-50 border border-sky-200/60 px-2 py-0.5 rounded-full">v0.2.0</span>
+        </div>
+      </a>
       
-      <div class="flex items-center gap-4">
-        <a href="/demo" class="text-sm font-bold text-white bg-slate-900 px-5 py-2.5 rounded-xl hover:bg-slate-800 transition-colors duration-150 flex items-center gap-2 shadow-md">
-          Try Sola
+      <!-- Center Nav Links -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-100/60 p-1 rounded-xl border border-slate-200/50">
+        <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3.5 py-1.5 rounded-lg hover:bg-white hover:shadow-xs transition-all duration-150 flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-slate-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="#architecture" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3.5 py-1.5 rounded-lg hover:bg-white hover:shadow-xs transition-all duration-150">Architecture</a>
+        <a href="/demo" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3.5 py-1.5 rounded-lg hover:bg-white hover:shadow-xs transition-all duration-150">Playground</a>
+      </nav>
+      
+      <!-- Right Actions -->
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200/80 bg-white/70 px-3.5 py-2 rounded-xl hover:bg-white transition-colors duration-150 shadow-xs">
+          <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Star on GitHub</span>
+        </a>
+        <a href="/demo" class="text-xs font-bold text-white bg-slate-900 px-4 sm:px-5 py-2.5 rounded-xl hover:bg-slate-800 transition-all duration-150 flex items-center gap-2 shadow-[0_4px_14px_rgba(15,23,42,0.15)] hover:shadow-[0_6px_20px_rgba(15,23,42,0.25)] hover:-translate-y-0.5">
+          <span>Try Sola</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
       </div>
     </header>
@@ -93,32 +115,39 @@
         </div>
       </div>
 
-            <!-- Components Showcase -->
-      <div class="flex flex-col justify-center px-2 md:px-8 mt-16 md:mt-0 lg:col-span-2">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4">World-Class UI Primitives</h2>
-          <p class="text-xl text-slate-500 font-medium max-w-2xl mx-auto">
-            Sola ships with an incredibly polished, handcrafted design system. These primitives compile to zero-dependency vanilla DOM — no runtime overhead.
+      <!-- Components Showcase -->
+      <div id="architecture" class="flex flex-col justify-center px-2 md:px-4 mt-20 lg:col-span-2">
+        <div class="text-center mb-14">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-50 border border-sky-200/60 text-sky-700 text-xs font-mono font-bold mb-4">
+            <span>@sola/ui • Native Component Primitives</span>
+          </div>
+          <h2 class="text-4xl md:text-5xl font-black text-slate-950 tracking-tight mb-4">Handcrafted UI Architecture</h2>
+          <p class="text-lg text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed">
+            Sola primitives compile directly into reactive vanilla DOM nodes with scoped styles and zero virtual DOM diffing.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           
           <!-- Data Card Demo -->
-          <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs pl-2">DataCard.sola</h3>
-            <div class="pointer-events-none">
-              <DataCard config={{ title: "Total Users", value: "84,320", trend: "+12.5%", icon: "activity" }} />
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between px-2">
+              <span class="font-mono text-xs font-bold text-slate-500">DataCard.sola</span>
+              <span class="text-[10px] font-mono text-sky-600 bg-sky-50 px-2 py-0.5 rounded font-bold border border-sky-100">Compiled DOM</span>
             </div>
-            <div class="pointer-events-none mt-2">
-              <DataCard config={{ title: "Conversion Rate", value: "4.2%", trend: "-1.1%", icon: "laptop" }} />
+            <div class="flex flex-col gap-3.5">
+              <DataCard config={{ title: "Total Users", value: "84,320", trend: "+12.5%", icon: "activity" }} />
+              <DataCard config={{ title: "Conversion Rate", value: "4.2%", trend: "-1.1%", icon: "trending-up" }} />
             </div>
           </div>
 
           <!-- Dynamic Form Demo -->
-          <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs pl-2">DynamicForm.sola</h3>
-            <div class="pointer-events-none">
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between px-2">
+              <span class="font-mono text-xs font-bold text-slate-500">DynamicForm.sola</span>
+              <span class="text-[10px] font-mono text-violet-600 bg-violet-50 px-2 py-0.5 rounded font-bold border border-violet-100">Live Intent</span>
+            </div>
+            <div>
               <DynamicForm config={{ 
                 title: "Provision Database", 
                 endpoint: "/api/provision", 
@@ -131,21 +160,25 @@
           </div>
 
           <!-- List Block Demo -->
-          <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs pl-2">ListBlock.sola</h3>
-            <div class="pointer-events-none">
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between px-2">
+              <span class="font-mono text-xs font-bold text-slate-500">ListBlock.sola</span>
+              <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold border border-emerald-100">Signal List</span>
+            </div>
+            <div>
               <ListBlock config={{ 
-                title: "Recent Deployments", 
+                title: "Active Clusters", 
                 items: [
-                  { label: "Sola-web-v2.1", description: "Deployed 2 mins ago", status: "Active" },
-                  { label: "postgres-cluster", description: "Provisioned 1 hr ago", status: "Active" },
-                  { label: "redis-cache", description: "Maintenance mode", status: "Offline" }
+                  { label: "sola-core-v2.1", description: "us-east-1 • 2 mins ago", status: "Active" },
+                  { label: "postgres-primary", description: "us-west-2 • 1 hr ago", status: "Active" },
+                  { label: "redis-cache-eu", description: "eu-central-1 • Maintenance", status: "Offline" }
                 ] 
               }} />
             </div>
           </div>
 
         </div>
-      </div></section>
+      </div>
+    </section>
   </div>
 </div>

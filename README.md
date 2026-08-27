@@ -1,6 +1,17 @@
-# Sola ☀️
+<p align="center">
+  <img src="brand/logo/sola-logo-transparent.png" alt="Sola Logo" width="120" height="120" />
+</p>
 
-**The ambient intent framework.** Compile `.sola` files into zero-dependency vanilla DOM with native `$intent` signals that resolve AI state at the framework level.
+<h1 align="center">Sola</h1>
+
+<p align="center">
+  <b>The Ambient Intent Framework</b><br>
+  Compile <code>.sola</code> components into zero-dependency vanilla DOM with native <code>$intent</code> signals that resolve AI state at the framework level.
+</p>
+
+<p align="center">
+  <a href="https://sola-ui.vercel.app"><b>Live Website & Playground →</b></a>
+</p>
 
 ```bash
 npm create sola@latest
@@ -10,13 +21,14 @@ npm create sola@latest
 
 ## What is Sola?
 
-Sola is a compiler-first JavaScript framework where AI isn't bolted on — it's a reactive primitive. Write `.sola` files with familiar syntax, and the compiler outputs hyper-optimized vanilla DOM instructions. No virtual DOM. No runtime framework. Just raw performance.
+Sola is a compiler-first JavaScript framework where AI isn't bolted on — it's a first-class reactive primitive. Write `.sola` files with familiar syntax, and the custom AST compiler outputs hyper-optimized vanilla DOM instructions. No virtual DOM. No heavy runtime framework. Just raw performance.
 
 ```html
 <script>
   let count = $state(0);
   let doubled = $derived(() => count() * 2);
   let dashboard = $intent("Show MRR trend for Q3");
+  let customerData = $data("postgres-primary:customers", { sync: "realtime" });
 </script>
 
 <div>
@@ -25,118 +37,61 @@ Sola is a compiler-first JavaScript framework where AI isn't bolted on — it's 
   <input bind:value="count" />
 
   {#if count() > 10}
-    <p>That's a lot of clicks.</p>
-  {:else}
-    <p>Keep going.</p>
+    <p>High engagement detected.</p>
   {/if}
 </div>
 
 <style>
-  h1 { color: #0ea5e9; }
+  h1 { color: #0ea5e9; font-weight: 800; }
 </style>
 ```
 
 The compiler transforms this into a self-contained ES module with:
-- **Signals-based reactivity** — fine-grained updates, no diffing
-- **Scoped styles** — auto-hashed CSS selectors per component
+- **Signals-based reactivity** — Fine-grained DOM updates, zero diffing
+- **Scoped styles** — Auto-hashed CSS selectors per component
 - **Native AI resolution** — `$intent` resolves structured data from any LLM provider
+- **Zero-Knowledge Data Plane** — `$data` connects to local databases via Sola Relay without exposing private credentials to the cloud
+
+---
 
 ## Why Sola?
 
-| | Sola | React | Svelte | Vue |
+| Feature | Sola | React | Svelte | Vue |
 |---|---|---|---|---|
-| **Bundle size** (hello world) | ~3 KB | ~45 KB | ~4 KB | ~33 KB |
-| **Virtual DOM** | No | Yes | No | Yes |
-| **Built-in AI primitive** | `$intent` | ❌ | ❌ | ❌ |
-| **Scoped styles** | ✅ | CSS Modules | ✅ | ✅ |
-| **Compiler** | ✅ | ❌ | ✅ | ✅ |
+| **Bundle size** (hello world) | **~3.2 KB** | ~45 KB | ~4 KB | ~33 KB |
+| **Virtual DOM Overhead** | **None (Direct DOM)** | Yes | No | Yes |
+| **Built-in AI Intent Primitive** | **`$intent`** | ❌ | ❌ | ❌ |
+| **Secure On-Prem Data Signals** | **`$data` (Sola Relay)** | ❌ | ❌ | ❌ |
+| **Scoped Styles** | **Native AST** | CSS Modules | Native | Scoped |
+| **Compiler Architecture** | **Acorn AST Transformer** | Babel / SWC | Custom | Template |
 
-Every framework has state. Every framework has effects. **No framework has intent.** Sola's `$intent` is a first-class reactive signal that resolves structured AI responses, with built-in AbortController cancellation, provider configuration, and caching.
+---
 
-## Features
+## Reactive Primitives
 
-- **`$state`** — Fine-grained reactive signals
-- **`$derived`** — Computed values with automatic dependency tracking
-- **`$intent`** — AI-native signal that resolves structured data from LLMs
-- **`{#if}` / `{:else}`** — Conditional rendering
-- **`{#each}`** — List rendering with index support
-- **`bind:value`** — Two-way binding for inputs
-- **`on:click`** — Event handling
-- **`<style>`** — Scoped CSS with auto-hashed selectors
-- **Component imports** — `import Counter from './Counter.sola'`
-- **Props** — `export let title = 'default'`
-- **Lifecycle hooks** — `onMount`, `onDestroy`
-- **Batched updates** — Signal writes are queued and flushed in a microtask
+- **`$state(initial)`** — Fine-grained reactive signal
+- **`$derived(() => fn)`** — Computed values with automatic dependency tracking
+- **`$effect(() => fn)`** — Side effects with automatic cleanup
+- **`$intent(prompt, options)`** — AI-native signal that resolves structured UI & data from LLMs
+- **`$data(source, options)`** — Real-time reactive data pipeline connected through Sola Relay
 
-## Architecture
+---
+
+## Monorepo Architecture
 
 ```
-packages/
-├── compiler/          @sola/compiler — AST-based .sola → ES module compiler
-├── core/              @sola/core — Signals, effects, derived, intent runtime
-├── vite-plugin-sola/  vite-plugin-sola — Vite integration with HMR
-└── create-sola/       create-sola — Project scaffolding CLI (coming soon)
-
-apps/
-├── test-app/          Minimal Vite app running .sola files
-└── docs/              Documentation site (coming soon)
+sola/
+├── packages/
+│   ├── compiler/    # Custom Acorn AST compiler (.sola -> JS + CSS)
+│   ├── core/        # Reactive runtime engine (signals, effects, $intent, $data)
+│   ├── ui/          # Standard component library (.sola files)
+│   └── relay/       # Zero-knowledge local data proxy (PostgreSQL, MySQL)
+├── brand/           # Official brand kit, logos, and favicons
+└── app/             # Marketing site & interactive playground
 ```
 
-### How the compiler works
-
-1. **Extract** — Splits `.sola` source into `<script>`, `<style>`, and template blocks
-2. **Parse JS** — Acorn AST traversal detects `$state`, `$derived`, `$intent` declarations and rewrites assignments (`count = x` → `set_count(x)`)
-3. **Scope CSS** — Hashes selectors with a unique per-component class
-4. **Parse HTML** — htmlparser2 builds a template AST, with expression extraction to protect JS in attributes from HTML parsing
-5. **Emit DOM** — Generates `document.createElement` / `createTextNode` calls with `createEffect` wrappers for reactive bindings
-6. **Output** — A self-contained ES module exporting a `mount(target, props?)` function
-
-## Quick Start
-
-```bash
-# Clone the repo
-git clone https://github.com/Rbm3267/sola.git
-cd sola
-
-# Install dependencies
-npm install
-
-# Run the test app
-cd apps/test-app
-npx vite
-```
-
-## Configuration
-
-Configure the `$intent` provider globally:
-
-```js
-import { configureIntent } from '@sola/core';
-
-configureIntent({
-  provider: 'openai',        // 'openai' | 'gemini' | 'anthropic' | 'local'
-  endpoint: '/api/intent',   // Your intent resolution endpoint
-  model: 'gpt-4o'            // Model to use
-});
-```
-
-## Roadmap
-
-- [x] Compiler V3 — AST-based reactive transforms
-- [x] Signals engine — `createSignal`, `createEffect`, `createDerived`
-- [x] `$intent` — AI-native reactive signal
-- [x] Scoped styles — Per-component CSS hashing
-- [x] Component imports & props
-- [x] `bind:value` two-way binding
-- [x] Batched microtask updates
-- [ ] `create-sola` CLI scaffolding
-- [ ] HMR with source maps
-- [ ] SSR / hydration
-- [ ] TypeScript in `<script lang="ts">`
-- [ ] Plugin ecosystem
-- [ ] VS Code syntax highlighting
-- [ ] Documentation site
+---
 
 ## License
 
-MIT
+MIT © 2026 Sola Contributors

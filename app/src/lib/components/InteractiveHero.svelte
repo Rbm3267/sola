@@ -100,39 +100,66 @@
   }
 </script>
 
-<!-- Hero -->
-<div class="w-full mx-auto flex flex-col items-center text-center mt-16 md:mt-28 relative">
-  
-  <!-- Badge -->
-  <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-sky-200/80 bg-white text-sky-600 text-[13px] font-semibold shadow-sm backdrop-blur-md mb-8">
-    <div class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></div>
-    <span class="tracking-wide">Ambient Intent Runtime</span>
-  </div>
-  
+<!-- Centered, High-Impact Hero -->
+<div class="flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8 pb-12 relative">
+
+  <!-- Floating Announcement Pill -->
+  <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] mb-8 hover:border-sky-300 hover:shadow-[0_4px_12px_rgba(14,165,233,0.1)] transition-all duration-200 group cursor-pointer text-decoration-none">
+    <span class="flex h-2 w-2 relative">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+    </span>
+    <span class="text-xs font-semibold text-slate-700 group-hover:text-slate-950 transition-colors">Introducing Sola v0.2.0 • The Ambient Runtime</span>
+    <svg class="w-3 h-3 text-slate-400 group-hover:text-sky-500 group-hover:translate-x-0.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  </a>
+
   <!-- Headline -->
-  <h1 class="text-5xl sm:text-6xl md:text-[5.5rem] font-extrabold tracking-[-0.04em] text-slate-900 leading-[1] mb-6 max-w-4xl">
-    Software that<br/>
-    <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-blue-500 to-violet-500">builds itself.</span>
+  <h1 class="text-5xl sm:text-6xl md:text-7xl font-black text-slate-950 tracking-tight leading-[1.08] mb-6">
+    Software that <br />
+    <span class="bg-gradient-to-r from-sky-500 via-blue-600 to-violet-600 bg-clip-text text-transparent drop-shadow-xs">builds itself.</span>
   </h1>
-  
-  <!-- Subtitle -->
-  <p class="text-lg md:text-xl text-slate-500 leading-relaxed max-w-2xl font-medium mb-10 px-4">
-    Sola compiles <code class="text-[15px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">.sola</code> files into zero-dependency vanilla DOM. 
-    Native <code class="text-[15px] font-semibold text-violet-600 bg-violet-50 px-2 py-0.5 rounded-md border border-violet-100">$intent</code> signals resolve AI state at the framework level.
+
+  <!-- Subheading -->
+  <p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
+    Sola compiles <code class="text-[14px] font-semibold font-mono text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200/60">.sola</code> components into zero-dependency DOM. 
+    Native <code class="text-[14px] font-semibold font-mono text-violet-600 bg-violet-50 px-2 py-0.5 rounded-md border border-violet-200/60">$intent</code> signals resolve generative UI at the framework level.
   </p>
 
   <!-- CTA Row -->
-  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-20">
-    <a href="/demo" class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-800 transition-all duration-150 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-center text-[15px]">
-      Try the Playground
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 w-full sm:w-auto justify-center">
+    <a href="/demo" class="bg-slate-950 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-800 transition-all duration-150 shadow-[0_4px_16px_rgba(15,23,42,0.2),inset_0_1px_1px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.3)] hover:-translate-y-0.5 text-center text-[15px] flex items-center justify-center gap-2">
+      <span>Try the Playground</span>
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
-    <div class="px-6 py-4 rounded-xl border border-slate-200 bg-white text-slate-600 font-mono text-sm flex items-center gap-4 shadow-sm">
-      <div><span class="text-sky-500 font-bold select-none">$</span> npm create sola@latest</div>
-      <button aria-label="Copy command" class="text-slate-300 hover:text-slate-600 transition-colors duration-150 cursor-pointer">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    
+    <!-- Interactive CLI Copy Box -->
+    <div class="px-5 py-3.5 rounded-xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-slate-700 font-mono text-sm flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
+      <div class="flex items-center gap-2 select-all">
+        <span class="text-sky-500 font-bold select-none">$</span>
+        <span>npm create sola@latest</span>
+      </div>
+      <button 
+        onclick={copyCliCommand}
+        aria-label="Copy CLI command" 
+        class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 text-xs font-sans font-semibold">
+        {#if copied}
+          <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="text-emerald-600 font-mono">Copied!</span>
+        {:else}
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        {/if}
       </button>
     </div>
   </div>
+
+  <!-- Micro Specs Line -->
+  <div class="flex items-center gap-4 text-xs font-semibold text-slate-400 mb-16">
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> 3.2 kB Core</span>
+    <span>•</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span> 0 Dependencies</span>
+    <span>•</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Native AI Intent</span>
+  </div></div>
 
   <!-- The Demo Canvas -->
   <div class="w-full max-w-5xl mx-auto relative px-4">
