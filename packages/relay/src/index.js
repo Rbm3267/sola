@@ -111,6 +111,68 @@ class GoogleSheetsConnector {
   async disconnect() {}
 }
 
+class ServiceNowConnector {
+  constructor(config) {
+    this.instance = config.instance || config.host || process.env.SN_INSTANCE || '';
+    this.username = config.username || config.user || process.env.SN_USERNAME || '';
+    this.password = config.password || process.env.SN_PASSWORD || '';
+    this.token = config.token || config.bearerToken || process.env.SN_BEARER_TOKEN || '';
+    this.defaultTable = config.table || 'incident';
+  }
+
+  async connect() {
+    if (!this.instance) {
+      throw new Error("ServiceNow instance URL or domain is required (e.g. 'dev12345.service-now.com')");
+    }
+  }
+
+  async query(options = {}) {
+    const table = options.table || options.source || this.defaultTable;
+    const query = options.query || options.sysparm_query || 'priority=1^state!=7^ORDERBYDESCsys_created_on';
+    const limit = options.limit || options.sysparm_limit || 20;
+    const fields = options.fields || 'number,short_description,priority,state,assigned_to,assignment_group,sys_created_on';
+
+    const baseUrl = this.instance.startsWith('http') ? this.instance : `https://${this.instance}.service-now.com`;
+    const endpoint = `${baseUrl}/api/now/table/${table}?sysparm_query=${encodeURIComponent(query)}&sysparm_limit=${limit}&sysparm_display_value=true&sysparm_fields=${encodeURIComponent(fields)}`;
+
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    } else if (this.username && this.password) {
+      const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+      headers['Authorization'] = `Basic ${auth}`;
+    }
+
+    const res = await fetch(endpoint, { headers });
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`ServiceNow API error (${res.status} ${res.statusText}): ${errText}`);
+    }
+
+    const data = await res.json();
+    const records = data.result || [];
+    return { rows: records, rowCount: records.length, table };
+  }
+
+  async schema() {
+    return {
+      "incident": [
+        { name: "number", type: "string" },
+        { name: "short_description", type: "string" },
+        { name: "priority", type: "string" },
+        { name: "state", type: "string" },
+        { name: "assigned_to", type: "string" }
+      ]
+    };
+  }
+
+  async disconnect() {}
+}
+
 class MySQLConnector {
   constructor(config) {
     this.config = config;
@@ -180,6 +242,10 @@ function addConnection(name, type, config) {
     case 'sheet':
     case 'googlesheets':
       connector = new GoogleSheetsConnector(config);
+      break;
+    case 'servicenow':
+    case 'now':
+      connector = new ServiceNowConnector(config);
       break;
     default:
       throw new Error(`Unsupported connector type: ${type}`);
