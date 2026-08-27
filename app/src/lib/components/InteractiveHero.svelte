@@ -239,15 +239,26 @@
               {/each}
             </div>
           {:else if phase === 'resolving'}
-            <div class="flex flex-col items-center justify-center min-h-[220px] py-4">
-              <LivingSolaCore state="synthesizing" size={160} showTelemetry={true} />
+            <div class="flex flex-col items-center justify-center min-h-[200px] gap-3">
+              <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold">
+                <div class="w-3.5 h-3.5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                <span>Synthesizing zero-VDOM components...</span>
+              </div>
             </div>
           {:else}
-            <div class="flex items-center justify-center min-h-[220px]">
-              <div class="text-center flex flex-col items-center">
-                <LivingSolaCore state="idle" size={120} showTelemetry={false} />
-                <span class="text-xs font-mono text-slate-400 mt-2">Ambient Intent Bus Listening</span>
-              </div>
+            <!-- Default / Typing Preview State -->
+            <div class="grid gap-4 {scenarios[currentIndex].components.length > 1 ? 'md:grid-cols-2' : ''} opacity-80">
+              {#each scenarios[currentIndex].components as comp}
+                <div>
+                  {#if comp.type === 'DataCard'}
+                    <DataCard config={comp.config} />
+                  {:else if comp.type === 'DynamicForm'}
+                    <DynamicForm config={comp.config} onSubmit={() => {}} />
+                  {:else if comp.type === 'ListBlock'}
+                    <ListBlock config={comp.config} />
+                  {/if}
+                </div>
+              {/each}
             </div>
           {/if}
         </div>
