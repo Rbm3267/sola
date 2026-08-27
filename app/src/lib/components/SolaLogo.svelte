@@ -13,14 +13,7 @@
     showGlow?: boolean;
   }>();
 
-  let mounted = $state(false);
-
-  onMount(() => {
-    // Trigger emergence animation
-    setTimeout(() => {
-      mounted = true;
-    }, 50);
-  });
+  let mounted = $state(true);
 
   const sizeClasses = {
     xs: 'w-7 h-7',
