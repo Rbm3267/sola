@@ -223,20 +223,44 @@
       ];
     } else if (type === 'servicenow') {
       widgets = [
-        { id: 'sn-1', component: 'DataCard', colSpan: 1, config: { title: 'P1 Critical Incidents', value: '2 Active', trend: '-4 from yesterday', icon: 'activity' } },
-        { id: 'sn-2', component: 'GaugeCard', colSpan: 1, config: { title: 'SLA Compliance Rate', value: '98.4%', percentage: 98, subtext: 'MTTR: 14.2 mins (Target: <30m)', color: 'emerald' } },
-        { id: 'sn-3', component: 'DataCard', colSpan: 1, config: { title: 'Pending CAB Changes', value: '7 Awaiting', trend: 'Release Window 02:00 UTC', icon: 'check' } },
-        { id: 'sn-4', component: 'ListBlock', colSpan: 3, config: { title: 'ServiceNow Live Incident Stream (now/table/incident)', items: [
-          { label: 'INC009481 • API Gateway Latency Spike (EU-West)', description: 'Assigned: Tier 3 Platform SRE • SLA Breach in 12m', status: 'Active' },
-          { label: 'INC009479 • SSO IdP Certificate Expiring', description: 'Assigned: Identity & SecOps • Fix Deployed to Staging', status: 'Active' },
-          { label: 'CHG003410 • Redis Cluster Version 7.2 Upgrade', description: 'CAB Approved • Scheduled for Window #4', status: 'Completed' }
-        ]} }
+        { id: 'sn-1', component: 'IncidentTriageMatrix', colSpan: 3, config: {
+          incidentId: 'INC009481',
+          title: 'API Gateway High-Frequency Latency Spike (EU-West)',
+          severity: 'P1 - Critical',
+          slaRemainingMin: 11,
+          blastRadius: '42,000 Active Checkout Sessions',
+          playbooks: [
+            { id: 'pb-1', title: 'Reroute Edge DNS to eu-central-1', action: 'Route53 Failover', automated: true },
+            { id: 'pb-2', title: 'Scale Redis Cluster Read Replicas (x4)', action: 'Auto-Provision', automated: true },
+            { id: 'pb-3', title: 'Page Tier 3 Database SRE On-Call', action: 'PagerDuty Incident', automated: false }
+          ]
+        } },
+        { id: 'sn-2', component: 'DiffAudit', colSpan: 3, config: {
+          title: 'Scale Redis Cluster Max Connections (x10)',
+          entityId: 'CHG009842',
+          entityType: 'ServiceNow CAB Release',
+          riskLevel: 'Moderate',
+          riskScore: 42,
+          requester: 'Tier 3 Platform SRE',
+          window: 'Tonight 02:00 – 04:00 UTC'
+        } },
+        { id: 'sn-3', component: 'DataCard', colSpan: 1, config: { title: 'P1 Critical Incidents', value: '1 Active', trend: '-4 resolved today', icon: 'activity' } },
+        { id: 'sn-4', component: 'GaugeCard', colSpan: 1, config: { title: 'SLA Compliance Rate', value: '98.4%', percentage: 98, subtext: 'MTTR: 14.2 mins (Target: <30m)', color: 'emerald' } },
+        { id: 'sn-5', component: 'DataCard', colSpan: 1, config: { title: 'Pending CAB Changes', value: '3 Awaiting', trend: 'Release Window 02:00 UTC', icon: 'check' } }
       ];
     } else if (type === 'cloud') {
       widgets = [
-        { id: 'c-1', component: 'DataCard', colSpan: 1, config: { title: 'Enterprise ARR', value: '$1,840,000', trend: '+34.2%', icon: 'trending-up' } },
-        { id: 'c-2', component: 'GaugeCard', colSpan: 1, config: { title: 'Cluster CPU', value: '68.4%', percentage: 68, subtext: 'Auto-scaled across 3 zones', color: 'sky' } },
-        { id: 'c-3', component: 'DataCard', colSpan: 1, config: { title: 'Edge Requests', value: '4.2M / day', trend: '99.99% Uptime', icon: 'check' } }
+        { id: 'c-1', component: 'ClusterMatrix', colSpan: 3, config: {
+          title: 'AWS us-east-1 RDS Read Replica Cluster Mesh',
+          subtitle: '12 Regional Shards Distributed Across 6 Global Regions'
+        } },
+        { id: 'c-2', component: 'FlowWaterfall', colSpan: 3, config: {
+          title: 'SaaS Gross Revenue Realization & Cloud Costs',
+          subtitle: 'End-to-end deduction breakdown across billing gateway and AWS egress'
+        } },
+        { id: 'c-3', component: 'DataCard', colSpan: 1, config: { title: 'Enterprise ARR', value: '$1,840,000', trend: '+34.2%', icon: 'trending-up' } },
+        { id: 'c-4', component: 'GaugeCard', colSpan: 1, config: { title: 'Cluster CPU', value: '68.4%', percentage: 68, subtext: 'Auto-scaled across 3 zones', color: 'sky' } },
+        { id: 'c-5', component: 'DataCard', colSpan: 1, config: { title: 'Edge Requests', value: '42.8M / hr', trend: '99.99% Uptime', icon: 'check' } }
       ];
     } else {
       widgets = [];

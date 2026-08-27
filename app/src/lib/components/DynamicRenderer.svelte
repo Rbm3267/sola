@@ -4,6 +4,11 @@
   import DynamicForm from './DynamicForm.svelte';
   import ListBlock from './ListBlock.svelte';
   import StreamView from './StreamView.svelte';
+  import ClusterMatrix from './ClusterMatrix.svelte';
+  import DiffAudit from './DiffAudit.svelte';
+  import FlowWaterfall from './FlowWaterfall.svelte';
+  import IncidentTriageMatrix from './IncidentTriageMatrix.svelte';
+  import SchemaInspector from './SchemaInspector.svelte';
 
   const props = $props<{
     intentPayload?: any;
@@ -17,7 +22,12 @@
     GaugeCard,
     DynamicForm,
     ListBlock,
-    StreamView
+    StreamView,
+    ClusterMatrix,
+    DiffAudit,
+    FlowWaterfall,
+    IncidentTriageMatrix,
+    SchemaInspector
   };
 
   const items = $derived<Array<{ component: string; config: any; colSpan?: number }>>(

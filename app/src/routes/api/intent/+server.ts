@@ -33,6 +33,16 @@ Available Primitives:
    config: { title: string, items: Array<{ label: string, description: string, status: 'Active' | 'Completed' | 'Syncing' | 'Offline' }> }
 5. 'StreamView': Real-time telemetry log feed.
    config: { title: string, events: Array<{ id: string, message: string, timestamp: string, type: 'info' | 'success' | 'warning' }> }
+6. 'ClusterMatrix': High-density distributed node matrix and cluster health grid.
+   config: { title: string, subtitle?: string, nodes: Array<{ id: string, label: string, status: 'nominal' | 'warning' | 'critical' | 'draining' | 'idle', load?: number, latency?: string, region?: string }> }
+7. 'DiffAudit': ServiceNow Change Advisory Board (CAB) & drift review diff with 1-click approvals.
+   config: { title: string, entityId: string, entityType: string, riskLevel: 'Low' | 'Moderate' | 'High' | 'Destructive', riskScore: number, requester: string, window: string, diffLines: Array<{ type: 'add' | 'remove' | 'context', content: string }> }
+8. 'FlowWaterfall': Financial revenue realization and APM request span latency breakdown.
+   config: { title: string, subtitle?: string, steps: Array<{ id: string, name: string, delta: number, type: 'start' | 'credit' | 'debit' | 'total', formattedValue: string }> }
+9. 'IncidentTriageMatrix': Mission-control P1 emergency incident triage capsule with countdown timer.
+   config: { incidentId: string, title: string, severity: 'P1 - Critical' | 'P2 - High' | 'P3 - Moderate', slaRemainingMin: number, blastRadius: string, playbooks: Array<{ id: string, title: string, action: string, automated?: boolean }> }
+10. 'SchemaInspector': Database table schema explorer with types, row counts, and foreign key relations.
+   config: { table: string, rowCount?: string, sizeBytes?: string, columns: Array<{ name: string, type: string, isPrimary?: boolean, isNullable?: boolean, foreignKey?: string }> }
 
 Output format: Return ONLY a JSON Array of component objects with an optional colSpan (1, 2, or 3).
 Example:

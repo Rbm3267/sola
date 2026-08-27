@@ -4,9 +4,15 @@
   import GaugeCard from '$lib/components/GaugeCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
+  import StreamView from '$lib/components/StreamView.svelte';
+  import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
+  import DiffAudit from '$lib/components/DiffAudit.svelte';
+  import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
+  import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
+  import SchemaInspector from '$lib/components/SchemaInspector.svelte';
   import { fade, fly } from 'svelte/transition';
 
-  let selectedComponent = $state('DataCard');
+  let selectedComponent = $state('ClusterMatrix');
   let viewMode = $state('preview'); // 'preview' | 'embed' | 'code' | 'compiled'
   let embedFramework = $state('react'); // 'react' | 'vue' | 'html' | 'svelte'
 
@@ -43,6 +49,11 @@
   }
 
   const componentList = [
+    { id: 'ClusterMatrix', name: 'ClusterMatrix', desc: 'High-density node matrix with sub-pixel glow status and APM hover cards', category: 'Infrastructure' },
+    { id: 'DiffAudit', name: 'DiffAudit', desc: 'ServiceNow CAB change review and drift diff with 1-click approvals', category: 'ITSM & Security' },
+    { id: 'FlowWaterfall', name: 'FlowWaterfall', desc: 'Financial revenue realization and APM request trace latency split breakdown', category: 'Analytics' },
+    { id: 'IncidentTriageMatrix', name: 'IncidentTriageMatrix', desc: 'Mission-control P1 emergency incident triage capsule with countdown timer', category: 'ITSM & Security' },
+    { id: 'SchemaInspector', name: 'SchemaInspector', desc: 'Relational database schema explorer with types, row counts, and foreign keys', category: 'Data Display' },
     { id: 'DataCard', name: 'DataCard', desc: 'KPI metric tile with vector SVG sparklines and change indicators', category: 'Analytics' },
     { id: 'GaugeCard', name: 'GaugeCard', desc: 'Circular SVG progress arc for memory, CPU, and hardware load', category: 'Telemetry' },
     { id: 'DynamicForm', name: 'DynamicForm', desc: 'Declarative auto-binding schema form with instant submit state', category: 'Inputs' },
@@ -256,12 +267,76 @@ import DataCard from '@sola/ui/DataCard';
           <div class="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-35 pointer-events-none"></div>
 
           {#if viewMode === 'preview'}
-            <div class="w-full max-w-md relative z-10 flex flex-col items-center gap-6">
+            <div class="w-full max-w-xl relative z-10 flex flex-col items-center gap-6">
               
-              {#if selectedComponent === 'DataCard'}
+              {#if selectedComponent === 'ClusterMatrix'}
+                <div class="w-full">
+                  <ClusterMatrix config={{
+                    title: "AWS us-east-1 RDS Cluster Mesh",
+                    subtitle: "12 Primary & Read-Replica Shards",
+                    nodes: [
+                      { id: "rds-01", label: "us-east-1a • Primary Master", status: "nominal", load: 28, latency: "1.1ms" },
+                      { id: "rds-02", label: "us-east-1b • Replica AZ-1", status: "nominal", load: 34, latency: "1.4ms" },
+                      { id: "rds-03", label: "us-east-1c • Replica AZ-2", status: "nominal", load: 42, latency: "1.9ms" },
+                      { id: "rds-04", label: "us-west-2a • Cross-Region", status: "warning", load: 79, latency: "24.2ms" },
+                      { id: "rds-05", label: "eu-west-1a • Auth Shard", status: "nominal", load: 31, latency: "11.8ms" },
+                      { id: "rds-06", label: "eu-west-1b • Edge Ingress", status: "critical", load: 96, latency: "148ms" }
+                    ]
+                  }} />
+                </div>
+              {:else if selectedComponent === 'DiffAudit'}
+                <div class="w-full">
+                  <DiffAudit config={{
+                    title: "Scale Redis Cluster Max Connections (x10)",
+                    entityId: "CHG009842",
+                    entityType: "ServiceNow CAB Release",
+                    riskLevel: "Moderate",
+                    riskScore: 42,
+                    requester: "Tier 3 Platform SRE",
+                    window: "Tonight 02:00 – 04:00 UTC"
+                  }} />
+                </div>
+              {:else if selectedComponent === 'FlowWaterfall'}
+                <div class="w-full">
+                  <FlowWaterfall config={{
+                    title: "SaaS Gross Revenue Realization",
+                    subtitle: "End-to-end deduction breakdown to net settlement",
+                    steps: [
+                      { id: "1", name: "Gross Payment Volume", delta: 184200, type: "start", formattedValue: "$184,200" },
+                      { id: "2", name: "Stripe Processing Fees", delta: -5340, type: "debit", formattedValue: "-$5,340" },
+                      { id: "3", name: "AWS Cloud Infrastructure", delta: -2400, type: "debit", formattedValue: "-$2,400" },
+                      { id: "4", name: "Enterprise Contract Add-ons", delta: 18400, type: "credit", formattedValue: "+$18,400" },
+                      { id: "5", name: "Net Realized Settlement", delta: 194860, type: "total", formattedValue: "$194,860" }
+                    ]
+                  }} />
+                </div>
+              {:else if selectedComponent === 'IncidentTriageMatrix'}
+                <div class="w-full">
+                  <IncidentTriageMatrix config={{
+                    incidentId: "INC009481",
+                    title: "API Gateway Latency Spike (EU-West)",
+                    severity: "P1 - Critical",
+                    slaRemainingMin: 11,
+                    blastRadius: "42,000 Active Sessions • Checkout Ingress",
+                    playbooks: [
+                      { id: "pb-1", title: "Reroute Edge DNS to eu-central-1", action: "Route53 Failover", automated: true },
+                      { id: "pb-2", title: "Scale Container Workers (x4)", action: "Auto-Provision", automated: true },
+                      { id: "pb-3", title: "Page On-Call Database Lead", action: "PagerDuty Incident", automated: false }
+                    ]
+                  }} />
+                </div>
+              {:else if selectedComponent === 'SchemaInspector'}
+                <div class="w-full">
+                  <SchemaInspector config={{
+                    table: "public.incident",
+                    rowCount: "2,419,042",
+                    sizeBytes: "842 MB"
+                  }} />
+                </div>
+              {:else if selectedComponent === 'DataCard'}
                 <DataCard config={{
                   title: "Monthly Recurring Revenue",
-                  value: "$148,200",
+                  value: "$184,200",
                   trend: "+24.8%",
                   icon: "trending-up"
                 }} />
