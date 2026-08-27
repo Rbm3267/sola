@@ -79,15 +79,15 @@
     }
   }
 
-  :global(.animate-sola-spin) {
+  .sola-spin {
     animation: sola-spin 32s linear infinite;
   }
 
-  :global(.group\/logo:hover .animate-sola-spin) {
-    animation-duration: 12s; /* Gentle acceleration on hover */
+  .sola-pulse {
+    animation: sola-pulse 6s ease-in-out infinite;
   }
 
-  :global(.animate-sola-pulse) {
-    animation: sola-pulse 6s ease-in-out infinite;
+  .group:hover .sola-spin {
+    animation-duration: 12s;
   }
 </style>

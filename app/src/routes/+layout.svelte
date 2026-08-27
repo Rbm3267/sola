@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>Sola — The Ambient Intent Framework (AIR)</title>
+	<title>Sola</title>
 	<meta name="description" content="A reactive runtime and compiler for dynamic, ambient AI-driven user interfaces." />
 	<meta property="og:title" content="Sola — The Ambient Intent Framework (AIR)" />
 	<meta property="og:description" content="A reactive runtime and compiler for dynamic, ambient AI-driven user interfaces." />

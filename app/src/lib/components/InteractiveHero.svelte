@@ -98,6 +98,16 @@
       currentIndex = (currentIndex + 1) % scenarios.length;
     }
   }
+
+  let copied = $state(false);
+
+  function copyCliCommand() {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('npm create sola@latest');
+      copied = true;
+      setTimeout(() => { copied = false; }, 2000);
+    }
+  }
 </script>
 
 <!-- Centered, High-Impact Hero -->
