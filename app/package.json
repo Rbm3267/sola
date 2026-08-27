@@ -30,5 +30,12 @@
 		"@sveltejs/adapter-vercel": "^6.3.4",
 		"chroma-js": "^3.2.0",
 		"jsdom": "^30.0.1"
+	},
+	"allowScripts": {
+		"esbuild": true,
+		"@google/genai": true,
+		"protobufjs": true,
+		"@rolldown/binding-linux-x64-gnu": true,
+		"@rolldown/binding-wasm32-wasi": true
 	}
 }
