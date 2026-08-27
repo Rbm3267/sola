@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { page } from '$app/state';
+  import { page } from '$app/stores';
   import SolaLogo from './SolaLogo.svelte';
 
-  let currentPath = $derived(page.url.pathname);
+  let currentPath = $derived($page.url.pathname);
 </script>
 
 <header class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-slate-200/80 transition-all">

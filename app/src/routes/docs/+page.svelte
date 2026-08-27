@@ -1,7 +1,7 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
   import { onMount } from 'svelte';
-  import { page } from '$app/state';
+  import { page } from '$app/stores';
 
   let activeSection = $state('quickstart');
   let askQuery = $state('');
@@ -47,7 +47,7 @@
   }
 
   onMount(() => {
-    if (page.url.searchParams.get('ai') === 'true') {
+    if ($page.url.searchParams.get('ai') === 'true') {
       const input = document.getElementById('ai-ask-input');
       input?.focus();
     }
