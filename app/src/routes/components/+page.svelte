@@ -70,10 +70,10 @@ export function Metric() {
   return <div ref={containerRef} />;
 }`,
       vue: `<!-- In any Vue 3 / Nuxt app: -->
-<script setup>
+<` + `script setup>
 import { vSola } from '@sola/vue';
 import DataCard from '@sola/ui/DataCard';
-</script>
+</` + `script>
 
 <template>
   <div v-sola="[DataCard, { title: 'MRR', value: '$148,200', trend: '+24.8%' }]" />
@@ -81,7 +81,7 @@ import DataCard from '@sola/ui/DataCard';
       html: `<!-- In any HTML page, Webflow, or WordPress: -->
 <div id="mrr-card"></div>
 
-<script type="module">
+<` + `script type="module">
   import mount from 'https://esm.sh/@sola/ui/DataCard';
   
   mount(document.getElementById('mrr-card'), {
@@ -89,15 +89,15 @@ import DataCard from '@sola/ui/DataCard';
     value: "$148,200",
     trend: "+24.8%"
   });
-</script>`,
+</` + `script>`,
       svelte: `<!-- In any Svelte app: -->
-<script>
+<` + `script>
   import { onMount } from 'svelte';
   import mountDataCard from '@sola/ui/DataCard';
 
   let el;
   onMount(() => mountDataCard(el, { title: "MRR", value: "$148,200" }));
-</script>
+</` + `script>
 
 <div bind:this={el} />`
     }
