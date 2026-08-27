@@ -1,0 +1,23 @@
+{
+  "name": "@sola/ui",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./canvas": "./src/Canvas.sola",
+    "./data-card": "./src/DataCard.sola",
+    "./table": "./src/Table.sola",
+    "./text-input": "./src/TextInput.sola",
+    "./card": "./src/Card.sola",
+    "./stack": "./src/Stack.sola",
+    "./badge": "./src/Badge.sola",
+    "./spinner": "./src/Spinner.sola",
+    "./alert": "./src/Alert.sola",
+    "./intent-card": "./src/IntentCard.sola",
+    "./intent-list": "./src/IntentList.sola"
+  },
+  "dependencies": {
+    "@sola/core": "*"
+  }
+}

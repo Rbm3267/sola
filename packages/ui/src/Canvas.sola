@@ -1,0 +1,19 @@
+<script>
+  export let theme = 'light';
+  export let padding = 'comfortable';
+  export let layout = 'auto-grid';
+  export let maxWidth = '1200px';
+</script>
+
+<div class="sola-canvas" style="max-width: {maxWidth}; margin: 0 auto;">
+  <slot />
+</div>
+
+<style>
+  .sola-canvas {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color: #1e293b;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+</style>

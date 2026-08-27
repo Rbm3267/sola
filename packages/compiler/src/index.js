@@ -221,6 +221,18 @@ export function compile(source, filename = 'Component.sola') {
                   end: node.end,
                   replacement: `const ${decl.id.name} = createDerived(${argSource});`
                 });
+              } else if (calleeName === '$data') {
+                const sourceArg = decl.init.arguments.length > 0
+                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
+                  : '""';
+                const optsArg = decl.init.arguments.length > 1
+                  ? ', ' + scriptContent.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
+                  : '';
+                edits.push({
+                  start: node.start,
+                  end: node.end,
+                  replacement: `const ${decl.id.name} = createData(${sourceArg}${optsArg});`
+                });
               }
             }
           });
@@ -457,7 +469,7 @@ export function compile(source, filename = 'Component.sola') {
   // ─── 7. Assemble final output ───
   const propsSignature = exportedProps.length > 0 ? 'props = {}' : '';
 
-  let output = `import { createSignal, createEffect, createDerived, createIntent, onMount, onDestroy, __flush_mounts, __flush_destroys } from '@sola/core';\n`;
+  let output = `import { createSignal, createEffect, createDerived, createIntent, createData, onMount, onDestroy, __flush_mounts, __flush_destroys } from '@sola/core';\n`;
 
   // Component imports
   for (const imp of componentImports) {

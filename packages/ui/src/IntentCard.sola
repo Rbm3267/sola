@@ -1,0 +1,85 @@
+<script>
+  export let data = null;
+  export let loading = false;
+
+  let resolved = $derived(() => {
+    const d = typeof data === 'function' ? data() : data;
+    if (!d || d === 'Resolving...') return null;
+    return d;
+  });
+</script>
+
+<div class="intent-card">
+  {#if !resolved()}
+    <div class="loading">
+      <div class="shimmer"></div>
+      <div class="shimmer short"></div>
+    </div>
+  {:else}
+    <div class="header">
+      <span class="title">{resolved().title || 'Intent Result'}</span>
+    </div>
+    <div class="value">{resolved().value || JSON.stringify(resolved())}</div>
+    {#if resolved().trend}
+      <div class="trend">{resolved().trend}</div>
+    {/if}
+  {/if}
+</div>
+
+<style>
+  .intent-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    min-height: 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .shimmer {
+    height: 16px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    border-radius: 8px;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .shimmer.short {
+    width: 60%;
+    height: 32px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 8px;
+  }
+
+  .trend {
+    font-size: 13px;
+    font-weight: 600;
+    color: #10b981;
+    margin-top: 4px;
+  }
+</style>

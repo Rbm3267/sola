@@ -1,0 +1,42 @@
+<script>
+  export let message = '';
+  export let variant = 'info';
+</script>
+
+<div class="alert {variant}">
+  <span class="message">{message}</span>
+</div>
+
+<style>
+  .alert {
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+
+  .info {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+  }
+
+  .success {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+  }
+
+  .warning {
+    background: #fffbeb;
+    color: #b45309;
+    border-color: #fde68a;
+  }
+
+  .error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: #fecaca;
+  }
+</style>

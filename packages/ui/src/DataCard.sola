@@ -1,0 +1,48 @@
+<script>
+  export let title = '';
+  export let value = '';
+  export let trend = '';
+  export let icon = '';
+</script>
+
+<div class="data-card">
+  <div class="header">
+    <span class="title">{title}</span>
+  </div>
+  <div class="value">{value}</div>
+  {#if trend}
+    <div class="trend">{trend}</div>
+  {/if}
+</div>
+
+<style>
+  .data-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .trend {
+    font-size: 13px;
+    font-weight: 600;
+    color: #10b981;
+    margin-top: 4px;
+  }
+</style>

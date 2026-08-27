@@ -1,0 +1,28 @@
+<script>
+  export let size = '24px';
+</script>
+
+<div class="spinner" style="width: {size}; height: {size}">
+  <div class="ring"></div>
+</div>
+
+<style>
+  .spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ring {
+    width: 100%;
+    height: 100%;
+    border: 2.5px solid #e2e8f0;
+    border-top-color: #0ea5e9;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

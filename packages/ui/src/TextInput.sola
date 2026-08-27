@@ -1,0 +1,46 @@
+<script>
+  export let label = '';
+  export let placeholder = '';
+  export let type = 'text';
+  export let required = false;
+</script>
+
+<div class="field">
+  {#if label}
+    <label class="label">{label}</label>
+  {/if}
+  <input class="input" type="{type}" placeholder="{placeholder}" />
+</div>
+
+<style>
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .input {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.08);
+    background: #ffffff;
+  }
+</style>

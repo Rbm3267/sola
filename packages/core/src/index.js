@@ -249,3 +249,89 @@ export function createIntent(promptFn, options = {}) {
 
   return read;
 }
+
+// ─── createData ───
+// Reactive data connection through the Sola Relay.
+const defaultDataConfig = {
+  relayEndpoint: 'http://localhost:4040/api/query',
+  refresh: null // e.g. '30s', '1m', '5m'
+};
+
+let globalDataConfig = { ...defaultDataConfig };
+
+export function configureData(config) {
+  globalDataConfig = { ...globalDataConfig, ...config };
+}
+
+function parseInterval(str) {
+  if (!str) return null;
+  const match = str.match(/^(\d+)(s|m|h)$/);
+  if (!match) return null;
+  const val = parseInt(match[1]);
+  switch (match[2]) {
+    case 's': return val * 1000;
+    case 'm': return val * 60 * 1000;
+    case 'h': return val * 3600 * 1000;
+  }
+  return null;
+}
+
+export function createData(source, options = {}) {
+  const config = { ...globalDataConfig, ...options };
+  const [read, write] = createSignal({ loading: true, data: null, error: null });
+  let abortController = null;
+  let refreshTimer = null;
+
+  function fetchData() {
+    if (abortController) abortController.abort();
+    abortController = new AbortController();
+
+    write({ loading: true, data: read().data, error: null });
+
+    fetch(config.relayEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source,
+        query: config.query || null,
+        filters: config.filters || null,
+        sort: config.sort || null,
+        limit: config.limit || null,
+        offset: config.offset || null
+      }),
+      signal: abortController.signal
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`Data fetch failed: ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      write({ loading: false, data: data.rows || data, error: null });
+    })
+    .catch(err => {
+      if (err.name !== 'AbortError') {
+        console.error('[Sola Data Error]', err);
+        write({ loading: false, data: null, error: err.message });
+      }
+    });
+  }
+
+  // Initial fetch
+  fetchData();
+
+  // Auto-refresh
+  const interval = parseInterval(config.refresh);
+  if (interval) {
+    refreshTimer = setInterval(fetchData, interval);
+  }
+
+  // Return a signal that provides .loading, .data, .error
+  const accessor = () => read();
+  accessor.refetch = fetchData;
+  accessor.stop = () => {
+    if (refreshTimer) clearInterval(refreshTimer);
+    if (abortController) abortController.abort();
+  };
+
+  return accessor;
+}
