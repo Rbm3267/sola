@@ -1,6 +1,6 @@
 <script lang="ts">
   import { themeState, updateTheme } from '$lib/theme.svelte';
-  import SolaLogo from '$lib/components/SolaLogo.svelte';
+  import Navbar from '$lib/components/Navbar.svelte';
   import InteractiveHero from '$lib/components/InteractiveHero.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
@@ -16,49 +16,12 @@
 </script>
 
 <div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-sky-200 selection:text-sky-900 overflow-x-hidden relative">
+  <Navbar />
   
   <!-- Ambient Glow -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] bg-gradient-to-b from-sky-100/40 to-transparent blur-[100px] rounded-full pointer-events-none"></div>
+  <div class="absolute top-16 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] bg-gradient-to-b from-sky-100/40 to-transparent blur-[100px] rounded-full pointer-events-none"></div>
   
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col pt-6 md:pt-8">
-    
-    <!-- Top Navigation Bar -->
-    <header class="w-full flex justify-between items-center mb-10 md:mb-16 bg-white/80 backdrop-blur-2xl border border-slate-200/80 px-5 sm:px-7 py-3.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] sticky top-4 z-50">
-      
-      <!-- Brand Logo + Wordmark -->
-      <a href="/" class="flex items-center gap-3.5 group cursor-pointer text-decoration-none">
-        <SolaLogo size="sm" spinning={true} showGlow={true} />
-        <div class="flex items-center gap-2">
-          <span class="text-2xl font-extrabold text-slate-900 tracking-tight leading-none font-sans">Sola</span>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600 bg-sky-50 border border-sky-200/60 px-2 py-0.5 rounded-full">v0.2.0</span>
-        </div>
-      </a>
-      
-      <!-- Center Nav Links -->
-      <nav class="hidden md:flex items-center gap-1 bg-slate-100/60 p-1 rounded-xl border border-slate-200/50">
-        <a href="https://github.com/Rbm3267/sola#readme" target="_blank" rel="noreferrer" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3.5 py-1.5 rounded-lg hover:bg-white hover:shadow-xs transition-all duration-150">
-          Documentation
-        </a>
-        <a href="#architecture" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3.5 py-1.5 rounded-lg hover:bg-white hover:shadow-xs transition-all duration-150">
-          Architecture
-        </a>
-        <a href="/demo" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3.5 py-1.5 rounded-lg hover:bg-white hover:shadow-xs transition-all duration-150">
-          Playground
-        </a>
-      </nav>
-      
-      <!-- Right Actions -->
-      <div class="flex items-center gap-3">
-        <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200/80 bg-white/70 px-3.5 py-2 rounded-xl hover:bg-white transition-colors duration-150 shadow-xs">
-          <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <span>Star on GitHub</span>
-        </a>
-        <a href="/demo" class="text-xs font-bold text-white bg-slate-900 px-4 sm:px-5 py-2.5 rounded-xl hover:bg-slate-800 transition-all duration-150 flex items-center gap-2 shadow-[0_4px_14px_rgba(15,23,42,0.15)] hover:shadow-[0_6px_20px_rgba(15,23,42,0.25)] hover:-translate-y-0.5">
-          <span>Try Sola</span>
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-      </div>
-    </header>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col pt-4">
 
     <InteractiveHero />
 

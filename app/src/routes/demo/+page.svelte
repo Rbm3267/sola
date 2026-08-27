@@ -1,6 +1,7 @@
 <script lang="ts">
   import DynamicRenderer from '$lib/components/DynamicRenderer.svelte';
   import SolaLogo from '$lib/components/SolaLogo.svelte';
+  import Navbar from '$lib/components/Navbar.svelte';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   
@@ -61,34 +62,13 @@
   }
 </script>
 
-<div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans p-4 md:p-8 flex flex-col items-center pt-24 relative overflow-x-hidden selection:bg-sky-200 selection:text-sky-900">
+<div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-sky-200 selection:text-sky-900">
+  <Navbar />
   
   <!-- Subtle Ambient Glows -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-gradient-to-b from-sky-100/50 to-transparent blur-[120px] rounded-full pointer-events-none"></div>
+  <div class="absolute top-16 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-gradient-to-b from-sky-100/50 to-transparent blur-[120px] rounded-full pointer-events-none"></div>
 
-  <!-- Top Navigation Header -->
-  <header class="w-full max-w-5xl fixed top-4 z-50 px-4">
-    <div class="w-full flex justify-between items-center bg-white/80 backdrop-blur-2xl border border-slate-200/80 px-5 sm:px-7 py-3.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-      <a href="/" class="flex items-center gap-3.5 group cursor-pointer text-decoration-none">
-        <SolaLogo size="sm" spinning={true} showGlow={true} />
-        <div class="flex items-center gap-2">
-          <span class="text-xl font-extrabold text-slate-900 tracking-tight leading-none">Sola</span>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600 bg-sky-50 border border-sky-200/60 px-2 py-0.5 rounded-full">Playground</span>
-        </div>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <a href="https://github.com/Rbm3267/sola#readme" target="_blank" rel="noreferrer" class="text-xs font-semibold text-slate-600 hover:text-slate-950 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-          Documentation
-        </a>
-        <a href="/" class="text-xs font-bold text-slate-900 border border-slate-200 bg-white/80 px-3.5 py-1.5 rounded-xl hover:bg-white transition-all shadow-xs">
-          ← Back to Home
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <div class="w-full max-w-4xl flex flex-col gap-8 z-10 mt-8 md:mt-12">
+  <div class="w-full max-w-4xl mx-auto px-4 py-8 flex flex-col gap-8 z-10 relative">
     
     <!-- Title Area -->
     <div class="text-center">
