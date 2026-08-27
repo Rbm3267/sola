@@ -192,20 +192,21 @@ import DataCard from '@sola/ui/DataCard';
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- Primitives Sidebar -->
-      <aside class="lg:col-span-4 bg-white border border-slate-200/90 rounded-3xl p-4 shadow-sm">
-        <div class="text-xs font-bold font-mono uppercase tracking-wider text-slate-400 px-3 py-2">
-          Available Primitives
+      <aside class="lg:col-span-4 bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 shadow-sm">
+        <div class="text-xs font-bold font-mono uppercase tracking-wider text-slate-400 px-3 py-2 flex items-center justify-between">
+          <span>Available Primitives</span>
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
         </div>
-        <div class="flex flex-col gap-1.5 mt-2">
+        <div class="flex flex-col gap-2 mt-2">
           {#each componentList as comp}
             <button 
               onclick={() => selectedComponent = comp.id}
-              class="w-full text-left px-4 py-3 rounded-2xl transition-all flex items-center justify-between group cursor-pointer {selectedComponent === comp.id ? 'bg-slate-950 text-white shadow-md' : 'text-slate-700 hover:bg-slate-50'}">
+              class="w-full text-left px-4 py-3.5 rounded-2xl transition-all duration-200 flex items-center justify-between group cursor-pointer {selectedComponent === comp.id ? 'bg-amber-500/10 border border-amber-500/25 shadow-xs' : 'hover:bg-slate-50 border border-transparent'}">
               <div>
-                <div class="text-sm font-bold {selectedComponent === comp.id ? 'text-white' : 'text-slate-900'} font-mono">{comp.name}</div>
-                <div class="text-xs {selectedComponent === comp.id ? 'text-slate-300' : 'text-slate-400'} line-clamp-1">{comp.desc}</div>
+                <div class="text-sm font-bold {selectedComponent === comp.id ? 'text-amber-950 font-black' : 'text-slate-800'} font-mono">{comp.name}</div>
+                <div class="text-xs {selectedComponent === comp.id ? 'text-amber-800/80' : 'text-slate-500'} line-clamp-1 mt-0.5">{comp.desc}</div>
               </div>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded {selectedComponent === comp.id ? 'bg-slate-800 text-amber-300' : 'bg-slate-100 text-slate-500'}">
+              <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full {selectedComponent === comp.id ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600'}">
                 {comp.category}
               </span>
             </button>
@@ -217,32 +218,32 @@ import DataCard from '@sola/ui/DataCard';
       <main class="lg:col-span-8 flex flex-col gap-6">
         
         <!-- Component Header & View Switcher Bar -->
-        <div class="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-black text-slate-950 font-mono flex items-center gap-2.5">
+            <h2 class="text-2xl font-black text-slate-900 font-mono flex items-center gap-2.5">
               <span>{selectedComponent}.sola</span>
-              <span class="text-xs font-sans font-bold bg-slate-100 text-slate-800 border border-slate-200 px-2.5 py-0.5 rounded-full">Interactive Demo</span>
+              <span class="text-xs font-sans font-bold bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-full">Interactive Demo</span>
             </h2>
-            <p class="text-xs text-slate-500 mt-1">
+            <p class="text-xs text-slate-600 mt-1">
               {componentList.find(c => c.id === selectedComponent)?.desc}
             </p>
           </div>
 
           <!-- Segmented Control View Switcher -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/60 self-start sm:self-auto">
+          <div class="flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto">
             <button 
               onclick={() => viewMode = 'preview'}
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
+              class="px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
               Live Preview
             </button>
             <button 
               onclick={() => viewMode = 'embed'}
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'embed' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
+              class="px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'embed' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
               1-Click Embed
             </button>
             <button 
               onclick={() => viewMode = 'code'}
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'code' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-950'}">
+              class="px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'code' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
               .sola Markup
             </button>
           </div>
@@ -305,32 +306,38 @@ import DataCard from '@sola/ui/DataCard';
                 <div class="flex flex-col items-center gap-4">
                   <button 
                     onclick={() => isModalOpen = true}
-                    class="bg-slate-950 text-white font-bold text-xs px-6 py-3.5 rounded-2xl hover:bg-slate-800 transition-all cursor-pointer shadow-md flex items-center gap-2">
+                    style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
+                    class="font-bold text-xs text-white px-7 py-4 rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.3)] hover:shadow-[0_8px_26px_rgba(245,158,11,0.4)] transition-all cursor-pointer flex items-center gap-2">
                     <span>Open Modal Dialog</span>
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   </button>
-                  <span class="text-xs text-slate-400 font-mono">Click to trigger real backdrop overlay</span>
+                  <span class="text-xs text-slate-500 font-mono">Click to trigger real backdrop overlay</span>
                 </div>
 
                 {#if isModalOpen}
                   <div 
                     transition:fade={{ duration: 200 }}
                     onclick={() => isModalOpen = false}
-                    class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 flex items-center justify-center p-4">
                     <div 
                       transition:fly={{ y: 20, duration: 250 }}
                       onclick={(e) => e.stopPropagation()}
-                      class="bg-white border border-slate-200 rounded-3xl p-6 max-w-sm w-full shadow-2xl flex flex-col gap-4">
-                      <div class="flex justify-between items-center">
-                        <h3 class="font-black text-slate-950 font-mono text-base">Scale Cluster</h3>
+                      class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-7 max-w-sm w-full shadow-2xl flex flex-col gap-4">
+                      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <h3 class="font-black text-slate-900 font-mono text-base">Scale Cluster</h3>
                         <button onclick={() => isModalOpen = false} class="text-slate-400 hover:text-slate-700">✕</button>
                       </div>
                       <p class="text-xs text-slate-600 leading-relaxed">
-                        Are you sure you want to deploy 12 additional worker instances to <code class="font-mono text-sky-600">us-east-1</code>?
+                        Are you sure you want to deploy 12 additional worker instances to <code class="font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">us-east-1</code>?
                       </p>
                       <div class="flex gap-2 justify-end pt-2">
-                        <button onclick={() => isModalOpen = false} class="text-xs font-bold px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100">Cancel</button>
-                        <button onclick={() => { isModalOpen = false; triggerToast(); }} class="bg-slate-950 text-white font-bold text-xs px-4 py-2 rounded-xl">Confirm Scale</button>
+                        <button onclick={() => isModalOpen = false} class="text-xs font-bold px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100">Cancel</button>
+                        <button 
+                          onclick={() => { isModalOpen = false; triggerToast(); }} 
+                          style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
+                          class="font-bold text-xs text-white px-5 py-2.5 rounded-xl shadow-sm">
+                          Confirm Scale
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -339,11 +346,12 @@ import DataCard from '@sola/ui/DataCard';
                 <div class="flex flex-col items-center gap-4">
                   <button 
                     onclick={triggerToast}
-                    class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs px-6 py-3.5 rounded-2xl transition-all cursor-pointer shadow-md flex items-center gap-2">
+                    style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
+                    class="font-bold text-xs text-white px-7 py-4 rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.3)] hover:shadow-[0_8px_26px_rgba(245,158,11,0.4)] transition-all cursor-pointer flex items-center gap-2">
                     <span>Trigger Notification Toast</span>
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                   </button>
-                  <span class="text-xs text-slate-400 font-mono">Spawns auto-dismissing toast in bottom-right</span>
+                  <span class="text-xs text-slate-500 font-mono">Spawns auto-dismissing toast in bottom-right</span>
                 </div>
               {:else if selectedComponent === 'Select'}
                 <div class="w-full relative">

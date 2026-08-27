@@ -297,11 +297,13 @@ ${widgets.map(w => `  <${w.component} class="col-span-${w.colSpan}" config={${JS
         </button>
 
         <!-- Submit Button (High Contrast & Always Visible) -->
+        <!-- Submit Button (Fluid Luminous Amber Gradient) -->
         <button 
           type="submit" 
           disabled={isLoading || !intentQuery.trim()}
           aria-label="Submit intent"
-          class="bg-slate-950 text-white w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.97] disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
+          style={!isLoading && intentQuery.trim() ? "background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;" : ""}
+          class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl font-bold transition-all active:scale-[0.97] disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </button>
@@ -314,14 +316,14 @@ ${widgets.map(w => `  <${w.component} class="col-span-${w.colSpan}" config={${JS
       {#each sampleIntents as sample}
         <button 
           onclick={() => pickSample(sample)}
-          class="text-xs bg-white border border-slate-200/90 text-slate-700 px-3 py-1.5 rounded-xl hover:border-slate-400 hover:text-slate-950 transition-all cursor-pointer shadow-2xs">
+          class="text-xs bg-white/95 border border-slate-200/90 text-slate-700 px-3.5 py-2 rounded-2xl hover:border-amber-400 hover:text-amber-900 hover:bg-amber-50/50 transition-all cursor-pointer shadow-xs">
           {sample}
         </button>
       {/each}
     </div>
 
     <!-- Production Dashboard Studio Controls Bar -->
-    <div class="bg-white border border-slate-200/90 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
+    <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -336,28 +338,29 @@ ${widgets.map(w => `  <${w.component} class="col-span-${w.colSpan}" config={${JS
         <span class="text-xs font-mono font-bold text-slate-400 uppercase mr-1">Presets:</span>
         <button 
           onclick={() => loadPreset('servicenow')}
-          class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-1.5">
+          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5">
           <span>⚡ ServiceNow ITSM</span>
         </button>
         <button 
           onclick={() => loadPreset('fitness')}
-          class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
+          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
           🏋️ Training
         </button>
         <button 
           onclick={() => loadPreset('cloud')}
-          class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
+          class="text-xs font-mono font-bold px-3.5 py-2 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
           ☁️ SaaS Cloud
         </button>
         <button 
           onclick={exportSolaCode}
-          class="text-xs font-mono font-bold px-3.5 py-1.5 rounded-xl bg-slate-950 text-white hover:bg-slate-800 transition-all cursor-pointer flex items-center gap-1.5 shadow-xs">
+          style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
+          class="text-xs font-mono font-bold px-4 py-2 rounded-2xl text-white shadow-[0_4px_16px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.35)] transition-all cursor-pointer flex items-center gap-1.5">
           {#if copiedExport}
-            <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Copied .sola!</span>
+            <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="text-white font-bold">Copied .sola!</span>
           {:else}
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-            <span>Export Code</span>
+            <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+            <span class="text-white font-bold">Export Code</span>
           {/if}
         </button>
       </div>
