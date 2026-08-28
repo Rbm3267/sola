@@ -93,6 +93,30 @@ sola/
 
 ---
 
+## Operational Guide (By Role)
+
+### 💻 Application Developers
+*   **Workflow**: Build frontends using `.sola` files. Use `$state` and `$derived` for local state, and `$intent` to bind AI capability.
+*   **Data Binding**: Connect components to backend databases or APIs using `$data("sheet://...")` or `$data("postgres://...")`.
+*   **Security Caret**: Never commit credentials in code; pass only resource identifiers to `$data`.
+
+### ⚙️ System Administrators
+*   **Deployment**: Deploy the Sola Relay server on-premises or close to the databases.
+    ```bash
+    npm install -g @sola/relay
+    sola-relay --config ./relay.json
+    ```
+*   **Access Provisioning**: Configure connection strings and table filters in `relay.json`.
+*   **Monitoring**: Check the relay logs for latency targets and query performance (default target is sub-1ms signal propagation).
+
+### 🔒 Security Engineers
+*   **Credential Isolation**: Ensure that connection credentials (passwords, certificates) are set via local environment variables on the Sola Relay server. They never leave the private network.
+*   **Query Sanitation**: Define read-only schema mappings and query rate-limits in Sola Relay config to prevent injections.
+*   **Write-Back Gates**: Assign `TransactionCapability` parameters and security levels (Tiers 1 & 2) to control which mutations require confirmation overlays.
+
+---
+
 ## License
 
 MIT © 2026 Sola Contributors
+
