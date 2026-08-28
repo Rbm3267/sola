@@ -1,7 +1,27 @@
 // ─── Sola Multi-Domain Action Contracts ───
 // Universal playbooks parameterized across any SaaS, Cloud, Database, or Spreadsheet
 
-import type { ActionContract } from '../../core/src/ActionContract';
+import type { ActionContract, IntentRecord, ActionResult } from '../../core/src/ActionContract';
+
+// In-memory simulation database for staged intents
+const stagedIntents = new Map<string, IntentRecord>();
+
+function createMockIntent(actionId: string, recordId: string, data: any, payload: any, tier: 1 | 2): IntentRecord {
+  const intentId = `${actionId}_intent_${Math.random().toString(36).substring(2, 9)}`;
+  const record: IntentRecord = {
+    id: intentId,
+    actionId,
+    recordId,
+    data,
+    payload,
+    status: 'pending',
+    tier,
+    timestamp: Date.now(),
+    expiresAt: Date.now() + 5000 // 5 seconds undo window
+  };
+  stagedIntents.set(intentId, record);
+  return record;
+}
 
 export const ServiceNowMajorIncidentContract: ActionContract = {
   id: 'sn_major_incident_bridge',
@@ -9,9 +29,11 @@ export const ServiceNowMajorIncidentContract: ActionContract = {
   description: 'Escalate to P1 Major Incident, page Tier 3 SRE via PagerDuty, and trigger Route53 traffic failover.',
   category: 'mitigation',
   severity: 'critical',
+  tier: 2,
+  capability: 'fire_and_forget',
+  blastRadiusMessage: 'This will page the on-call SRE lead, spin up a Zoom war room link, and re-route 100% of global web traffic to the secondary cloud region.',
 
   isSurfaced: (data, behavior) => {
-    // Surfaced if data is P1 or user dwells/rage clicks on it
     const isP1 = data?.severity === 'P1 - Critical' || data?.priority === '1 - Critical';
     return isP1 || behavior.activeDwellTarget === 'incident' || behavior.rageClickCount >= 2;
   },
@@ -29,12 +51,19 @@ export const ServiceNowMajorIncidentContract: ActionContract = {
     return 'calm';
   },
 
-  execute: async (payload, ctx) => {
+  stage: async (payload, ctx) => {
+    return createMockIntent('sn_major_incident_bridge', ctx.recordId, ctx.data, payload, 2);
+  },
+
+  commit: async (intentId: string): Promise<ActionResult> => {
+    const intent = stagedIntents.get(intentId);
+    if (intent) intent.status = 'committed';
     return {
       success: true,
       actionId: 'sn_major_incident_bridge',
+      transactionId: intentId,
       timestamp: Date.now(),
-      message: `Major Incident bridge opened for ${ctx.recordId || 'INC009481'}. Secondary SRE paged.`
+      message: `Major Incident bridge opened for ${intent?.recordId || 'INC009481'}. Secondary SRE paged.`
     };
   }
 };
@@ -45,6 +74,9 @@ export const AwsDrainNodeContract: ActionContract = {
   description: 'Safely evicts container pods and schedules replacements across healthy availability zones.',
   category: 'mitigation',
   severity: 'high',
+  tier: 2,
+  capability: 'transactional',
+  blastRadiusMessage: 'Affects 42 pod resources on this node. Safe rescheduling might take up to 90 seconds. Transactional rollback will resume pods on failure.',
 
   isSurfaced: (data, behavior) => {
     return data?.percentage > 80 || behavior.activeDwellTarget === 'degraded-node' || behavior.rageClickCount >= 1;
@@ -60,12 +92,31 @@ export const AwsDrainNodeContract: ActionContract = {
     return 'calm';
   },
 
-  execute: async (payload, ctx) => {
+  stage: async (payload, ctx) => {
+    return createMockIntent('aws_drain_node', ctx.recordId, ctx.data, payload, 2);
+  },
+
+  commit: async (intentId: string): Promise<ActionResult> => {
+    const intent = stagedIntents.get(intentId);
+    if (intent) intent.status = 'committed';
     return {
       success: true,
       actionId: 'aws_drain_node',
+      transactionId: intentId,
       timestamp: Date.now(),
-      message: 'Node drain initiated: 42 pods rescheduled to us-east-1b.'
+      message: 'Node drain initiated: 42 pods rescheduled to healthy zones.'
+    };
+  },
+
+  rollback: async (intentId: string): Promise<ActionResult> => {
+    const intent = stagedIntents.get(intentId);
+    if (intent) intent.status = 'rolled_back';
+    return {
+      success: true,
+      actionId: 'aws_drain_node',
+      transactionId: intentId,
+      timestamp: Date.now(),
+      message: 'Eviction cancelled. Target node un-cordoned and traffic resumed.'
     };
   }
 };
@@ -76,6 +127,8 @@ export const StripeDunningNoticeContract: ActionContract = {
   description: 'Retries merchant card payment with optimal bank routing and dispatches automated invoice reminder.',
   category: 'mutation',
   severity: 'medium',
+  tier: 1, // Soft mutation with 5s undo window
+  capability: 'idempotent',
 
   isSurfaced: (data, behavior) => {
     return behavior.activeDwellTarget === 'finops' || behavior.persona === 'finops_auditor';
@@ -90,12 +143,31 @@ export const StripeDunningNoticeContract: ActionContract = {
     return 'calm';
   },
 
-  execute: async (payload, ctx) => {
+  stage: async (payload, ctx) => {
+    return createMockIntent('stripe_send_dunning', ctx.recordId, ctx.data, payload, 1);
+  },
+
+  commit: async (intentId: string): Promise<ActionResult> => {
+    const intent = stagedIntents.get(intentId);
+    if (intent) intent.status = 'committed';
     return {
       success: true,
       actionId: 'stripe_send_dunning',
+      transactionId: intentId,
       timestamp: Date.now(),
       message: 'Smart Dunning sequence dispatched to billing contact.'
+    };
+  },
+
+  rollback: async (intentId: string): Promise<ActionResult> => {
+    const intent = stagedIntents.get(intentId);
+    if (intent) intent.status = 'rolled_back';
+    return {
+      success: true,
+      actionId: 'stripe_send_dunning',
+      transactionId: intentId,
+      timestamp: Date.now(),
+      message: 'Payment retry aborted. Smart dunning sequence canceled.'
     };
   }
 };
@@ -106,6 +178,9 @@ export const PostgresKillLocksContract: ActionContract = {
   description: 'Executes pg_terminate_backend on transactions holding exclusive locks longer than 5 seconds.',
   category: 'mitigation',
   severity: 'critical',
+  tier: 2,
+  capability: 'fire_and_forget',
+  blastRadiusMessage: 'Will abruptly disconnect 3 client connection backends. In-progress transactions will instantly roll back.',
 
   isSurfaced: (data, behavior) => {
     return (data?.activePool && data.activePool > 80) || behavior.persona === 'sre_commander';
@@ -118,10 +193,17 @@ export const PostgresKillLocksContract: ActionContract = {
     return 'calm';
   },
 
-  execute: async (payload, ctx) => {
+  stage: async (payload, ctx) => {
+    return createMockIntent('pg_kill_locks', ctx.recordId, ctx.data, payload, 2);
+  },
+
+  commit: async (intentId: string): Promise<ActionResult> => {
+    const intent = stagedIntents.get(intentId);
+    if (intent) intent.status = 'committed';
     return {
       success: true,
       actionId: 'pg_kill_locks',
+      transactionId: intentId,
       timestamp: Date.now(),
       message: 'Terminated 3 lock-holding queries on primary replica.'
     };

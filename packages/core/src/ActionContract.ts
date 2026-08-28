@@ -3,6 +3,7 @@
 
 export type ActionSeverity = 'info' | 'low' | 'medium' | 'high' | 'critical';
 export type VisualAffordance = 'hidden' | 'calm' | 'expanded_preview' | 'urgent_override';
+export type TransactionCapability = 'idempotent' | 'transactional' | 'fire_and_forget';
 
 export interface BehavioralVector {
   activeDwellTarget: string | null;
@@ -37,12 +38,28 @@ export interface ActionResult<TOutput = any> {
   };
 }
 
+export interface IntentRecord<TData = any, TPayload = any> {
+  id: string;
+  actionId: string;
+  recordId: string;
+  data: TData;
+  payload: TPayload;
+  status: 'pending' | 'committed' | 'rolled_back' | 'failed';
+  tier: 0 | 1 | 2;
+  timestamp: number;
+  expiresAt?: number;
+  errorMessage?: string;
+}
+
 export interface ActionContract<TData = any, TPayload = any, TResult = any> {
   id: string;
   title: string;
   description: string;
   category: 'mitigation' | 'mutation' | 'diagnostic' | 'export';
   severity: ActionSeverity;
+  tier: 1 | 2; // Staging tier definition
+  capability: TransactionCapability;
+  blastRadiusMessage?: string; // Estimated impact message for Tier 2 swipe drawer
   
   // Guard check: Does data & permission allow this action to exist?
   isPermitted?: (ctx: ActionExecutionContext<TData>) => boolean;
@@ -56,6 +73,8 @@ export interface ActionContract<TData = any, TPayload = any, TResult = any> {
   // Resolves the visual representation (Calm pill vs Expanded Drawer vs Urgent 1-Click Button)
   resolveAffordance: (data: TData, behavior: BehavioralVector) => VisualAffordance;
 
-  // Asynchronous execution handler
-  execute: (payload: TPayload, ctx: ActionExecutionContext<TData>) => Promise<ActionResult<TResult>>;
+  // Split staging lifecycle
+  stage: (payload: TPayload, ctx: ActionExecutionContext<TData>) => Promise<IntentRecord<TData, TPayload>>;
+  commit: (intentId: string) => Promise<ActionResult<TResult>>;
+  rollback?: (intentId: string) => Promise<ActionResult<TResult>>;
 }
