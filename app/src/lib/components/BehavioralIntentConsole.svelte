@@ -1,5 +1,12 @@
 <script lang="ts">
   import { behavioralObserver, type BehavioralMetrics } from '../../../../packages/behavior/src/index';
+  import { 
+    ServiceNowMajorIncidentContract, 
+    AwsDrainNodeContract, 
+    StripeDunningNoticeContract, 
+    PostgresKillLocksContract 
+  } from '../../../../packages/behavior/src/playbooks';
+  import AdaptiveActionTrigger from './AdaptiveActionTrigger.svelte';
   import IncidentTriageMatrix from './IncidentTriageMatrix.svelte';
   import FlowWaterfall from './FlowWaterfall.svelte';
   import DataCard from './DataCard.svelte';
@@ -17,8 +24,7 @@
   });
 
   let testInput = $state('');
-  let unfoldedDrawer = $state<string | null>(null);
-  let emergencyAlert = $state(false);
+  let actionLog = $state<string[]>([]);
 
   onMount(() => {
     return behavioralObserver.subscribe((m) => {
@@ -31,9 +37,7 @@
   }
 
   function handleHoverStart(target: string) {
-    behavioralObserver.registerHoverStart(target, () => {
-      unfoldedDrawer = target;
-    }, 1000);
+    behavioralObserver.registerHoverStart(target, undefined, 800);
   }
 
   function handleHoverEnd(target: string) {
@@ -41,15 +45,16 @@
   }
 
   function handleNodeClick(target: string) {
-    behavioralObserver.registerClick(target, () => {
-      emergencyAlert = true;
-    });
+    behavioralObserver.registerClick(target);
+  }
+
+  function handleActionExecuted(res: any) {
+    const timeStr = new Date().toTimeString().split(' ')[0];
+    actionLog = [`[${timeStr}] ✅ ${res.message || 'Action executed'}`, ...actionLog.slice(0, 4)];
   }
 
   function resetState() {
     behavioralObserver.resetUrgency();
-    unfoldedDrawer = null;
-    emergencyAlert = false;
     testInput = '';
   }
 </script>
@@ -68,13 +73,13 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono uppercase tracking-widest text-slate-400">Detected User Persona:</span>
+          <span class="text-xs font-mono uppercase tracking-widest text-slate-400">Dual-Driver Persona:</span>
           <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' : metrics.persona === 'finops_auditor' ? 'bg-violet-500/20 text-violet-300 border-violet-500/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'}">
             {metrics.persona === 'sre_commander' ? 'SRE Incident Commander' : metrics.persona === 'finops_auditor' ? 'FinOps Cloud Auditor' : 'Visual Explorer'}
           </span>
         </div>
         <h3 class="text-lg font-black font-sans mt-0.5 text-slate-100">
-          Behavioral Intent Engine (@sola/behavior)
+          Dual-Driver ActionContract Protocol (Data + Behavior)
         </h3>
       </div>
     </div>
@@ -82,12 +87,12 @@
     <!-- Live Telemetry Readout Chips -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto relative z-10 font-mono text-xs">
       <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col gap-0.5">
-        <span class="text-[10px] text-slate-500 uppercase">Typing Speed</span>
+        <span class="text-[10px] text-slate-500 uppercase">Typing Cadence</span>
         <span class="text-amber-400 font-bold">{metrics.typingVelocityCps} chars/sec</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col gap-0.5">
         <span class="text-[10px] text-slate-500 uppercase">Hover Dwell</span>
-        <span class="text-sky-400 font-bold">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget} (Active)` : 'None'}</span>
+        <span class="text-sky-400 font-bold">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col gap-0.5 col-span-2 sm:col-span-1">
         <span class="text-[10px] text-slate-500 uppercase">Rage Click Vector</span>
@@ -105,7 +110,7 @@
         type="text"
         bind:value={testInput}
         oninput={handleTyping}
-        placeholder="Type rapidly here to trigger Power SRE Compact density mode..."
+        placeholder="Type fast here: 'kubectl drain node-iad1 --ignore-daemonsets' to trigger SRE Mode..."
         class="w-full bg-transparent text-xs sm:text-sm font-mono text-slate-900 outline-none placeholder:text-slate-400"
       />
     </div>
@@ -119,30 +124,22 @@
     </div>
   </div>
 
-  <!-- Emergency Escalation Banner -->
-  {#if emergencyAlert}
+  <!-- Action Log Banner (if actions executed) -->
+  {#if actionLog.length > 0}
     <div 
-      transition:fly={{ y: -10, duration: 200 }}
-      class="p-5 rounded-3xl bg-rose-50 border border-rose-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
-        <div>
-          <div class="text-sm font-black text-rose-950 font-mono">Urgency Vector Escalated • Anomaly Under Investigation</div>
-          <div class="text-xs text-rose-700 font-mono mt-0.5">Sola auto-surfaced 1-click mitigation playbooks due to rapid user clicks.</div>
-        </div>
-      </div>
-      <button 
-        onclick={() => alert("Mitigation Playbook Executed: Traffic Rerouted to eu-central-1")}
-        class="px-4 py-2 rounded-xl bg-rose-600 text-white font-mono text-xs font-bold hover:bg-rose-700 shadow-sm cursor-pointer whitespace-nowrap">
-        Execute Route53 Failover
-      </button>
+      transition:fly={{ y: -8, duration: 200 }}
+      class="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 font-mono text-xs flex flex-col gap-1 shadow-sm">
+      <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Playbook Execution Audit Log:</span>
+      {#each actionLog as log}
+        <div>{log}</div>
+      {/each}
     </div>
   {/if}
 
   <!-- Adaptive Surface Grid -->
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
-    <!-- Column 1: Anomaly Hover Target -->
+    <!-- Column 1: ServiceNow Major Incident Card with Adaptive Trigger -->
     <div class="lg:col-span-6 flex flex-col gap-4">
       
       <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -153,7 +150,7 @@
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-          <span>Hover Dwell Target (>1.0s to Unfold)</span>
+          <span>ServiceNow Incident Target (Dwell >0.8s)</span>
         </div>
 
         <IncidentTriageMatrix config={{
@@ -162,31 +159,25 @@
           severity: "P1 - Critical",
           slaRemainingMin: 8,
           blastRadius: "42,000 Active Checkout Sessions",
-          playbooks: [
-            { id: "pb-1", title: "Reroute Edge DNS", action: "Route53 Failover", automated: true },
-            { id: "pb-2", title: "Scale Redis Replicas (x4)", action: "Auto-Provision", automated: true }
-          ]
+          playbooks: []
         }} />
-      </div>
 
-      <!-- Unfolded Drilldown Drawer (Progressive Disclosure) -->
-      {#if unfoldedDrawer === 'incident' || metrics.persona === 'sre_commander'}
-        <div 
-          transition:fly={{ y: 15, duration: 250 }}
-          class="p-5 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl flex flex-col gap-3 font-mono text-xs">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-            <span class="text-amber-400 font-bold">Implicit Drill-Down: Root Cause Trace</span>
-            <span class="text-[10px] text-slate-400">Triggered by Dwell / Persona</span>
-          </div>
-          <p class="text-slate-300 text-[11px] leading-relaxed">
-            Correlated spike with deployment <code class="text-emerald-400 font-bold">v2.4.19-edge</code> in Frankfurt. 38% connection saturation on primary write replica.
-          </p>
+        <!-- DUAL-DRIVER ACTION CONTRACT TRIGGER -->
+        <div class="mt-3 flex items-center justify-between bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs">
+          <span class="text-xs font-mono text-slate-500 font-medium">Data-Driven Action:</span>
+          <AdaptiveActionTrigger 
+            action={ServiceNowMajorIncidentContract} 
+            data={{ severity: "P1 - Critical", incidentId: "INC009481" }}
+            recordId="INC009481"
+            onExecute={handleActionExecuted}
+          />
         </div>
-      {/if}
+
+      </div>
 
     </div>
 
-    <!-- Column 2: Rage Click Target & FinOps Affinity Target -->
+    <!-- Column 2: AWS / Kubernetes Degraded Node with Rage Click Trigger -->
     <div class="lg:col-span-6 flex flex-col gap-6">
       
       <!-- Rage Click Target -->
@@ -197,19 +188,31 @@
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
-          <span>Rage-Click Target (Tap 3x rapidly)</span>
+          <span>AWS Worker Target (Tap 3x rapidly to rage-click)</span>
         </div>
 
         <GaugeCard config={{
-          title: "Edge Worker Saturation",
+          title: "AWS Worker CPU Saturation",
           value: "94.2%",
           percentage: 94,
-          subtext: "Click rapidly to simulate operator urgency",
+          subtext: "High load on cluster shard 3",
           color: "amber"
         }} />
+
+        <!-- DUAL-DRIVER KINETIC ACTION TRIGGER -->
+        <div class="mt-3 flex items-center justify-between bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs">
+          <span class="text-xs font-mono text-slate-500 font-medium">Kinetic Playbook:</span>
+          <AdaptiveActionTrigger 
+            action={AwsDrainNodeContract} 
+            data={{ percentage: 94, nodeId: "i-09f4812a" }}
+            recordId="i-09f4812a"
+            onExecute={handleActionExecuted}
+          />
+        </div>
+
       </div>
 
-      <!-- FinOps Hover Target -->
+      <!-- Stripe / FinOps Hover Target -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div 
         onmouseenter={() => handleHoverStart('finops')}
@@ -218,18 +221,30 @@
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
-          <span>Domain Interest Target (FinOps)</span>
+          <span>FinOps Domain Target (Hover to preview dunning)</span>
         </div>
 
         <FlowWaterfall config={{
           title: "SaaS Gross Revenue Realization",
-          subtitle: "Hover to expand financial deduction model",
+          subtitle: "Stripe Billing & Cloud Cost Ledger",
           steps: [
             { label: "Gross ARR Billing", amount: "$184,200", type: "positive", note: "Tier 1 Enterprise Subscriptions" },
             { label: "Payment Gateway Fees", amount: "-$5,340", type: "negative", note: "2.9% Stripe processing" },
             { label: "Net Bank Realization", amount: "$178,860", type: "subtotal", note: "Clearing to corporate treasury" }
           ]
         }} />
+
+        <!-- DUAL-DRIVER STRIPE DUNNING TRIGGER -->
+        <div class="mt-3 flex items-center justify-between bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs">
+          <span class="text-xs font-mono text-slate-500 font-medium">Billing Recovery:</span>
+          <AdaptiveActionTrigger 
+            action={StripeDunningNoticeContract} 
+            data={{ invoiceId: "in_1N8f92a", amount: "$184,200" }}
+            recordId="in_1N8f92a"
+            onExecute={handleActionExecuted}
+          />
+        </div>
+
       </div>
 
     </div>
