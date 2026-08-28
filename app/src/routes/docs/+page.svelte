@@ -18,7 +18,8 @@
     { id: 'syntax', title: 'The .sola Component Format' },
     { id: 'intent', title: 'Ambient Intent Signals ($intent)' },
     { id: 'data', title: 'Remote Data Signals ($data)' },
-    { id: 'engine', title: 'Compiler & Zero-VDOM Engine' }
+    { id: 'engine', title: 'Compiler & Zero-VDOM Engine' },
+    { id: 'operations', title: 'Operational & Persona Guide' }
   ];
 
   async function askSolaAi() {
@@ -311,6 +312,52 @@ export function mount(__target, props = {}) {
               <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
                 <h4 class="font-bold text-slate-900 text-sm mb-1 font-mono">Fine-Grained Signals</h4>
                 <p class="text-xs text-slate-600">Only the precise text node or attribute that changed is modified in the DOM.</p>
+              </div>
+            </div>
+          </div>
+
+        {:else if activeSection === 'operations'}
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold mb-3">
+              <span>User Personas</span>
+            </div>
+            <h1 class="text-3xl font-black text-slate-900 tracking-[-0.03em] mb-4">Operational & Persona Guide</h1>
+            <p class="text-slate-600 text-base leading-relaxed mb-6">
+              Sola simplifies collaboration between engineering, operations, and security departments by delineating responsibilities at the protocol layer.
+            </p>
+
+            <div class="flex flex-col gap-6">
+              <!-- Developer -->
+              <div class="p-6 border border-slate-200 rounded-2xl bg-white shadow-xs">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-lg">💻</span>
+                  <h3 class="font-bold text-slate-950 text-sm font-mono">Application Developers</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Focus entirely on declarative components inside <code>.sola</code> files. Use standard reactive primitives (<code>$state</code>, <code>$derived</code>) and bind AI interfaces via <code>$intent</code>. Data connections are made cleanly using <code>$data</code> identifiers without managing API polling or async fetch loops.
+                </p>
+              </div>
+
+              <!-- Admin -->
+              <div class="p-6 border border-slate-200 rounded-2xl bg-white shadow-xs">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-lg">⚙️</span>
+                  <h3 class="font-bold text-slate-950 text-sm font-mono">System Administrators</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Manage the Sola Relay server configuration in on-premises or virtual networks close to the core data assets. Sysadmins control pool allocations, manage credentials, and monitor query runtimes (leveraging sub-millisecond telemetry mesh speeds).
+                </p>
+              </div>
+
+              <!-- Security -->
+              <div class="p-6 border border-slate-200 rounded-2xl bg-white shadow-xs">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-lg">🔒</span>
+                  <h3 class="font-bold text-slate-950 text-sm font-mono">Security Engineers</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Enforce zero-knowledge safety. Credentials and certificates are kept locally on the Sola Relay server and are never exposed to the public cloud. Security teams define query read-only scopes, and assign transaction security configurations (Tiers 1 & 2) for staging write-backs.
+                </p>
               </div>
             </div>
           </div>
