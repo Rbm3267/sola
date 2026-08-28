@@ -9,7 +9,7 @@
   import { fade, fly } from 'svelte/transition';
 
   type HostMode = 'preset' | 'screenshot';
-  type TemplatePreset = 'linear' | 'stripe' | 'shopify' | 'servicenow' | 'grafana' | 'vercel';
+  type TemplatePreset = 'linear' | 'stripe' | 'shopify' | 'moveworks' | 'servicenow' | 'grafana' | 'vercel';
 
   let activeMode = $state<HostMode>('preset');
   let selectedPreset = $state<TemplatePreset>('linear');
@@ -17,7 +17,7 @@
 
   // Selected Sola Component to mount
   let activeComponent = $state<'incident' | 'cluster' | 'waterfall' | 'datacard' | 'dial'>('incident');
-  let activeFramework = $state<'react' | 'vue' | 'html' | 'sola'>('react');
+  let activeFramework = $state<'react' | 'vue' | 'swift' | 'html' | 'sola'>('react');
 
   // Handle file drop for screenshot mode
   function handleFileUpload(e: Event) {
@@ -35,6 +35,7 @@
     linear: { name: 'Linear App', brand: '#5e6ad2', theme: 'dark', bg: '#0f1015', text: '#e2e8f0', border: '#232530', subtext: 'Ultra-Dark Keyboard-First Workspace' },
     stripe: { name: 'Stripe Dashboard', brand: '#635bff', theme: 'light', bg: '#f8fafc', text: '#0f172a', border: '#e2e8f0', subtext: 'Clean FinTech Light Surface' },
     shopify: { name: 'Shopify Admin', brand: '#95bf47', theme: 'light', bg: '#f6f6f7', text: '#202223', border: '#e1e3e5', subtext: 'E-Commerce Storefront & Analytics' },
+    moveworks: { name: 'Moveworks Front Door', brand: '#00b4d8', theme: 'dark', bg: '#0f172a', text: '#f8fafc', border: '#1e293b', subtext: 'Next-Gen Conversational AI Front Door' },
     servicenow: { name: 'ServiceNow Portal', brand: '#81b5a1', theme: 'dark', bg: '#16222f', text: '#f1f5f9', border: '#253545', subtext: 'High-Density Enterprise Navy Surface' },
     grafana: { name: 'Grafana Telemetry', brand: '#f97316', theme: 'dark', bg: '#111217', text: '#d8d9da', border: '#22252b', subtext: 'Real-Time Observability NOC' },
     vercel: { name: 'Vercel Console', brand: '#000000', theme: 'light', bg: '#ffffff', text: '#000000', border: '#eaeaea', subtext: 'Monochrome Edge Developer Platform' }
@@ -86,7 +87,7 @@
         
         {#if activeMode === 'preset'}
           <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
-            {#each (['linear', 'stripe', 'shopify', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
+            {#each (['linear', 'stripe', 'shopify', 'moveworks', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
               <button 
                 onclick={() => selectedPreset = t}
                 class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-slate-100'}">
@@ -402,6 +403,84 @@
                       }} />
                     {:else}
                       <ClusterMatrix config={{ title: "Shopify Edge Storefront Nodes", subtitle: "Global CDN Edge Replicas" }} />
+                    {/if}
+                  </div>
+                </div>
+              </div>
+
+            {:else if selectedPreset === 'moveworks'}
+              <!-- Authentic Moveworks Next-Gen AI Front Door & Copilot Layout -->
+              <div class="flex flex-col gap-4">
+                <!-- Moveworks Top Header Bar -->
+                <div class="flex items-center justify-between border-b pb-3 border-slate-800">
+                  <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-500 text-white font-black text-xs flex items-center justify-center font-mono shadow-md">
+                      M
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm text-slate-100 tracking-tight">Moveworks AI Copilot</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/80 font-bold">Enterprise Front Door</span>
+                      </div>
+                      <p class="text-[11px] font-mono text-slate-400">Autonomous Resolution • Connected to ServiceNow ITSM</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-800/60">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                    <span>NLP Intent: Ingress Anomaly</span>
+                  </div>
+                </div>
+
+                <!-- Moveworks Conversational Stream & Sola Interactive Canvas -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <!-- Conversational Dialogue Stream -->
+                  <div class="lg:col-span-5 flex flex-col gap-3 font-mono text-xs">
+                    <!-- User Prompt Bubble -->
+                    <div class="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-slate-200 self-end max-w-[90%] flex flex-col gap-1">
+                      <span class="text-[10px] text-cyan-400 font-bold">You (SRE Commander):</span>
+                      <p class="leading-relaxed">"Moveworks, why is checkout latency spiking in us-east-1 and what playbooks are available?"</p>
+                    </div>
+
+                    <!-- Moveworks Copilot Response Bubble -->
+                    <div class="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-900/60 text-slate-200 self-start max-w-[95%] flex flex-col gap-2">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                        <span class="text-[10px] text-cyan-300 font-bold uppercase">Moveworks Copilot • Instant Analysis</span>
+                      </div>
+                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                        I identified an active P1 incident (<strong class="text-white">INC009481</strong>) linked to Aurora DB connection pool saturation. I've launched the <strong class="text-cyan-300">Sola Ambient Triage Canvas</strong> below with 1-click mitigation actions.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Injected Sola Zero-VDOM Interactive Canvas inside Moveworks -->
+                  <div class="lg:col-span-7 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-cyan-400 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                      <span>Moveworks Interactive Canvas (`@sola/core`)</span>
+                    </div>
+
+                    {#if activeComponent === 'incident'}
+                      <IncidentTriageMatrix config={{
+                        incidentId: "INC009481",
+                        title: "Moveworks • Production Aurora Latency Spike",
+                        severity: "P1 - Critical Outage",
+                        slaRemainingMin: 11,
+                        blastRadius: "42,000 Active Sessions Impacted",
+                        playbooks: [
+                          { id: "pb-1", title: "Route53 Edge Failover", action: "1-Click Auto-Reroute", automated: true },
+                          { id: "pb-2", title: "Scale Container Workers (x4)", action: "Auto-Provision", automated: true },
+                          { id: "pb-3", title: "Page Tier 3 Database SRE", action: "PagerDuty Trigger", automated: false }
+                        ]
+                      }} />
+                    {:else if activeComponent === 'cluster'}
+                      <ClusterMatrix config={{ title: "Moveworks Connected AWS Cluster", subtitle: "12 Pods In Sync with ServiceNow" }} />
+                    {:else if activeComponent === 'waterfall'}
+                      <FlowWaterfall config={{ title: "Moveworks Automated Ticket Cost Avoidance", subtitle: "Deflection savings realized across ITSM tiers" }} />
+                    {:else if activeComponent === 'datacard'}
+                      <DataCard config={{ title: "Moveworks Autonomous MTTR", value: "4.2 mins", trend: "-82% vs manual portal", icon: "activity" }} />
+                    {:else}
+                      <TactileDialCard config={{ title: "Moveworks Mitigation Confidence", value: 96, unit: "%", subtext: "Deterministic ActionContract" }} />
                     {/if}
                   </div>
                 </div>
