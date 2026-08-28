@@ -243,83 +243,70 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
   }
 }`;
 
-  const engineExample = `// Sola compiled output: Pure direct DOM node manipulation
-export function mount(__target, props = {}) {
-  const root = document.createElement('div');
-  root.className = 'sola-metric-card';
+  const engineExample = '// Sola compiled output: Pure direct DOM node manipulation\n' +
+    'export function mount(__target, props = {}) {\n' +
+    '  const root = document.createElement("div");\n' +
+    '  root.className = "sola-metric-card";\n\n' +
+    '  const textNode = document.createTextNode(props.value || "0");\n' +
+    '  root.appendChild(textNode);\n\n' +
+    '  // Fine-grained signal subscription (No VDOM diffing loop!)\n' +
+    '  createEffect(() => {\n' +
+    '    textNode.data = props.value();\n' +
+    '  });\n\n' +
+    '  __target.appendChild(root);\n' +
+    '  return () => __target.removeChild(root);\n' +
+    '}';
 
-  const textNode = document.createTextNode(props.value || '0');
-  root.appendChild(textNode);
+  const llmSystemPrompt = '<' + 'sola_rules>\n' +
+    'You are an expert developer building applications with Sola (zero-VDOM ambient runtime).\n' +
+    'When writing Sola components (.sola files), strictly follow these language rules:\n\n' +
+    '1. COMPONENT FORMAT (.sola):\n' +
+    '   - Combine script, HTML markup, and scoped CSS in one file.\n' +
+    '   - Use \'let count = $state(initialValue)\' for reactive signals.\n' +
+    '   - Use \'let doubled = $derived(expression)\' for computed values.\n' +
+    '   - Handlers attach directly: <button onclick={increment}>Scale +1</button>.\n\n' +
+    '2. MACROS ($intent and $data):\n' +
+    '   - Use $intent("natural language prompt") to dynamically generate UI sub-components.\n' +
+    '   - Use $data("sheet://<sheetId>") or $data("servicenow://<table>") to auto-poll data sources.\n\n' +
+    '3. MOUNTING CONTRACT:\n' +
+    '   - Compiled components export a function: mount(domNode, props).\n' +
+    '   - Mounting returns an unmount cleanup function: const unmount = MyComponent(el, props).\n' +
+    '</' + 'sola_rules>';
 
-  // Fine-grained signal subscription (No VDOM diffing loop!)
-  createEffect(() => {
-    textNode.data = props.value();
-  });
+  const serviceNowEmbedCode = '// ServiceNow Service Portal Widget (Client Controller)\n' +
+    'function(c, $element) {\n' +
+    '  // Import or bundle compiled Sola component\n' +
+    '  var IncidentCard = window.SolaComponents.IncidentCard;\n\n' +
+    '  // Mount directly to the ServiceNow widget DOM element\n' +
+    '  var rootNode = $element.find("#sn-widget-mount")[0];\n' +
+    '  var unmount = IncidentCard(rootNode, {\n' +
+    '    sys_id: c.data.sys_id,\n' +
+    '    priority: c.data.priority,\n' +
+    '    onEscalate: function(newPriority) {\n' +
+    '      c.server.get({ action: "escalate", priority: newPriority });\n' +
+    '    }\n' +
+    '  });\n\n' +
+    '  // Clean up when ServiceNow destroys the widget scope\n' +
+    '  $scope.$on("$destroy", function() {\n' +
+    '    if (unmount) unmount();\n' +
+    '  });\n' +
+    '}';
 
-  __target.appendChild(root);
-  return () => __target.removeChild(root);
-};
-
-  const llmSystemPrompt = `<sola_rules>
-You are an expert developer building applications with Sola (zero-VDOM ambient runtime).
-When writing Sola components (.sola files), strictly follow these language rules:
-
-1. COMPONENT FORMAT (.sola):
-   - Combine <` + `script>, HTML markup, and scoped CSS styles in one file.
-   - Use 'let count = $state(initialValue)' for reactive signals.
-   - Use 'let doubled = $derived(expression)' for computed values.
-   - Handlers attach directly: <button onclick={increment}>Scale +1</button>.
-
-2. MACROS ($intent and $data):
-   - Use $intent("natural language prompt") to dynamically generate UI sub-components.
-   - Use $data("sheet://<sheetId>") or $data("servicenow://<table>") to auto-poll data sources.
-
-3. MOUNTING CONTRACT:
-   - Compiled components export a function: mount(domNode, props).
-   - Mounting returns an unmount cleanup function: const unmount = MyComponent(el, props).
-</sola_rules>`;
-
-  const serviceNowEmbedCode = `// ServiceNow Service Portal Widget (Client Controller)
-function(c, $element) {
-  // Import or bundle compiled Sola component
-  var IncidentCard = window.SolaComponents.IncidentCard;
-
-  // Mount directly to the ServiceNow widget DOM element
-  var rootNode = $element.find('#sn-widget-mount')[0];
-  var unmount = IncidentCard(rootNode, {
-    sys_id: c.data.sys_id,
-    priority: c.data.priority,
-    onEscalate: function(newPriority) {
-      c.server.get({ action: 'escalate', priority: newPriority });
-    }
-  });
-
-  // Clean up when ServiceNow destroys the widget scope
-  $scope.$on('$destroy', function() {
-    if (unmount) unmount();
-  });
-}`;
-
-  const reactEmbedCode = `import React, { useEffect, useRef } from 'react';
-import IncidentCard from './IncidentCard.sola';
-
-export function SolaWidgetWrapper({ incidentId }) {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Mount fine-grained Sola component directly into React DOM ref
-    const unmount = IncidentCard(containerRef.current, {
-      incidentId: incidentId
-    });
-
-    // Clean up when React unmounts component
-    return () => unmount();
-  }, [incidentId]);
-
-  return <div ref={containerRef} className="sola-react-host-container" />;
-}`;;
+  const reactEmbedCode = 'import React, { useEffect, useRef } from "react";\n' +
+    'import IncidentCard from "./IncidentCard.sola";\n\n' +
+    'export function SolaWidgetWrapper({ incidentId }) {\n' +
+    '  const containerRef = useRef(null);\n\n' +
+    '  useEffect(() => {\n' +
+    '    if (!containerRef.current) return;\n\n' +
+    '    // Mount fine-grained Sola component directly into React DOM ref\n' +
+    '    const unmount = IncidentCard(containerRef.current, {\n' +
+    '      incidentId: incidentId\n' +
+    '    });\n\n' +
+    '    // Clean up when React unmounts component\n' +
+    '    return () => unmount();\n' +
+    '  }, [incidentId]);\n\n' +
+    '  return <div ref={containerRef} className="sola-react-host-container" />;\n' +
+    '}';;
 </script>
 
 <div class="min-h-screen bg-[#fafafa] text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900 pb-20">
