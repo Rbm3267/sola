@@ -165,92 +165,269 @@
           <!-- Mock Host Dashboard UI Layout -->
           <div class="w-full max-w-4xl flex flex-col gap-4 sm:gap-6" style="color: {presets[selectedPreset].text}">
             
-            <!-- Host Top Bar -->
-            <div class="flex items-center justify-between border-b pb-3 sm:pb-4 gap-2" style="border-color: {presets[selectedPreset].border}">
-              <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-                <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm shrink-0" style="background: {presets[selectedPreset].brand}">
-                  {presets[selectedPreset].name[0]}
-                </span>
-                <div class="min-w-0">
-                  <div class="font-bold font-mono text-xs sm:text-sm truncate">{presets[selectedPreset].name} Workspace</div>
-                  <div class="text-[10px] opacity-60 font-mono hidden sm:block">{presets[selectedPreset].subtext}</div>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-lg sm:rounded-xl border font-mono whitespace-nowrap" style="border-color: {presets[selectedPreset].border}">
-                  Cluster: us-east-1
-                </span>
-              </div>
-            </div>
-
-            <!-- Host Grid with Injected Sola Component -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
-              
-              <!-- Host Static Column -->
-              <div class="lg:col-span-4 flex flex-col gap-3 sm:gap-4">
-                <div class="p-4 sm:p-5 rounded-2xl border flex flex-col gap-1 sm:gap-2" style="background: {presets[selectedPreset].theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'}; border-color: {presets[selectedPreset].border}">
-                  <span class="text-[10px] sm:text-xs font-mono opacity-60 uppercase">Host SLA Availability</span>
-                  <span class="text-xl sm:text-2xl font-black font-mono">99.98%</span>
-                  <span class="text-[10px] sm:text-xs text-emerald-500 font-mono">+0.04% vs 30-day target</span>
-                </div>
-                <div class="p-4 sm:p-5 rounded-2xl border flex flex-col gap-1 sm:gap-2" style="background: {presets[selectedPreset].theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'}; border-color: {presets[selectedPreset].border}">
-                  <span class="text-[10px] sm:text-xs font-mono opacity-60 uppercase">Active Gateway Sessions</span>
-                  <span class="text-xl sm:text-2xl font-black font-mono">142,800</span>
-                  <span class="text-[10px] sm:text-xs opacity-60 font-mono">Across 42 Global Regions</span>
-                </div>
-              </div>
-
-              <!-- INJECTED SOLA COMPONENT -->
-              <div class="lg:col-span-8 relative group w-full max-w-full">
-                
-                <!-- Injection Highlight Badge -->
-                <div class="absolute -top-3 left-3 sm:left-4 z-20 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[9px] sm:text-[10px] font-black shadow-md flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
-                  <span>Injected Sola Component</span>
+            {#if selectedPreset === 'servicenow'}
+              <!-- Authentic ServiceNow Portal Layout -->
+              <div class="flex flex-col gap-4">
+                <!-- ServiceNow Breadcrumb & Header Bar -->
+                <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
+                  <div class="flex items-center gap-2 text-xs font-mono">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">ServiceNow Portal</span>
+                    <span class="opacity-40">&gt;</span>
+                    <span class="opacity-70">ITSM Incident Management</span>
+                    <span class="opacity-40">&gt;</span>
+                    <span class="font-bold text-amber-400">INC009481</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Assignment: Tier 3 SRE Subnet</span>
+                  </div>
                 </div>
 
-                {#if activeComponent === 'incident'}
-                  <IncidentTriageMatrix config={{
-                    incidentId: "INC009481",
-                    title: `${presets[selectedPreset].name} • Ingress Latency Spike`,
-                    severity: "P1 - Critical",
-                    slaRemainingMin: 11,
-                    blastRadius: "42,000 Active Sessions",
-                    playbooks: [
-                      { id: "pb-1", title: "Reroute Edge Traffic", action: "Route53 Failover", automated: true },
-                      { id: "pb-2", title: "Scale Container Workers (x4)", action: "Auto-Provision", automated: true },
-                      { id: "pb-3", title: "Page Tier 3 Database SRE", action: "PagerDuty Incident", automated: false }
-                    ]
-                  }} />
-                {:else if activeComponent === 'cluster'}
-                  <ClusterMatrix config={{
-                    title: `${presets[selectedPreset].name} Distributed Mesh`,
-                    subtitle: "12 Primary & Read-Replica Shards"
-                  }} />
-                {:else if activeComponent === 'waterfall'}
-                  <FlowWaterfall config={{
-                    title: `${presets[selectedPreset].name} Revenue Realization`,
-                    subtitle: "Gross volume to net merchant bank payout"
-                  }} />
-                {:else if activeComponent === 'datacard'}
-                  <DataCard config={{
-                    title: `${presets[selectedPreset].name} Live ARR`,
-                    value: "$2,480,000",
-                    trend: "+24.8% vs last quarter",
-                    icon: "trending-up"
-                  }} />
-                {:else if activeComponent === 'dial'}
-                  <TactileDialCard config={{
-                    title: "Host Cluster Capacity Throttle",
-                    value: 78,
-                    unit: "%",
-                    subtext: "Drag rotary dial to adjust worker quota"
-                  }} />
-                {/if}
+                <!-- ServiceNow Host Context + Injected Sola Component Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <!-- ServiceNow Context Sidebar -->
+                  <div class="lg:col-span-4 flex flex-col gap-3 font-sans">
+                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-2">
+                      <div class="text-[10px] font-mono uppercase opacity-50">Caller / Impacted User</div>
+                      <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs">JS</div>
+                        <div>
+                          <div class="text-xs font-bold">Jason Statham (FinOps Ops)</div>
+                          <div class="text-[10px] opacity-60">j.statham@enterprise-corp.com</div>
+                        </div>
+                      </div>
+                    </div>
 
+                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-2">
+                      <div class="text-[10px] font-mono uppercase opacity-50">Configuration Item (CI)</div>
+                      <div class="text-xs font-bold font-mono text-emerald-400">aws-prod-us-east-1a-pg</div>
+                      <div class="text-[10px] opacity-60">Primary Aurora PostgreSQL Cluster</div>
+                    </div>
+                  </div>
+
+                  <!-- Injected Sola Component Surface -->
+                  <div class="lg:col-span-8 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                      <span>Injected Sola ServiceNow Widget</span>
+                    </div>
+
+                    {#if activeComponent === 'incident'}
+                      <IncidentTriageMatrix config={{
+                        incidentId: "INC009481",
+                        title: "ServiceNow ITSM • Ingress Latency Spike",
+                        severity: "P1 - Critical",
+                        slaRemainingMin: 11,
+                        blastRadius: "42,000 Active Sessions",
+                        playbooks: [
+                          { id: "pb-1", title: "Reroute Edge Traffic", action: "Route53 Failover", automated: true },
+                          { id: "pb-2", title: "Scale Container Workers (x4)", action: "Auto-Provision", automated: true },
+                          { id: "pb-3", title: "Page Tier 3 Database SRE", action: "PagerDuty Incident", automated: false }
+                        ]
+                      }} />
+                    {:else if activeComponent === 'cluster'}
+                      <ClusterMatrix config={{ title: "ServiceNow Attached Cluster Mesh", subtitle: "12 Primary & Read-Replica Shards" }} />
+                    {:else if activeComponent === 'waterfall'}
+                      <FlowWaterfall config={{ title: "ServiceNow FinOps Cost Allocation", subtitle: "Monthly cloud allocation to ITSM cost centers" }} />
+                    {:else if activeComponent === 'datacard'}
+                      <DataCard config={{ title: "ServiceNow Open Incidents", value: "14 P1/P2", trend: "-4 vs yesterday", icon: "activity" }} />
+                    {:else if activeComponent === 'dial'}
+                      <TactileDialCard config={{ title: "ServiceNow SLA Breach Risk", value: 84, unit: "%", subtext: "Urgency throttle" }} />
+                    {/if}
+                  </div>
+                </div>
               </div>
 
-            </div>
+            {:else if selectedPreset === 'stripe'}
+              <!-- Authentic Stripe Dashboard Layout -->
+              <div class="flex flex-col gap-4">
+                <!-- Stripe Top Bar -->
+                <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
+                  <div class="flex items-center gap-3">
+                    <span class="font-bold text-sm tracking-tight text-slate-900">Stripe Dashboard</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-bold border border-indigo-200">LIVE MODE</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-slate-500">Balance: <strong class="text-slate-900">$184,920.00</strong></span>
+                  </div>
+                </div>
+
+                <!-- Stripe Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <div class="lg:col-span-4 flex flex-col gap-3">
+                    <div class="p-4 rounded-xl border bg-white border-slate-200 flex flex-col gap-1 shadow-xs">
+                      <span class="text-xs font-medium text-slate-500">Gross Volume (30D)</span>
+                      <span class="text-2xl font-bold text-slate-900">$1,420,800</span>
+                      <span class="text-xs text-emerald-600 font-medium">+18.4% vs last month</span>
+                    </div>
+                    <div class="p-4 rounded-xl border bg-white border-slate-200 flex flex-col gap-1 shadow-xs">
+                      <span class="text-xs font-medium text-slate-500">Successful Payments</span>
+                      <span class="text-2xl font-bold text-slate-900">42,910</span>
+                      <span class="text-xs text-slate-500">99.4% approval rate</span>
+                    </div>
+                  </div>
+
+                  <!-- Injected Sola Component Surface -->
+                  <div class="lg:col-span-8 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-indigo-600 text-white font-mono text-[10px] font-bold shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                      <span>Injected Sola FinTech Card</span>
+                    </div>
+
+                    {#if activeComponent === 'waterfall'}
+                      <FlowWaterfall config={{ title: "Stripe Payout Realization", subtitle: "Gross volume to net merchant bank payout" }} />
+                    {:else if activeComponent === 'datacard'}
+                      <DataCard config={{ title: "Live Stripe Volume ARR", value: "$2,480,000", trend: "+24.8% vs Q2", icon: "trending-up" }} />
+                    {:else if activeComponent === 'dial'}
+                      <TactileDialCard config={{ title: "Stripe Dunning Escalation Dial", value: 65, unit: "%", subtext: "Automated retry frequency" }} />
+                    {:else if activeComponent === 'incident'}
+                      <IncidentTriageMatrix config={{
+                        incidentId: "CHG-9941",
+                        title: "Stripe Webhook Gateway Latency",
+                        severity: "P2 - High",
+                        slaRemainingMin: 24,
+                        blastRadius: "1,200 Pending Webhooks",
+                        playbooks: [
+                          { id: "pb-1", title: "Flush Webhook Queue", action: "Retry Failed Hooks", automated: true }
+                        ]
+                      }} />
+                    {:else}
+                      <ClusterMatrix config={{ title: "Stripe Payment Gateway Nodes", subtitle: "Active PCI-DSS Clusters" }} />
+                    {/if}
+                  </div>
+                </div>
+              </div>
+
+            {:else if selectedPreset === 'linear'}
+              <!-- Authentic Linear Workspace Layout -->
+              <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
+                  <div class="flex items-center gap-2 text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    <span class="font-bold text-slate-200">Linear Workspace</span>
+                    <span class="opacity-40">/</span>
+                    <span class="opacity-80">Active Cycle 42</span>
+                  </div>
+                  <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Press CMD+K to search</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <div class="lg:col-span-4 flex flex-col gap-2 font-mono text-xs">
+                    <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-slate-300">
+                      <span>SOL-104 Scale Redis Worker</span>
+                      <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px]">In Progress</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-slate-300">
+                      <span>SOL-108 Zero-VDOM Macro AST</span>
+                      <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px]">Done</span>
+                    </div>
+                  </div>
+
+                  <div class="lg:col-span-8 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                      <span>Injected Sola Linear Widget</span>
+                    </div>
+
+                    {#if activeComponent === 'incident'}
+                      <IncidentTriageMatrix config={{
+                        incidentId: "SOL-104",
+                        title: "Linear Issue • Scale Redis Cluster Worker",
+                        severity: "High Priority",
+                        slaRemainingMin: 45,
+                        blastRadius: "Affects API Rate Limits",
+                        playbooks: [
+                          { id: "pb-1", title: "Trigger Auto-Scale Workflow", action: "Deploy Worker v2.4", automated: true }
+                        ]
+                      }} />
+                    {:else if activeComponent === 'dial'}
+                      <TactileDialCard config={{ title: "Linear Sprint Capacity Dial", value: 92, unit: "%", subtext: "Cycle 42 Velocity" }} />
+                    {:else}
+                      <ClusterMatrix config={{ title: "Linear Dev Cluster Mesh", subtitle: "8 Active Microservices" }} />
+                    {/if}
+                  </div>
+                </div>
+              </div>
+
+            {:else if selectedPreset === 'grafana'}
+              <!-- Authentic Grafana Telemetry NOC Layout -->
+              <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
+                  <div class="flex items-center gap-2 text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="font-bold text-amber-400">Grafana NOC Dashboard</span>
+                    <span class="opacity-40">•</span>
+                    <span class="opacity-80">Prometheus / Cluster Metrics</span>
+                  </div>
+                  <span class="text-[10px] font-mono bg-slate-900 text-amber-400 px-2.5 py-1 rounded border border-amber-500/30">Last 15 minutes (Live 5s)</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <div class="lg:col-span-4 flex flex-col gap-3 font-mono">
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col gap-1">
+                      <span class="text-[10px] opacity-60">PROMETHEUS CPU SATURATION</span>
+                      <span class="text-2xl font-bold text-amber-400">78.4%</span>
+                      <span class="text-[10px] text-slate-400">12/16 Cores Allocated</span>
+                    </div>
+                  </div>
+
+                  <div class="lg:col-span-8 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                      <span>Injected Sola Grafana NOC Card</span>
+                    </div>
+
+                    {#if activeComponent === 'cluster'}
+                      <ClusterMatrix config={{ title: "Grafana Prometheus Node Cluster", subtitle: "12 Pod Shards Monitored Live" }} />
+                    {:else if activeComponent === 'datacard'}
+                      <DataCard config={{ title: "Grafana Active Telemetry RPS", value: "14,800 RPS", trend: "Nominal Load", icon: "activity" }} />
+                    {:else}
+                      <TactileDialCard config={{ title: "Grafana Alert Threshold Dial", value: 85, unit: "%", subtext: "Trigger PagerDuty if exceeded" }} />
+                    {/if}
+                  </div>
+                </div>
+              </div>
+
+            {:else}
+              <!-- Authentic Vercel Console Layout -->
+              <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b pb-3 border-slate-200">
+                  <div class="flex items-center gap-2 font-mono text-xs text-slate-900">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 76 65"><path d="M37.5274 0L75.0548 65H0L37.5274 0Z"/></svg>
+                    <span class="font-bold">Vercel Console</span>
+                    <span class="text-slate-400">/</span>
+                    <span class="text-slate-600">sola-air</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">● Ready</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <div class="lg:col-span-4 flex flex-col gap-3 font-mono text-xs">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1">
+                      <span class="text-[10px] text-slate-400 uppercase">Git Branch</span>
+                      <span class="font-bold text-slate-900">main (ca94995)</span>
+                      <span class="text-[10px] text-slate-500">Built in 16s via Edge</span>
+                    </div>
+                  </div>
+
+                  <div class="lg:col-span-8 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-slate-950 text-white font-mono text-[10px] font-bold shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                      <span>Injected Sola Edge Console Widget</span>
+                    </div>
+
+                    {#if activeComponent === 'datacard'}
+                      <DataCard config={{ title: "Vercel Edge Functions Requests", value: "1,420,800", trend: "0ms Cold Start", icon: "activity" }} />
+                    {:else if activeComponent === 'waterfall'}
+                      <FlowWaterfall config={{ title: "Vercel Bandwidth & Compute Cost", subtitle: "Edge network bandwidth utilization" }} />
+                    {:else}
+                      <ClusterMatrix config={{ title: "Vercel Global Edge Regions", subtitle: "iad1, sfo1, cdg1, hnd1" }} />
+                    {/if}
+                  </div>
+                </div>
+              </div>
+            {/if}
 
           </div>
 
