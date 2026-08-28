@@ -1,233 +1,270 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import Navbar from '$lib/components/Navbar.svelte';
-  import DataCard from '$lib/components/DataCard.svelte';
-  import GaugeCard from '$lib/components/GaugeCard.svelte';
-  import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
-  import TactileDialCard from '$lib/components/TactileDialCard.svelte';
-  import DynamicForm from '$lib/components/DynamicForm.svelte';
-  import ListBlock from '$lib/components/ListBlock.svelte';
-  import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
-  import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
-  import DiffAudit from '$lib/components/DiffAudit.svelte';
+  import { onMount } from 'svelte';
 
-  // Active Theme: Clean Ivory Light default
-  let studioTheme = $state<'ivory' | 'obsidian'>('ivory');
+  // --- 1. Signal & Reactive State Engine ---
+  let signals = $state({
+    mrr: 128450,
+    cpuUsage: 42,
+    p99Latency: 84,
+    errorRate: 0.12,
+    activeIncidents: 2,
+    simulating: true
+  });
 
-  // Active Canvas Components Model
-  interface CanvasItem {
+  // Dynamic live signal simulator effect
+  $effect(() => {
+    if (!signals.simulating) return;
+    const interval = setInterval(() => {
+      signals.mrr = Math.round(128000 + Math.sin(Date.now() / 2000) * 3500);
+      signals.cpuUsage = Math.min(99, Math.max(12, Math.round(45 + Math.sin(Date.now() / 1500) * 28)));
+      signals.p99Latency = Math.max(24, Math.round(80 + Math.cos(Date.now() / 1800) * 35));
+      signals.errorRate = Number((0.1 + Math.abs(Math.sin(Date.now() / 3000)) * 0.45).toFixed(2));
+    }, 1200);
+
+    return () => clearInterval(interval);
+  });
+
+  // --- 2. Canvas Cards Data Model ---
+  interface StudioCard {
     id: string;
-    type: 'DataCard' | 'GaugeCard' | 'FlowWaterfall' | 'TactileDialCard' | 'DynamicForm' | 'ListBlock' | 'IncidentTriageMatrix' | 'ClusterMatrix';
-    colSpan: 1 | 2 | 3;
-    config: any;
+    type: 'metric' | 'gauge' | 'waterfall' | 'dial' | 'triage' | 'form' | 'activity';
+    title: string;
+    subtitle?: string;
+    cols: 1 | 2 | 3;
+    signalBinding?: keyof typeof signals;
+    customValue?: string | number;
+    accentColor: string;
+    config?: Record<string, any>;
   }
 
-  // Live Signal Telemetry Mesh (Reactively updates all canvas items)
-  let liveNodes = $state(16);
-  let liveCpu = $state(68);
-  let liveMrr = $state(184000);
-  let liveLatency = $state(4.2);
+  let selectedTemplate = $state('finops');
+  let arcPromptInput = $state('');
+  let isGeneratingArc = $state(false);
+  let activeCardId = $state<string | null>(null);
+  let exportModalOpen = $state(false);
+  let exportTab = $state<'svelte' | 'react' | 'webcomponent'>('svelte');
+  let copyNotification = $state(false);
 
-  // Default Canvas Items (FinOps & Telemetry Starter)
-  let canvasItems = $state<CanvasItem[]>([
-    {
-      id: 'c-1',
-      type: 'DataCard',
-      colSpan: 1,
-      config: { title: 'Realized MRR', value: '$184,000', trend: '+18.4%', icon: 'trending-up' }
+  // Pre-built templates
+  const templates: Record<string, { name: string; description: string; cards: StudioCard[] }> = {
+    finops: {
+      name: 'FinOps & Cloud Economy',
+      description: 'Real-time billing, waterfall revenue analytics, and compute budget burn rates.',
+      cards: [
+        {
+          id: 'c1',
+          type: 'metric',
+          title: 'Monthly Recurring Revenue',
+          subtitle: 'Live Stripe & billing gateway signal',
+          cols: 1,
+          signalBinding: 'mrr',
+          accentColor: 'indigo'
+        },
+        {
+          id: 'c2',
+          type: 'gauge',
+          title: 'Cluster CPU Saturation',
+          subtitle: 'Production node workers pool',
+          cols: 1,
+          signalBinding: 'cpuUsage',
+          accentColor: 'blue'
+        },
+        {
+          id: 'c3',
+          type: 'dial',
+          title: 'Auto-Scaler Governor',
+          subtitle: 'Throttle limit: 0 to 100%',
+          cols: 1,
+          customValue: 68,
+          accentColor: 'emerald'
+        },
+        {
+          id: 'c4',
+          type: 'waterfall',
+          title: 'Quarterly Revenue & COGS Waterfall',
+          subtitle: 'Gross Margin: 78.4% ($98.2k net)',
+          cols: 2,
+          accentColor: 'violet',
+          config: {
+            bars: [
+              { name: 'Base MRR', value: 120, delta: '+12%', type: 'pos' },
+              { name: 'Expansions', value: 34, delta: '+8%', type: 'pos' },
+              { name: 'Infra Cost', value: -22, delta: '-4%', type: 'neg' },
+              { name: 'Net EOY', value: 132, delta: '+16%', type: 'total' }
+            ]
+          }
+        },
+        {
+          id: 'c5',
+          type: 'activity',
+          title: 'Live Telemetry Relay Feed',
+          subtitle: 'Zero-egress signal stream sync',
+          cols: 1,
+          accentColor: 'slate'
+        }
+      ]
     },
-    {
-      id: 'c-2',
-      type: 'GaugeCard',
-      colSpan: 1,
-      config: { title: 'Cluster CPU Saturation', value: '68%', percentage: 68, subtext: 'Auto-balanced across 16 nodes', color: 'emerald' }
+    incident: {
+      name: 'P1 Incident Command',
+      description: 'Real-time triage, p99 latency watchdog, and on-call escalation loop.',
+      cards: [
+        {
+          id: 'i1',
+          type: 'triage',
+          title: 'Active Incident Response Hub',
+          subtitle: '2 active Sev-1 / Sev-2 alerts',
+          cols: 2,
+          accentColor: 'rose'
+        },
+        {
+          id: 'i2',
+          type: 'gauge',
+          title: 'Edge Gateway P99 Latency',
+          subtitle: 'Threshold: 120ms',
+          cols: 1,
+          signalBinding: 'p99Latency',
+          accentColor: 'amber'
+        },
+        {
+          id: 'i3',
+          type: 'metric',
+          title: 'Error Ingestion Rate',
+          subtitle: '5xx status / total requests',
+          cols: 1,
+          signalBinding: 'errorRate',
+          accentColor: 'rose'
+        },
+        {
+          id: 'i4',
+          type: 'form',
+          title: '1-Click Incident Dispatch',
+          subtitle: 'Trigger DNS failover, Slack, & Statuspage',
+          cols: 2,
+          accentColor: 'slate'
+        }
+      ]
     },
-    {
-      id: 'c-3',
-      type: 'TactileDialCard',
-      colSpan: 1,
-      config: { title: 'API Rate Limit Throttle', value: 24, min: 4, max: 64, unit: 'k req/s' }
-    },
-    {
-      id: 'c-4',
-      type: 'FlowWaterfall',
-      colSpan: 2,
-      config: {
-        title: 'Monthly Subscription ARR Realization',
-        subtitle: 'Real-time deduction pipeline to bank settlement',
-        grossVolume: 184000,
-        computeExpense: 32000,
-        supportExpense: 14000,
-        tierDiscount: 6000
-      }
-    },
-    {
-      id: 'c-5',
-      type: 'IncidentTriageMatrix',
-      colSpan: 1,
-      config: {
-        incidentId: 'INC009481',
-        title: 'API Gateway Ingress Spike (EU-West)',
-        severity: 'P1 - Critical Outage',
-        slaRemainingMin: 9,
-        blastRadius: '42,000 Active Sessions',
-        playbooks: [
-          { id: 'pb-1', title: 'Route53 Edge DNS Failover', action: 'Route53 Failover', automated: true },
-          { id: 'pb-2', title: 'Scale Container Workers (x4)', action: 'Auto-Provision', automated: true }
-        ]
-      }
+    blank: {
+      name: 'Blank Canvas',
+      description: 'Start from scratch or prompt Arc to compose your canvas.',
+      cards: []
     }
-  ]);
+  };
 
-  // Selected item for Inspector
-  let selectedItem = $state<CanvasItem | null>(null);
+  let cards = $state<StudioCard[]>([...templates.finops.cards]);
+  const activeCard = $derived(cards.find((c) => c.id === activeCardId) || null);
 
-  // Sola Arc Generative Prompt
-  let arcPrompt = $state('');
-  let isArcSynthesizing = $state(false);
-
-  // Multi-Target Code Export
-  let activeExportFormat = $state<'sola' | 'react' | 'svelte' | 'webcomponent'>('sola');
-  let isCopied = $state(false);
-  let toastMsg = $state<string | null>(null);
-
-  function showToast(msg: string) {
-    toastMsg = msg;
-    setTimeout(() => { toastMsg = null; }, 3000);
+  function switchTemplate(tplKey: string) {
+    selectedTemplate = tplKey;
+    cards = JSON.parse(JSON.stringify(templates[tplKey].cards));
+    activeCardId = null;
   }
 
-  // --- Hand-Crafted Add Component Actions ---
-  function addComponent(type: CanvasItem['type']) {
-    const id = 'c-' + Math.random().toString(36).substring(2, 7);
-    let newItem: CanvasItem;
-
-    if (type === 'DataCard') {
-      newItem = {
-        id,
-        type: 'DataCard',
-        colSpan: 1,
-        config: { title: 'New Metric Card', value: '$42,500', trend: '+8.2%', icon: 'trending-up' }
-      };
-    } else if (type === 'GaugeCard') {
-      newItem = {
-        id,
-        type: 'GaugeCard',
-        colSpan: 1,
-        config: { title: 'SLA Availability', value: '99.9%', percentage: 99, subtext: 'Zero-Egress Compliant', color: 'emerald' }
-      };
-    } else if (type === 'TactileDialCard') {
-      newItem = {
-        id,
-        type: 'TactileDialCard',
-        colSpan: 1,
-        config: { title: 'Worker Node Throttle', value: 16, min: 2, max: 48, unit: 'nodes' }
-      };
-    } else if (type === 'FlowWaterfall') {
-      newItem = {
-        id,
-        type: 'FlowWaterfall',
-        colSpan: 2,
+  // 1-Click Component Shelf Dispatchers
+  function addComponent(type: StudioCard['type']) {
+    const newId = 'card_' + Math.random().toString(36).substring(2, 9);
+    const defaultMap: Record<StudioCard['type'], Partial<StudioCard>> = {
+      metric: {
+        title: 'Active Node Count',
+        subtitle: 'Autoscaling cluster',
+        cols: 1,
+        signalBinding: 'cpuUsage',
+        accentColor: 'indigo'
+      },
+      gauge: {
+        title: 'Memory Utilization',
+        subtitle: 'Target < 85%',
+        cols: 1,
+        signalBinding: 'cpuUsage',
+        accentColor: 'blue'
+      },
+      waterfall: {
+        title: 'Cost Distribution Breakdown',
+        subtitle: 'Compute vs Storage vs Network',
+        cols: 2,
+        accentColor: 'violet',
         config: {
-          title: 'Financial Realization Waterfall',
-          subtitle: 'Gross to net deduction stream',
-          grossVolume: 120000,
-          computeExpense: 22000,
-          supportExpense: 8000,
-          tierDiscount: 4000
-        }
-      };
-    } else if (type === 'DynamicForm') {
-      newItem = {
-        id,
-        type: 'DynamicForm',
-        colSpan: 1,
-        config: {
-          title: 'Auto-Binding Configuration Form',
-          endpoint: '/api/config',
-          fields: [
-            { name: 'clusterName', type: 'text', label: 'Cluster Namespace', required: true },
-            { name: 'maxNodes', type: 'number', label: 'Max Worker Nodes', required: true }
+          bars: [
+            { name: 'Compute', value: 85, delta: '60%', type: 'pos' },
+            { name: 'Storage', value: 35, delta: '25%', type: 'pos' },
+            { name: 'Egress', value: -18, delta: '15%', type: 'neg' },
+            { name: 'Net', value: 102, delta: 'Total', type: 'total' }
           ]
         }
-      };
-    } else if (type === 'ListBlock') {
-      newItem = {
-        id,
-        type: 'ListBlock',
-        colSpan: 1,
-        config: {
-          title: 'Live Telemetry Ingress Nodes',
-          items: [
-            { label: 'edge-us-east-1a', description: '4.1ms p99 • 24.2k req/s', status: 'Active' },
-            { label: 'edge-eu-west-1b', description: '6.8ms p99 • 18.4k req/s', status: 'Active' },
-            { label: 'edge-ap-east-1', description: '3.2ms p99 • Synchronized', status: 'Completed' }
-          ]
-        }
-      };
-    } else if (type === 'IncidentTriageMatrix') {
-      newItem = {
-        id,
-        type: 'IncidentTriageMatrix',
-        colSpan: 2,
-        config: {
-          incidentId: 'INC009921',
-          title: 'Database Connection Pool Exhaustion',
-          severity: 'P1 - Critical Outage',
-          slaRemainingMin: 12,
-          blastRadius: '38,000 Active Sessions',
-          playbooks: [
-            { id: 'pb-1', title: 'Scale Read Replicas (x3)', action: 'Auto-Provision', automated: true },
-            { id: 'pb-2', title: 'Terminate Idle Locks', action: 'Kill Idle Transactions', automated: true }
-          ]
-        }
-      };
-    } else {
-      newItem = {
-        id,
-        type: 'ClusterMatrix',
-        colSpan: 2,
-        config: {
-          title: 'High-Density Kubernetes Pod Mesh',
-          subtitle: '12 Active Edge Workers',
-          regions: [
-            { name: 'us-east-1 (Primary)', status: 'Optimal', lagMs: 0, tps: 18400 },
-            { name: 'eu-west-1 (Replica)', status: 'Optimal', lagMs: 4, tps: 12100 }
-          ]
-        }
-      };
-    }
-
-    canvasItems = [...canvasItems, newItem];
-    selectedItem = newItem;
-    showToast(`Added ${type} to canvas!`);
-  }
-
-  function removeComponent(id: string) {
-    canvasItems = canvasItems.filter(i => i.id !== id);
-    if (selectedItem?.id === id) selectedItem = null;
-    showToast('Component removed');
-  }
-
-  function duplicateComponent(item: CanvasItem) {
-    const clone: CanvasItem = {
-      ...item,
-      id: 'c-' + Math.random().toString(36).substring(2, 7),
-      config: JSON.parse(JSON.stringify(item.config))
+      },
+      dial: {
+        title: 'Throughput Governor',
+        subtitle: 'Rate limit RPS throttle',
+        cols: 1,
+        customValue: 50,
+        accentColor: 'emerald'
+      },
+      triage: {
+        title: 'Incident Queue',
+        subtitle: 'Live triage matrix',
+        cols: 2,
+        accentColor: 'rose'
+      },
+      form: {
+        title: 'Dynamic Configuration Form',
+        subtitle: 'Runtime environment variables',
+        cols: 2,
+        accentColor: 'slate'
+      },
+      activity: {
+        title: 'Audit & Telemetry Stream',
+        subtitle: 'Zero-latency event log',
+        cols: 1,
+        accentColor: 'slate'
+      }
     };
-    canvasItems = [...canvasItems, clone];
-    selectedItem = clone;
-    showToast(`Duplicated ${item.type}`);
+
+    const templateData = defaultMap[type];
+    const card: StudioCard = {
+      id: newId,
+      type,
+      title: templateData.title || 'New Component',
+      subtitle: templateData.subtitle,
+      cols: templateData.cols || 1,
+      signalBinding: templateData.signalBinding,
+      customValue: templateData.customValue,
+      accentColor: templateData.accentColor || 'indigo',
+      config: templateData.config
+    };
+
+    cards = [...cards, card];
+    activeCardId = newId;
   }
 
-  function cycleColSpan(item: CanvasItem) {
-    item.colSpan = item.colSpan === 1 ? 2 : item.colSpan === 2 ? 3 : 1;
+  function removeCard(id: string, e?: Event) {
+    if (e) e.stopPropagation();
+    cards = cards.filter((c) => c.id !== id);
+    if (activeCardId === id) activeCardId = null;
   }
 
-  // --- Sola Arc Prompt Compilation ---
-  async function handleArcSynthesize() {
-    if (!arcPrompt.trim() || isArcSynthesizing) return;
-    const query = arcPrompt.trim();
-    isArcSynthesizing = true;
+  function duplicateCard(card: StudioCard, e?: Event) {
+    if (e) e.stopPropagation();
+    const copy: StudioCard = {
+      ...JSON.parse(JSON.stringify(card)),
+      id: 'card_' + Math.random().toString(36).substring(2, 9),
+      title: card.title + ' (Copy)'
+    };
+    const idx = cards.findIndex((c) => c.id === card.id);
+    cards = [...cards.slice(0, idx + 1), copy, ...cards.slice(idx + 1)];
+    activeCardId = copy.id;
+  }
+
+  function updateCols(cardId: string, cols: 1 | 2 | 3, e?: Event) {
+    if (e) e.stopPropagation();
+    cards = cards.map((c) => (c.id === cardId ? { ...c, cols } : c));
+  }
+
+  // Arc AI Natural Language Synthesis
+  async function runArcPrompt() {
+    if (!arcPromptInput.trim() || isGeneratingArc) return;
+    isGeneratingArc = true;
+    const query = arcPromptInput.trim();
 
     try {
       const res = await fetch('/api/intent', {
@@ -238,474 +275,724 @@
 
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        const generatedItems: CanvasItem[] = data.map((d: any, idx: number) => ({
-          id: 'c-arc-' + idx + '-' + Math.random().toString(36).substring(2, 5),
-          type: (d.component || 'DataCard') as CanvasItem['type'],
-          colSpan: (d.colSpan || 1) as 1 | 2 | 3,
-          config: d.config || { title: 'Generated Component', value: 'Active' }
-        }));
-        canvasItems = generatedItems;
-        showToast(`Sola Arc synthesized ${generatedItems.length} components!`);
-      } else {
-        showToast('Sola Arc updated canvas layout.');
+        const synthesized: StudioCard[] = data.map((item: any, idx: number) => {
+          const typeMap: Record<string, StudioCard['type']> = {
+            DataCard: 'metric',
+            GaugeCard: 'gauge',
+            FlowWaterfall: 'waterfall',
+            TactileDialCard: 'dial',
+            DynamicForm: 'form',
+            ListBlock: 'activity',
+            IncidentTriageMatrix: 'triage',
+            ClusterMatrix: 'metric'
+          };
+          const cardType = typeMap[item.component] || 'metric';
+          return {
+            id: 'arc_' + idx + '_' + Math.random().toString(36).substring(2, 7),
+            type: cardType,
+            title: item.config?.title || 'Synthesized Component',
+            subtitle: item.config?.subtitle || 'Generated by Sola Arc',
+            cols: (item.colSpan || 1) as 1 | 2 | 3,
+            signalBinding: cardType === 'gauge' ? 'cpuUsage' : cardType === 'metric' ? 'mrr' : undefined,
+            customValue: item.config?.value || 'Active',
+            accentColor: 'indigo',
+            config: item.config
+          };
+        });
+        cards = synthesized;
+        activeCardId = synthesized[0].id;
       }
-    } catch (e: any) {
-      showToast('Sola Arc compiled with fallback defaults.');
+    } catch {
+      // Fallback composition
+      const p = query.toLowerCase();
+      if (p.includes('waterfall') || p.includes('revenue')) addComponent('waterfall');
+      else if (p.includes('cpu') || p.includes('gauge') || p.includes('latency')) addComponent('gauge');
+      else if (p.includes('incident') || p.includes('triage')) addComponent('triage');
+      else if (p.includes('dial') || p.includes('knob')) addComponent('dial');
+      else addComponent('metric');
     } finally {
-      isArcSynthesizing = false;
+      isGeneratingArc = false;
+      arcPromptInput = '';
     }
   }
 
-  // Preset Starters
-  function loadPreset(preset: 'finops' | 'telemetry' | 'incident' | 'blank') {
-    if (preset === 'blank') {
-      canvasItems = [];
-      selectedItem = null;
-      showToast('Canvas cleared');
-      return;
-    }
-    if (preset === 'finops') {
-      canvasItems = [
-        { id: 'c-f1', type: 'DataCard', colSpan: 1, config: { title: 'Realized ARR', value: `$${liveMrr.toLocaleString()}`, trend: '+14.2%', icon: 'trending-up' } },
-        { id: 'c-f2', type: 'GaugeCard', colSpan: 1, config: { title: 'Gross Churn Rate', value: '1.8%', percentage: 18, subtext: 'Annual churn baseline < 2%', color: 'emerald' } },
-        { id: 'c-f3', type: 'TactileDialCard', colSpan: 1, config: { title: 'Customer Expansion Throttle', value: 24, min: 5, max: 50, unit: '%' } },
-        { id: 'c-f4', type: 'FlowWaterfall', colSpan: 3, config: { title: 'Enterprise Revenue Realization', grossVolume: liveMrr, computeExpense: 32000, supportExpense: 14000, tierDiscount: 6000 } }
-      ];
-    } else if (preset === 'telemetry') {
-      canvasItems = [
-        { id: 'c-t1', type: 'DataCard', colSpan: 1, config: { title: 'Ingress Latency p99', value: `${liveLatency}ms`, trend: '-0.8ms vs baseline', icon: 'trending-up' } },
-        { id: 'c-t2', type: 'GaugeCard', colSpan: 1, config: { title: 'Cluster CPU Saturation', value: `${liveCpu}%`, percentage: liveCpu, subtext: `Optimal across ${liveNodes} nodes`, color: 'emerald' } },
-        { id: 'c-t3', type: 'TactileDialCard', colSpan: 1, config: { title: 'Auto-Scale Node Multiplier', value: liveNodes, min: 2, max: 48, unit: 'nodes' } },
-        { id: 'c-t4', type: 'ClusterMatrix', colSpan: 3, config: { title: 'Global Multi-Region Ingress Grid', regions: [{ name: 'us-east-1 (Primary)', status: 'Optimal', lagMs: 0, tps: 18400 }, { name: 'eu-west-1 (Replica)', status: 'Optimal', lagMs: 4, tps: 12100 }] } }
-      ];
-    } else if (preset === 'incident') {
-      canvasItems = [
-        { id: 'c-i1', type: 'IncidentTriageMatrix', colSpan: 2, config: { incidentId: 'INC009481', title: 'API Gateway Ingress Spike (EU-West)', severity: 'P1 - Critical Outage', slaRemainingMin: 9, blastRadius: '42,000 Active Sessions', playbooks: [{ id: 'pb-1', title: 'Route53 Failover', action: 'Route53 Failover', automated: true }, { id: 'pb-2', title: 'Scale Workers', action: 'Auto-Provision', automated: true }] } },
-        { id: 'c-i2', type: 'GaugeCard', colSpan: 1, config: { title: 'SLA Countdown Clock', value: '9m Rem', percentage: 38, subtext: 'MTTR Target: 15 mins', color: 'amber' } }
-      ];
-    }
-    showToast(`Loaded ${preset} starter canvas!`);
-  }
+  // Multi-Target Code Exporter Logic
+  const generatedCode = $derived.by(() => {
+    if (exportTab === 'svelte') {
+      return '<' + 'script lang="ts">\n' +
+        '  // Exported Sola Canvas (Svelte 5 Runes)\n' +
+        '  let signals = $state({\n' +
+        `    mrr: ${signals.mrr},\n` +
+        `    cpuUsage: ${signals.cpuUsage},\n` +
+        `    p99Latency: ${signals.p99Latency},\n` +
+        `    errorRate: ${signals.errorRate}\n` +
+        '  });\n' +
+        '<' + '/script>\n\n' +
+        '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 bg-[#fafafa] min-h-screen">\n' +
+        cards.map(c => `  <!-- ${c.title} -->\n  <div class="col-span-${c.cols} bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">\n    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">${c.title}</h3>\n    <div class="text-3xl font-bold tracking-tight text-slate-900 mt-2">\n      {${c.signalBinding ? `signals.${c.signalBinding}` : JSON.stringify(c.customValue || 'N/A')}}\n    </div>\n  </div>`).join('\n') +
+        '\n</div>';
+    } else if (exportTab === 'react') {
+      return `import React, { useState } from 'react';
 
-  // Real-time Export Code Generation
-  let generatedCode = $derived.by(() => {
-    if (activeExportFormat === 'sola') {
-      return `<!-- Sola Ambient Single-File Component Canvas -->
-<sola:component name="CustomCanvas">
-  <intent:schema version="1.0" signals={["$mrr", "$nodes", "$cpu"]} />
-
-  <layout:grid cols="3" gap="6">
-${canvasItems.map(item => `    <${item.type} colSpan="${item.colSpan}" config={${JSON.stringify(item.config)}} />`).join('\n')}
-  </layout:grid>
-</sola:component>`;
-    } else if (activeExportFormat === 'react') {
-      return `// React 19 / Next.js Sola Canvas Adapter
-import React from 'react';
-import { useSolaSignal } from '@sola/react';
-import { DataCard, GaugeCard, FlowWaterfall, TactileDialCard } from '@sola/ui';
-
-export default function SolaCustomCanvas() {
-  const mrr = useSolaSignal('finance/mrr', ${liveMrr});
-  const nodes = useSolaSignal('cluster/nodes', ${liveNodes});
+export default function SolaExportedDashboard() {
+  const [signals] = useState({
+    mrr: ${signals.mrr},
+    cpuUsage: ${signals.cpuUsage},
+    p99Latency: ${signals.p99Latency}
+  });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-[#fafafa]">
-${canvasItems.map(item => `      <div className="col-span-${item.colSpan}">
-        <${item.type} {...${JSON.stringify(item.config)}} />
-      </div>`).join('\n')}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 bg-[#fafafa] min-h-screen">
+      ${cards.map(c => `{/* ${c.title} */}
+      <div className="col-span-${c.cols} bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">${c.title}</h3>
+        <p class="text-3xl font-bold tracking-tight text-slate-900 mt-2">
+          {signals.${c.signalBinding || 'mrr'}}
+        </p>
+      </div>`).join('\n      ')}
     </div>
   );
 }`;
-    } else if (activeExportFormat === 'svelte') {
-      return '<' + 'script lang="ts">\n' +
-        '  // Svelte 5 Native Rune Canvas\n' +
-        "  import { DataCard, GaugeCard, FlowWaterfall, TactileDialCard } from '@sola/ui';\n\n" +
-        `  let mrr = $state(${liveMrr});\n` +
-        `  let nodes = $state(${liveNodes});\n` +
-        '<' + '/script>\n\n' +
-        '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-[#fafafa]">\n' +
-        canvasItems.map(item => `  <div class="col-span-${item.colSpan}">\n    <${item.type} config={${JSON.stringify(item.config)}} />\n  </div>`).join('\n') +
-        '\n</div>';
     } else {
       return '<!-- Web Component Shadow DOM Mount -->\n' +
         '<' + 'script type="module" src="https://cdn.sola-air.dev/sola-ui.js"><' + '/script>\n\n' +
-        '<sola-canvas-host>\n' +
-        '  <template shadowrootmode="open">\n' +
-        '    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 24px; background: #fafafa;">\n' +
-        canvasItems.map(item => `      <sola-${item.type.toLowerCase()} style="grid-column: span ${item.colSpan};" data-config='${JSON.stringify(item.config)}'></sola-${item.type.toLowerCase()}>`).join('\n') +
-        '\n    </div>\n' +
-        '  </template>\n' +
-        '</sola-canvas-host>';
+        `<sola-dashboard mrr="${signals.mrr}" cpu="${signals.cpuUsage}" cards='${JSON.stringify(cards.map((c) => ({ id: c.id, title: c.title, cols: c.cols })))}'></sola-dashboard>`;
     }
   });
 
-  function copyCode() {
+  function copyToClipboard() {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(generatedCode);
-      isCopied = true;
-      showToast('Copied code to clipboard!');
-      setTimeout(() => { isCopied = false; }, 2000);
+      copyNotification = true;
+      setTimeout(() => (copyNotification = false), 2000);
     }
   }
 </script>
 
 <svelte:head>
-  <title>Sola Design Studio — Interactive Canvas & Component Builder</title>
+  <title>Sola Design Studio — Interactive Canvas Builder</title>
 </svelte:head>
 
-<!-- Toast -->
-{#if toastMsg}
-  <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white border border-emerald-500/50 shadow-2xl flex items-center gap-3 backdrop-blur-xl transition-all">
-    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-    <span class="text-xs font-mono font-bold tracking-tight">{toastMsg}</span>
-  </div>
-{/if}
-
-<div class="min-h-screen {studioTheme === 'ivory' ? 'bg-[#fafafa] text-slate-950' : 'bg-[#090d19] text-white'} font-sans selection:bg-amber-500/20 selection:text-amber-900 transition-colors duration-300">
+<!-- Outer Container: Pure Light Ivory Theme -->
+<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
   <Navbar />
 
-  <!-- Top Studio Command Header & Sola Arc Prompt Bar -->
-  <header class="border-b {studioTheme === 'ivory' ? 'border-slate-200/90 bg-white/90' : 'border-slate-800/90 bg-slate-900/90'} backdrop-blur-xl px-4 sm:px-6 lg:px-8 py-5 sticky top-0 z-30 shadow-xs">
-    <div class="max-w-7xl mx-auto flex flex-col gap-4">
+  <!-- 1. Top Global Workspace Navigation Bar -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3.5 shadow-xs">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
       
-      <!-- Top Row: Branding, Starters, and Theme Switcher -->
-      <div class="flex items-center justify-between flex-wrap gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 font-bold">
+      <!-- Left: Brand + Template Switcher -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-sm shadow-xs">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-base font-black tracking-tight {studioTheme === 'ivory' ? 'text-slate-950' : 'text-white'}">Sola Design Studio</h1>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-bold border border-emerald-200">Interactive Canvas</span>
+              <span class="font-black tracking-tight text-slate-950 text-sm">Studio Canvas</span>
+              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full">Interactive</span>
             </div>
-            <p class="text-[11px] {studioTheme === 'ivory' ? 'text-slate-500' : 'text-slate-400'}">Build custom UI canvas by hand or synthesize with Sola Arc</p>
           </div>
         </div>
 
-        <!-- Preset Starters -->
-        <div class="flex items-center gap-1.5 flex-wrap">
-          <span class="text-[10px] font-mono font-bold uppercase text-slate-400 mr-1">Starters:</span>
-          <button onclick={() => loadPreset('finops')} class="px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">FinOps</button>
-          <button onclick={() => loadPreset('telemetry')} class="px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">Telemetry</button>
-          <button onclick={() => loadPreset('incident')} class="px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer">P1 Outage</button>
-          <button onclick={() => loadPreset('blank')} class="px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all cursor-pointer">Clear</button>
-        </div>
+        <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
 
-        <!-- Canvas Theme Mode Switcher -->
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
-          <button 
-            onclick={() => studioTheme = 'ivory'}
-            class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer {studioTheme === 'ivory' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'}">
-            Ivory Light
+        <!-- Template Switcher Pills -->
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs font-medium text-slate-600">
+          <button
+            onclick={() => switchTemplate('finops')}
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer {selectedTemplate === 'finops' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
+            FinOps
           </button>
-          <button 
-            onclick={() => studioTheme = 'obsidian'}
-            class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer {studioTheme === 'obsidian' ? 'bg-slate-900 text-emerald-400 shadow-xs' : 'text-slate-500 hover:text-slate-900'}">
-            Obsidian Dark
+          <button
+            onclick={() => switchTemplate('incident')}
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer {selectedTemplate === 'incident' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
+            Incident Response
+          </button>
+          <button
+            onclick={() => switchTemplate('blank')}
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer {selectedTemplate === 'blank' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
+            Blank
           </button>
         </div>
       </div>
 
-      <!-- Sola Arc Generative Prompt Bar -->
-      <form 
-        onsubmit={(e) => { e.preventDefault(); handleArcSynthesize(); }}
-        class="flex items-center gap-2 bg-white border border-slate-200/90 rounded-2xl p-1.5 shadow-xs focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all">
-        <div class="pl-3 text-emerald-600 flex items-center gap-1.5">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/></svg>
-          <span class="text-xs font-mono font-bold text-slate-800">Arc:</span>
-        </div>
-        <input 
-          type="text" 
-          bind:value={arcPrompt}
-          placeholder="Describe your canvas intent (e.g. Add an API latency gauge and MRR realization waterfall)..." 
-          class="flex-1 bg-transparent px-2 py-1.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none font-sans" />
-        <button 
-          type="submit"
-          disabled={isArcSynthesizing || !arcPrompt.trim()}
-          class="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 disabled:opacity-40 text-white font-mono text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
-          {#if isArcSynthesizing}
-            <span class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-            <span>Synthesizing...</span>
-          {:else}
-            <span>Synthesize Canvas</span>
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          {/if}
-        </button>
-      </form>
+      <!-- Center: Arc Natural Language Co-Pilot Bar -->
+      <div class="flex-1 max-w-lg min-w-[280px]">
+        <form
+          onsubmit={(e) => {
+            e.preventDefault();
+            runArcPrompt();
+          }}
+          class="relative flex items-center">
+          <div class="absolute left-3 text-emerald-600">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 0 1 10 10M12 12m-3 0a3 3 0 1 0 6 0" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            bind:value={arcPromptInput}
+            placeholder="Describe what to build (e.g. 'Add a revenue waterfall and node CPU gauge')..."
+            class="w-full pl-9 pr-28 py-2 bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-all font-sans" />
+          <button
+            type="submit"
+            disabled={isGeneratingArc || !arcPromptInput.trim()}
+            class="absolute right-1 px-3 py-1 bg-slate-950 hover:bg-slate-800 disabled:opacity-40 text-white rounded-lg text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
+            {#if isGeneratingArc}
+              <div class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <span>Generating...</span>
+            {:else}
+              <span>Build with Arc</span>
+            {/if}
+          </button>
+        </form>
+      </div>
 
+      <!-- Right: Actions & Export -->
+      <div class="flex items-center gap-2">
+        <button
+          onclick={() => (signals.simulating = !signals.simulating)}
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 shadow-xs transition-all cursor-pointer">
+          <span class="w-2 h-2 rounded-full {signals.simulating ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}"></span>
+          <span>{signals.simulating ? 'Live Signals On' : 'Paused'}</span>
+        </button>
+
+        <button
+          onclick={() => (exportModalOpen = true)}
+          class="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <span>Export Code</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Studio Main Workspace: Grid & Palette -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8 items-start">
+  <!-- 2. Horizontal Component Shelf / Tool Ribbon (Figma Style) -->
+  <div class="bg-white border-b border-slate-200/70 px-4 sm:px-6 lg:px-8 py-2.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-3 py-0.5 no-scrollbar">
+      <div class="flex items-center gap-2 text-xs font-medium text-slate-500">
+        <span class="font-bold text-slate-700 uppercase tracking-wider text-[10px] pl-1">Insert:</span>
+        
+        <button
+          onclick={() => addComponent('metric')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <span>+ Metric Card</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('gauge')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>+ Progress Gauge</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('waterfall')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <span>+ Revenue Waterfall</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('dial')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/></svg>
+          <span>+ Rotary Dial</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('triage')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>+ Incident Triage</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('form')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>+ Input Form</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('activity')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>+ Activity Feed</span>
+        </button>
+      </div>
+
+      <div class="text-[11px] text-slate-400 font-mono font-medium whitespace-nowrap">
+        {cards.length} {cards.length === 1 ? 'component' : 'components'} active
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Main Live Canvas & Inspector Layout -->
+  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 items-start">
     
-    <!-- LEFT PALETTE: Hand-Crafted Component Builder Dock (Cols 3) -->
-    <aside class="w-full lg:w-72 shrink-0 flex flex-col gap-5 sticky top-36">
-      
-      <!-- Add Component Primitives Panel -->
-      <div class="bg-white/95 border border-slate-200/90 rounded-3xl p-5 shadow-xs flex flex-col gap-4">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Add Primitives</span>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">1-Click</span>
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <button 
-            onclick={() => addComponent('DataCard')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">DataCard</span>
-              <span class="text-[10px] text-slate-400 font-mono">KPI Metric</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-
-          <button 
-            onclick={() => addComponent('GaugeCard')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">GaugeCard</span>
-              <span class="text-[10px] text-slate-400 font-mono">Progress Arc</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-
-          <button 
-            onclick={() => addComponent('TactileDialCard')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">TactileDial</span>
-              <span class="text-[10px] text-slate-400 font-mono">Rotary Knob</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-
-          <button 
-            onclick={() => addComponent('FlowWaterfall')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">FlowWaterfall</span>
-              <span class="text-[10px] text-slate-400 font-mono">Realization</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-
-          <button 
-            onclick={() => addComponent('DynamicForm')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">DynamicForm</span>
-              <span class="text-[10px] text-slate-400 font-mono">Auto-Bind</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-
-          <button 
-            onclick={() => addComponent('ListBlock')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">ListBlock</span>
-              <span class="text-[10px] text-slate-400 font-mono">Entity Stream</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-
-          <button 
-            onclick={() => addComponent('IncidentTriageMatrix')}
-            class="p-2.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:border-emerald-300 flex items-center justify-between text-left transition-all cursor-pointer group">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900">IncidentMatrix</span>
-              <span class="text-[10px] text-slate-400 font-mono">P1 Triage</span>
-            </div>
-            <span class="text-xs font-bold text-emerald-600">+ Add</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Live Reactive Signal Simulator Sliders -->
-      <div class="bg-white/95 border border-slate-200/90 rounded-3xl p-5 shadow-xs flex flex-col gap-4">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Live Signal Mesh</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-        </div>
-
-        <div class="flex flex-col gap-3">
-          <div class="flex flex-col gap-1">
-            <div class="flex items-center justify-between text-xs font-mono">
-              <span class="text-slate-600">$cluster/nodes:</span>
-              <strong class="text-slate-900">{liveNodes}</strong>
-            </div>
-            <input type="range" min="4" max="48" bind:value={liveNodes} class="w-full accent-emerald-500 cursor-pointer" />
+    <!-- Canvas Grid Area -->
+    <main class="flex-1 w-full">
+      {#if cards.length === 0}
+        <div class="min-h-[380px] rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center bg-white/70">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
-
-          <div class="flex flex-col gap-1">
-            <div class="flex items-center justify-between text-xs font-mono">
-              <span class="text-slate-600">$cluster/cpu:</span>
-              <strong class="text-slate-900">{liveCpu}%</strong>
-            </div>
-            <input type="range" min="10" max="99" bind:value={liveCpu} class="w-full accent-emerald-500 cursor-pointer" />
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <div class="flex items-center justify-between text-xs font-mono">
-              <span class="text-slate-600">$finance/mrr:</span>
-              <strong class="text-slate-900">${(liveMrr / 1000).toFixed(0)}k</strong>
-            </div>
-            <input type="range" min="50000" max="500000" step="5000" bind:value={liveMrr} class="w-full accent-emerald-500 cursor-pointer" />
-          </div>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- RIGHT STAGE: Live Interactive Canvas Grid (Cols 9) -->
-    <div class="flex-1 w-full flex flex-col gap-6">
-      
-      <!-- Canvas Status & Component Count Header -->
-      <div class="flex items-center justify-between border-b border-slate-200/90 pb-4">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Active Canvas Grid:</span>
-          <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-800">
-            {canvasItems.length} {canvasItems.length === 1 ? 'Component' : 'Components'} Mounted
-          </span>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button 
-            onclick={() => { selectedItem = null; }} 
-            class="text-xs font-mono text-slate-500 hover:text-slate-900 cursor-pointer">
-            Deselect All
-          </button>
-        </div>
-      </div>
-
-      <!-- MAIN CANVAS GRID CONTAINER -->
-      {#if canvasItems.length === 0}
-        <div class="p-16 rounded-3xl border-2 border-dashed border-slate-200 bg-white/60 flex flex-col items-center justify-center text-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-slate-900">Your Canvas is Empty</h3>
-            <p class="text-xs text-slate-500 mt-1 max-w-sm">
-              Add component primitives from the left palette or type a prompt for Sola Arc above to synthesize a complete UI.
-            </p>
-          </div>
-          <button 
-            onclick={() => loadPreset('finops')} 
-            class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold transition-all shadow-xs cursor-pointer">
-            Load FinOps Template
+          <h3 class="text-base font-bold text-slate-900 mb-1">Canvas is empty</h3>
+          <p class="text-xs text-slate-500 max-w-sm mb-5">Click a component from the top ribbon or ask Sola Arc above.</p>
+          <button
+            onclick={() => switchTemplate('finops')}
+            class="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
+            Load FinOps Starter
           </button>
         </div>
       {:else}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-          {#each canvasItems as item (item.id)}
-            <div 
-              class="relative rounded-3xl p-5 transition-all duration-200 flex flex-col gap-4 border {selectedItem?.id === item.id ? 'ring-2 ring-emerald-500 border-emerald-500 shadow-xl' : 'border-slate-200/90 hover:border-slate-300 shadow-xs'} {studioTheme === 'ivory' ? 'bg-white/95' : 'bg-slate-900/95'} {item.colSpan === 3 ? 'lg:col-span-3 md:col-span-2' : item.colSpan === 2 ? 'md:col-span-2' : 'col-span-1'}">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {#each cards as card (card.id)}
+            <div
+              onclick={() => (activeCardId = card.id)}
+              class="group relative bg-white rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md {card.cols === 3 ? 'md:col-span-3' : card.cols === 2 ? 'md:col-span-2' : 'md:col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'}">
               
-              <!-- Card Action Bar (Span, Duplicate, Delete) -->
-              <div class="flex items-center justify-between border-b {studioTheme === 'ivory' ? 'border-slate-100' : 'border-slate-800'} pb-2 text-[10px] font-mono">
-                <span class="font-bold text-slate-400 uppercase">{item.type}</span>
-                <div class="flex items-center gap-1.5">
-                  <button 
-                    onclick={() => cycleColSpan(item)} 
-                    class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold transition-colors cursor-pointer"
-                    title="Change Width">
-                    {item.colSpan}x Width
+              <!-- Floating Hover Controls (Figma Style) -->
+              <div class="absolute -top-3.5 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1 bg-white border border-slate-200 shadow-md rounded-xl p-1 text-[11px] font-medium text-slate-600">
+                <!-- Width Selector -->
+                <div class="flex items-center bg-slate-100 rounded-lg p-0.5 mr-1">
+                  <button
+                    onclick={(e) => updateCols(card.id, 1, e)}
+                    class="px-1.5 py-0.5 rounded cursor-pointer {card.cols === 1 ? 'bg-white font-bold text-emerald-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
+                    title="1 Column">
+                    1c
                   </button>
-                  <button 
-                    onclick={() => duplicateComponent(item)} 
-                    class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold transition-colors cursor-pointer"
-                    title="Duplicate">
-                    Clone
+                  <button
+                    onclick={(e) => updateCols(card.id, 2, e)}
+                    class="px-1.5 py-0.5 rounded cursor-pointer {card.cols === 2 ? 'bg-white font-bold text-emerald-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
+                    title="2 Columns">
+                    2c
                   </button>
-                  <button 
-                    onclick={() => removeComponent(item.id)} 
-                    class="px-1.5 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold transition-colors cursor-pointer"
-                    title="Delete">
-                    Remove
+                  <button
+                    onclick={(e) => updateCols(card.id, 3, e)}
+                    class="px-1.5 py-0.5 rounded cursor-pointer {card.cols === 3 ? 'bg-white font-bold text-emerald-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
+                    title="Full Row">
+                    3c
                   </button>
                 </div>
+
+                <!-- Duplicate -->
+                <button
+                  onclick={(e) => duplicateCard(card, e)}
+                  class="p-1 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-900 cursor-pointer"
+                  title="Duplicate">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+
+                <!-- Delete -->
+                <button
+                  onclick={(e) => removeCard(card.id, e)}
+                  class="p-1 hover:bg-rose-50 rounded-lg text-slate-500 hover:text-rose-600 cursor-pointer"
+                  title="Delete">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
               </div>
 
-              <!-- Component Live Render -->
-              <div>
-                {#if item.type === 'DataCard'}
-                  <DataCard config={item.config} />
-                {:else if item.type === 'GaugeCard'}
-                  <GaugeCard config={item.config} />
-                {:else if item.type === 'TactileDialCard'}
-                  <TactileDialCard config={item.config} />
-                {:else if item.type === 'FlowWaterfall'}
-                  <FlowWaterfall config={item.config} />
-                {:else if item.type === 'DynamicForm'}
-                  <DynamicForm config={item.config} />
-                {:else if item.type === 'ListBlock'}
-                  <ListBlock config={item.config} />
-                {:else if item.type === 'IncidentTriageMatrix'}
-                  <IncidentTriageMatrix config={item.config} />
-                {:else if item.type === 'ClusterMatrix'}
-                  <ClusterMatrix config={item.config} />
+              <!-- Card Header -->
+              <div class="px-5 pt-5 pb-3 flex items-start justify-between border-b border-slate-100">
+                <div>
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    {card.title}
+                    {#if card.signalBinding}
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    {/if}
+                  </h4>
+                  {#if card.subtitle}
+                    <p class="text-[11px] text-slate-400 mt-0.5">{card.subtitle}</p>
+                  {/if}
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 uppercase">
+                  {card.type}
+                </span>
+              </div>
+
+              <!-- Card Dynamic Body -->
+              <div class="p-5">
+                <!-- TYPE: METRIC -->
+                {#if card.type === 'metric'}
+                  <div class="flex items-baseline justify-between">
+                    <div class="text-3xl font-extrabold tracking-tight text-slate-900 font-mono">
+                      {#if card.signalBinding === 'mrr'}
+                        ${signals.mrr.toLocaleString()}
+                      {:else if card.signalBinding === 'errorRate'}
+                        {signals.errorRate}%
+                      {:else if card.signalBinding === 'cpuUsage'}
+                        {signals.cpuUsage}%
+                      {:else}
+                        {card.customValue ?? '$128,450'}
+                      {/if}
+                    </div>
+                    <div class="flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 font-mono">
+                      <span>+14.2%</span>
+                    </div>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                    <span>Live signal stream</span>
+                    <span class="font-medium text-slate-600">Zero-VDOM</span>
+                  </div>
+
+                <!-- TYPE: PROGRESS GAUGE -->
+                {:else if card.type === 'gauge'}
+                  {@const val = card.signalBinding ? signals[card.signalBinding] : Number(card.customValue || 75)}
+                  <div class="flex items-center justify-between gap-6 py-2">
+                    <div class="relative w-22 h-22 flex items-center justify-center">
+                      <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                        <path
+                          class="text-slate-100"
+                          stroke-width="3.5"
+                          stroke="currentColor"
+                          fill="none"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path
+                          class="text-emerald-600 transition-all duration-500 ease-out"
+                          stroke-dasharray="{val}, 100"
+                          stroke-width="3.5"
+                          stroke-linecap="round"
+                          stroke="currentColor"
+                          fill="none"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-xl font-bold font-mono text-slate-900">{val}{card.signalBinding === 'p99Latency' ? 'ms' : '%'}</span>
+                      </div>
+                    </div>
+                    <div class="flex-1 space-y-2">
+                      <div class="flex justify-between text-xs">
+                        <span class="text-slate-500">Nominal Baseline</span>
+                        <span class="font-semibold text-slate-800">&lt; 80%</span>
+                      </div>
+                      <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: {val}%"></div>
+                      </div>
+                      <p class="text-[11px] text-slate-400">Reactive telemetry indicator</p>
+                    </div>
+                  </div>
+
+                <!-- TYPE: REVENUE WATERFALL -->
+                {:else if card.type === 'waterfall'}
+                  <div class="space-y-3 py-1">
+                    <div class="flex items-end gap-3 h-28 pt-2">
+                      {#each card.config?.bars || [
+                        { name: 'MRR', value: 120, delta: '+12%', type: 'pos' },
+                        { name: 'Expansion', value: 40, delta: '+8%', type: 'pos' },
+                        { name: 'COGS', value: -25, delta: '-4%', type: 'neg' },
+                        { name: 'Net EOY', value: 135, delta: '+16%', type: 'total' }
+                      ] as bar}
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                          <span class="text-[10px] font-bold font-mono {bar.type === 'neg' ? 'text-rose-600' : bar.type === 'total' ? 'text-emerald-700 font-extrabold' : 'text-emerald-600'}">
+                            {bar.delta}
+                          </span>
+                          <div
+                            class="w-full rounded-t-lg transition-all duration-500 {bar.type === 'neg' ? 'bg-rose-400' : bar.type === 'total' ? 'bg-emerald-600' : 'bg-slate-200 hover:bg-slate-300'}"
+                            style="height: {Math.min(100, Math.max(15, Math.abs(bar.value)))}%"></div>
+                          <span class="text-[10px] font-medium text-slate-500 truncate w-full text-center">{bar.name}</span>
+                        </div>
+                      {/each}
+                    </div>
+                  </div>
+
+                <!-- TYPE: ROTARY DIAL / SLIDER -->
+                {:else if card.type === 'dial'}
+                  <div class="py-2 flex flex-col items-center text-center">
+                    <div class="text-2xl font-black font-mono text-slate-900 mb-1">{card.customValue ?? 68}%</div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      bind:value={card.customValue}
+                      class="w-full accent-emerald-600 cursor-pointer h-2 bg-slate-100 rounded-lg" />
+                    <div class="w-full flex justify-between text-[10px] font-semibold text-slate-400 mt-2">
+                      <span>0% (Standby)</span>
+                      <span>50% (Nominal)</span>
+                      <span>100% (Turbo)</span>
+                    </div>
+                  </div>
+
+                <!-- TYPE: INCIDENT TRIAGE -->
+                {:else if card.type === 'triage'}
+                  <div class="divide-y divide-slate-100 -mx-5 -mb-5">
+                    <div class="px-5 py-3 flex items-center justify-between hover:bg-slate-50/80 transition-all">
+                      <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        <div>
+                          <div class="text-xs font-semibold text-slate-900">INC-8492: Edge SSL Handshake Surge</div>
+                          <div class="text-[10px] text-slate-400">Origin: Cloud Gateway EU-West &bull; 4m ago</div>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 rounded-md">Sev-1</span>
+                    </div>
+                    <div class="px-5 py-3 flex items-center justify-between hover:bg-slate-50/80 transition-all">
+                      <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                        <div>
+                          <div class="text-xs font-semibold text-slate-900">INC-8490: DB Read Replica IOPS Spike</div>
+                          <div class="text-[10px] text-slate-400">Origin: Postgres Pool &bull; 18m ago</div>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 rounded-md">Sev-2</span>
+                    </div>
+                  </div>
+
+                <!-- TYPE: INPUT FORM -->
+                {:else if card.type === 'form'}
+                  <div class="space-y-3">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Target Cluster Namespace</label>
+                      <input
+                        type="text"
+                        value="production-east-gateway"
+                        class="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800"
+                        readonly />
+                    </div>
+                    <div class="flex items-center justify-between pt-1">
+                      <span class="text-xs font-medium text-slate-600">Auto-Remediation Relay</span>
+                      <input type="checkbox" checked class="accent-emerald-600 rounded w-4 h-4 cursor-pointer" />
+                    </div>
+                  </div>
+
+                <!-- TYPE: ACTIVITY FEED -->
+                {:else if card.type === 'activity'}
+                  <div class="space-y-3 text-xs">
+                    <div class="flex items-start gap-2.5">
+                      <div class="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[10px] flex items-center justify-center shrink-0">SN</div>
+                      <div>
+                        <p class="text-slate-800 font-medium text-[11px]">ServiceNow Ticket #4102 Synced</p>
+                        <span class="text-[10px] text-slate-400">2 min ago</span>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                      <div class="w-5 h-5 rounded-full bg-sky-50 text-sky-700 font-bold text-[10px] flex items-center justify-center shrink-0">DD</div>
+                      <div>
+                        <p class="text-slate-800 font-medium text-[11px]">Datadog Latency Metric Bound</p>
+                        <span class="text-[10px] text-slate-400">8 min ago</span>
+                      </div>
+                    </div>
+                  </div>
                 {/if}
               </div>
-
             </div>
           {/each}
         </div>
       {/if}
+    </main>
 
-      <!-- MULTI-TARGET CODE EXPORT ACCORDION -->
-      <section class="bg-white/95 border border-slate-200/90 rounded-3xl p-6 shadow-xs flex flex-col gap-4 mt-6">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4 flex-wrap gap-3">
+    <!-- 4. Slide-over Property Inspector for Active Card -->
+    {#if activeCard}
+      <aside class="w-80 shrink-0 bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-4 sticky top-24">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-600"></div>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-900">Card Inspector</h3>
+          </div>
+          <button onclick={() => (activeCardId = null)} class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
+            &times;
+          </button>
+        </div>
+
+        <div class="space-y-3.5 text-xs">
+          <!-- Title Edit -->
           <div>
-            <h3 class="text-sm font-bold text-slate-950">Multi-Target Code Export</h3>
-            <p class="text-xs text-slate-500">1-Click export to Zero-VDOM Sola, React 19, Svelte 5, or Web Components</p>
+            <label class="block font-semibold text-slate-700 mb-1">Title Label</label>
+            <input
+              type="text"
+              bind:value={activeCard.title}
+              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 outline-none font-sans" />
           </div>
 
-          <!-- Format Selector Buttons -->
-          <div class="flex items-center gap-1.5">
-            <button 
-              onclick={() => activeExportFormat = 'sola'}
-              class="px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer {activeExportFormat === 'sola' ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-              .sola Native
+          <!-- Subtitle Edit -->
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Subtitle / Context</label>
+            <input
+              type="text"
+              bind:value={activeCard.subtitle}
+              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 outline-none font-sans" />
+          </div>
+
+          <!-- Column Width -->
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Grid Column Span</label>
+            <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl">
+              <button
+                onclick={() => (activeCard.cols = 1)}
+                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 1 ? 'bg-white shadow-xs text-slate-950 font-bold' : 'text-slate-500'}">
+                1 Col
+              </button>
+              <button
+                onclick={() => (activeCard.cols = 2)}
+                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 2 ? 'bg-white shadow-xs text-slate-950 font-bold' : 'text-slate-500'}">
+                2 Col
+              </button>
+              <button
+                onclick={() => (activeCard.cols = 3)}
+                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 3 ? 'bg-white shadow-xs text-slate-950 font-bold' : 'text-slate-500'}">
+                3 Col
+              </button>
+            </div>
+          </div>
+
+          <!-- Reactive Signal Binding -->
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Reactive Signal Relay</label>
+            <select
+              bind:value={activeCard.signalBinding}
+              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 outline-none font-sans cursor-pointer">
+              <option value={undefined}>No Signal (Static Mock)</option>
+              <option value="mrr">MRR ($finance/mrr)</option>
+              <option value="cpuUsage">Node CPU ($cluster/cpu)</option>
+              <option value="p99Latency">P99 Latency ($telemetry/latency)</option>
+              <option value="errorRate">5xx Error Rate ($ingress/errors)</option>
+            </select>
+          </div>
+
+          <!-- Actions -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <button
+              onclick={() => duplicateCard(activeCard)}
+              class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-all cursor-pointer">
+              Duplicate
             </button>
-            <button 
-              onclick={() => activeExportFormat = 'react'}
-              class="px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer {activeExportFormat === 'react' ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-              React 19 / JSX
-            </button>
-            <button 
-              onclick={() => activeExportFormat = 'svelte'}
-              class="px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer {activeExportFormat === 'svelte' ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-              Svelte 5
-            </button>
-            <button 
-              onclick={() => activeExportFormat = 'webcomponent'}
-              class="px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer {activeExportFormat === 'webcomponent' ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-              Web Component
+            <button
+              onclick={() => removeCard(activeCard.id)}
+              class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-medium transition-all cursor-pointer">
+              Delete
             </button>
           </div>
         </div>
+      </aside>
+    {/if}
+  </div>
 
-        <!-- Code Block Window -->
-        <div class="relative bg-slate-950 text-slate-100 p-4 rounded-2xl font-mono text-xs overflow-x-auto border border-slate-800 max-h-72">
-          <button 
-            onclick={copyCode}
-            class="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs">
-            {#if isCopied}
-              <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="text-emerald-400">Copied!</span>
-            {:else}
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span>Copy Code</span>
-            {/if}
+  <!-- 5. Bottom Live Signal Simulation Playground Ribbon -->
+  <footer class="bg-white border-t border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3.5 sticky bottom-0 z-20 shadow-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-700 font-mono">Live Signal Playground:</span>
+        <span class="text-xs text-slate-400 hidden sm:inline">Drag sliders to test canvas reactivity</span>
+      </div>
+
+      <!-- Signal Sliders -->
+      <div class="flex items-center gap-6 flex-1 max-w-2xl">
+        <!-- MRR Simulator -->
+        <div class="flex-1 flex items-center gap-2">
+          <span class="text-[11px] font-semibold text-slate-600 shrink-0 font-mono">MRR</span>
+          <input
+            type="range"
+            min="50000"
+            max="250000"
+            bind:value={signals.mrr}
+            class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer" />
+          <span class="text-[11px] font-mono font-bold text-slate-900 w-14 text-right">${(signals.mrr / 1000).toFixed(0)}k</span>
+        </div>
+
+        <!-- CPU Simulator -->
+        <div class="flex-1 flex items-center gap-2">
+          <span class="text-[11px] font-semibold text-slate-600 shrink-0 font-mono">CPU</span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            bind:value={signals.cpuUsage}
+            class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer" />
+          <span class="text-[11px] font-mono font-bold text-slate-900 w-10 text-right">{signals.cpuUsage}%</span>
+        </div>
+
+        <!-- Latency Simulator -->
+        <div class="flex-1 flex items-center gap-2">
+          <span class="text-[11px] font-semibold text-slate-600 shrink-0 font-mono">P99</span>
+          <input
+            type="range"
+            min="10"
+            max="300"
+            bind:value={signals.p99Latency}
+            class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer" />
+          <span class="text-[11px] font-mono font-bold text-slate-900 w-12 text-right">{signals.p99Latency}ms</span>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-slate-400 font-mono font-medium hidden md:inline">
+        Sub-millisecond reactivity &bull; Zero-VDOM
+      </div>
+    </div>
+  </footer>
+
+  <!-- 6. Code Export Modal -->
+  {#if exportModalOpen}
+    <div class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-3xl rounded-3xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Export Canvas Code</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Clean, zero-runtime, fully typed UI component.</p>
+          </div>
+          <button
+            onclick={() => (exportModalOpen = false)}
+            class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold cursor-pointer">
+            &times;
           </button>
+        </div>
+
+        <!-- Framework Selector Tabs -->
+        <div class="px-6 pt-3 flex items-center gap-2 bg-slate-50 border-b border-slate-100">
+          <button
+            onclick={() => (exportTab = 'svelte')}
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'svelte' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'}">
+            Svelte 5 (Runes)
+          </button>
+          <button
+            onclick={() => (exportTab = 'react')}
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'react' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'}">
+            React 19 (JSX)
+          </button>
+          <button
+            onclick={() => (exportTab = 'webcomponent')}
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'webcomponent' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-800'}">
+            HTML / Web Component
+          </button>
+        </div>
+
+        <!-- Code Box -->
+        <div class="p-6 flex-1 overflow-auto bg-slate-950 text-slate-100 font-mono text-xs leading-relaxed">
           <pre><code>{generatedCode}</code></pre>
         </div>
-      </section>
 
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-xs text-slate-500">
+            {#if copyNotification}
+              <span class="text-emerald-600 font-semibold flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                Copied to clipboard!
+              </span>
+            {:else}
+              Ready to paste into your codebase
+            {/if}
+          </span>
+          <div class="flex items-center gap-2">
+            <button
+              onclick={copyToClipboard}
+              class="px-4 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
+              Copy Code
+            </button>
+            <button
+              onclick={() => (exportModalOpen = false)}
+              class="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-
-  </main>
+  {/if}
 </div>

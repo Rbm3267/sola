@@ -82,7 +82,7 @@ Available Primitives:
 Output format: Return ONLY a JSON Array of component objects with an optional colSpan (1, 2, or 3).`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.6-flash',
+      model: 'gemini-2.5-flash',
       contents: systemInstruction + "\n\nUser Intent: " + prompt,
       config: {
         responseMimeType: "application/json",
