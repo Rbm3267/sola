@@ -58,7 +58,7 @@
           {config.slaRemainingMin !== undefined ? `${config.slaRemainingMin}m 00s` : '11m 42s'}
         </span>
       </div>
-      <div class="w-8 h-8 rounded-full border-2 border-rose-500/30 border-t-rose-600 animate-spin"></div>
+      <div class="w-8 h-8 aspect-square shrink-0 rounded-full border-2 border-rose-500/30 border-t-rose-600 animate-spin"></div>
     </div>
   </div>
 
