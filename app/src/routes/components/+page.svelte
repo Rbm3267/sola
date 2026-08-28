@@ -10,6 +10,7 @@
   import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
   import SchemaInspector from '$lib/components/SchemaInspector.svelte';
+  import TactileDialCard from '$lib/components/TactileDialCard.svelte';
   import { fade, fly } from 'svelte/transition';
 
   // Active Category Ecosystem
@@ -34,6 +35,7 @@
 
   // ── 1. Core Universal Primitives ──
   const corePrimitives = [
+    { id: 'TactileDialCard', name: 'TactileDialCard', desc: 'One-thumb rotary touch controller designed for mobile tactile feedback', category: 'Mobile & Touch' },
     { id: 'DataCard', name: 'DataCard', desc: 'KPI metric tile with vector SVG sparklines and change indicators', category: 'Analytics' },
     { id: 'GaugeCard', name: 'GaugeCard', desc: 'Circular SVG progress arc for memory, CPU, and hardware load', category: 'Telemetry' },
     { id: 'ClusterMatrix', name: 'ClusterMatrix', desc: 'High-density node matrix with sub-pixel glow status and APM hover cards', category: 'Infrastructure' },
@@ -112,23 +114,23 @@
         </p>
       </div>
 
-      <!-- Segmented Ecosystem Switcher -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto overflow-x-auto max-w-full">
+      <!-- Segmented Ecosystem Switcher (Clean No-Scrollbar) -->
+      <div class="flex flex-wrap sm:flex-nowrap items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto shadow-xs">
         <button 
           onclick={() => switchEcosystem('primitives')}
-          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeEcosystem === 'primitives' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeEcosystem === 'primitives' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
           <span>Universal Primitives</span>
         </button>
         <button 
           onclick={() => switchEcosystem('enterprise')}
-          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeEcosystem === 'enterprise' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeEcosystem === 'enterprise' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           <span>Enterprise SaaS</span>
         </button>
         <button 
           onclick={() => switchEcosystem('solo')}
-          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeEcosystem === 'solo' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeEcosystem === 'solo' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span>Solo Dev • MCP • A2A</span>
         </button>
@@ -212,7 +214,16 @@
             <div class="w-full max-w-xl relative z-10 flex flex-col items-center gap-6">
               
               <!-- ── Universal Primitives Previews ── -->
-              {#if selectedComponent === 'DataCard'}
+              {#if selectedComponent === 'TactileDialCard'}
+                <div class="w-full">
+                  <TactileDialCard config={{
+                    title: "Node Load Controller",
+                    value: 74,
+                    unit: "%",
+                    subtext: "Drag thumb around dial to throttle cluster worker allocation"
+                  }} />
+                </div>
+              {:else if selectedComponent === 'DataCard'}
                 <div class="w-full">
                   <DataCard config={{
                     title: "Monthly Recurring Revenue",

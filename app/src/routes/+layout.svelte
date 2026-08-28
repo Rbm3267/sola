@@ -3,6 +3,7 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { themeState, updateTheme } from '$lib/theme.svelte';
+	import MobileHudCapsule from '$lib/components/MobileHudCapsule.svelte';
 
 	let { children } = $props();
 
@@ -22,3 +23,5 @@
 </svelte:head>
 
 {@render children()}
+
+<MobileHudCapsule />

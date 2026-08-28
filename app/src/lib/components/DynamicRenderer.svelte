@@ -9,6 +9,7 @@
   import FlowWaterfall from './FlowWaterfall.svelte';
   import IncidentTriageMatrix from './IncidentTriageMatrix.svelte';
   import SchemaInspector from './SchemaInspector.svelte';
+  import TactileDialCard from './TactileDialCard.svelte';
 
   const props = $props<{
     intentPayload?: any;
@@ -27,7 +28,8 @@
     DiffAudit,
     FlowWaterfall,
     IncidentTriageMatrix,
-    SchemaInspector
+    SchemaInspector,
+    TactileDialCard
   };
 
   const items = $derived<Array<{ component: string; config: any; colSpan?: number }>>(
