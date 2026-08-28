@@ -19,6 +19,27 @@
 
   let activeStep = $state<WaterfallStep | null>(null);
 
+  // Parse dollar strings like "$184,200" or "-$5,340" into numeric values
+  function parseDelta(step: any): number {
+    if (typeof step.delta === 'number' && !isNaN(step.delta)) return step.delta;
+    const raw = step.amount || step.value || step.formattedValue || '0';
+    const cleaned = String(raw).replace(/[^0-9.\-]/g, '');
+    const num = parseFloat(cleaned) || 0;
+    if (step.type === 'negative' || step.type === 'debit') return -Math.abs(num);
+    return num;
+  }
+
+  function normalizeStep(step: any, idx: number): WaterfallStep {
+    return {
+      id: step.id || `s-${idx}`,
+      name: step.name || step.label || step.title || 'Item',
+      delta: parseDelta(step),
+      type: step.type === 'positive' ? 'credit' : step.type === 'negative' ? 'debit' : step.type || 'credit',
+      formattedValue: step.formattedValue || step.amount || step.value || '',
+      unitLabel: step.unitLabel || step.note || ''
+    };
+  }
+
   const defaultSteps: WaterfallStep[] = [
     { id: 's-1', name: 'Gross Payment Volume', delta: 184200, type: 'start', formattedValue: '$184,200' },
     { id: 's-2', name: 'Stripe Interchange & Processing', delta: -5340, type: 'debit', formattedValue: '-$5,340' },
@@ -28,9 +49,10 @@
     { id: 's-6', name: 'Net Settlement Payout', delta: 191040, type: 'total', formattedValue: '$191,040' }
   ];
 
-  const steps = $derived(config.steps && config.steps.length > 0 ? config.steps : defaultSteps);
+  const rawSteps = $derived(config.steps && config.steps.length > 0 ? config.steps : defaultSteps);
+  const steps = $derived(rawSteps.map((s, i) => normalizeStep(s, i)));
 
-  const maxVal = $derived(Math.max(...steps.map(s => Math.abs(s.delta)), 200000));
+  const maxVal = $derived(Math.max(...steps.map(s => Math.abs(s.delta)), 1));
 </script>
 
 <div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all">

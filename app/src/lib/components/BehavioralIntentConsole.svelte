@@ -163,8 +163,7 @@
         }} />
 
         <!-- DUAL-DRIVER ACTION CONTRACT TRIGGER -->
-        <div class="mt-3 flex items-center justify-between bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs">
-          <span class="text-xs font-mono text-slate-500 font-medium">Data-Driven Action:</span>
+        <div class="mt-2 flex justify-end">
           <AdaptiveActionTrigger 
             action={ServiceNowMajorIncidentContract} 
             data={{ severity: "P1 - Critical", incidentId: "INC009481" }}
@@ -200,8 +199,7 @@
         }} />
 
         <!-- DUAL-DRIVER KINETIC ACTION TRIGGER -->
-        <div class="mt-3 flex items-center justify-between bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs">
-          <span class="text-xs font-mono text-slate-500 font-medium">Kinetic Playbook:</span>
+        <div class="mt-2 flex justify-end">
           <AdaptiveActionTrigger 
             action={AwsDrainNodeContract} 
             data={{ percentage: 94, nodeId: "i-09f4812a" }}
@@ -235,8 +233,7 @@
         }} />
 
         <!-- DUAL-DRIVER STRIPE DUNNING TRIGGER -->
-        <div class="mt-3 flex items-center justify-between bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs">
-          <span class="text-xs font-mono text-slate-500 font-medium">Billing Recovery:</span>
+        <div class="mt-2 flex justify-end">
           <AdaptiveActionTrigger 
             action={StripeDunningNoticeContract} 
             data={{ invoiceId: "in_1N8f92a", amount: "$184,200" }}
