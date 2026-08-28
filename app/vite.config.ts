@@ -1,24 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import UnoCSS from 'unocss/vite';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync } from 'fs';
 import path from 'path';
-
-// Fallback resolver for standalone Vercel builds when root directory is set to app
-const compilerPath = existsSync(path.resolve(__dirname, '../packages/compiler/src/index.js'))
-  ? path.resolve(__dirname, '../packages/compiler/src/index.js')
-  : path.resolve(__dirname, './src/lib/sola-engine/compiler.js');
-
-const corePath = existsSync(path.resolve(__dirname, '../packages/core/src/index.js'))
-  ? path.resolve(__dirname, '../packages/core/src/index.js')
-  : path.resolve(__dirname, './src/lib/sola-engine/core.js');
-
-const uiPath = existsSync(path.resolve(__dirname, '../packages/ui/src/index.js'))
-  ? path.resolve(__dirname, '../packages/ui/src/index.js')
-  : path.resolve(__dirname, './src/lib/sola-engine/ui.js');
-
-// Dynamically import compiler
-const { compile } = await import(path.pathToFileURL(compilerPath).href);
+import { compile } from '../packages/compiler/src/index.js';
 
 function sola() {
 	return {
@@ -36,9 +21,9 @@ function sola() {
 export default defineConfig({
 	resolve: {
 		alias: {
-			'@sola/core': corePath,
-			'@sola/compiler': compilerPath,
-			'@sola/ui': uiPath
+			'@sola/core': path.resolve(__dirname, '../packages/core/src/index.js'),
+			'@sola/compiler': path.resolve(__dirname, '../packages/compiler/src/index.js'),
+			'@sola/ui': path.resolve(__dirname, '../packages/ui/src/index.js')
 		}
 	},
 	plugins: [
