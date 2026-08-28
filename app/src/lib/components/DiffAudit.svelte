@@ -59,7 +59,7 @@
           {config.entityId || 'CHG009842'}
         </span>
         <span class="text-xs font-mono font-bold text-slate-500 uppercase">
-          {config.entityType || 'ServiceNow Change Request'}
+          {config.entityType || 'Enterprise Change Request'}
         </span>
       </div>
       <h3 class="text-base font-black text-slate-950 tracking-tight font-mono">
@@ -133,7 +133,7 @@
       {:else if approvalState === 'approving'}
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-mono font-bold border border-emerald-200">
           <div class="w-3.5 h-3.5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-          <span>Dispatching ServiceNow ACL Mutator...</span>
+          <span>Dispatching Enterprise ACL Mutator...</span>
         </div>
       {:else if approvalState === 'approved'}
         <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-mono font-bold border border-emerald-200">

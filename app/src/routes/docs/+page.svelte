@@ -43,7 +43,7 @@
     {
       name: 'HOST EMBEDDING',
       items: [
-        { id: 'host-embedding', title: 'ServiceNow & React Embedding' }
+        { id: 'host-embedding', title: 'Enterprise Platform & React Embedding' }
       ]
     },
     {
@@ -273,17 +273,17 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
     '   - Mounting returns an unmount cleanup function: const unmount = MyComponent(el, props).\n' +
     '</' + 'sola_rules>';
 
-  const serviceNowEmbedCode = '// ServiceNow Service Portal Widget (Client Controller)\n' +
+  const serviceNowEmbedCode = '// Enterprise Platform Service Portal Widget (Client Controller)\n' +
     'function(c, $element, $scope) {\n' +
     '  // Import or bundle compiled Sola component\n' +
     '  var IncidentCard = window.SolaComponents.IncidentCard;\n\n' +
-    '  // Mount directly to the ServiceNow widget DOM element\n' +
+    '  // Mount directly to the Enterprise Platform widget DOM element\n' +
     '  var rootNode = $element.find("#sn-widget-mount")[0];\n' +
     '  var unmount = IncidentCard(rootNode, {\n' +
     '    incidentId: c.data.sys_id || "INC009481",\n' +
     '    severity: "P1 - Critical"\n' +
     '  });\n\n' +
-    '  // Clean up reactive signal listeners when ServiceNow destroys widget\n' +
+    '  // Clean up reactive signal listeners when Enterprise Platform destroys widget\n' +
     '  $scope.$on("$destroy", function() {\n' +
     '    if (unmount) unmount();\n' +
     '  });\n' +
@@ -894,12 +894,12 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Embedding Guide</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">ServiceNow & React Embedding</h1>
+            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Enterprise Platform & React Embedding</h1>
             <p class="text-slate-600 text-sm leading-relaxed mb-6 font-sans">
-              Because Sola compiles into pure, fine-grained DOM JavaScript (<code>~3.2 kB</code>), you can drop compiled Sola components directly into ServiceNow widgets or React applications without running a backend server or Docker container.
+              Because Sola compiles into pure, fine-grained DOM JavaScript (<code>~3.2 kB</code>), you can drop compiled Sola components directly into Enterprise Platform widgets or React applications without running a backend server or Docker container.
             </p>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. ServiceNow Service Portal Widget Embedding</h3>
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Enterprise Platform Service Portal Widget Embedding</h3>
             <div class="relative group mb-8">
               <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{serviceNowEmbedCode}</code></pre>
               <button 

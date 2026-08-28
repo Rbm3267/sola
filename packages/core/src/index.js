@@ -11,12 +11,14 @@ function scheduleFlush() {
   if (!isFlushing) {
     isFlushing = true;
     queueMicrotask(() => {
-      isFlushing = false;
-      const effects = [...pendingEffects];
-      pendingEffects.clear();
-      for (const effect of effects) {
-        effect.execute();
+      while (pendingEffects.size > 0) {
+        const effects = [...pendingEffects];
+        pendingEffects.clear();
+        for (const effect of effects) {
+          effect.execute();
+        }
       }
+      isFlushing = false;
     });
   }
 }

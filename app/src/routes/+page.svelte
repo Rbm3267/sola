@@ -6,6 +6,9 @@
   import DataCard from '$lib/components/DataCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
+  import GaugeCard from '$lib/components/GaugeCard.svelte';
+  import TactileDialCard from '$lib/components/TactileDialCard.svelte';
+  import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
 </script>
 
 <div class="min-h-screen bg-[#fafafa] text-slate-950 font-sans selection:bg-slate-200 selection:text-slate-900 overflow-x-hidden relative">
@@ -16,7 +19,84 @@
   
   <div class="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-col pt-4 w-full max-w-full overflow-x-hidden">
 
+    <!-- Universal Interactive Hero -->
     <InteractiveHero />
+
+    <!-- THE 3 CORE PILLARS SECTION -->
+    <section class="w-full py-16 border-t border-slate-200/80 relative">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-bold mb-3">
+          <span>The Sola Ecosystem</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight mb-4">
+          From Idea to In-Situ Production in Seconds
+        </h2>
+        <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
+          Three interconnected pillars built to synthesize, preview, and share zero-VDOM reactive components across personal projects and global enterprise platforms.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Pillar 1: Sola Design Studio -->
+        <div class="p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-500/40 transition-all flex flex-col justify-between gap-6 group">
+          <div class="flex flex-col gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 flex items-center justify-center font-bold text-lg">
+              ⚡
+            </div>
+            <h3 class="text-xl font-bold text-slate-950 group-hover:text-emerald-700 transition-colors">
+              Sola Design Studio
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Generative AI engine that builds complete UIs from natural language prompts, raw CSV/JSON datasets, or legacy code. Test live signals and export to .sola, React 19, or Svelte 5.
+            </p>
+          </div>
+          <a href="/studio" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-900 group-hover:translate-x-1 transition-all">
+            <span>Launch Studio</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- Pillar 2: Chrome Browser Extension -->
+        <div class="p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-sky-500/40 transition-all flex flex-col justify-between gap-6 group">
+          <div class="flex flex-col gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-600 flex items-center justify-center font-bold text-lg">
+              🧩
+            </div>
+            <h3 class="text-xl font-bold text-slate-950 group-hover:text-sky-700 transition-colors">
+              "View in My UI" Extension
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Manifest V3 Chrome extension that injects a closed Shadow DOM sandbox on any active web app. Preview the "art of the possible" directly on your live tools with zero CSS collisions.
+            </p>
+          </div>
+          <a href="/preview" class="inline-flex items-center gap-1.5 text-xs font-bold text-sky-700 hover:text-sky-900 group-hover:translate-x-1 transition-all">
+            <span>Try in Simulator</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <!-- Pillar 3: Sola Design Community -->
+        <div class="p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-violet-500/40 transition-all flex flex-col justify-between gap-6 group">
+          <div class="flex flex-col gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-600 flex items-center justify-center font-bold text-lg">
+              🌐
+            </div>
+            <h3 class="text-xl font-bold text-slate-950 group-hover:text-violet-700 transition-colors">
+              Sola Design Community
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Open component registry and preset showcase across 5 universal tiers (Personal, SaaS, FinOps, Telemetry, Operations). 1-click fork into Studio or push to your browser extension.
+            </p>
+          </div>
+          <a href="/community" class="inline-flex items-center gap-1.5 text-xs font-bold text-violet-700 hover:text-violet-900 group-hover:translate-x-1 transition-all">
+            <span>Explore Community</span>
+            <span>→</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
 
     <!-- Google Sheets & Data Relay Interactive Section -->
     <SheetsDemo />
@@ -48,8 +128,8 @@
               <span class="text-[10px] font-mono text-sky-600 bg-sky-50 px-2 py-0.5 rounded font-bold border border-sky-100">Compiled DOM</span>
             </div>
             <div class="flex flex-col gap-3.5">
-              <DataCard config={{ title: "Total Users", value: "84,320", trend: "+12.5%", icon: "activity" }} />
-              <DataCard config={{ title: "Conversion Rate", value: "4.2%", trend: "-1.1%", icon: "trending-up" }} />
+              <DataCard config={{ title: "Realized MRR", value: "$184,200", trend: "+14.2%", icon: "activity" }} />
+              <DataCard config={{ title: "Net Retention", value: "138%", trend: "+6.2%", icon: "trending-up" }} />
             </div>
           </div>
 
@@ -57,15 +137,15 @@
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between px-2">
               <span class="font-mono text-xs font-bold text-slate-500">DynamicForm.sola</span>
-              <span class="text-[10px] font-mono text-violet-600 bg-violet-50 px-2 py-0.5 rounded font-bold border border-violet-100">Live Intent</span>
+              <span class="text-[10px] font-mono text-violet-600 bg-violet-50 px-2 py-0.5 rounded font-bold border border-violet-100">Live Schema</span>
             </div>
             <div>
               <DynamicForm config={{ 
-                title: "Provision Database", 
+                title: "Scale Connection Pool", 
                 endpoint: "/api/provision", 
                 fields: [
                   { name: "cluster", label: "Cluster Name", type: "text", required: true },
-                  { name: "region", label: "Region (e.g. us-east)", type: "text", required: true }
+                  { name: "capacity", label: "Max Capacity (Nodes)", type: "number", required: true }
                 ] 
               }} />
             </div>
@@ -81,9 +161,9 @@
               <ListBlock config={{ 
                 title: "Active Clusters", 
                 items: [
-                  { label: "sola-core-v2.1", description: "us-east-1 • 2 mins ago", status: "Active" },
-                  { label: "postgres-primary", description: "us-west-2 • 1 hr ago", status: "Active" },
-                  { label: "redis-cache-eu", description: "eu-central-1 • Maintenance", status: "Offline" }
+                  { label: "cluster-us-east-1", description: "32 Nodes • Optimal", status: "Active" },
+                  { label: "postgres-primary", description: "Lag: 0ms • Synchronized", status: "Active" },
+                  { label: "edge-cdn-pop", description: "p99 Latency: 4.2ms", status: "Completed" }
                 ] 
               }} />
             </div>

@@ -167,7 +167,7 @@
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-          <span>ServiceNow Incident (Hold to inspect)</span>
+          <span>Enterprise Incident (Hold to inspect)</span>
         </div>
 
         <IncidentTriageMatrix config={{

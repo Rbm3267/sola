@@ -108,7 +108,7 @@
   </div>
 
   <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-4 mt-5 border-t border-slate-100">
-    <span>ServiceNow MIM Direct Command Capsule</span>
+    <span>Enterprise MIM Direct Command Capsule</span>
     <span>Auto-Dispatching ACLs</span>
   </div>
 

@@ -10,10 +10,10 @@
   import { fade, fly } from 'svelte/transition';
 
   type HostMode = 'preset' | 'screenshot';
-  type TemplatePreset = 'linear' | 'stripe' | 'shopify' | 'moveworks' | 'servicenow' | 'grafana' | 'vercel';
+  type TemplatePreset = 'workspace' | 'fintech' | 'commerce' | 'aifrontdoor' | 'enterprise' | 'telemetry' | 'developer';
 
   let activeMode = $state<HostMode>('preset');
-  let selectedPreset = $state<TemplatePreset>('linear');
+  let selectedPreset = $state<TemplatePreset>('workspace');
   let uploadedImage = $state<string | null>(null);
 
   // Selected Sola Component to mount
@@ -46,13 +46,13 @@
   }
 
   const presets: Record<TemplatePreset, { name: string; brand: string; theme: 'dark' | 'light'; bg: string; text: string; border: string; subtext: string }> = {
-    linear: { name: 'Linear App', brand: '#5e6ad2', theme: 'dark', bg: '#0f1015', text: '#e2e8f0', border: '#232530', subtext: 'Ultra-Dark Keyboard-First Workspace' },
-    stripe: { name: 'Stripe Dashboard', brand: '#635bff', theme: 'light', bg: '#f8fafc', text: '#0f172a', border: '#e2e8f0', subtext: 'Clean FinTech Light Surface' },
-    shopify: { name: 'Shopify Admin', brand: '#95bf47', theme: 'light', bg: '#f6f6f7', text: '#202223', border: '#e1e3e5', subtext: 'E-Commerce Storefront & Analytics' },
-    moveworks: { name: 'Moveworks Front Door', brand: '#00b4d8', theme: 'dark', bg: '#0f172a', text: '#f8fafc', border: '#1e293b', subtext: 'Next-Gen Conversational AI Front Door' },
-    servicenow: { name: 'ServiceNow Portal', brand: '#81b5a1', theme: 'dark', bg: '#16222f', text: '#f1f5f9', border: '#253545', subtext: 'High-Density Enterprise Navy Surface' },
-    grafana: { name: 'Grafana Telemetry', brand: '#f97316', theme: 'dark', bg: '#111217', text: '#d8d9da', border: '#22252b', subtext: 'Real-Time Observability NOC' },
-    vercel: { name: 'Vercel Console', brand: '#000000', theme: 'light', bg: '#ffffff', text: '#000000', border: '#eaeaea', subtext: 'Monochrome Edge Developer Platform' }
+    workspace: { name: 'Project Workspace', brand: '#5e6ad2', theme: 'dark', bg: '#0f1015', text: '#e2e8f0', border: '#232530', subtext: 'Ultra-Dark Keyboard-First Workspace' },
+    fintech: { name: 'FinTech & Billing', brand: '#635bff', theme: 'light', bg: '#f8fafc', text: '#0f172a', border: '#e2e8f0', subtext: 'Clean FinTech Light Surface' },
+    commerce: { name: 'E-Commerce Admin', brand: '#95bf47', theme: 'light', bg: '#f6f6f7', text: '#202223', border: '#e1e3e5', subtext: 'E-Commerce Storefront & Analytics' },
+    aifrontdoor: { name: 'AI Front Door', brand: '#00b4d8', theme: 'dark', bg: '#0f172a', text: '#f8fafc', border: '#1e293b', subtext: 'Conversational AI Front Door' },
+    enterprise: { name: 'Enterprise Portal', brand: '#81b5a1', theme: 'dark', bg: '#16222f', text: '#f1f5f9', border: '#253545', subtext: 'High-Density Enterprise Navy Surface' },
+    telemetry: { name: 'Telemetry NOC', brand: '#f97316', theme: 'dark', bg: '#111217', text: '#d8d9da', border: '#22252b', subtext: 'Real-Time Observability NOC' },
+    developer: { name: 'Developer Console', brand: '#000000', theme: 'light', bg: '#ffffff', text: '#000000', border: '#eaeaea', subtext: 'Monochrome Edge Developer Platform' }
   };
 </script>
 
@@ -181,16 +181,16 @@
           <!-- Mock Host Dashboard UI Layout -->
           <div class="w-full max-w-4xl flex flex-col gap-4 sm:gap-6" style="color: {presets[selectedPreset].text}">
             
-            {#if selectedPreset === 'servicenow'}
-              <!-- Official ServiceNow Employee Center (ec_ticket_page) Standard Ticket Page Layout -->
+            {#if selectedPreset === 'enterprise'}
+              <!-- Official Enterprise Platform Employee Center (ec_ticket_page) Standard Ticket Page Layout -->
               <div class="flex flex-col gap-4 font-sans text-slate-200">
                 
-                <!-- ServiceNow Portal Header & Breadcrumbs (navbar-default) -->
+                <!-- Enterprise Portal Header & Breadcrumbs (navbar-default) -->
                 <div class="bg-[#162638] -mx-3 -mt-3 sm:-mx-6 sm:-mt-6 p-3 sm:p-4 rounded-t-2xl sm:rounded-t-3xl flex items-center justify-between border-b border-[#253950]">
                   <div class="flex items-center gap-3">
                     <div class="flex items-center gap-2">
                       <span class="w-6 h-6 rounded-md bg-[#81b5a1] flex items-center justify-center font-bold text-xs text-[#0e1924]">sn</span>
-                      <span class="font-bold text-sm tracking-tight text-white">ServiceNow Employee Center</span>
+                      <span class="font-bold text-sm tracking-tight text-white">Enterprise Platform Employee Center</span>
                     </div>
                     <div class="hidden md:flex items-center gap-2 text-xs font-mono text-slate-300 ml-4">
                       <span class="opacity-60">Home</span>
@@ -257,7 +257,7 @@
                       </div>
                     </div>
 
-                    <!-- ServiceNow Page Route Badge -->
+                    <!-- Enterprise Platform Page Route Badge -->
                     <div class="p-3 rounded-xl bg-[#162638] border border-[#253950] flex items-center justify-between text-xs">
                       <span class="text-slate-400 font-mono text-[10px]">Page ID:</span>
                       <span class="font-mono text-[#81b5a1] text-[10px] bg-[#0e1924] px-2 py-0.5 rounded border border-[#253950]">/esc?id=ec_ticket_page&sys_id=INC009481</span>
@@ -268,13 +268,13 @@
                   <div class="lg:col-span-7 relative group w-full max-w-full">
                     <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-[#81b5a1] text-[#0e1924] font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
                       <span class="w-1.5 h-1.5 rounded-full bg-[#0e1924] animate-ping"></span>
-                      <span>ServiceNow Widget Container (`sp-widget-content`)</span>
+                      <span>Enterprise Widget Slot (`sp-widget-content`)</span>
                     </div>
 
                     {#if activeComponent === 'incident'}
                       <IncidentTriageMatrix config={{
                         incidentId: "INC009481",
-                        title: "ServiceNow ESC • Ingress Latency Spike",
+                        title: "Enterprise Operations • Ingress Latency Spike",
                         severity: "P1 - Critical Outage",
                         slaRemainingMin: 11,
                         blastRadius: "42,000 Active Sessions",
@@ -285,19 +285,19 @@
                         ]
                       }} />
                     {:else if activeComponent === 'cluster'}
-                      <ClusterMatrix config={{ title: "ServiceNow ESC Attached Cluster Mesh", subtitle: "12 Primary & Read-Replica Shards" }} />
+                      <ClusterMatrix config={{ title: "Enterprise Operations Attached Cluster Mesh", subtitle: "12 Primary & Read-Replica Shards" }} />
                     {:else if activeComponent === 'waterfall'}
-                      <FlowWaterfall config={{ title: "ServiceNow ESC FinOps Allocation", subtitle: "Monthly cloud allocation to ITSM cost centers" }} />
+                      <FlowWaterfall config={{ title: "Enterprise Operations FinOps Allocation", subtitle: "Monthly cloud allocation to ITSM cost centers" }} />
                     {:else if activeComponent === 'datacard'}
-                      <DataCard config={{ title: "ServiceNow Open ESC Tickets", value: "14 Active", trend: "-4 vs yesterday", icon: "activity" }} />
+                      <DataCard config={{ title: "Open Work Items", value: "14 Active", trend: "-4 vs yesterday", icon: "activity" }} />
                     {:else if activeComponent === 'dial'}
-                      <TactileDialCard config={{ title: "ServiceNow SLA Breach Risk", value: 84, unit: "%", subtext: "Urgency throttle" }} />
+                      <TactileDialCard config={{ title: "SLA Breach Risk", value: 84, unit: "%", subtext: "Urgency throttle" }} />
                     {/if}
                   </div>
                 </div>
               </div>
 
-            {:else if selectedPreset === 'stripe'}
+            {:else if selectedPreset === 'fintech'}
               <!-- Authentic Stripe Dashboard Layout -->
               <div class="flex flex-col gap-4">
                 <!-- Stripe Top Bar -->
@@ -357,7 +357,7 @@
                 </div>
               </div>
 
-            {:else if selectedPreset === 'shopify'}
+            {:else if selectedPreset === 'commerce'}
               <!-- Authentic Shopify Admin & E-Commerce Storefront Analytics Layout -->
               <div class="flex flex-col gap-4">
                 <!-- Shopify Top Navigation Bar -->
@@ -422,7 +422,7 @@
                 </div>
               </div>
 
-            {:else if selectedPreset === 'moveworks'}
+            {:else if selectedPreset === 'aifrontdoor'}
               <!-- Authentic Moveworks Next-Gen AI Front Door & Copilot Layout -->
               <div class="flex flex-col gap-4">
                 <!-- Moveworks Top Header Bar -->
@@ -436,7 +436,7 @@
                         <span class="font-bold text-sm text-slate-100 tracking-tight">Moveworks AI Copilot</span>
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/80 font-bold">Enterprise Front Door</span>
                       </div>
-                      <p class="text-[11px] font-mono text-slate-400">Autonomous Resolution • Connected to ServiceNow ITSM</p>
+                      <p class="text-[11px] font-mono text-slate-400">Autonomous Resolution • Connected to Enterprise Platform ITSM</p>
                     </div>
                   </div>
                   <div class="flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-800/60">
@@ -488,7 +488,7 @@
                         ]
                       }} />
                     {:else if activeComponent === 'cluster'}
-                      <ClusterMatrix config={{ title: "Moveworks Connected AWS Cluster", subtitle: "12 Pods In Sync with ServiceNow" }} />
+                      <ClusterMatrix config={{ title: "Moveworks Connected AWS Cluster", subtitle: "12 Pods In Sync with Enterprise Platform" }} />
                     {:else if activeComponent === 'waterfall'}
                       <FlowWaterfall config={{ title: "Moveworks Automated Ticket Cost Avoidance", subtitle: "Deflection savings realized across ITSM tiers" }} />
                     {:else if activeComponent === 'datacard'}
@@ -500,7 +500,7 @@
                 </div>
               </div>
 
-            {:else if selectedPreset === 'linear'}
+            {:else if selectedPreset === 'workspace'}
               <!-- Authentic Linear Workspace Layout -->
               <div class="flex flex-col gap-4">
                 <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
@@ -551,7 +551,7 @@
                 </div>
               </div>
 
-            {:else if selectedPreset === 'grafana'}
+            {:else if selectedPreset === 'telemetry'}
               <!-- Authentic Grafana Telemetry NOC Layout -->
               <div class="flex flex-col gap-4">
                 <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">

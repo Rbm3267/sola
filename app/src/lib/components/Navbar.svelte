@@ -36,28 +36,33 @@
       <nav class="hidden md:flex items-center gap-1.5">
         <a 
           href="/" 
-          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath === '/' ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath === '/' ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
           Overview
         </a>
         <a 
-          href="/components" 
-          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/components') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
-          Component Library
+          href="/studio" 
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/studio') ? 'text-emerald-950 bg-emerald-500/10 font-bold border border-emerald-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          ⚡ Studio
         </a>
         <a 
-          href="/docs" 
-          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/docs') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
-          Interactive Docs
+          href="/community" 
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/community') ? 'text-violet-950 bg-violet-500/10 font-bold border border-violet-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          Community
+        </a>
+        <a 
+          href="/components" 
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/components') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          Components
         </a>
         <a 
           href="/preview" 
-          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/preview') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
-          View on My UI
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/preview') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          View in My UI
         </a>
         <a 
-          href="/demo" 
-          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
-          Studio Playground
+          href="/docs" 
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/docs') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          Docs
         </a>
       </nav>
     </div>

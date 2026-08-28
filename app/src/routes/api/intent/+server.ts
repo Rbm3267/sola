@@ -35,7 +35,7 @@ Available Primitives:
    config: { title: string, events: Array<{ id: string, message: string, timestamp: string, type: 'info' | 'success' | 'warning' }> }
 6. 'ClusterMatrix': High-density distributed node matrix and cluster health grid.
    config: { title: string, subtitle?: string, nodes: Array<{ id: string, label: string, status: 'nominal' | 'warning' | 'critical' | 'draining' | 'idle', load?: number, latency?: string, region?: string }> }
-7. 'DiffAudit': ServiceNow Change Advisory Board (CAB) & drift review diff with 1-click approvals.
+7. 'DiffAudit': Enterprise Platform Change Advisory Board (CAB) & drift review diff with 1-click approvals.
    config: { title: string, entityId: string, entityType: string, riskLevel: 'Low' | 'Moderate' | 'High' | 'Destructive', riskScore: number, requester: string, window: string, diffLines: Array<{ type: 'add' | 'remove' | 'context', content: string }> }
 8. 'FlowWaterfall': Financial revenue realization and APM request span latency breakdown.
    config: { title: string, subtitle?: string, steps: Array<{ id: string, name: string, delta: number, type: 'start' | 'credit' | 'debit' | 'total', formattedValue: string }> }

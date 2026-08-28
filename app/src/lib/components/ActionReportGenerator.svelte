@@ -51,7 +51,7 @@
       ]
     },
     finops_audit: {
-      title: 'Cloud FinOps Realization: Monthly AWS & ServiceNow Allocation',
+      title: 'Cloud FinOps Realization: Monthly Infrastructure & SaaS Allocation',
       classification: 'Executive Brief',
       author: 'FinOps Principal Architect',
       sections: [
@@ -64,20 +64,20 @@
         {
           id: 'spend-table',
           heading: '2. Cost Center Breakdown',
-          content: 'Serverless compute and Moveworks deflection accounted for the highest operational margin improvements.',
+          content: 'Serverless compute and autonomous workflow deflection accounted for the highest operational margin improvements.',
           table: {
             headers: ['Cost Center', 'Previous Run-Rate', 'Optimized Run-Rate', 'Net Savings'],
             rows: [
-              ['AWS EKS Worker Nodes', '$42,000 / mo', '$31,500 / mo', '$10,500 (25%)'],
-              ['ServiceNow ITSM Tier 1', '$28,000 / mo', '$22,400 / mo', '$5,600 (20%)'],
-              ['Cloudflare Edge Workers', '$8,500 / mo', '$6,200 / mo', '$2,300 (27%)']
+              ['Kubernetes Worker Nodes', '$42,000 / mo', '$31,500 / mo', '$10,500 (25%)'],
+              ['Enterprise Workflow Tier 1', '$28,000 / mo', '$22,400 / mo', '$5,600 (20%)'],
+              ['Global Edge Workers', '$8,500 / mo', '$6,200 / mo', '$2,300 (27%)']
             ]
           }
         }
       ]
     },
     security_audit: {
-      title: 'SAIF Security & Zero-Trust Architecture Review',
+      title: 'Zero-Trust Architecture & Compliance Review',
       classification: 'Confidential',
       author: 'Chief Information Security Officer',
       sections: [
@@ -90,12 +90,12 @@
         {
           id: 'rbac-table',
           heading: '2. RBAC & Access Matrix',
-          content: 'Role-based access controls strictly enforce least-privilege scoping across ServiceNow Table API endpoints.',
+          content: 'Role-based access controls strictly enforce least-privilege scoping across enterprise API endpoints.',
           table: {
             headers: ['Entity / Role', 'Access Scope', 'Write Privilege', 'Audit Logging'],
             rows: [
-              ['ITSM Tier 1 Operator', 'incident (Read/Update)', 'Soft Mutation Only', 'Enforced (SysLog)'],
-              ['Moveworks AI Copilot', 'ActionContract Dispatch', 'Playbook Execution', 'Cryptographically Signed'],
+              ['ITSM Tier 1 Operator', 'Work Items (Read/Update)', 'Soft Mutation Only', 'Enforced (SysLog)'],
+              ['Autonomous AI Copilot', 'ActionContract Dispatch', 'Playbook Execution', 'Cryptographically Signed'],
               ['Sola Client Runtime', 'DOM Node Operations', '0 kB Token Exposure', 'Enforced (No Storage)']
             ]
           }
@@ -162,9 +162,9 @@
         id="report-template-select"
         bind:value={reportType}
         class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
-        <option value="sre_postmortem">SRE Postmortem (Aurora DB Connection Saturation)</option>
-        <option value="finops_audit">Cloud FinOps Audit (Monthly AWS & ServiceNow Allocation)</option>
-        <option value="security_audit">Zero-Trust & SAIF Compliance Architecture Brief</option>
+        <option value="sre_postmortem">SRE Postmortem (Database Connection Pool Saturation)</option>
+        <option value="finops_audit">Cloud FinOps Audit (Monthly Compute & SaaS Allocation)</option>
+        <option value="security_audit">Zero-Trust & Data Enclave Compliance Architecture Brief</option>
       </select>
     </div>
 
@@ -174,9 +174,9 @@
         id="target-env-select"
         bind:value={environment}
         class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
-        <option value="production_us_east">Production Cluster (us-east-1 / AWS + ServiceNow)</option>
+        <option value="production_us_east">Production Cluster (us-east-1 / High-Availability)</option>
         <option value="staging_eu_central">Staging Verification (eu-central-1)</option>
-        <option value="edge_cloudflare">Global Edge Workers (Cloudflare)</option>
+        <option value="edge_cloudflare">Global Edge Workers (Edge CDN)</option>
       </select>
     </div>
   </div>

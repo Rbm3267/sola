@@ -43,7 +43,7 @@
           {config.table || 'public.incident'}
         </h3>
       </div>
-      <p class="text-xs text-slate-500">ServiceNow Schema Definition & Relational Foreign Keys</p>
+      <p class="text-xs text-slate-500">Relational Schema Definition & Foreign Key Constraints</p>
     </div>
 
     <!-- Stats Pill -->

@@ -241,7 +241,7 @@
         { id: 'sn-2', component: 'DiffAudit', colSpan: 3, config: {
           title: 'Scale Redis Cluster Max Connections (x10)',
           entityId: 'CHG009842',
-          entityType: 'ServiceNow CAB Release',
+          entityType: 'Enterprise Platform CAB Release',
           riskLevel: 'Moderate',
           riskScore: 42,
           requester: 'Tier 3 Platform SRE',
@@ -430,7 +430,7 @@
             onclick={() => loadPreset('servicenow')}
             class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
-            <span>ServiceNow ITSM</span>
+            <span>Enterprise Operations Platform</span>
           </button>
           <button 
             onclick={() => loadPreset('finance')}
