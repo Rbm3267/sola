@@ -16,7 +16,7 @@
   hostDiv.style.fontFamily = 'system-ui, -apple-system, sans-serif';
   document.documentElement.appendChild(hostDiv);
 
-  const shadow = hostDiv.attachShadow({ mode: 'closed' });
+  const shadow = hostDiv.attachShadow({ mode: 'open' });
 
   // CSP-Safe Sentinel Theme Scraper
   function extractHostTheme() {
