@@ -218,7 +218,7 @@
   <div class="w-full max-w-5xl mx-auto relative px-2 sm:px-4">
     
     <!-- Scenario Selection Tabs Bar -->
-    <div class="flex items-center justify-start sm:justify-center gap-2 mb-4 overflow-x-auto max-w-full pb-1 px-1 select-none">
+    <div class="flex items-center justify-start sm:justify-center gap-2 mb-4 overflow-x-auto sm:overflow-visible no-scrollbar pb-1 px-1 select-none">
       {#each scenarios as sc, i}
         <button 
           onclick={() => selectScenario(i)}

@@ -56,7 +56,7 @@
       </div>
 
       <!-- Segmented Mode Switcher -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto overflow-x-auto max-w-full">
+      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto shadow-xs">
         <button 
           onclick={() => activeMode = 'sheets'}
           class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'sheets' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
