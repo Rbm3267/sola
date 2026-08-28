@@ -14,7 +14,7 @@
   <!-- Precision Monochromatic Grid Texture -->
   <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none"></div>
   
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col pt-4">
+  <div class="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-col pt-4 w-full max-w-full overflow-x-hidden">
 
     <InteractiveHero />
 

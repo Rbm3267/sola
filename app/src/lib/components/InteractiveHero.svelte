@@ -1,104 +1,112 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import DataCard from './DataCard.svelte';
+  import GaugeCard from './GaugeCard.svelte';
   import DynamicForm from './DynamicForm.svelte';
   import ListBlock from './ListBlock.svelte';
-  import GaugeCard from './GaugeCard.svelte';
-  import { onMount } from 'svelte';
 
-  interface Scenario {
-    id: string;
-    tabLabel: string;
-    prompt: string;
-    components: Array<{
-      type: 'DataCard' | 'DynamicForm' | 'ListBlock' | 'GaugeCard';
-      config: any;
-    }>;
-  }
-
-  const scenarios: Scenario[] = [
+  const scenarios = [
     {
       id: 'deployments',
       tabLabel: 'Active Deployments',
-      prompt: 'List all active edge clusters with their health and latency',
+      prompt: 'Show active deployment cluster in us-east-1 and p99 latency',
       components: [
+        {
+          type: 'DataCard',
+          config: {
+            title: 'Cluster Status',
+            value: 'Healthy (32 Nodes)',
+            trend: '+4 nodes provisioned',
+            icon: 'check-circle'
+          }
+        },
+        {
+          type: 'GaugeCard',
+          config: {
+            title: 'p99 Ingress Latency',
+            value: '14.2ms',
+            percentage: 86,
+            subtext: 'Global edge median: 18ms',
+            color: 'emerald'
+          }
+        }
+      ]
+    },
+    {
+      id: 'arr',
+      tabLabel: 'Enterprise ARR',
+      prompt: 'Show enterprise monthly recurring revenue and expansion rate',
+      components: [
+        {
+          type: 'DataCard',
+          config: {
+            title: 'Monthly Recurring Revenue',
+            value: '$184,200',
+            trend: '+24.8% vs last month',
+            icon: 'trending-up'
+          }
+        },
+        {
+          type: 'DataCard',
+          config: {
+            title: 'Net Revenue Retention',
+            value: '138%',
+            trend: '+6.2% expansion',
+            icon: 'activity'
+          }
+        }
+      ]
+    },
+    {
+      id: 'telemetry',
+      tabLabel: 'Edge Telemetry',
+      prompt: 'Display real-time memory pressure and active worker threads',
+      components: [
+        {
+          type: 'GaugeCard',
+          config: {
+            title: 'Memory Utilization',
+            value: '78.4%',
+            percentage: 78,
+            subtext: 'Auto-balanced across AZs',
+            color: 'amber'
+          }
+        },
         {
           type: 'ListBlock',
           config: {
-            title: 'Active Deployments',
+            title: 'Top Ingress Nodes',
             items: [
-              { label: 'api-gateway-v3.2', description: 'us-east-1 • 2 min ago', status: 'Active' },
-              { label: 'auth-service-v1.8', description: 'eu-west-2 • 14 min ago', status: 'Active' },
-              { label: 'ml-pipeline-v0.9', description: 'us-west-2 • 1 hr ago • Latency optimal', status: 'Completed' }
+              { label: 'edge-iad-01', description: '2.4 GB/s • 4.1ms p99', status: 'Active' },
+              { label: 'edge-lhr-02', description: '1.8 GB/s • 3.8ms p99', status: 'Active' },
+              { label: 'edge-nrt-01', description: '940 MB/s • Synchronized', status: 'Completed' }
             ]
           }
         }
       ]
     },
     {
-      id: 'revenue',
-      tabLabel: 'Enterprise ARR',
-      prompt: 'Show enterprise revenue velocity and conversion rate',
+      id: 'postgres',
+      tabLabel: 'PostgreSQL Relay',
+      prompt: 'Connect to live database relay and show active connections',
       components: [
         {
           type: 'DataCard',
           config: {
-            title: 'Enterprise ARR',
-            value: '$1,840,000',
-            trend: '+34.2% YoY',
-            icon: 'trending-up'
-          }
-        },
-        {
-          type: 'GaugeCard',
-          config: {
-            title: 'SLA Compliance',
-            value: '99.98%',
-            percentage: 99,
-            subtext: 'Target: >99.90%',
-            color: 'emerald'
-          }
-        }
-      ]
-    },
-    {
-      id: 'latency',
-      tabLabel: 'Edge Telemetry',
-      prompt: 'Monitor edge CDN request volume and p99 global latency',
-      components: [
-        {
-          type: 'DataCard',
-          config: {
-            title: 'Global Edge Requests',
-            value: '42.8M / hr',
-            trend: '+12.4% vs baseline',
+            title: 'Active DB Pool Connections',
+            value: '42 / 100',
+            trend: 'Pool saturation: 42%',
             icon: 'activity'
           }
         },
         {
-          type: 'GaugeCard',
-          config: {
-            title: 'p99 Global Latency',
-            value: '18.4 ms',
-            percentage: 92,
-            subtext: 'Optimal Edge Routing',
-            color: 'emerald'
-          }
-        }
-      ]
-    },
-    {
-      id: 'database',
-      tabLabel: 'PostgreSQL Relay',
-      prompt: 'Provision zero-knowledge database connection modal',
-      components: [
-        {
           type: 'DynamicForm',
           config: {
-            title: 'Connect Managed Database',
-            endpoint: '/api/database/connect',
+            title: 'Scale Connection Pool',
+            endpoint: '/api/pool',
             fields: [
-              { name: 'db_host', label: 'Database Host URI', type: 'text', required: true },
-              { name: 'db_name', label: 'Database Name', type: 'text', required: true }
+              { name: 'maxPool', type: 'number', label: 'Max Connections (e.g. 150)', required: true },
+              { name: 'idleTimeout', type: 'number', label: 'Idle Timeout (ms)', required: true }
             ]
           }
         }
@@ -108,41 +116,45 @@
 
   let activeIndex = $state(0);
   let typedPrompt = $state(scenarios[0].prompt);
-  let isResolving = $state(false);
   let isTyping = $state(false);
-  let typingTimer: any = null;
+  let isResolving = $state(false);
+  let copied = $state(false);
 
-  async function selectScenario(index: number) {
-    if (index === activeIndex && !isResolving) return;
-    if (typingTimer) clearTimeout(typingTimer);
+  let typingTimeout: any = null;
+  let resolveTimeout: any = null;
+
+  function selectScenario(index: number) {
+    if (activeIndex === index && !isTyping && !isResolving) return;
+
+    if (typingTimeout) clearTimeout(typingTimeout);
+    if (resolveTimeout) clearTimeout(resolveTimeout);
 
     activeIndex = index;
     const targetPrompt = scenarios[index].prompt;
-    
-    // Clear and animate typing cleanly
-    typedPrompt = "";
+    typedPrompt = '';
     isTyping = true;
     isResolving = false;
 
     let charIdx = 0;
-    const typeStep = () => {
-      if (charIdx <= targetPrompt.length) {
-        typedPrompt = targetPrompt.slice(0, charIdx);
+    const speed = 14;
+
+    function typeNextChar() {
+      if (charIdx < targetPrompt.length) {
+        typedPrompt = targetPrompt.slice(0, charIdx + 1);
         charIdx++;
-        typingTimer = setTimeout(typeStep, 20);
+        typingTimeout = setTimeout(typeNextChar, speed);
       } else {
         isTyping = false;
         isResolving = true;
-        typingTimer = setTimeout(() => {
+        resolveTimeout = setTimeout(() => {
           isResolving = false;
-        }, 400);
+        }, 220);
       }
-    };
+    }
 
-    typeStep();
+    typeNextChar();
   }
 
-  let copied = $state(false);
   function copyCliCommand() {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText('npm create sola@latest');
@@ -153,7 +165,7 @@
 </script>
 
 <!-- Centered, High-Impact Hero -->
-<div class="flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8 pb-12 relative">
+<div class="flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8 pb-12 relative w-full max-w-full overflow-x-hidden">
 
   <!-- Floating Announcement Pill -->
   <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] mb-8 hover:border-amber-300 hover:shadow-[0_4px_12px_rgba(245,158,11,0.1)] transition-all duration-200 group cursor-pointer text-decoration-none">
@@ -166,17 +178,17 @@
   </a>
 
   <!-- Main Headline -->
-  <h1 class="text-3xl sm:text-6xl md:text-7xl font-black text-slate-900 tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
+  <h1 class="text-3xl sm:text-5xl md:text-7xl font-black text-slate-900 tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
     UI that synthesizes from <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">intent</span>.
   </h1>
 
   <!-- Subheadline -->
-  <p class="text-base sm:text-lg text-slate-600 max-w-2xl mb-10 leading-relaxed font-normal">
+  <p class="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal px-2">
     The zero-VDOM ambient runtime for the agentic web. Single-file declarative components that compile natural language into fine-grained native DOM signals with 0 kB framework bloat.
   </p>
 
   <!-- CTA Buttons -->
-  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 w-full sm:w-auto justify-center">
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 w-full sm:w-auto justify-center px-4">
     <a 
       href="/demo" 
       style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
@@ -206,23 +218,23 @@
   </div>
 
   <!-- Micro Specs Line -->
-  <div class="flex items-center gap-4 text-xs font-semibold text-slate-500 mb-12">
+  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-500 mb-10 sm:mb-12 px-2">
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 3.2 kB Core</span>
     <span>•</span>
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 0 Dependencies</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Native AI Intent</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Native Intent AST</span>
   </div>
 
   <!-- The Luxury Interactive Demo Studio -->
-  <div class="w-full max-w-5xl mx-auto relative px-2 sm:px-4">
+  <div class="w-full max-w-5xl mx-auto relative px-2 sm:px-4 overflow-hidden">
     
     <!-- Scenario Selection Tabs Bar -->
-    <div class="flex items-center justify-start sm:justify-center gap-2 mb-4 overflow-x-auto sm:overflow-visible no-scrollbar pb-1 px-1 select-none">
+    <div class="flex items-center justify-start sm:justify-center gap-2 mb-4 overflow-x-auto sm:overflow-visible no-scrollbar pb-1 px-1 select-none max-w-full">
       {#each scenarios as sc, i}
         <button 
           onclick={() => selectScenario(i)}
-          class="px-3.5 sm:px-4 py-2 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs font-black' : 'bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-white hover:text-slate-900'}">
+          class="px-3 sm:px-4 py-2 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs font-black' : 'bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-white hover:text-slate-900'}">
           <span class="w-2 h-2 rounded-full {activeIndex === i ? 'bg-amber-500' : 'bg-slate-300'}"></span>
           <span>{sc.tabLabel}</span>
         </button>
@@ -230,48 +242,48 @@
     </div>
 
     <!-- Main Canvas Card -->
-    <div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
+    <div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden w-full max-w-full">
       
       <!-- Window Chrome Bar -->
-      <div class="h-12 flex items-center px-5 gap-2 border-b border-slate-100 bg-slate-50/70">
-        <div class="w-3 h-3 rounded-full bg-red-300/80"></div>
-        <div class="w-3 h-3 rounded-full bg-amber-300/80"></div>
-        <div class="w-3 h-3 rounded-full bg-green-300/80"></div>
+      <div class="h-10 sm:h-12 flex items-center px-4 sm:px-5 gap-2 border-b border-slate-100 bg-slate-50/70">
+        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-300/80"></div>
+        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-300/80"></div>
+        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-300/80"></div>
         <div class="flex-1 flex justify-center">
-          <div class="text-[11px] font-mono text-slate-400 tracking-wider font-medium bg-slate-100/80 px-4 py-1 rounded-full border border-slate-200/60">sola-playground</div>
+          <div class="text-[10px] sm:text-[11px] font-mono text-slate-400 tracking-wider font-medium bg-slate-100/80 px-3 sm:px-4 py-0.5 sm:py-1 rounded-full border border-slate-200/60">sola-playground</div>
         </div>
       </div>
 
       <!-- Content Area -->
-      <div class="p-6 md:p-10">
+      <div class="p-4 sm:p-6 md:p-10">
         
         <!-- Prompt Input Bar -->
-        <div class="flex items-center gap-3 bg-slate-50/90 border border-slate-200/80 rounded-2xl px-5 py-4 mb-8 transition-all duration-300 {isTyping ? 'border-amber-300 shadow-[0_0_0_3px_rgba(245,158,11,0.1)]' : ''}">
+        <div class="flex items-center gap-2.5 sm:gap-3 bg-slate-50/90 border border-slate-200/80 rounded-2xl px-3.5 sm:px-5 py-3 sm:py-4 mb-6 sm:mb-8 transition-all duration-300 {isTyping ? 'border-amber-300 shadow-[0_0_0_3px_rgba(245,158,11,0.1)]' : ''}">
           <div class="shrink-0">
             {#if isResolving}
-              <div class="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+              <div class="w-4 h-4 sm:w-5 sm:h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
             {:else}
-              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             {/if}
           </div>
-          <div class="flex-1 text-left text-[15px] font-medium text-slate-800 min-h-[24px]">
+          <div class="flex-1 text-left text-xs sm:text-[15px] font-medium text-slate-800 min-h-[20px] sm:min-h-[24px] truncate">
             {typedPrompt}
             {#if isTyping}
-              <span class="inline-block w-[2px] h-5 bg-amber-500 ml-0.5 align-middle animate-pulse rounded-full"></span>
+              <span class="inline-block w-[2px] h-4 sm:h-5 bg-amber-500 ml-0.5 align-middle animate-pulse rounded-full"></span>
             {/if}
           </div>
           {#if isResolving}
-            <div class="text-xs font-mono font-bold text-amber-900 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200 shrink-0">
+            <div class="text-[10px] sm:text-xs font-mono font-bold text-amber-900 bg-amber-50 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-amber-200 shrink-0">
               Compiling...
             </div>
           {/if}
         </div>
 
         <!-- Rendered Surface Area -->
-        <div class="min-h-[220px] relative flex items-center justify-center">
+        <div class="min-h-[200px] sm:min-h-[220px] relative flex items-center justify-center">
           {#if isTyping}
             <!-- Clean Typing State -->
-            <div class="w-full flex flex-col items-center justify-center min-h-[220px] p-8 border border-dashed border-slate-200 rounded-3xl bg-slate-50/40 text-center">
+            <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] p-6 sm:p-8 border border-dashed border-slate-200 rounded-3xl bg-slate-50/40 text-center">
               <div class="flex items-center gap-2 text-slate-400 text-xs font-mono">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                 <span>Listening to intent stream...</span>
@@ -279,7 +291,7 @@
             </div>
           {:else if isResolving}
             <!-- Compiling State -->
-            <div class="w-full flex flex-col items-center justify-center min-h-[220px] gap-3">
+            <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] gap-3">
               <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold shadow-xs">
                 <div class="w-3.5 h-3.5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
                 <span>Synthesizing zero-VDOM components...</span>
