@@ -215,14 +215,14 @@
   </div>
 
   <!-- The Luxury Interactive Demo Studio -->
-  <div class="w-full max-w-5xl mx-auto relative px-4">
+  <div class="w-full max-w-5xl mx-auto relative px-2 sm:px-4">
     
     <!-- Scenario Selection Tabs Bar -->
-    <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+    <div class="flex items-center justify-start sm:justify-center gap-2 mb-4 overflow-x-auto max-w-full pb-1 px-1 select-none">
       {#each scenarios as sc, i}
         <button 
           onclick={() => selectScenario(i)}
-          class="px-4 py-2 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs font-black' : 'bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-white hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs font-black' : 'bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-white hover:text-slate-900'}">
           <span class="w-2 h-2 rounded-full {activeIndex === i ? 'bg-amber-500' : 'bg-slate-300'}"></span>
           <span>{sc.tabLabel}</span>
         </button>

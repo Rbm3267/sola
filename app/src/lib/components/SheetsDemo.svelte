@@ -56,16 +56,16 @@
       </div>
 
       <!-- Segmented Mode Switcher -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto">
+      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto overflow-x-auto max-w-full">
         <button 
           onclick={() => activeMode = 'sheets'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'sheets' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'sheets' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
           <span>Google Sheets Relay</span>
         </button>
         <button 
           onclick={() => activeMode = 'postgres'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {activeMode === 'postgres' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'postgres' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
           <span>PostgreSQL Cluster</span>
         </button>
