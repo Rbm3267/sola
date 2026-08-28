@@ -234,6 +234,23 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
     }
   }
 }`;
+
+  const engineExample = `// Sola compiled output: Pure direct DOM node manipulation
+export function mount(__target, props = {}) {
+  const root = document.createElement('div');
+  root.className = 'sola-metric-card';
+
+  const textNode = document.createTextNode(props.value || '0');
+  root.appendChild(textNode);
+
+  // Fine-grained signal subscription (No VDOM diffing loop!)
+  createEffect(() => {
+    textNode.data = props.value();
+  });
+
+  __target.appendChild(root);
+  return () => __target.removeChild(root);
+};`;
 </script>
 
 <div class="min-h-screen bg-[#fafafa] text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900 pb-20">
@@ -477,7 +494,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
                 <!-- Actual Live Mounted Rendering -->
                 <div class="flex flex-col items-center justify-center p-4 border border-slate-200/80 rounded-2xl bg-slate-50/50 min-h-[140px]">
-                  <DataCard title={sandboxTitle} value={sandboxValue} trend="+12.4% vs baseline" icon="activity" />
+                  <DataCard config={{ title: sandboxTitle, value: sandboxValue, trend: "+12.4% vs baseline", icon: "activity" }} />
                 </div>
               </div>
             </div>
@@ -715,8 +732,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               </div>
             </div>
           </div>
-
-
+        {/if}
 
       </main>
 
