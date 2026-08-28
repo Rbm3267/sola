@@ -40,3 +40,9 @@ implementation_plan.md
 task.md
 walkthrough.md
 start_aura.vbs
+
+.vercel
+.env*
+servicenow.local.json
+*.credentials.json
+scratch/
