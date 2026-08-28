@@ -36,6 +36,7 @@
       items: [
         { id: 'api-reactivity', title: 'Core Reactivity Primitives' },
         { id: 'api-macros', title: 'Compiler Macro Primitives' },
+        { id: 'engine', title: 'Compiler & Zero-VDOM Engine' },
         { id: 'llm-spec', title: 'LLM & AI Agent Prompting Spec' }
       ]
     },
