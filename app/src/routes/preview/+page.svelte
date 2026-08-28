@@ -76,58 +76,64 @@
       </div>
     </div>
 
-    <!-- Controls Sub-Bar -->
-    <div class="bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-full overflow-hidden">
+    <!-- Controls Sub-Bar (Stacked & Labeled Rows) -->
+    <div class="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-sm flex flex-col gap-4 max-w-full overflow-hidden">
       
-      <!-- Sola Component Injected Selector -->
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-1 sm:pb-0 select-none">
-        <span class="text-xs font-mono font-bold text-slate-400 uppercase shrink-0 mr-1">Inject:</span>
-        <button 
-          onclick={() => activeComponent = 'incident'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
-          P1 Incident Matrix
-        </button>
-        <button 
-          onclick={() => activeComponent = 'cluster'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
-          Node Cluster Mesh
-        </button>
-        <button 
-          onclick={() => activeComponent = 'waterfall'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
-          Revenue Waterfall
-        </button>
-        <button 
-          onclick={() => activeComponent = 'datacard'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
-          KPI DataCard
-        </button>
-        <button 
-          onclick={() => activeComponent = 'dial'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
-          Tactile Touch Dial
-        </button>
+      <!-- Row 1: Target App Environment -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <span class="text-xs font-mono font-medium text-slate-400 uppercase shrink-0 w-32">Host Environment:</span>
+        
+        {#if activeMode === 'preset'}
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
+            {#each (['linear', 'stripe', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
+              <button 
+                onclick={() => selectedPreset = t}
+                class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-slate-100'}">
+                <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background-color: {presets[t].brand}"></span>
+                <span>{presets[t].name}</span>
+              </button>
+            {/each}
+          </div>
+        {:else}
+          <label class="px-4 py-1.5 rounded-full bg-slate-900 text-white text-xs font-mono font-medium cursor-pointer hover:bg-slate-800 flex items-center gap-2 self-start shrink-0 active:scale-[0.97] transition-all">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Select PNG / Figma Frame</span>
+            <input type="file" accept="image/*" onchange={handleFileUpload} class="hidden" />
+          </label>
+        {/if}
       </div>
 
-      <!-- Preset Selection Chips -->
-      {#if activeMode === 'preset'}
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-1 sm:pb-0 select-none">
-          {#each (['linear', 'stripe', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
-            <button 
-              onclick={() => selectedPreset = t}
-              class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'}">
-              <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {presets[t].brand}"></span>
-              <span>{presets[t].name}</span>
-            </button>
-          {/each}
+      <!-- Row 2: Sola Component to Inject -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-3 border-t border-slate-100">
+        <span class="text-xs font-mono font-medium text-slate-400 uppercase shrink-0 w-32">Inject Component:</span>
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
+          <button 
+            onclick={() => activeComponent = 'incident'}
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            P1 Incident Matrix
+          </button>
+          <button 
+            onclick={() => activeComponent = 'cluster'}
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            Node Cluster Mesh
+          </button>
+          <button 
+            onclick={() => activeComponent = 'waterfall'}
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            Revenue Waterfall
+          </button>
+          <button 
+            onclick={() => activeComponent = 'datacard'}
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            KPI DataCard
+          </button>
+          <button 
+            onclick={() => activeComponent = 'dial'}
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            Tactile Touch Dial
+          </button>
         </div>
-      {:else}
-        <label class="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-mono font-bold cursor-pointer hover:bg-slate-800 flex items-center gap-2 self-start sm:self-auto shrink-0">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <span>Select PNG / Figma Frame</span>
-          <input type="file" accept="image/*" onchange={handleFileUpload} class="hidden" />
-        </label>
-      {/if}
+      </div>
 
     </div>
 
