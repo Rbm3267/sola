@@ -7,6 +7,7 @@
   import TactileDialCard from '$lib/components/TactileDialCard.svelte';
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
   import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
+  import SentinelCapsule from '$lib/components/SentinelCapsule.svelte';
 
   // Active Filter & Search States (Svelte 5 Runes)
   let selectedCategory = $state<string>('All');
@@ -199,6 +200,27 @@
         type: 'gauge',
         targetScore: 90,
         framework: 'SOC2-Type-II'
+      }
+    },
+    {
+      id: 'comm-07',
+      title: 'UX Sentinel & Intent Telemetry Matrix',
+      author: { name: 'Sola Core Team', handle: 'sola.sentinel', verified: true, avatarBg: '#10b981' },
+      category: 'Telemetry & APM',
+      stars: 1042,
+      installs: '34.8k',
+      desc: 'Real-time UX flow observer with autonomous rage-click circuit breakers and sub-0.05ms telemetry stream.',
+      signals: ['sentinel/flow_index', 'intent/friction_events', 'circuit_breaker/state'],
+      previewType: 'sentinel',
+      targetPreset: 'sentinel',
+      previewConfig: {
+        flowIndex: 99.8,
+        frictionCount: 0
+      },
+      schema: {
+        type: 'sentinel-matrix',
+        thresholdMs: 500,
+        maxRageClicks: 3
       }
     }
   ];
@@ -495,6 +517,8 @@
                 <GaugeCard config={tmpl.previewConfig} />
               {:else if tmpl.previewType === 'dial'}
                 <TactileDialCard config={tmpl.previewConfig} />
+              {:else if tmpl.previewType === 'sentinel'}
+                <SentinelCapsule flowIndex={tmpl.previewConfig.flowIndex} frictionCount={tmpl.previewConfig.frictionCount} />
               {/if}
             </div>
 

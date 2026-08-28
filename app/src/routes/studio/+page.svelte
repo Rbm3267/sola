@@ -7,7 +7,10 @@
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
   import DiffAudit from '$lib/components/DiffAudit.svelte';
+  import UserFrictionMatrix from '$lib/components/UserFrictionMatrix.svelte';
   import SolaLogo from '$lib/components/SolaLogo.svelte';
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
 
   // Active Input Mode for Generative Engine
   let inputMode = $state<'prompt' | 'data' | 'code'>('prompt');
@@ -38,14 +41,26 @@
   let clusterCpu = $state(74);
   let mrrValue = $state(168400);
   let churnRate = $state(2.1);
-  let habitStreak = $state(18);
 
   // Active Export Code Format
   let exportFormat = $state<'sola' | 'react' | 'svelte' | 'webcomponent'>('sola');
   let copied = $state(false);
 
   // Generated Component Tree
-  let generatedPreset = $state<'finops' | 'fitness' | 'telemetry' | 'custom'>('finops');
+  let generatedPreset = $state<'finops' | 'ratelimit' | 'telemetry' | 'sentinel'>('finops');
+
+  onMount(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const p = urlParams.get('preset');
+    if (p === 'sentinel' || p === 'friction') {
+      generatedPreset = 'sentinel';
+      promptText = 'Create a real-time UX Sentinel intent telemetry boundary with rage-click self-healing circuit breakers.';
+    } else if (p === 'ratelimit') {
+      generatedPreset = 'ratelimit';
+    } else if (p === 'telemetry') {
+      generatedPreset = 'telemetry';
+    }
+  });
 
   function handleGenerate() {
     isCompiling = true;
@@ -63,9 +78,12 @@
         setTimeout(() => {
           isCompiling = false;
           if (inputMode === 'prompt') {
-            if (promptText.toLowerCase().includes('workout') || promptText.toLowerCase().includes('habit') || promptText.toLowerCase().includes('fitness')) {
-              generatedPreset = 'fitness';
-            } else if (promptText.toLowerCase().includes('telemetry') || promptText.toLowerCase().includes('cluster') || promptText.toLowerCase().includes('cpu')) {
+            const low = promptText.toLowerCase();
+            if (low.includes('sentinel') || low.includes('friction') || low.includes('analytics') || low.includes('heal') || low.includes('rage')) {
+              generatedPreset = 'sentinel';
+            } else if (low.includes('ratelimit') || low.includes('gateway') || low.includes('throttle') || low.includes('token')) {
+              generatedPreset = 'ratelimit';
+            } else if (low.includes('telemetry') || low.includes('cluster') || low.includes('cpu')) {
               generatedPreset = 'telemetry';
             } else {
               generatedPreset = 'finops';
@@ -81,6 +99,49 @@
   }
 
   let exportedCode = $derived.by(() => {
+    if (generatedPreset === 'sentinel') {
+      if (exportFormat === 'sola') {
+        return '<!-- Sola Zero-VDOM Intent Sentinel Boundary -->\n' +
+'<script>\n' +
+'  import { SentinelBoundary, DataCard, GaugeCard, UserFrictionMatrix } from \'@sola/ui\';\n' +
+'  import { createSentinel } from \'@sola/core\';\n\n' +
+'  const sentinel = createSentinel(\'CheckoutFlow\', { thresholdMs: 500, maxRageClicks: 3 });\n' +
+'  sentinel.onFriction((err) => console.log(\'Friction Alert:\', err));\n' +
+'</' + 'script>\n\n' +
+'<SentinelBoundary observer={sentinel} fallback="cache">\n' +
+'  <UserFrictionMatrix title="Intent Sentinel Dashboard" />\n' +
+'</SentinelBoundary>';
+      } else if (exportFormat === 'react') {
+        return '// React 19 / Next.js with @sola/ui Sentinel\n' +
+'import React from \'react\';\n' +
+'import { SolaBoundary, SentinelBoundary, DataCard } from \'@sola/react\';\n\n' +
+'export default function ResilientApp() {\n' +
+'  return (\n' +
+'    <SolaBoundary theme="' + activeTheme + '">\n' +
+'      <SentinelBoundary name="CoreActions" maxRageClicks={3} onFriction={(e) => console.warn(e)}>\n' +
+'        <DataCard title="Flow Index" value="99.8%" trend="Optimal" />\n' +
+'      </SentinelBoundary>\n' +
+'    </SolaBoundary>\n' +
+'  );\n' +
+'}';
+      } else if (exportFormat === 'svelte') {
+        return '<' + 'script lang="ts">\n' +
+'  import { SentinelBoundary, UserFrictionMatrix } from \'@sola/ui\';\n' +
+'  import { createSentinel } from \'@sola/core\';\n\n' +
+'  const sentinel = createSentinel(\'ProductionSurface\');\n' +
+'</' + 'script>\n\n' +
+'<SentinelBoundary observer={sentinel} fallback="cache">\n' +
+'  <UserFrictionMatrix />\n' +
+'</SentinelBoundary>';
+      } else {
+        return '<!-- Sola Web Component (Isolated Shadow DOM Sentinel) -->\n' +
+'<' + 'script type="module" src="https://cdn.sola-air.dev/sola-elements.js"></' + 'script>\n\n' +
+'<sola-sentinel-boundary name="ProductionApp" theme="' + activeTheme + '">\n' +
+'  <sola-friction-matrix title="Live Intent Telemetry"></sola-friction-matrix>\n' +
+'</sola-sentinel-boundary>';
+      }
+    }
+
     if (exportFormat === 'sola') {
       return '<!-- Sola Zero-VDOM Native Template -->\n' +
 '<script>\n' +
@@ -220,16 +281,25 @@
           <!-- Example Prompts -->
           <div class="flex flex-wrap gap-1.5">
             <button 
-              onclick={() => promptText = 'Create a high-density FinOps dashboard with gross margin waterfall and churn gauge.'}
-              class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
-              FinOps & MRR
+              type="button"
+              onclick={() => promptText = 'Create a real-time UX Sentinel intent telemetry boundary with rage-click self-healing circuit breakers.'}
+              class="text-[11px] px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 font-bold">
+              UX Sentinel &amp; Friction
             </button>
             <button 
+              type="button"
+              onclick={() => promptText = 'Create a high-density FinOps dashboard with gross margin waterfall and churn gauge.'}
+              class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
+              FinOps &amp; MRR
+            </button>
+            <button 
+              type="button"
               onclick={() => promptText = 'Create an API Gateway token bucket rate limiter with dynamic throttle dials and p99 latency gauge.'}
               class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
               API Rate Limiter
             </button>
             <button 
+              type="button"
               onclick={() => promptText = 'Create a live cloud cluster telemetry HUD with worker auto-scaling rotary dials.'}
               class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
               Cluster Telemetry
@@ -351,18 +421,20 @@
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold font-mono text-slate-400 uppercase">Stage Canvas:</span>
           <span class="text-xs font-bold text-white bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
-            {generatedPreset === 'ratelimit' ? 'API Gateway Rate Limiter' : (generatedPreset === 'telemetry' ? 'APM & Telemetry HUD' : 'FinOps & Revenue Studio')}
+            {generatedPreset === 'sentinel' ? 'UX Sentinel & Intent Telemetry' : (generatedPreset === 'ratelimit' ? 'API Gateway Rate Limiter' : (generatedPreset === 'telemetry' ? 'APM & Telemetry HUD' : 'FinOps & Revenue Studio'))}
           </span>
         </div>
 
         <!-- Theme Mode Toggle -->
         <div class="flex items-center gap-1.5">
           <button 
+            type="button"
             onclick={() => activeTheme = 'obsidian'}
             class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all {activeTheme === 'obsidian' ? 'bg-slate-800 text-emerald-400 border border-emerald-500/30' : 'text-slate-500 hover:text-slate-300'}">
             Obsidian Dark
           </button>
           <button 
+            type="button"
             onclick={() => activeTheme = 'ivory'}
             class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all {activeTheme === 'ivory' ? 'bg-slate-200 text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-300'}">
             Ivory Light
@@ -373,7 +445,11 @@
       <!-- LIVE INTERACTIVE STAGE CANVAS -->
       <div class="p-6 rounded-3xl border transition-all {activeTheme === 'obsidian' ? 'bg-[#090d19] border-slate-800/80 shadow-2xl' : 'bg-slate-50 border-slate-300 text-slate-950 shadow-xl'} min-h-[420px] flex flex-col gap-6">
         
-        {#if generatedPreset === 'finops'}
+        {#if generatedPreset === 'sentinel'}
+          <!-- Intent Sentinel & User Friction Matrix -->
+          <UserFrictionMatrix />
+
+        {:else if generatedPreset === 'finops'}
           <!-- FinOps Preset Primitives -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <DataCard config={{ title: "Realized MRR", value: `$${mrrValue.toLocaleString()}`, trend: "+14.2%", icon: "trending-up" }} />
