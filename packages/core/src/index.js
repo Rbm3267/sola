@@ -335,3 +335,78 @@ export function createData(source, options = {}) {
 
   return accessor;
 }
+
+// ─── Named Cross-Widget Signal Telemetry Mesh ───
+
+class SignalMeshEngine {
+  constructor() {
+    this.topics = new Map();
+    this.telemetrySubscribers = new Set();
+    this.cycleStack = new Set();
+  }
+
+  topic(name, initialValue) {
+    if (!this.topics.has(name)) {
+      const [read, write] = createSignal(initialValue);
+      this.topics.set(name, { read, write, value: initialValue, subscribers: new Set() });
+    }
+
+    const entry = this.topics.get(name);
+
+    const read = () => entry.read();
+    const write = (next, originId = 'signal') => {
+      const nextVal = typeof next === 'function' ? next(entry.value) : next;
+      if (entry.value === nextVal) return;
+
+      if (this.cycleStack.has(name)) {
+        console.warn(`[Sola Signal Mesh] Cycle detected on topic "${name}". Aborting cyclic dispatch.`);
+        return;
+      }
+
+      const prev = entry.value;
+      entry.value = nextVal;
+      entry.write(nextVal);
+
+      const event = {
+        topic: name,
+        value: nextVal,
+        prevValue: prev,
+        timestamp: typeof performance !== 'undefined' ? performance.now() : Date.now(),
+        originWidgetId: originId
+      };
+
+      this.telemetrySubscribers.forEach(cb => {
+        try { cb(event); } catch (e) { console.error(e); }
+      });
+
+      this.cycleStack.add(name);
+      try {
+        entry.subscribers.forEach(sub => {
+          try { sub(nextVal, event); } catch (e) { console.error(e); }
+        });
+      } finally {
+        this.cycleStack.delete(name);
+      }
+    };
+
+    return [read, write];
+  }
+
+  subscribe(name, fn) {
+    if (!this.topics.has(name)) {
+      this.topic(name, undefined);
+    }
+    const entry = this.topics.get(name);
+    entry.subscribers.add(fn);
+    return () => entry.subscribers.delete(fn);
+  }
+
+  onTelemetry(fn) {
+    this.telemetrySubscribers.add(fn);
+    return () => this.telemetrySubscribers.delete(fn);
+  }
+}
+
+export const signalMesh = new SignalMeshEngine();
+export const createTopicSignal = (topic, initialVal) => signalMesh.topic(topic, initialVal);
+
