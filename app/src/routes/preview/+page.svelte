@@ -570,50 +570,83 @@
 
       </div>
 
-    </div>
-
     <!-- 1-Click Embed Snippet Tray -->
     <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs flex flex-col gap-3 sm:gap-4 max-w-full overflow-hidden">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3 gap-2">
         <span class="text-[10px] sm:text-xs font-mono font-bold text-slate-400 uppercase truncate">Embed in your host app:</span>
         <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl shrink-0">
-          {#each (['react', 'vue', 'html', 'sola'] as const) as fw}
+          {#each (['react', 'vue', 'swift', 'html', 'sola'] as const) as fw}
             <button 
               onclick={() => activeFramework = fw}
-              class="px-2.5 sm:px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer {activeFramework === fw ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
-              {fw.toUpperCase()}
+              class="px-2.5 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs font-mono font-bold capitalize transition-all cursor-pointer {activeFramework === fw ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'}">
+              {fw === 'swift' ? 'SwiftUI (iOS)' : fw}
             </button>
           {/each}
         </div>
       </div>
 
-      <pre class="p-4 rounded-2xl bg-slate-900 text-white font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 max-w-full"><code>{#if activeFramework === 'react'}// In your React / Next.js app:
-import &#123; useSola &#125; from '@sola/react';
-import &#123; IncidentTriageMatrix &#125; from '@sola/ui/IncidentTriageMatrix';
+      <pre class="p-4 rounded-2xl bg-slate-900 text-white font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 max-w-full"><code>{#if activeFramework === 'react'}// React 18 / Next.js Host Component
+import React, &#123; useEffect, useRef &#125; from 'react';
+import &#123; mount &#125; from '@sola/core';
+import IncidentWidget from './IncidentWidget.sola';
 
-export function SolaEmbedded() &#123;
-  const ref = useSola(IncidentTriageMatrix, &#123; source: "now://table/incident" &#125;);
-  return &lt;div ref=&#123;ref&#125; /&gt;;
-&#125;{:else if activeFramework === 'vue'}&lt;template&gt;
-  &lt;div ref="solaContainer" /&gt;
-&lt;/template&gt;
-&lt;script setup&gt;
-import &#123; onMounted, ref &#125; from 'vue';
-import &#123; IncidentTriageMatrix &#125; from '@sola/ui/IncidentTriageMatrix';
+export function SolaReactHost(&#123; incidentId, severity &#125;) &#123;
+  const containerRef = useRef(null);
 
-const solaContainer = ref(null);
-onMounted(() =&gt; IncidentTriageMatrix(solaContainer.value, &#123; source: "now://table/incident" &#125;));
-&lt;/script&gt;{:else if activeFramework === 'html'}&lt;!-- Zero Framework Vanilla Drop --&gt;
-&lt;div id="sola-target"&gt;&lt;/div&gt;
-&lt;script type="module"&gt;
-  import &#123; IncidentTriageMatrix &#125; from 'https://cdn.sola-air.dev/ui/IncidentTriageMatrix.js';
-  IncidentTriageMatrix(document.getElementById('sola-target'), &#123; source: "now://table/incident" &#125;);
-&lt;/script&gt;{:else}&lt;script&gt;
-  import &#123; IncidentTriageMatrix &#125; from '@sola/ui/IncidentTriageMatrix';
-  const incidents = $data("now://table/incident");
+  useEffect(() =&gt; &#123;
+    if (!containerRef.current) return;
+    const unmount = mount(containerRef.current, IncidentWidget, &#123; incidentId, severity &#125;);
+    return () =&gt; unmount();
+  &#125;, [incidentId, severity]);
+
+  return &lt;div ref=&#123;containerRef&#125; className="sola-react-wrapper" /&gt;;
+&#125;{:else if activeFramework === 'vue'}&lt;script setup&gt;
+import &#123; ref, onMounted, onUnmounted &#125; from 'vue';
+import &#123; mount &#125; from '@sola/core';
+import FlowWaterfall from './FlowWaterfall.sola';
+
+const props = defineProps(['mrr', 'churn']);
+const container = ref(null);
+let unmountFn = null;
+
+onMounted(() =&gt; &#123;
+  unmountFn = mount(container.value, FlowWaterfall, &#123; mrr: props.mrr, churn: props.churn &#125;);
+&#125;);
+
+onUnmounted(() =&gt; &#123; if (unmountFn) unmountFn(); &#125;);
 &lt;/script&gt;
 
-&lt;IncidentTriageMatrix data=&#123;incidents&#125; /&gt;{/if}</code></pre>
+&lt;template&gt;
+  &lt;div ref="container" class="sola-vue-wrapper" /&gt;
+&lt;/template&gt;{:else if activeFramework === 'swift'}// SwiftUI Native iOS Host (SolaSwiftBridge)
+import SwiftUI
+import WebKit
+
+struct SolaIncidentCardView: UIViewRepresentable &#123;
+    let incidentId: String
+    
+    func makeUIView(context: Context) -&gt; WKWebView &#123;
+        let webView = WKWebView()
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.loadHTMLString("&lt;div id='sola-root'&gt;&lt;/div&gt;&lt;script src='https://cdn.jsdelivr.net/npm/@sola/core'&gt;&lt;/script&gt;", baseURL: nil)
+        return webView
+    &#125;
+    func updateUIView(_ uiView: WKWebView, context: Context) &#123;&#125;
+&#125;{:else if activeFramework === 'html'}&lt;!-- Zero Framework Vanilla / Web Component Drop --&gt;
+&lt;div id="sola-target"&gt;&lt;/div&gt;
+&lt;script type="module"&gt;
+  import &#123; mount &#125; from 'https://cdn.jsdelivr.net/npm/@sola/core@latest/dist/index.js';
+  mount(document.getElementById('sola-target'), window.IncidentMatrix, &#123; incidentId: 'INC009481' &#125;);
+&lt;/script&gt;{:else}&lt;script&gt;
+  export let title = "Cluster Saturation";
+  export let value = 84;
+&lt;/script&gt;
+
+&lt;div class="p-6 bg-slate-900 border border-slate-800 rounded-3xl text-white"&gt;
+  &lt;h3 class="text-xs font-mono font-bold text-slate-400"&gt;&#123;title&#125;&lt;/h3&gt;
+  &lt;div class="text-3xl font-mono font-black text-amber-400 mt-2"&gt;&#123;value&#125;%&lt;/div&gt;
+&lt;/div&gt;{/if}</code></pre>
     </div>
 
   </main>

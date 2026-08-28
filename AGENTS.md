@@ -260,6 +260,93 @@ class SolaWidgetElement extends HTMLElement {
 customElements.define('sola-widget', SolaWidgetElement);
 ```
 
+### F. iOS Native Swift & SwiftUI (`SolaSwiftBridge`)
+In iOS native apps, Sola's zero-VDOM signals bridge directly into SwiftUI via `WKWebView` or JavaScriptCore:
+```swift
+import SwiftUI
+import WebKit
+
+struct SolaIncidentCardView: UIViewRepresentable {
+    let incidentId: String
+    let severity: String
+    
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.scrollView.isScrollEnabled = false
+        
+        let html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <script src="https://cdn.jsdelivr.net/npm/@sola/core@latest/dist/index.js"></script>
+        </head>
+        <body style="margin:0; background:transparent;">
+          <div id="sola-root"></div>
+          <script>
+            window.Sola.mount(document.getElementById('sola-root'), window.IncidentMatrix, {
+              incidentId: '\(incidentId)',
+              severity: '\(severity)'
+            });
+          </script>
+        </body>
+        </html>
+        """
+        webView.loadHTMLString(html, baseURL: nil)
+        return webView
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
+
+// SwiftUI Native Host View
+struct ContentView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Active Incident Monitor")
+                .font(.headline)
+            
+            SolaIncidentCardView(incidentId: "INC009481", severity: "P1 - Critical")
+                .frame(height: 240)
+                .cornerRadius(20)
+        }
+        .padding()
+        .background(Color(hex: "#090d19"))
+    }
+}
+```
+
+### G. React Native & Expo (`useSolaSignal`)
+```tsx
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { sola } from '@sola/core';
+
+export function SolaMobileDataCard({ signalName }) {
+  const [metric, setMetric] = useState(() => sola.get(signalName));
+
+  useEffect(() => {
+    return sola.subscribe(signalName, (newVal) => {
+      setMetric(newVal);
+    });
+  }, [signalName]);
+
+  return (
+    <View style={styles.card}>
+      <Text style={styles.title}>Live Mobile Telemetry</Text>
+      <Text style={styles.value}>{metric?.value ?? '0'}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: { backgroundColor: '#16222f', borderRadius: 20, padding: 18 },
+  title: { color: '#81b5a1', fontSize: 12, fontWeight: '700' },
+  value: { color: '#ffffff', fontSize: 24, fontWeight: '900', marginTop: 4 }
+});
+```
+
 ---
 
 ## 8. Multi-Domain SaaS & Consumer Presets
