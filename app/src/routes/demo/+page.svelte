@@ -4,6 +4,7 @@
   import SolaLogo from '$lib/components/SolaLogo.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import SignalMeshConsole from '$lib/components/SignalMeshConsole.svelte';
+  import BehavioralIntentConsole from '$lib/components/BehavioralIntentConsole.svelte';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { onMount } from 'svelte';
@@ -15,7 +16,7 @@
     config: any;
   }
   
-  let viewMode = $state<'mesh' | 'custom'>('mesh');
+  let viewMode = $state<'mesh' | 'behavior' | 'custom'>('behavior');
   let intentQuery = $state('');
   let isLoading = $state(false);
   let errorMsg = $state('');
@@ -379,16 +380,22 @@
     <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
       
       <!-- Studio View Mode Switcher -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto select-none">
+      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto select-none overflow-x-auto no-scrollbar">
+        <button 
+          onclick={() => viewMode = 'behavior'}
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'behavior' ? 'bg-amber-500 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Behavioral Intent (Adaptive)</span>
+        </button>
         <button 
           onclick={() => viewMode = 'mesh'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {viewMode === 'mesh' ? 'bg-amber-500 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'mesh' ? 'bg-amber-500 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          <span>Live Signal Mesh (Connected)</span>
+          <span>Signal Mesh (Connected)</span>
         </button>
         <button 
           onclick={() => viewMode = 'custom'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 {viewMode === 'custom' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'custom' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           <span>Custom Studio Grid ({widgets.length})</span>
         </button>
@@ -432,7 +439,10 @@
       {/if}
     </div>
 
-    {#if viewMode === 'mesh'}
+    {#if viewMode === 'behavior'}
+      <!-- LIVE BEHAVIORAL INTENT & ADAPTIVE PERSONA CONSOLE -->
+      <BehavioralIntentConsole />
+    {:else if viewMode === 'mesh'}
       <!-- LIVE INTER-WIDGET SIGNAL TELEMETRY MESH -->
       <SignalMeshConsole />
     {:else}
