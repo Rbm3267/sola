@@ -48,6 +48,31 @@
     'Solo & MCP'
   ];
 
+  function getPresetForIntegration(item: SaasIntegration): string {
+    const b = (item.badge || '').toLowerCase();
+    const id = (item.id || '').toLowerCase();
+    if (b.includes('servicenow') || id.includes('servicenow')) return 'servicenow';
+    if (b.includes('stripe') || id.includes('stripe') || id.includes('finance')) return 'stripe';
+    if (b.includes('shopify') || id.includes('shopify') || id.includes('cart')) return 'shopify';
+    if (b.includes('moveworks') || id.includes('moveworks')) return 'moveworks';
+    if (b.includes('linear') || id.includes('linear')) return 'linear';
+    if (b.includes('grafana') || b.includes('datadog') || id.includes('telemetry')) return 'grafana';
+    if (b.includes('vercel') || b.includes('cloudflare') || b.includes('aws') || id.includes('cloud')) return 'vercel';
+    return 'servicenow';
+  }
+
+  function getComponentParam(compName: string): string {
+    switch (compName) {
+      case 'IncidentTriageMatrix': return 'incident';
+      case 'ClusterMatrix': return 'cluster';
+      case 'FlowWaterfall': return 'waterfall';
+      case 'TactileDialCard': return 'dial';
+      case 'DataCard': return 'datacard';
+      case 'GaugeCard': return 'dial';
+      default: return 'incident';
+    }
+  }
+
   const filteredIntegrations = $derived(
     SAAS_ECOSYSTEM.filter(item => {
       const matchCat = activeCategory === 'All' || item.category === activeCategory;
@@ -197,7 +222,7 @@
               1-Click Embed
             </button>
             <a 
-              href="/preview"
+              href={'/preview?preset=' + getPresetForIntegration(selectedIntegration) + '&component=' + getComponentParam(selectedIntegration.primaryComponent)}
               class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-xs hover:bg-amber-600 flex items-center gap-1.5">
               <span>View on My UI</span>
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>

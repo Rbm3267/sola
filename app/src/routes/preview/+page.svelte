@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import Navbar from '$lib/components/Navbar.svelte';
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
   import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
@@ -18,6 +19,19 @@
   // Selected Sola Component to mount
   let activeComponent = $state<'incident' | 'cluster' | 'waterfall' | 'datacard' | 'dial'>('incident');
   let activeFramework = $state<'react' | 'vue' | 'swift' | 'html' | 'sola'>('react');
+
+  $effect(() => {
+    try {
+      const p = page.url.searchParams.get('preset');
+      const c = page.url.searchParams.get('component');
+      if (p && p in presets) {
+        selectedPreset = p as TemplatePreset;
+      }
+      if (c && ['incident', 'cluster', 'waterfall', 'datacard', 'dial'].includes(c)) {
+        activeComponent = c as any;
+      }
+    } catch (e) {}
+  });
 
   // Handle file drop for screenshot mode
   function handleFileUpload(e: Event) {
