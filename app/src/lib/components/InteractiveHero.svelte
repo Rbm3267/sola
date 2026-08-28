@@ -166,7 +166,7 @@
   </a>
 
   <!-- Main Headline -->
-  <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-slate-900 tracking-[-0.04em] leading-[1.05] mb-6 max-w-3xl">
+  <h1 class="text-3xl sm:text-6xl md:text-7xl font-black text-slate-900 tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
     UI that synthesizes from <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">intent</span>.
   </h1>
 

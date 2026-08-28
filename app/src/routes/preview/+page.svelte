@@ -18,7 +18,6 @@
   // Selected Sola Component to mount
   let activeComponent = $state<'incident' | 'cluster' | 'waterfall' | 'datacard' | 'dial'>('incident');
   let activeFramework = $state<'react' | 'vue' | 'html' | 'sola'>('react');
-  let overlayAnchor = $state<'top-center' | 'bottom-right' | 'in-grid'>('in-grid');
 
   // Handle file drop for screenshot mode
   function handleFileUpload(e: Event) {
@@ -41,11 +40,11 @@
   };
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 flex flex-col font-sans">
+<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 flex flex-col font-sans overflow-x-hidden w-full max-w-full">
   
   <Navbar />
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col gap-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col gap-6 overflow-x-hidden">
     
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200/80 pb-6">
@@ -54,76 +53,76 @@
           <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
           <span>In-Situ Preview Simulator</span>
         </div>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-[-0.03em]">
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-[-0.03em]">
           View on My UI
         </h1>
-        <p class="text-slate-600 text-sm max-w-2xl mt-1 leading-relaxed">
+        <p class="text-slate-600 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
           Simulate how Sola's zero-VDOM components, ambient signals, and Dynamic Island HUD seamlessly mount inside your existing application.
         </p>
       </div>
 
       <!-- Mode Selector -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 shadow-xs self-start md:self-auto select-none">
+      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 shadow-xs self-start md:self-auto select-none overflow-x-auto no-scrollbar max-w-full">
         <button 
           onclick={() => activeMode = 'preset'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'preset' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'preset' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
           Enterprise Host Presets
         </button>
         <button 
           onclick={() => activeMode = 'screenshot'}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'screenshot' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'screenshot' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
           Upload Screenshot / Figma
         </button>
       </div>
     </div>
 
     <!-- Controls Sub-Bar -->
-    <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
+    <div class="bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-full overflow-hidden">
       
       <!-- Sola Component Injected Selector -->
-      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
-        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Inject:</span>
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-1 sm:pb-0 select-none">
+        <span class="text-xs font-mono font-bold text-slate-400 uppercase shrink-0 mr-1">Inject:</span>
         <button 
           onclick={() => activeComponent = 'incident'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
           P1 Incident Matrix
         </button>
         <button 
           onclick={() => activeComponent = 'cluster'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
           Node Cluster Mesh
         </button>
         <button 
           onclick={() => activeComponent = 'waterfall'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
           Revenue Waterfall
         </button>
         <button 
           onclick={() => activeComponent = 'datacard'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
           KPI DataCard
         </button>
         <button 
           onclick={() => activeComponent = 'dial'}
-          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
           Tactile Touch Dial
         </button>
       </div>
 
       <!-- Preset Selection Chips -->
       {#if activeMode === 'preset'}
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full pb-1 sm:pb-0 select-none">
           {#each (['linear', 'stripe', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
             <button 
               onclick={() => selectedPreset = t}
-              class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'}">
-              <span class="w-2 h-2 rounded-full" style="background-color: {presets[t].brand}"></span>
+              class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'}">
+              <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {presets[t].brand}"></span>
               <span>{presets[t].name}</span>
             </button>
           {/each}
         </div>
       {:else}
-        <label class="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-mono font-bold cursor-pointer hover:bg-slate-800 flex items-center gap-2">
+        <label class="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-mono font-bold cursor-pointer hover:bg-slate-800 flex items-center gap-2 self-start sm:self-auto shrink-0">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span>Select PNG / Figma Frame</span>
           <input type="file" accept="image/*" onchange={handleFileUpload} class="hidden" />
@@ -133,73 +132,73 @@
     </div>
 
     <!-- Simulator Canvas Window -->
-    <div class="relative bg-slate-950 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden min-h-[600px] flex flex-col">
+    <div class="relative bg-slate-950 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-2xl overflow-hidden min-h-[460px] flex flex-col w-full max-w-full">
       
       <!-- Mock Browser Frame Chrome -->
-      <div class="h-11 bg-slate-900/90 border-b border-slate-800 flex items-center px-4 gap-2">
-        <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
-        <div class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></div>
-        <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></div>
+      <div class="h-10 bg-slate-900/90 border-b border-slate-800 flex items-center px-3 sm:px-4 gap-2">
+        <div class="w-2.5 h-2.5 rounded-full bg-red-400/80 shrink-0"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-amber-400/80 shrink-0"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80 shrink-0"></div>
         
-        <div class="flex-1 flex justify-center max-w-md mx-auto">
-          <div class="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-1 text-[11px] font-mono text-slate-400 text-center truncate">
+        <div class="flex-1 flex justify-center max-w-md mx-auto px-2">
+          <div class="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-2.5 py-0.5 text-[10px] sm:text-[11px] font-mono text-slate-400 text-center truncate">
             {activeMode === 'preset' ? `https://${selectedPreset}.app/workspace` : 'sandbox://in-situ-screenshot-stage'}
           </div>
         </div>
 
-        <div class="text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold">
-          Sola Zero-VDOM Active
+        <div class="text-[9px] sm:text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold whitespace-nowrap shrink-0">
+          Zero-VDOM Active
         </div>
       </div>
 
       <!-- Canvas Interior Surface -->
-      <div class="flex-1 relative overflow-auto p-6 flex items-center justify-center transition-colors duration-300" style="background-color: {activeMode === 'preset' ? presets[selectedPreset].bg : '#090d19'}">
+      <div class="flex-1 relative overflow-auto p-3 sm:p-6 flex items-center justify-center transition-colors duration-300 w-full max-w-full" style="background-color: {activeMode === 'preset' ? presets[selectedPreset].bg : '#090d19'}">
         
         {#if activeMode === 'preset'}
           
           <!-- Mock Host Dashboard UI Layout -->
-          <div class="w-full max-w-4xl flex flex-col gap-6" style="color: {presets[selectedPreset].text}">
+          <div class="w-full max-w-4xl flex flex-col gap-4 sm:gap-6" style="color: {presets[selectedPreset].text}">
             
             <!-- Host Top Bar -->
-            <div class="flex items-center justify-between border-b pb-4" style="border-color: {presets[selectedPreset].border}">
-              <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style="background: {presets[selectedPreset].brand}">
+            <div class="flex items-center justify-between border-b pb-3 sm:pb-4 gap-2" style="border-color: {presets[selectedPreset].border}">
+              <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm shrink-0" style="background: {presets[selectedPreset].brand}">
                   {presets[selectedPreset].name[0]}
                 </span>
-                <div>
-                  <div class="font-bold font-mono text-sm">{presets[selectedPreset].name} Workspace</div>
-                  <div class="text-[11px] opacity-60 font-mono">{presets[selectedPreset].subtext}</div>
+                <div class="min-w-0">
+                  <div class="font-bold font-mono text-xs sm:text-sm truncate">{presets[selectedPreset].name} Workspace</div>
+                  <div class="text-[10px] opacity-60 font-mono hidden sm:block">{presets[selectedPreset].subtext}</div>
                 </div>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs px-2.5 py-1 rounded-xl border font-mono" style="border-color: {presets[selectedPreset].border}">
-                  Host Cluster: us-east-1
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-lg sm:rounded-xl border font-mono whitespace-nowrap" style="border-color: {presets[selectedPreset].border}">
+                  Cluster: us-east-1
                 </span>
               </div>
             </div>
 
             <!-- Host Grid with Injected Sola Component -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
               
               <!-- Host Static Column -->
-              <div class="md:col-span-4 flex flex-col gap-4">
-                <div class="p-5 rounded-2xl border flex flex-col gap-2" style="background: {presets[selectedPreset].theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'}; border-color: {presets[selectedPreset].border}">
-                  <span class="text-xs font-mono opacity-60 uppercase">Host SLA Availability</span>
-                  <span class="text-2xl font-black font-mono">99.98%</span>
-                  <span class="text-xs text-emerald-500 font-mono">+0.04% vs 30-day target</span>
+              <div class="lg:col-span-4 flex flex-col gap-3 sm:gap-4">
+                <div class="p-4 sm:p-5 rounded-2xl border flex flex-col gap-1 sm:gap-2" style="background: {presets[selectedPreset].theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'}; border-color: {presets[selectedPreset].border}">
+                  <span class="text-[10px] sm:text-xs font-mono opacity-60 uppercase">Host SLA Availability</span>
+                  <span class="text-xl sm:text-2xl font-black font-mono">99.98%</span>
+                  <span class="text-[10px] sm:text-xs text-emerald-500 font-mono">+0.04% vs 30-day target</span>
                 </div>
-                <div class="p-5 rounded-2xl border flex flex-col gap-2" style="background: {presets[selectedPreset].theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'}; border-color: {presets[selectedPreset].border}">
-                  <span class="text-xs font-mono opacity-60 uppercase">Active Gateway Sessions</span>
-                  <span class="text-2xl font-black font-mono">142,800</span>
-                  <span class="text-xs opacity-60 font-mono">Across 42 Global Regions</span>
+                <div class="p-4 sm:p-5 rounded-2xl border flex flex-col gap-1 sm:gap-2" style="background: {presets[selectedPreset].theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'}; border-color: {presets[selectedPreset].border}">
+                  <span class="text-[10px] sm:text-xs font-mono opacity-60 uppercase">Active Gateway Sessions</span>
+                  <span class="text-xl sm:text-2xl font-black font-mono">142,800</span>
+                  <span class="text-[10px] sm:text-xs opacity-60 font-mono">Across 42 Global Regions</span>
                 </div>
               </div>
 
               <!-- INJECTED SOLA COMPONENT -->
-              <div class="md:col-span-8 relative group">
+              <div class="lg:col-span-8 relative group w-full max-w-full">
                 
                 <!-- Injection Highlight Badge -->
-                <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                <div class="absolute -top-3 left-3 sm:left-4 z-20 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[9px] sm:text-[10px] font-black shadow-md flex items-center gap-1.5">
                   <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
                   <span>Injected Sola Component</span>
                 </div>
@@ -253,9 +252,9 @@
           
           <div class="w-full max-w-3xl flex flex-col items-center gap-4">
             {#if uploadedImage}
-              <div class="relative rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
+              <div class="relative rounded-2xl overflow-hidden border border-slate-700 shadow-xl max-w-full">
                 <img src={uploadedImage} alt="Uploaded UI Mockup" class="w-full max-h-[480px] object-contain" />
-                <div class="absolute bottom-6 right-6 max-w-xs shadow-2xl">
+                <div class="absolute bottom-4 right-4 max-w-xs shadow-2xl">
                   <DataCard config={{
                     title: "Sola Overlay Widget",
                     value: "$184,200",
@@ -265,10 +264,10 @@
                 </div>
               </div>
             {:else}
-              <label class="w-full p-16 border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-3xl text-center flex flex-col items-center gap-3 cursor-pointer transition-all">
-                <svg class="w-12 h-12 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                <div class="text-sm font-mono text-slate-300 font-bold">Drop your Figma frame or App screenshot here</div>
-                <p class="text-xs font-mono text-slate-500">Supports PNG, JPG, WebP. Sola anchors live components over your mockup.</p>
+              <label class="w-full p-10 sm:p-16 border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-3xl text-center flex flex-col items-center gap-3 cursor-pointer transition-all">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <div class="text-xs sm:text-sm font-mono text-slate-300 font-bold">Drop your Figma frame or App screenshot here</div>
+                <p class="text-[10px] sm:text-xs font-mono text-slate-500">Supports PNG, JPG, WebP. Sola anchors live components over your mockup.</p>
                 <input type="file" accept="image/*" onchange={handleFileUpload} class="hidden" />
               </label>
             {/if}
@@ -281,21 +280,21 @@
     </div>
 
     <!-- 1-Click Embed Snippet Tray -->
-    <div class="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xs flex flex-col gap-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Embed in your host app:</span>
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs flex flex-col gap-3 sm:gap-4 max-w-full overflow-hidden">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3 gap-2">
+        <span class="text-[10px] sm:text-xs font-mono font-bold text-slate-400 uppercase truncate">Embed in your host app:</span>
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl shrink-0">
           {#each (['react', 'vue', 'html', 'sola'] as const) as fw}
             <button 
               onclick={() => activeFramework = fw}
-              class="px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer {activeFramework === fw ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
+              class="px-2.5 sm:px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer {activeFramework === fw ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
               {fw.toUpperCase()}
             </button>
           {/each}
         </div>
       </div>
 
-      <pre class="p-4 rounded-2xl bg-slate-900 text-white font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{#if activeFramework === 'react'}// In your React / Next.js app:
+      <pre class="p-4 rounded-2xl bg-slate-900 text-white font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800 max-w-full"><code>{#if activeFramework === 'react'}// In your React / Next.js app:
 import &#123; useSola &#125; from '@sola/react';
 import &#123; IncidentTriageMatrix &#125; from '@sola/ui/IncidentTriageMatrix';
 
