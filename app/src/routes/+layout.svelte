@@ -14,6 +14,7 @@
 
 <svelte:head>
 	<title>Sola</title>
+	<meta name="google-site-verification" content="WcTmhJBtVJPU0tzzt4XiIY4AfSDAywCA6RTgfowxVcw" />
 	<meta name="description" content="A reactive runtime and compiler for dynamic, ambient AI-driven user interfaces." />
 	<meta property="og:title" content="Sola — The Ambient Intent Framework (AIR)" />
 	<meta property="og:description" content="A reactive runtime and compiler for dynamic, ambient AI-driven user interfaces." />
