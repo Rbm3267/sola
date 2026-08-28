@@ -158,6 +158,42 @@ class ServiceNowConnector {
     return { rows: records, rowCount: records.length, table };
   }
 
+  async mutate(action, payload = {}) {
+    const table = payload.table || this.defaultTable;
+    const sysId = payload.sys_id || payload.id;
+    if (!sysId) throw new Error("sys_id is required to mutate ServiceNow record");
+
+    const baseUrl = this.instance.startsWith('http') ? this.instance : `https://${this.instance}.service-now.com`;
+    const endpoint = `${baseUrl}/api/now/table/${table}/${sysId}`;
+
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    } else if (this.username && this.password) {
+      const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+      headers['Authorization'] = `Basic ${auth}`;
+    }
+
+    const body = payload.data || payload.fields || {};
+    const res = await fetch(endpoint, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`ServiceNow mutation error (${res.status} ${res.statusText}): ${errText}`);
+    }
+
+    const data = await res.json();
+    return { success: true, result: data.result };
+  }
+
   async schema() {
     return {
       "incident": [
@@ -165,7 +201,16 @@ class ServiceNowConnector {
         { name: "short_description", type: "string" },
         { name: "priority", type: "string" },
         { name: "state", type: "string" },
-        { name: "assigned_to", type: "string" }
+        { name: "assigned_to", type: "string" },
+        { name: "urgency", type: "string" },
+        { name: "impact", type: "string" }
+      ],
+      "change_request": [
+        { name: "number", type: "string" },
+        { name: "short_description", type: "string" },
+        { name: "risk", type: "string" },
+        { name: "state", type: "string" },
+        { name: "start_date", type: "string" }
       ]
     };
   }

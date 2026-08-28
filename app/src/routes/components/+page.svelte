@@ -183,22 +183,23 @@
           </div>
 
           <!-- View Mode Switcher -->
-          <div class="flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto shrink-0">
+          <div class="flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto shrink-0 select-none">
             <button 
               onclick={() => viewMode = 'preview'}
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+              class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
               Live Preview
             </button>
             <button 
               onclick={() => viewMode = 'embed'}
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'embed' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+              class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'embed' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
               1-Click Embed
             </button>
-            <button 
-              onclick={() => viewMode = 'protocol'}
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'protocol' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-              Relay URI
-            </button>
+            <a 
+              href="/preview"
+              class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-xs hover:bg-amber-600 flex items-center gap-1.5">
+              <span>View on My UI</span>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
           </div>
         </div>
 

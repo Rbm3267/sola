@@ -70,9 +70,9 @@
         onclick={() => isAiModalOpen = true}
         class="flex items-center justify-between w-auto sm:w-60 md:w-64 h-9 sm:h-10 px-3 sm:px-4 rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-xs font-medium text-slate-500 hover:border-amber-400 hover:bg-white hover:text-slate-900 transition-all cursor-pointer shadow-xs group">
         <div class="flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
-          <span class="font-medium text-slate-700 hidden sm:inline">Ask Sola AI...</span>
-          <span class="font-medium text-slate-700 sm:hidden">Ask AI</span>
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500 group-hover:text-slate-900 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span class="font-medium text-slate-700 hidden sm:inline">Search docs & specs...</span>
+          <span class="font-medium text-slate-700 sm:hidden">Search</span>
         </div>
         <kbd class="hidden sm:inline text-[10px] font-mono bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500 font-bold group-hover:bg-amber-50 group-hover:text-amber-900 group-hover:border-amber-200 transition-colors">⌘K</kbd>
       </button>
