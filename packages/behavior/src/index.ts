@@ -1,6 +1,7 @@
 // ─── Sola Behavioral Intent Engine (@sola/behavior) ───
 // Real-time implicit generative adaptation based on interaction telemetry.
 // 100% Client-Side Privacy: zero keystrokes logged, only local timing vectors.
+// Touch-device compatible: long-press = hover dwell on mobile.
 
 export type PersonaType = 'visual_explorer' | 'sre_commander' | 'finops_auditor';
 
@@ -13,6 +14,8 @@ export interface BehavioralMetrics {
   densityMode: 'comfortable' | 'compact' | 'emergency';
 }
 
+const STORAGE_KEY = 'sola_behavior_persona';
+
 export class BehavioralObserver {
   private keydownTimestamps: number[] = [];
   private dwellTimer: any = null;
@@ -20,6 +23,7 @@ export class BehavioralObserver {
   private dwellStart = 0;
   private clickTimestamps: Map<string, number[]> = new Map();
   private listeners: Set<(metrics: BehavioralMetrics) => void> = new Set();
+  private touchMoved = false;
 
   private state: BehavioralMetrics = {
     typingVelocityCps: 0,
@@ -32,29 +36,43 @@ export class BehavioralObserver {
 
   constructor() {
     if (typeof window !== 'undefined') {
+      this.loadPersistedPersona();
       this.attachGlobalListeners();
     }
   }
 
+  private loadPersistedPersona() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === 'sre_commander' || saved === 'finops_auditor') {
+        this.state.persona = saved;
+      }
+    } catch {}
+  }
+
+  private persistPersona() {
+    try {
+      localStorage.setItem(STORAGE_KEY, this.state.persona);
+    } catch {}
+  }
+
   private emit() {
     this.recalculatePersona();
+    this.persistPersona();
     this.listeners.forEach(fn => {
       try { fn({ ...this.state }); } catch (e) { console.error(e); }
     });
   }
 
   private recalculatePersona() {
-    // If user is clicking rapidly or on an incident -> SRE Commander
     if (this.state.rageClickCount >= 2 || this.state.activeDwellTarget === 'incident') {
       this.state.persona = 'sre_commander';
       this.state.densityMode = 'emergency';
     } 
-    // If typing fast (>5 CPS) -> SRE Power User / Compact
     else if (this.state.typingVelocityCps >= 5) {
       this.state.persona = 'sre_commander';
       this.state.densityMode = 'compact';
     } 
-    // If dwelling on FinOps or Cost cards -> FinOps Auditor
     else if (this.state.activeDwellTarget === 'finops' || this.state.activeDwellTarget === 'waterfall') {
       this.state.persona = 'finops_auditor';
       this.state.densityMode = 'comfortable';
@@ -68,7 +86,6 @@ export class BehavioralObserver {
   public registerKeyStroke() {
     const now = performance.now();
     this.keydownTimestamps.push(now);
-    // Keep last 10 keystrokes
     if (this.keydownTimestamps.length > 10) this.keydownTimestamps.shift();
 
     if (this.keydownTimestamps.length >= 2) {
@@ -80,6 +97,7 @@ export class BehavioralObserver {
     this.emit();
   }
 
+  // Works for both mouse hover AND touch long-press
   public registerHoverStart(targetId: string, onDwellThreshold?: () => void, thresholdMs = 1200) {
     this.currentDwellId = targetId;
     this.dwellStart = performance.now();
@@ -107,10 +125,36 @@ export class BehavioralObserver {
     }
   }
 
+  // Touch-specific: call on touchstart, starts dwell timer
+  // touchmove cancels it, touchend cancels it
+  public registerTouchStart(targetId: string, onDwellThreshold?: () => void, thresholdMs = 800) {
+    this.touchMoved = false;
+    this.registerHoverStart(targetId, onDwellThreshold, thresholdMs);
+  }
+
+  public registerTouchMove() {
+    this.touchMoved = true;
+    // User is scrolling, cancel dwell
+    if (this.currentDwellId) {
+      this.registerHoverEnd(this.currentDwellId);
+    }
+  }
+
+  public registerTouchEnd(targetId: string) {
+    // Only end dwell if touch didn't trigger a scroll
+    if (!this.touchMoved) {
+      // Keep dwell active briefly so user can see the expanded state
+      setTimeout(() => {
+        this.registerHoverEnd(targetId);
+      }, 2500);
+    } else {
+      this.registerHoverEnd(targetId);
+    }
+  }
+
   public registerClick(targetId: string, onRageClick?: () => void) {
     const now = performance.now();
     const history = this.clickTimestamps.get(targetId) || [];
-    // Keep clicks within the last 600ms
     const recent = [...history.filter(t => now - t < 600), now];
     this.clickTimestamps.set(targetId, recent);
 

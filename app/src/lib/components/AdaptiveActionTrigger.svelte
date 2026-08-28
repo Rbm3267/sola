@@ -75,6 +75,9 @@
     class="relative inline-flex flex-col transition-all duration-200"
     onmouseenter={() => behavioralObserver.registerHoverStart(targetId, undefined, 800)}
     onmouseleave={() => behavioralObserver.registerHoverEnd(targetId)}
+    ontouchstart={() => behavioralObserver.registerTouchStart(targetId, undefined, 800)}
+    ontouchmove={() => behavioralObserver.registerTouchMove()}
+    ontouchend={() => behavioralObserver.registerTouchEnd(targetId)}
   >
     
     <!-- CALM STATE: Minimal Ambient Badge -->

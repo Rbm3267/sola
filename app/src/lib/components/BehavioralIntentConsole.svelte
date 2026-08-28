@@ -36,12 +36,26 @@
     behavioralObserver.registerKeyStroke();
   }
 
+  // Mouse events (desktop)
   function handleHoverStart(target: string) {
     behavioralObserver.registerHoverStart(target, undefined, 800);
   }
 
   function handleHoverEnd(target: string) {
     behavioralObserver.registerHoverEnd(target);
+  }
+
+  // Touch events (mobile long-press = hover dwell)
+  function handleTouchStart(target: string) {
+    behavioralObserver.registerTouchStart(target, undefined, 800);
+  }
+
+  function handleTouchMove() {
+    behavioralObserver.registerTouchMove();
+  }
+
+  function handleTouchEnd(target: string) {
+    behavioralObserver.registerTouchEnd(target);
   }
 
   function handleNodeClick(target: string) {
@@ -146,11 +160,14 @@
       <div 
         onmouseenter={() => handleHoverStart('incident')}
         onmouseleave={() => handleHoverEnd('incident')}
+        ontouchstart={() => handleTouchStart('incident')}
+        ontouchmove={handleTouchMove}
+        ontouchend={() => handleTouchEnd('incident')}
         class="relative group cursor-pointer transition-all">
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-          <span>ServiceNow Incident Target (Dwell >0.8s)</span>
+          <span>ServiceNow Incident (Hold to inspect)</span>
         </div>
 
         <IncidentTriageMatrix config={{
@@ -183,11 +200,12 @@
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div 
         onclick={() => handleNodeClick('degraded-node')}
+        ontouchend={() => handleNodeClick('degraded-node')}
         class="relative group cursor-pointer transition-all">
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
-          <span>AWS Worker Target (Tap 3x rapidly to rage-click)</span>
+          <span>AWS Worker (Tap 3x rapidly)</span>
         </div>
 
         <GaugeCard config={{
@@ -215,11 +233,14 @@
       <div 
         onmouseenter={() => handleHoverStart('finops')}
         onmouseleave={() => handleHoverEnd('finops')}
+        ontouchstart={() => handleTouchStart('finops')}
+        ontouchmove={handleTouchMove}
+        ontouchend={() => handleTouchEnd('finops')}
         class="relative group cursor-pointer transition-all">
         
         <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
-          <span>FinOps Domain Target (Hover to preview dunning)</span>
+          <span>FinOps Revenue (Hold to inspect)</span>
         </div>
 
         <FlowWaterfall config={{
