@@ -264,7 +264,7 @@ You are an expert developer building applications with Sola (zero-VDOM ambient r
 When writing Sola components (.sola files), strictly follow these language rules:
 
 1. COMPONENT FORMAT (.sola):
-   - Combine <` + `script>, HTML markup, and <` + `style> in one file.
+   - Combine <` + `script>, HTML markup, and scoped CSS styles in one file.
    - Use 'let count = $state(initialValue)' for reactive signals.
    - Use 'let doubled = $derived(expression)' for computed values.
    - Handlers attach directly: <button onclick={increment}>Scale +1</button>.
