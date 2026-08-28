@@ -470,8 +470,8 @@ export class RelayServer {
 
     // Connect to all configured data sources
     connectAll().then(() => {
-      server.listen(this.port, () => {
-        console.log(`  Relay listening on http://localhost:${this.port}\n`);
+      server.listen(this.port, '127.0.0.1', () => {
+        console.log(`  Relay listening on http://127.0.0.1:${this.port}\n`);
       });
     });
   }
