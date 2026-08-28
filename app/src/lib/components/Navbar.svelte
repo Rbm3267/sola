@@ -50,6 +50,11 @@
           Interactive Docs
         </a>
         <a 
+          href="/preview" 
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/preview') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
+          View on My UI
+        </a>
+        <a 
           href="/demo" 
           class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo') ? 'text-amber-950 bg-amber-500/10 font-bold border border-amber-500/25 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'}">
           Studio Playground
@@ -121,6 +126,13 @@
         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/docs') ? 'text-amber-950 bg-amber-500/10 border border-amber-500/25' : 'text-slate-700 hover:bg-slate-50'}">
         <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
         <span>Interactive Docs</span>
+      </a>
+      <a 
+        href="/preview" 
+        onclick={() => isMobileMenuOpen = false}
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/preview') ? 'text-amber-950 bg-amber-500/10 border border-amber-500/25' : 'text-slate-700 hover:bg-slate-50'}">
+        <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span>View on My UI</span>
       </a>
       <a 
         href="/demo" 
