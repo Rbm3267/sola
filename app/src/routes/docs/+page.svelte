@@ -41,8 +41,7 @@
     {
       name: 'SAAS ORCHESTRATION',
       items: [
-        { id: 'relay-saas', title: 'Sola Relay SaaS Deployment' },
-        { id: 'operations', title: 'Operational & Persona Guide' }
+        { id: 'relay-saas', title: 'Sola Relay SaaS Deployment' }
       ]
     }
   ];
@@ -717,58 +716,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
             </div>
           </div>
 
-        {:else if activeSection === 'operations'}
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>User Personas</span>
-            </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Operational & Persona Guide</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6 font-sans">
-              Sola delineates clear platform boundaries between application developers, sysadmins, and security engineers.
-            </p>
 
-            <div class="flex flex-col gap-6">
-              <!-- Developer -->
-              <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 flex gap-4">
-                <div class="p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-700 w-10 h-10 flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-950 text-xs font-mono">Application Developers</h3>
-                  <p class="text-[11px] text-slate-600 mt-1 leading-normal">
-                    Code <code>.sola</code> components, use fine-grained signals (<code>$state</code>, <code>$derived</code>), and build custom business views. Bind real-time data inputs via <code>$data</code> without handling async boilerplates, API intervals, or local cache state.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Admin -->
-              <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 flex gap-4">
-                <div class="p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-700 w-10 h-10 flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-950 text-xs font-mono">System Administrators</h3>
-                  <p class="text-[11px] text-slate-600 mt-1 leading-normal">
-                    Deploy, run, and scale Sola Relay instances inside protected private subnets close to your data assets. Admins manage the <code>relay.json</code> configuration, register database clusters, and monitor latency metrics.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Security -->
-              <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 flex gap-4">
-                <div class="p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-700 w-10 h-10 flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-950 text-xs font-mono">Security Engineers</h3>
-                  <p class="text-[11px] text-slate-600 mt-1 leading-normal">
-                    Assure zero-knowledge perimeter containment. Credentials for downstream resources (PostgreSQL, ServiceNow tokens) never leave the Sola Relay boundary. Security enforces table read-only limits, query scopes, and staging authorization gates.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        {/if}
 
       </main>
 
