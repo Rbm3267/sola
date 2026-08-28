@@ -13,6 +13,16 @@
   let sandboxTitle = $state('Active Cluster Telemetry');
   let sandboxValue = $state('1,420 RPS');
 
+  // Copy Feedback State
+  let copiedId = $state('');
+  function handleCopy(text: string, id: string) {
+    navigator.clipboard.writeText(text);
+    copiedId = id;
+    setTimeout(() => {
+      if (copiedId === id) copiedId = '';
+    }, 2000);
+  }
+
   const groups = [
     {
       name: 'GETTING STARTED',
@@ -22,16 +32,16 @@
       ]
     },
     {
-      name: 'REACTIVITY ENGINE',
+      name: 'DEVELOPER API REFERENCE',
       items: [
-        { id: 'intent', title: 'Ambient Intent Signals ($intent)' },
-        { id: 'data', title: 'Remote Data Signals ($data)' },
-        { id: 'engine', title: 'Compiler & Zero-VDOM Engine' }
+        { id: 'api-reactivity', title: 'Core Reactivity Primitives' },
+        { id: 'api-macros', title: 'Compiler Macro Primitives' }
       ]
     },
     {
-      name: 'OPERATIONS',
+      name: 'SAAS ORCHESTRATION',
       items: [
+        { id: 'relay-saas', title: 'Sola Relay SaaS Deployment' },
         { id: 'operations', title: 'Operational & Persona Guide' }
       ]
     }
@@ -66,13 +76,15 @@
     }
   }
 
-  onMount(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('ai') === 'true') {
-      const input = document.getElementById('ai-ask-input');
-      input?.focus();
-    }
-  });
+  const scaffoldCmd = `npm create sola@latest my-sola-app`;
+  const installCmd = `npm install @sola/core @sola/compiler @sola/vite-plugin-sola`;
+  
+  const viteConfigCode = `import { defineConfig } from 'vite';
+import sola from '@sola/vite-plugin-sola';
+
+export default defineConfig({
+  plugins: [sola()]
+});`;
 
   const syntaxExample = `<` + `script>
   export let title = "Cluster Dashboard";
@@ -99,40 +111,129 @@
   }
 </style>`;
 
-  const intentExample = `<` + `script>
-  // $intent resolves plain-language requests into compiled UI
-  const view = $intent("Show active database clusters with latency sparklines");
+  const signalExample = `import { createSignal } from '@sola/core';
+
+// 1. Initialize local reactive signal
+const [count, setCount] = createSignal(10);
+
+// 2. Read value (getter function invocation)
+console.log(count()); // -> 10
+
+// 3. Mutate value (setter function invocation)
+setCount(25);
+console.log(count()); // -> 25`;
+
+  const derivedExample = `import { createSignal, createDerived } from '@sola/core';
+
+const [width, setWidth] = createSignal(5);
+const [height, setHeight] = createSignal(10);
+
+// Derived value recalculates when either dependency updates
+const area = createDerived(() => width() * height());
+
+console.log(area()); // -> 50
+setWidth(8);
+console.log(area()); // -> 80`;
+
+  const effectExample = `import { createSignal, createEffect } from '@sola/core';
+
+const [volume, setVolume] = createSignal(80);
+
+// Effect runs immediately, tracks dependency automatically
+const cleanup = createEffect(() => {
+  console.log(\`System volume changed to \${volume()}\`);
+  
+  // Return optional cleanup handler
+  return () => {
+    console.log('Cleaning up previous volume subscription listeners');
+  };
+});
+
+setVolume(95); // Output: "System volume changed to 95"`;
+
+  const mountExample = `import MyCard from './MyCard.sola';
+
+// Mount the compiled component constructor into target container
+const unmount = MyCard(document.getElementById('widget-dock'), {
+  title: 'Active Load Balancers',
+  nodes: 12
+});
+
+// To destroy component and clean up state/DOM:
+// unmount();`;
+
+  const intentMacroExample = `<` + `script>
+  // Transpiles to createIntent("Show cluster metric graphs")
+  const analyticsWidget = $intent("Show cluster metric graphs");
 </` + `script>
 
-<!-- Mounts the synthesized reactive component tree -->
-<svelte:component this={view} />`;
+<div class="app-stage">
+  <svelte:component this={analyticsWidget} />
+</div>`;
 
-  const dataExample = `<` + `script>
-  // 1-line reactive binding to any Google Sheet or remote API
+  const dataMacroExample = `<` + `script>
+  // Transpiles to createData("postgres-primary:billing_summary")
   const fitness = $data("sheet://1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms");
 </` + `script>
 
-<!-- Pure reactive data surfaces without async boilerplate -->
 <div class="grid grid-cols-2 gap-4">
   <DataCard title="Daily Volume" value="{fitness.volume} lbs" trend="{fitness.delta}" />
-  <GaugeCard title="Recovery Index" value="{fitness.recovery} / 100" percentage={fitness.recovery} />
 </div>`;
 
-  const engineExample = `// Sola compiled output: Pure direct DOM node manipulation
-export function mount(__target, props = {}) {
-  const root = document.createElement('div');
-  root.className = 'sola-metric-card';
+  const dockerfileCode = `FROM node:20-alpine
 
-  const textNode = document.createTextNode(props.value || '0');
-  root.appendChild(textNode);
+WORKDIR /app
 
-  // Fine-grained signal subscription (No VDOM diffing loop!)
-  createEffect(() => {
-    textNode.data = props.value();
-  });
+# Install standard dependencies
+COPY package*.json ./
+RUN npm ci --only=production
 
-  __target.appendChild(root);
-  return () => __target.removeChild(root);
+# Bundle Sola Relay source
+COPY src/ ./src
+COPY relay.json ./
+
+EXPOSE 4040
+
+# Run in production cluster
+CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
+
+  const nginxCode = `server {
+    listen 443 ssl http2;
+    server_name relay.my-saas.com;
+
+    ssl_certificate /etc/letsencrypt/live/relay.my-saas.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/relay.my-saas.com/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:4040;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        
+        # Enforce rate limits
+        limit_req zone=one burst=20 nodelay;
+    }
+}`;
+
+  const relayJsonCode = `{
+  "datasources": {
+    "googlesheet-main": {
+      "type": "googlesheets",
+      "sheetId": "1WwRxcYopR7nCVKiu3ZcYuPiqdeBASwkAtYAHjWV3x8w"
+    },
+    "customer-db": {
+      "type": "postgres",
+      "host": "database-internal.my-subnet.co",
+      "port": 5432,
+      "database": "billing_prod",
+      "user": "sola_read_only",
+      "password": "ENV_SOLA_DB_PASSWORD"
+    }
+  }
 }`;
 </script>
 
@@ -227,28 +328,56 @@ export function mount(__target, props = {}) {
             <p class="text-slate-600 text-sm leading-relaxed mb-4">
               Use the official initializer to create a new Sola app scaffolded with Vite and Tailwind configuration:
             </p>
-            <div class="bg-slate-900 text-amber-400 p-4 rounded-2xl font-mono text-xs sm:text-sm mb-6 shadow-inner">
-              <code>$ npm create sola@latest my-sola-app</code>
+            <div class="relative group mb-6">
+              <div class="bg-slate-900 text-amber-400 p-5 rounded-2xl font-mono text-xs sm:text-sm shadow-inner">
+                <code>$ {scaffoldCmd}</code>
+              </div>
+              <button 
+                onclick={() => handleCopy(scaffoldCmd, 'scaffold')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'scaffold'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
             </div>
 
             <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Install Monorepo Packages Directly</h3>
             <p class="text-slate-600 text-sm leading-relaxed mb-4">
               If you are integrating Sola into an existing monorepo or standard Vite workspace, install the individual core packages from NPM:
             </p>
-            <div class="bg-slate-900 text-amber-400 p-4 rounded-2xl font-mono text-xs sm:text-sm mb-6 shadow-inner">
-              <code>$ npm install @sola/core @sola/compiler @sola/vite-plugin-sola</code>
+            <div class="relative group mb-6">
+              <div class="bg-slate-900 text-amber-400 p-5 rounded-2xl font-mono text-xs sm:text-sm shadow-inner">
+                <code>$ {installCmd}</code>
+              </div>
+              <button 
+                onclick={() => handleCopy(installCmd, 'install')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'install'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
             </div>
 
             <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Configure Vite Plugin</h3>
             <p class="text-slate-600 text-sm leading-relaxed mb-4">
               Add the Sola plugin to your <code>vite.config.js</code> to enable compiling of <code>.sola</code> single-file components:
             </p>
-            <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800 mb-6"><code>import { defineConfig } from 'vite';
-import sola from '@sola/vite-plugin-sola';
-
-export default defineConfig({
-  plugins: [sola()]
-});</code></pre>
+            <div class="relative group mb-6">
+              <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{viteConfigCode}</code></pre>
+              <button 
+                onclick={() => handleCopy(viteConfigCode, 'vite-config')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'vite-config'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
           </div>
 
         {:else if activeSection === 'syntax'}
@@ -260,7 +389,18 @@ export default defineConfig({
             <p class="text-slate-600 text-sm leading-relaxed mb-6">
               Sola components are single-file, declarative modules that combine logic, layout, and scoped styles without virtual DOM runtime overhead:
             </p>
-            <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-8"><code>{syntaxExample}</code></pre>
+            <div class="relative group mb-8">
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{syntaxExample}</code></pre>
+              <button 
+                onclick={() => handleCopy(syntaxExample, 'syntax')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'syntax'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
 
             <!-- Live Editable Component Sandbox -->
             <div class="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-sm flex flex-col gap-6">
@@ -301,67 +441,202 @@ export default defineConfig({
 
           </div>
 
-        {:else if activeSection === 'intent'}
+        {:else if activeSection === 'api-reactivity'}
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Generative UI</span>
+              <span>Developer Reference</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Ambient Intent Signals ($intent)</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              Use the built-in compiler macro <code>$intent(prompt)</code> to declare sections of your UI that automatically resolve and materialize layout structures on the fly:
-            </p>
-            <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-6"><code>{intentExample}</code></pre>
+            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Core Reactivity API</h1>
+            
+            <!-- createSignal -->
+            <div class="border-b border-slate-100 pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 font-mono">createSignal(initialValue)</h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Generates a reactive local state tuple. Reading invoking the getter subscribes current running effects. Calling setter triggers reactive execution.
+              </p>
+              <div class="relative group mt-3">
+                <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto"><code>{signalExample}</code></pre>
+                <button 
+                  onclick={() => handleCopy(signalExample, 'api-sig')}
+                  class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'api-sig'}
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  {:else}
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
+            </div>
+
+            <!-- createDerived -->
+            <div class="border-b border-slate-100 pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 font-mono">createDerived(fn)</h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Establishes derived values that automatically track dependency changes. Computed value caches and recalculates only when dependencies mutate.
+              </p>
+              <div class="relative group mt-3">
+                <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto"><code>{derivedExample}</code></pre>
+                <button 
+                  onclick={() => handleCopy(derivedExample, 'api-der')}
+                  class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'api-der'}
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  {:else}
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
+            </div>
+
+            <!-- createEffect -->
+            <div class="border-b border-slate-100 pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 font-mono">createEffect(callback)</h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Defines runtime side effects. Fires immediately on initialization and registers subscriptions on getters accessed inside callback.
+              </p>
+              <div class="relative group mt-3">
+                <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto"><code>{effectExample}</code></pre>
+                <button 
+                  onclick={() => handleCopy(effectExample, 'api-eff')}
+                  class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'api-eff'}
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  {:else}
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
+            </div>
+
+            <!-- mount -->
+            <div>
+              <h2 class="text-lg font-bold text-slate-900 font-mono">Component Mount Instantiation</h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Compiled Sola components export a default function executing mount. Arguments require target container node and properties schema map. Returns an unmount handler function.
+              </p>
+              <div class="relative group mt-3">
+                <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto"><code>{mountExample}</code></pre>
+                <button 
+                  onclick={() => handleCopy(mountExample, 'api-mnt')}
+                  class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'api-mnt'}
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  {:else}
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
+            </div>
+
           </div>
 
-        {:else if activeSection === 'data'}
+        {:else if activeSection === 'api-macros'}
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Data Plurality</span>
+              <span>Compiler Macros</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Remote Data Signals ($data)</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-              Connect Google Sheets, PostgreSQL, MySQL, or ServiceNow endpoints in a single line of declarative code. Sola manages connection lifecycle, auto-polling, and real-time reactive signals automatically:
-            </p>
-            <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-6"><code>{dataExample}</code></pre>
+            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Sola Compiler Macros</h1>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Running Sola Relay</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-              Because Sola operates on a zero-knowledge data plane, database credentials are never sent to the cloud. Install and run Sola Relay locally in your subnet:
-            </p>
-            <div class="bg-slate-900 text-amber-400 p-4 rounded-2xl font-mono text-xs sm:text-sm mb-6 shadow-inner">
-              <code>$ npm install -g @sola/relay<br/>$ sola-relay --config ./relay.json --port 4040</code>
+            <!-- $intent -->
+            <div class="border-b border-slate-100 pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 font-mono">$intent(prompt, options)</h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Declared in script sections to resolve plain-text prompts into dynamically bound UI. Transpiles to core execution handler that polls Gemini AST models.
+              </p>
+              <div class="relative group mt-3">
+                <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto"><code>{intentMacroExample}</code></pre>
+                <button 
+                  onclick={() => handleCopy(intentMacroExample, 'macro-int')}
+                  class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'macro-int'}
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  {:else}
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
             </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Configuring Datasources (relay.json)</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-              Define target connections in your local <code>relay.json</code> file:
-            </p>
-            <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800 mb-6"><code>{
-  "datasources": {
-    "finance-ops": {
-      "type": "googlesheets",
-      "sheetId": "1WwRxcYopR7nCVKiu3ZcYuPiqdeBASwkAtYAHjWV3x8w"
-    },
-    "postgres-replica": {
-      "type": "postgres",
-      "host": "localhost",
-      "database": "production_telemetry",
-      "user": "sola_read",
-      "password": "ENV_DB_PASSWORD"
-    }
-  }
-}</code></pre>
+            <!-- $data -->
+            <div>
+              <h2 class="text-lg font-bold text-slate-900 font-mono">$data(sourceUri, options)</h2>
+              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                Binds properties to remote live datasources. Transpiles to WebSocket signals polling target proxy configurations inside Sola Relay.
+              </p>
+              <div class="relative group mt-3">
+                <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto"><code>{dataMacroExample}</code></pre>
+                <button 
+                  onclick={() => handleCopy(dataMacroExample, 'macro-dat')}
+                  class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'macro-dat'}
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  {:else}
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
+            </div>
+          </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Supported URI Protocols</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-              <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
-                <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">sheet://[id]</h4>
-                <p class="text-[11px] text-slate-500 leading-normal">Zero-backend Google Sheets reader. Auto-extracts column headers and streams row data.</p>
-              </div>
-              <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
-                <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">postgres://...</h4>
-                <p class="text-[11px] text-slate-500 leading-normal">Zero-knowledge relay proxy. Database credentials remain strictly on your local machine.</p>
-              </div>
+        {:else if activeSection === 'relay-saas'}
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+              <span>SaaS Production Guide</span>
+            </div>
+            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Sola Relay SaaS Deployment</h1>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+              To utilize Sola inside a production multi-tenant SaaS application, deploy Sola Relay close to your target databases and expose it via a secure reverse proxy with SSL termination.
+            </p>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Docker Deployment (Containerization)</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Orchestrate the Sola Relay server using a lightweight Node.js Docker container:
+            </p>
+            <div class="relative group mb-6">
+              <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{dockerfileCode}</code></pre>
+              <button 
+                onclick={() => handleCopy(dockerfileCode, 'adm-dock')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'adm-dock'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Reverse Proxy SSL Routing (Nginx)</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Map public requests securely to Sola Relay via an Nginx block with WebSockets upgrades support:
+            </p>
+            <div class="relative group mb-6">
+              <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{nginxCode}</code></pre>
+              <button 
+                onclick={() => handleCopy(nginxCode, 'adm-ngx')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'adm-ngx'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Datasources Configuration</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Use environment variables inside <code>relay.json</code> to load database passwords securely at runtime:
+            </p>
+            <div class="relative group mb-6">
+              <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{relayJsonCode}</code></pre>
+              <button 
+                onclick={() => handleCopy(relayJsonCode, 'adm-json')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'adm-json'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
             </div>
           </div>
 
@@ -374,7 +649,18 @@ export default defineConfig({
             <p class="text-slate-600 text-sm leading-relaxed mb-6">
               Sola compiles template nodes into <strong>direct native DOM updates</strong> instead of running Virtual DOM diffing routines:
             </p>
-            <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-6"><code>{engineExample}</code></pre>
+            <div class="relative group mb-6">
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{engineExample}</code></pre>
+              <button 
+                onclick={() => handleCopy(engineExample, 'syntax-eng')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'syntax-eng'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
                 <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">3.2 kB Core Bundle</h4>
