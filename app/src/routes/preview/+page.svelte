@@ -166,113 +166,93 @@
           <div class="w-full max-w-4xl flex flex-col gap-4 sm:gap-6" style="color: {presets[selectedPreset].text}">
             
             {#if selectedPreset === 'servicenow'}
-              <!-- Authentic ServiceNow Next Experience / Polaris & Employee Center (/esc) Layout -->
-              <div class="flex flex-col gap-3 font-sans text-slate-200">
-                <!-- ServiceNow Polaris Top Header Bar -->
-                <div class="bg-[#0b1620] -mx-3 -mt-3 sm:-mx-6 sm:-mt-6 p-3 rounded-t-2xl sm:rounded-t-3xl flex items-center justify-between border-b border-[#1b2b3a]">
-                  <div class="flex items-center gap-4">
+              <!-- Official ServiceNow Employee Center (ec_ticket_page) Standard Ticket Page Layout -->
+              <div class="flex flex-col gap-4 font-sans text-slate-200">
+                
+                <!-- ServiceNow Portal Header & Breadcrumbs (navbar-default) -->
+                <div class="bg-[#162638] -mx-3 -mt-3 sm:-mx-6 sm:-mt-6 p-3 sm:p-4 rounded-t-2xl sm:rounded-t-3xl flex items-center justify-between border-b border-[#253950]">
+                  <div class="flex items-center gap-3">
                     <div class="flex items-center gap-2">
-                      <span class="w-6 h-6 rounded bg-[#293e40] border border-[#3b595b] flex items-center justify-center font-mono font-bold text-xs text-[#81b5a1]">now</span>
-                      <span class="font-bold text-sm text-slate-100 tracking-tight">ServiceNow</span>
+                      <span class="w-6 h-6 rounded-md bg-[#81b5a1] flex items-center justify-center font-bold text-xs text-[#0e1924]">sn</span>
+                      <span class="font-bold text-sm tracking-tight text-white">ServiceNow Employee Center</span>
                     </div>
-                    <div class="hidden md:flex items-center gap-1 text-xs font-mono text-slate-300">
-                      <button class="px-2.5 py-1 rounded bg-[#162638] text-slate-200 font-bold border border-[#253950] flex items-center gap-1">
-                        <span>Workspaces</span>
-                        <span class="text-[9px] opacity-60">▼</span>
-                      </button>
-                      <button class="px-2.5 py-1 rounded hover:bg-[#162638] text-slate-300">All</button>
-                      <button class="px-2.5 py-1 rounded hover:bg-[#162638] text-slate-300">Favorites</button>
-                      <button class="px-2.5 py-1 rounded bg-[#81b5a1]/20 text-[#81b5a1] font-bold border border-[#81b5a1]/30">Employee Center (/esc)</button>
+                    <div class="hidden md:flex items-center gap-2 text-xs font-mono text-slate-300 ml-4">
+                      <span class="opacity-60">Home</span>
+                      <span class="opacity-40">/</span>
+                      <span class="opacity-60">My Requests</span>
+                      <span class="opacity-40">/</span>
+                      <span class="text-[#81b5a1] font-bold">Standard Ticket View (INC009481)</span>
                     </div>
                   </div>
                   <div class="flex items-center gap-3">
                     <div class="relative hidden sm:block">
-                      <input type="text" placeholder="Type / to search incidents, CIs, KB..." class="px-3 py-1 rounded bg-[#162638] text-slate-200 placeholder-slate-400 text-xs border border-[#253950] outline-none w-56 focus:w-72 transition-all font-mono" />
+                      <input type="text" placeholder="Search for help, KB, or requests..." class="px-3 py-1.5 rounded bg-[#0e1924] text-slate-200 placeholder-slate-400 text-xs border border-[#253950] outline-none w-52 focus:w-64 transition-all" />
                     </div>
-                    <div class="flex items-center gap-2">
-                      <div class="relative w-7 h-7 rounded-full bg-[#293e40] border border-[#81b5a1]/50 text-white font-bold text-xs flex items-center justify-center">
-                        <span>JD</span>
-                        <span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-[#0b1620]"></span>
-                      </div>
-                      <span class="text-xs font-mono hidden lg:inline text-slate-300">John Doe (Admin)</span>
-                    </div>
+                    <div class="w-7 h-7 rounded-full bg-[#81b5a1] text-[#0e1924] font-bold text-xs flex items-center justify-center shadow-xs">JD</div>
                   </div>
                 </div>
 
-                <!-- ServiceNow ESC Navigation Bar -->
-                <div class="bg-[#142230] -mx-3 sm:-mx-6 px-4 py-2 flex items-center justify-between border-b border-[#203244] text-xs font-mono">
-                  <div class="flex items-center gap-3 text-slate-300">
-                    <span class="font-bold text-[#81b5a1]">Employee Center</span>
-                    <span class="opacity-40">/</span>
-                    <span class="opacity-80">Incident Management</span>
-                    <span class="opacity-40">/</span>
-                    <span class="text-amber-400 font-bold">INC009481</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-bold">State: In Progress</span>
-                    <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold">P1 - Critical</span>
-                  </div>
-                </div>
-
-                <!-- ServiceNow Ticket Form Header Bar -->
-                <div class="p-3.5 rounded-xl bg-[#142230] border border-[#203244] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <!-- Ticket Header Banner Panel (panel panel-default) -->
+                <div class="p-4 rounded-xl bg-[#162638] border border-[#253950] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
                   <div>
-                    <div class="text-[10px] font-mono text-[#81b5a1] uppercase font-bold tracking-wide">Incident Form • Task #INC009481</div>
-                    <h2 class="text-sm sm:text-base font-bold text-slate-100">Production Aurora PostgreSQL Ingress Latency Degradation</h2>
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="px-2 py-0.5 rounded bg-[#81b5a1]/20 text-[#81b5a1] font-mono font-bold text-[10px]">INCIDENT #INC009481</span>
+                      <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono font-bold text-[10px]">State: In Progress</span>
+                    </div>
+                    <h2 class="text-sm sm:text-base font-bold text-white">Production Database Ingress Latency & SLA Degradation</h2>
                   </div>
                   <div class="flex items-center gap-2 shrink-0">
-                    <button class="px-3 py-1 rounded bg-[#203244] hover:bg-[#2b4158] text-slate-200 text-xs font-mono font-bold transition-all border border-[#2e465e]">Save</button>
-                    <button class="px-3 py-1 rounded bg-[#81b5a1] hover:bg-[#96c4b2] text-[#0b1620] text-xs font-mono font-bold transition-all">Update Record</button>
+                    <span class="px-2.5 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-mono font-bold">P1 - Critical Outage</span>
                   </div>
                 </div>
 
-                <!-- ServiceNow Record Form & Injected Sola Widget Grid -->
+                <!-- Standard Ticket Page Split Layout (Primary Column + Widget Container) -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start pt-1">
                   
-                  <!-- ServiceNow Form Fields Left Sidebar -->
+                  <!-- Left Primary Column: Standard Ticket Configuration Details -->
                   <div class="lg:col-span-5 flex flex-col gap-3 font-sans">
-                    <div class="p-4 rounded-xl bg-[#142230] border border-[#203244] flex flex-col gap-3 text-xs">
-                      <div class="text-[10px] font-mono uppercase text-[#81b5a1] border-b border-[#203244] pb-1.5 font-bold">ServiceNow Form Details</div>
+                    <!-- Ticket Details Panel -->
+                    <div class="rounded-xl bg-[#162638] border border-[#253950] overflow-hidden">
+                      <div class="bg-[#0e1924] px-4 py-2.5 border-b border-[#253950] flex items-center justify-between">
+                        <span class="text-xs font-mono font-bold text-[#81b5a1] uppercase">Standard Ticket Details</span>
+                        <span class="text-[10px] font-mono text-slate-400">sp_instance: 9481</span>
+                      </div>
                       
-                      <div class="grid grid-cols-2 gap-2">
-                        <div>
-                          <span class="text-slate-400 block text-[10px] font-mono">Number</span>
-                          <span class="font-mono font-bold text-slate-200">INC009481</span>
+                      <div class="p-4 flex flex-col gap-3 text-xs">
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                          <span class="text-slate-400">Caller / Opened For:</span>
+                          <span class="font-bold text-white">Jason Statham</span>
                         </div>
-                        <div>
-                          <span class="text-slate-400 block text-[10px] font-mono">Category</span>
-                          <span class="font-bold text-slate-200">Database (Aurora)</span>
+                        
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                          <span class="text-slate-400">Assignment Group:</span>
+                          <span class="font-mono text-[#81b5a1]">Cloud Infrastructure SRE</span>
                         </div>
-                      </div>
 
-                      <div class="grid grid-cols-2 gap-2">
-                        <div>
-                          <span class="text-slate-400 block text-[10px] font-mono">Caller / Impacted</span>
-                          <span class="font-bold text-slate-200">Jason Statham</span>
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                          <span class="text-slate-400">Configuration Item (CI):</span>
+                          <span class="font-mono text-amber-400 text-[11px]">aws-prod-aurora-pg-us-east-1a</span>
                         </div>
-                        <div>
-                          <span class="text-slate-400 block text-[10px] font-mono">Assignment Group</span>
-                          <span class="font-mono text-[#81b5a1] text-[11px]">Cloud Infra SRE</span>
-                        </div>
-                      </div>
 
-                      <div>
-                        <span class="text-slate-400 block text-[10px] font-mono">Configuration Item (CI)</span>
-                        <span class="font-mono text-amber-400 text-[11px]">aws-prod-aurora-pg-us-east-1a</span>
+                        <div class="flex items-center justify-between">
+                          <span class="text-slate-400">Resolution SLA:</span>
+                          <span class="font-mono text-red-400 font-bold">11m 42s Remaining</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="p-3.5 rounded-xl bg-[#142230] border border-[#203244] flex items-center justify-between text-xs">
-                      <span class="text-slate-400 font-mono text-[10px]">Portal Route:</span>
-                      <span class="font-mono text-[#81b5a1] text-[10px] bg-[#0b1620] px-2 py-0.5 rounded border border-[#203244]">/esc?id=ec_ticket_page&sys_id=INC009481</span>
+                    <!-- ServiceNow Page Route Badge -->
+                    <div class="p-3 rounded-xl bg-[#162638] border border-[#253950] flex items-center justify-between text-xs">
+                      <span class="text-slate-400 font-mono text-[10px]">Page ID:</span>
+                      <span class="font-mono text-[#81b5a1] text-[10px] bg-[#0e1924] px-2 py-0.5 rounded border border-[#253950]">/esc?id=ec_ticket_page&sys_id=INC009481</span>
                     </div>
                   </div>
 
-                  <!-- Injected Sola Component Surface inside ServiceNow Widget Container -->
+                  <!-- Right Primary Column: Injected Sola Service Portal Widget Container (sp-widget-content) -->
                   <div class="lg:col-span-7 relative group w-full max-w-full">
-                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-[#81b5a1] text-[#0b1620] font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-[#0b1620] animate-ping"></span>
-                      <span>ServiceNow Portal Widget Container (`sp-widget`)</span>
+                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-[#81b5a1] text-[#0e1924] font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#0e1924] animate-ping"></span>
+                      <span>ServiceNow Widget Container (`sp-widget-content`)</span>
                     </div>
 
                     {#if activeComponent === 'incident'}
