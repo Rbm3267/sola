@@ -64,23 +64,23 @@
         onmouseleave={() => activeStep = null}
         class="w-full text-left p-2.5 rounded-2xl transition-all cursor-pointer group flex items-center justify-between gap-4 border {activeStep?.id === step.id ? 'bg-slate-100/90 border-slate-300' : 'bg-slate-50/70 border-slate-100 hover:bg-slate-100/60'}">
         
-        <div class="flex items-center gap-2.5 min-w-[180px]">
-          <span class="w-2 h-2 rounded-full {step.type === 'total' ? 'bg-indigo-600' : step.delta >= 0 ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
-          <span class="text-xs font-mono font-bold text-slate-800 truncate">{step.name}</span>
+        <div class="flex items-center gap-2.5 min-w-[140px] sm:min-w-[180px]">
+          <span class="w-2 h-2 rounded-full {step.type === 'total' || step.type === 'subtotal' ? 'bg-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+          <span class="text-xs font-mono font-bold text-slate-800 truncate">{step.name || step.label || step.title || 'Deduction Item'}</span>
         </div>
 
         <!-- Relative Bar -->
         <div class="flex-1 max-w-xs h-3.5 bg-slate-200/80 rounded-full overflow-hidden flex items-center p-0.5">
           <div 
-            class="h-full rounded-full transition-all duration-500 {step.type === 'total' ? 'bg-indigo-600' : step.delta >= 0 ? 'bg-emerald-500' : 'bg-rose-500'}"
+            class="h-full rounded-full transition-all duration-500 {step.type === 'total' || step.type === 'subtotal' ? 'bg-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'bg-emerald-500' : 'bg-rose-500'}"
             style="width: {pct}%;">
           </div>
         </div>
 
         <!-- Value Metric -->
-        <div class="text-right min-w-[90px]">
-          <span class="text-xs font-mono font-black {step.type === 'total' ? 'text-indigo-600' : step.delta >= 0 ? 'text-emerald-600' : 'text-rose-600'}">
-            {step.formattedValue || (step.delta >= 0 ? `+${step.delta}` : `${step.delta}`)}
+        <div class="text-right min-w-[80px] sm:min-w-[90px]">
+          <span class="text-xs font-mono font-black {step.type === 'total' || step.type === 'subtotal' ? 'text-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'text-emerald-600' : 'text-rose-600'}">
+            {step.formattedValue || step.amount || step.value || (step.delta ? (step.delta >= 0 ? `+$${step.delta.toLocaleString()}` : `-$${Math.abs(step.delta).toLocaleString()}`) : '$0')}
           </span>
         </div>
       </button>

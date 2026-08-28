@@ -90,24 +90,24 @@
     {:else if affordance === 'expanded_preview'}
       <div 
         transition:fly={{ y: 8, duration: 200 }}
-        class="p-4 rounded-2xl bg-slate-900 text-white border border-slate-700 shadow-xl flex flex-col gap-2.5 font-mono text-xs max-w-sm">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <span class="text-[10px] uppercase font-bold text-amber-400 flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+        class="p-4 rounded-2xl bg-white/95 backdrop-blur-2xl text-slate-900 border border-amber-200 shadow-xl flex flex-col gap-2.5 font-mono text-xs max-w-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
+          <span class="text-[10px] uppercase font-bold text-amber-600 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
             <span>Surfaced via Hover Dwell</span>
           </span>
           <span class="text-[10px] text-slate-400">Urgency: {(urgency * 100).toFixed(0)}%</span>
         </div>
         <div>
-          <div class="font-bold text-slate-100 text-xs">{action.title}</div>
-          <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">{action.description}</p>
+          <div class="font-bold text-slate-950 text-xs">{action.title}</div>
+          <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">{action.description}</p>
         </div>
         <button 
           onclick={handleTrigger}
           disabled={isExecuting}
-          class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold transition-all cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
+          class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition-all cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
           {#if isExecuting}
-            <div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             <span>Executing Action...</span>
           {:else}
             <span>1-Click Run Playbook</span>

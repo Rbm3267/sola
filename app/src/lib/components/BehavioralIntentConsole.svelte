@@ -62,23 +62,23 @@
 <div class="w-full flex flex-col gap-6">
   
   <!-- Top Behavioral Vector Telemetry HUD -->
-  <div class="bg-slate-950 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl text-white flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
+  <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-sm text-slate-900 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
     
-    <!-- Ambient Persona Glow -->
-    <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl opacity-30 pointer-events-none {metrics.persona === 'sre_commander' ? 'bg-rose-500' : metrics.persona === 'finops_auditor' ? 'bg-violet-500' : 'bg-emerald-500'}"></div>
+    <!-- Ambient Persona Subtle Glow -->
+    <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl opacity-15 pointer-events-none {metrics.persona === 'sre_commander' ? 'bg-rose-500' : metrics.persona === 'finops_auditor' ? 'bg-violet-500' : 'bg-emerald-500'}"></div>
 
     <div class="flex items-center gap-4 relative z-10">
-      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg {metrics.persona === 'sre_commander' ? 'bg-gradient-to-br from-rose-500 to-amber-600' : metrics.persona === 'finops_auditor' ? 'bg-gradient-to-br from-violet-600 to-indigo-600' : 'bg-gradient-to-br from-emerald-500 to-teal-600'}">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-sm {metrics.persona === 'sre_commander' ? 'bg-gradient-to-br from-rose-500 to-amber-600' : metrics.persona === 'finops_auditor' ? 'bg-gradient-to-br from-violet-600 to-indigo-600' : 'bg-gradient-to-br from-emerald-500 to-teal-600'}">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono uppercase tracking-widest text-slate-400">Dual-Driver Persona:</span>
-          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' : metrics.persona === 'finops_auditor' ? 'bg-violet-500/20 text-violet-300 border-violet-500/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'}">
+          <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Dual-Driver Persona:</span>
+          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 text-rose-700 border-rose-200' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 text-violet-700 border-violet-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}">
             {metrics.persona === 'sre_commander' ? 'SRE Incident Commander' : metrics.persona === 'finops_auditor' ? 'FinOps Cloud Auditor' : 'Visual Explorer'}
           </span>
         </div>
-        <h3 class="text-lg font-black font-sans mt-0.5 text-slate-100">
+        <h3 class="text-lg font-black font-sans mt-0.5 text-slate-950">
           Dual-Driver ActionContract Protocol (Data + Behavior)
         </h3>
       </div>
@@ -86,17 +86,17 @@
 
     <!-- Live Telemetry Readout Chips -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto relative z-10 font-mono text-xs">
-      <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col gap-0.5">
-        <span class="text-[10px] text-slate-500 uppercase">Typing Cadence</span>
-        <span class="text-amber-400 font-bold">{metrics.typingVelocityCps} chars/sec</span>
+      <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-0.5">
+        <span class="text-[10px] text-slate-400 font-bold uppercase">Typing Cadence</span>
+        <span class="text-amber-600 font-black">{metrics.typingVelocityCps} chars/sec</span>
       </div>
-      <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col gap-0.5">
-        <span class="text-[10px] text-slate-500 uppercase">Hover Dwell</span>
-        <span class="text-sky-400 font-bold">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
+      <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-0.5">
+        <span class="text-[10px] text-slate-400 font-bold uppercase">Hover Dwell</span>
+        <span class="text-sky-600 font-black">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
       </div>
-      <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col gap-0.5 col-span-2 sm:col-span-1">
-        <span class="text-[10px] text-slate-500 uppercase">Rage Click Vector</span>
-        <span class="{metrics.rageClickCount >= 2 ? 'text-rose-400 font-black animate-pulse' : 'text-slate-400'}">{metrics.rageClickCount} Clicks / 600ms</span>
+      <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-0.5 col-span-2 sm:col-span-1">
+        <span class="text-[10px] text-slate-400 font-bold uppercase">Rage Click Vector</span>
+        <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 font-black animate-pulse' : 'text-slate-700 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
       </div>
     </div>
 
