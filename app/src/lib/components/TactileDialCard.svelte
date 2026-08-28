@@ -53,7 +53,7 @@
   <!-- Interactive Rotary Dial Area -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div 
-    class="relative w-44 h-44 my-2 flex items-center justify-center cursor-pointer select-none touch-none group"
+    class="relative w-44 h-44 aspect-square shrink-0 my-2 flex items-center justify-center cursor-pointer select-none touch-none group"
     ontouchstart={(e) => { isDragging = true; handleTouch(e); }}
     ontouchmove={(e) => { if (isDragging) handleTouch(e); }}
     ontouchend={() => isDragging = false}
@@ -62,7 +62,7 @@
     onmouseup={() => isDragging = false}>
     
     <!-- Outer Arc Track -->
-    <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+    <svg class="w-full h-full aspect-square -rotate-90" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
       <!-- Background Track -->
       <circle 
         cx="50" cy="50" r="40" 

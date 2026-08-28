@@ -57,8 +57,8 @@
     </div>
 
     <!-- Circular SVG Progress Ring -->
-    <div class="relative w-20 h-20 flex items-center justify-center shrink-0">
-      <svg class="w-full h-full -rotate-90" viewBox="0 0 88 88">
+    <div class="relative w-20 h-20 aspect-square flex items-center justify-center shrink-0">
+      <svg class="w-full h-full aspect-square -rotate-90" viewBox="0 0 88 88" preserveAspectRatio="xMidYMid meet">
         <!-- Track circle -->
         <circle 
           cx="44" cy="44" r="36" 
