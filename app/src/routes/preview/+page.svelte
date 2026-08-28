@@ -101,7 +101,7 @@
         
         {#if activeMode === 'preset'}
           <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
-            {#each (['linear', 'stripe', 'shopify', 'moveworks', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
+            {#each (['workspace', 'fintech', 'commerce', 'aifrontdoor', 'enterprise', 'telemetry', 'developer'] as TemplatePreset[]) as t}
               <button 
                 onclick={() => selectedPreset = t}
                 class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-slate-100'}">
