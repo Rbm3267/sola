@@ -35,7 +35,14 @@
       name: 'DEVELOPER API REFERENCE',
       items: [
         { id: 'api-reactivity', title: 'Core Reactivity Primitives' },
-        { id: 'api-macros', title: 'Compiler Macro Primitives' }
+        { id: 'api-macros', title: 'Compiler Macro Primitives' },
+        { id: 'llm-spec', title: 'LLM & AI Agent Prompting Spec' }
+      ]
+    },
+    {
+      name: 'HOST EMBEDDING',
+      items: [
+        { id: 'host-embedding', title: 'ServiceNow & React Embedding' }
       ]
     },
     {
@@ -250,7 +257,68 @@ export function mount(__target, props = {}) {
 
   __target.appendChild(root);
   return () => __target.removeChild(root);
-};`;
+};
+
+  const llmSystemPrompt = `<sola_rules>
+You are an expert developer building applications with Sola (zero-VDOM ambient runtime).
+When writing Sola components (.sola files), strictly follow these language rules:
+
+1. COMPONENT FORMAT (.sola):
+   - Combine <` + `script>, HTML markup, and <` + `style> in one file.
+   - Use 'let count = $state(initialValue)' for reactive signals.
+   - Use 'let doubled = $derived(expression)' for computed values.
+   - Handlers attach directly: <button onclick={increment}>Scale +1</button>.
+
+2. MACROS ($intent and $data):
+   - Use $intent("natural language prompt") to dynamically generate UI sub-components.
+   - Use $data("sheet://<sheetId>") or $data("servicenow://<table>") to auto-poll data sources.
+
+3. MOUNTING CONTRACT:
+   - Compiled components export a function: mount(domNode, props).
+   - Mounting returns an unmount cleanup function: const unmount = MyComponent(el, props).
+</sola_rules>`;
+
+  const serviceNowEmbedCode = `// ServiceNow Service Portal Widget (Client Controller)
+function(c, $element) {
+  // Import or bundle compiled Sola component
+  var IncidentCard = window.SolaComponents.IncidentCard;
+
+  // Mount directly to the ServiceNow widget DOM element
+  var rootNode = $element.find('#sn-widget-mount')[0];
+  var unmount = IncidentCard(rootNode, {
+    sys_id: c.data.sys_id,
+    priority: c.data.priority,
+    onEscalate: function(newPriority) {
+      c.server.get({ action: 'escalate', priority: newPriority });
+    }
+  });
+
+  // Clean up when ServiceNow destroys the widget scope
+  $scope.$on('$destroy', function() {
+    if (unmount) unmount();
+  });
+}`;
+
+  const reactEmbedCode = `import React, { useEffect, useRef } from 'react';
+import IncidentCard from './IncidentCard.sola';
+
+export function SolaWidgetWrapper({ incidentId }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Mount fine-grained Sola component directly into React DOM ref
+    const unmount = IncidentCard(containerRef.current, {
+      incidentId: incidentId
+    });
+
+    // Clean up when React unmounts component
+    return () => unmount();
+  }, [incidentId]);
+
+  return <div ref={containerRef} className="sola-react-host-container" />;
+}`;;
 </script>
 
 <div class="min-h-screen bg-[#fafafa] text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900 pb-20">
@@ -730,6 +798,70 @@ export function mount(__target, props = {}) {
                 <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">Fine-Grained Signals</h4>
                 <p class="text-[11px] text-slate-500 leading-normal">Only the precise text node or attribute that changed is modified in the DOM.</p>
               </div>
+            </div>
+          </div>
+
+        {:else if activeSection === 'llm-spec'}
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+              <span>AI Integration</span>
+            </div>
+            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">LLM & AI Agent Prompting Spec</h1>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6 font-sans">
+              Provide this exact system prompt context block to <strong>Claude 3.5/3.7</strong>, <strong>ChatGPT (GPT-4o)</strong>, or <strong>Gemini 2.5/3.0</strong> so any LLM can write valid Sola components, signals, and macro bindings without hallucinating:
+            </p>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">Copyable LLM Context Block</h3>
+            <div class="relative group mb-8">
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{llmSystemPrompt}</code></pre>
+              <button 
+                onclick={() => handleCopy(llmSystemPrompt, 'llm-ctx')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'llm-ctx'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
+          </div>
+
+        {:else if activeSection === 'host-embedding'}
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+              <span>Embedding Guide</span>
+            </div>
+            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">ServiceNow & React Embedding</h1>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6 font-sans">
+              Because Sola compiles into pure, fine-grained DOM JavaScript (<code>~3.2 kB</code>), you can drop compiled Sola components directly into ServiceNow widgets or React applications without running a backend server or Docker container.
+            </p>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. ServiceNow Service Portal Widget Embedding</h3>
+            <div class="relative group mb-8">
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{serviceNowEmbedCode}</code></pre>
+              <button 
+                onclick={() => handleCopy(serviceNowEmbedCode, 'sn-emb')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'sn-emb'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. React Application Embedding (useEffect Hook)</h3>
+            <div class="relative group mb-8">
+              <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{reactEmbedCode}</code></pre>
+              <button 
+                onclick={() => handleCopy(reactEmbedCode, 'react-emb')}
+                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'react-emb'}
+                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {:else}
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
             </div>
           </div>
         {/if}
