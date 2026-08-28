@@ -9,15 +9,36 @@
   }
 
   export interface FlowWaterfallConfig {
-    title: string;
+    title?: string;
     subtitle?: string;
     unit?: string; // '$', 'ms', 'MB'
     steps?: WaterfallStep[];
   }
 
-  let { config } = $props<{ config: FlowWaterfallConfig }>();
+  let { 
+    config = {},
+    title,
+    subtitle,
+    grossVolume,
+    computeExpense,
+    supportExpense,
+    tierDiscount,
+    steps: directSteps
+  } = $props<{ 
+    config?: FlowWaterfallConfig;
+    title?: string;
+    subtitle?: string;
+    grossVolume?: number;
+    computeExpense?: number;
+    supportExpense?: number;
+    tierDiscount?: number;
+    steps?: WaterfallStep[];
+  }>();
 
   let activeStep = $state<WaterfallStep | null>(null);
+
+  const displayTitle = $derived(title || config?.title || 'Revenue Realization & Margin Breakdown');
+  const displaySubtitle = $derived(subtitle || config?.subtitle || 'End-to-end reconciliation across billing gateway and cloud infrastructure');
 
   // Parse dollar strings like "$184,200" or "-$5,340" into numeric values
   function parseDelta(step: any): number {
@@ -40,18 +61,36 @@
     };
   }
 
-  const defaultSteps: WaterfallStep[] = [
-    { id: 's-1', name: 'Gross Payment Volume', delta: 184200, type: 'start', formattedValue: '$184,200' },
-    { id: 's-2', name: 'Stripe Interchange & Processing', delta: -5340, type: 'debit', formattedValue: '-$5,340' },
-    { id: 's-3', name: 'AWS Cloud Compute Egress', delta: -1820, type: 'debit', formattedValue: '-$1,820' },
-    { id: 's-4', name: 'Enterprise Contract Add-ons', delta: 14800, type: 'credit', formattedValue: '+$14,800' },
-    { id: 's-5', name: 'Chargeback Reserve Buffer', delta: -800, type: 'debit', formattedValue: '-$800' },
-    { id: 's-6', name: 'Net Settlement Payout', delta: 191040, type: 'total', formattedValue: '$191,040' }
-  ];
+  const computedSteps = $derived.by(() => {
+    if (directSteps && directSteps.length > 0) return directSteps;
+    if (config?.steps && config.steps.length > 0) return config.steps;
 
-  const rawSteps = $derived(config.steps && config.steps.length > 0 ? config.steps : defaultSteps);
-  const steps = $derived(rawSteps.map((s, i) => normalizeStep(s, i)));
+    if (grossVolume !== undefined) {
+      const gv = grossVolume || 168000;
+      const ce = computeExpense || Math.round(gv * 0.18);
+      const se = supportExpense || Math.round(gv * 0.08);
+      const td = tierDiscount || Math.round(gv * 0.04);
+      const net = gv - ce - se - td;
+      return [
+        { id: 's-1', name: 'Gross Payment ARR', delta: gv, type: 'start' as const, formattedValue: `$${gv.toLocaleString()}` },
+        { id: 's-2', name: 'Cloud Compute Infrastructure', delta: -ce, type: 'debit' as const, formattedValue: `-$${ce.toLocaleString()}` },
+        { id: 's-3', name: 'Dedicated Support Triage', delta: -se, type: 'debit' as const, formattedValue: `-$${se.toLocaleString()}` },
+        { id: 's-4', name: 'Enterprise Volume Rebate', delta: -td, type: 'debit' as const, formattedValue: `-$${td.toLocaleString()}` },
+        { id: 's-5', name: 'Net Realized Profit', delta: net, type: 'total' as const, formattedValue: `$${net.toLocaleString()}` }
+      ];
+    }
 
+    return [
+      { id: 's-1', name: 'Gross Payment Volume', delta: 184200, type: 'start' as const, formattedValue: '$184,200' },
+      { id: 's-2', name: 'Stripe Interchange & Processing', delta: -5340, type: 'debit' as const, formattedValue: '-$5,340' },
+      { id: 's-3', name: 'AWS Cloud Compute Egress', delta: -1820, type: 'debit' as const, formattedValue: '-$1,820' },
+      { id: 's-4', name: 'Enterprise Contract Add-ons', delta: 14800, type: 'credit' as const, formattedValue: '+$14,800' },
+      { id: 's-5', name: 'Chargeback Reserve Buffer', delta: -800, type: 'debit' as const, formattedValue: '-$800' },
+      { id: 's-6', name: 'Net Settlement Payout', delta: 191040, type: 'total' as const, formattedValue: '$191,040' }
+    ];
+  });
+
+  const steps = $derived(computedSteps.map((s, i) => normalizeStep(s, i)));
   const maxVal = $derived(Math.max(...steps.map(s => Math.abs(s.delta)), 1));
 </script>
 
@@ -62,9 +101,9 @@
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-        <h3 class="text-base font-black text-slate-950 tracking-tight font-mono">{config.title || 'Revenue Realization & Margin Breakdown'}</h3>
+        <h3 class="text-base font-black text-slate-950 tracking-tight font-mono">{displayTitle}</h3>
       </div>
-      <p class="text-xs text-slate-500">{config.subtitle || 'End-to-end reconciliation across billing gateway and cloud infrastructure'}</p>
+      <p class="text-xs text-slate-500">{displaySubtitle}</p>
     </div>
 
     <!-- Final Value Highlight -->
