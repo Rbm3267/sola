@@ -9,6 +9,9 @@
   "dependencies": {
     "acorn": "^8.10.0",
     "htmlparser2": "^9.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
-

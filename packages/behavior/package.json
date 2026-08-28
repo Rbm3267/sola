@@ -10,5 +10,9 @@
   },
   "keywords": ["sola", "behavior", "generative-ui", "telemetry", "signals"],
   "author": "Sola Architecture Team",
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

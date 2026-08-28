@@ -1,14 +1,21 @@
 {
-  "name": "sola-relay",
+  "name": "@sola/relay",
   "version": "0.0.1",
   "type": "module",
   "bin": {
     "sola-relay": "./src/cli.js"
   },
   "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
   "dependencies": {
     "pg": "^8.11.0",
     "mysql2": "^3.6.0",
     "ws": "^8.14.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

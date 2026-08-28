@@ -14,7 +14,7 @@ export default function solaPlugin(options = {}) {
         const source = readFileSync(id, 'utf-8');
         const compiled = compile(source, id);
         return {
-          code: compiled,
+          code: compiled.code,
           map: null
         };
       } catch (err) {

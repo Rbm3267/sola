@@ -19,5 +19,9 @@
   },
   "dependencies": {
     "@sola/core": "*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

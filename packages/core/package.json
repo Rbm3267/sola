@@ -2,9 +2,12 @@
   "name": "@sola/core",
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
-
