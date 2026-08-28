@@ -147,6 +147,8 @@ Binds Google Sheets, ServiceNow, or PostgreSQL datasources with auto-polling.
 | `DynamicForm` | `{ title: string, endpoint: string, fields: Array<{ name: string, label: string, type: string }> }` | Auto-binding Schema Form |
 | `ListBlock` | `{ title: string, items: Array<{ id: string, title: string, subtitle: string, status: string }> }` | Reactive Incident/Entity List |
 | `FlowWaterfall` | `{ title: string, subtitle: string, steps: Array<{ id: string, name: string, delta: string, type: "positive"\|"negative"\|"subtotal" }> }` | FinOps Financial Flow |
+| `ReportDocViewer` | `{ title: string, author?: string, date?: string, classification?: string, sections: Array<{ heading: string, content: string, table?: object, codeBlock?: object }> }` | Native Markdown/HTML Presentation Viewer with 1-Click Export |
+| `ActionReportGenerator` | `{ title?: string, defaultType?: string }` | On-Demand Technical Report Generator with interactive synthesis & export |
 
 ---
 

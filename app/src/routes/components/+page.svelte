@@ -11,6 +11,8 @@
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
   import SchemaInspector from '$lib/components/SchemaInspector.svelte';
   import TactileDialCard from '$lib/components/TactileDialCard.svelte';
+  import ReportDocViewer from '$lib/components/ReportDocViewer.svelte';
+  import ActionReportGenerator from '$lib/components/ActionReportGenerator.svelte';
   import { SAAS_ECOSYSTEM, type SaasIntegration } from '$lib/data/ecosystem';
   import { fade, fly } from 'svelte/transition';
 
@@ -251,6 +253,14 @@
               {:else if selectedIntegration.primaryComponent === 'ListBlock'}
                 <div class="w-full">
                   <ListBlock config={selectedIntegration.config} />
+                </div>
+              {:else if selectedIntegration.primaryComponent === 'ReportDocViewer'}
+                <div class="w-full">
+                  <ReportDocViewer config={selectedIntegration.config} />
+                </div>
+              {:else if selectedIntegration.primaryComponent === 'ActionReportGenerator'}
+                <div class="w-full">
+                  <ActionReportGenerator config={selectedIntegration.config} />
                 </div>
               {:else if selectedIntegration.primaryComponent === 'DynamicForm'}
                 <div class="w-full">

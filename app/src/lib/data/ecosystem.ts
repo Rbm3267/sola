@@ -365,5 +365,36 @@ export const SAAS_ECOSYSTEM: SaasIntegration[] = [
       rowCount: '48,200',
       sizeBytes: '12.4 MB'
     }
+  },
+
+  // ── 8. Technical Artifacts & On-Demand Report Generators ──
+  {
+    id: 'sre-incident-report',
+    name: 'SRE Incident Postmortem Brief (HTML/MD)',
+    category: 'ITSM & Security',
+    badge: 'Artifact Viewer',
+    description: 'Luxury native Markdown and HTML presentation viewer with tables, alert callouts, and 1-click HTML/MD export.',
+    protocolUri: 'artifact://sre/incident-postmortem.html',
+    primaryComponent: 'ReportDocViewer',
+    sampleIntent: 'Render internal SRE postmortem brief with blast radius table and remediation diff',
+    config: {
+      title: 'SRE Postmortem: Database Connection Exhaustion (P1)',
+      classification: 'Internal Only',
+      author: 'Principal Systems Reliability Architect',
+      date: 'August 28, 2026'
+    }
+  },
+  {
+    id: 'on-demand-report-engine',
+    name: 'On-Demand Technical Report Generator',
+    category: 'Cloud & DevOps',
+    badge: 'Report Engine',
+    description: 'Technical component with 1-click generation triggers that synthesizes structured reports, timelines, and standalone HTML artifacts.',
+    protocolUri: 'generator://reports/synthesis',
+    primaryComponent: 'ActionReportGenerator',
+    sampleIntent: 'Generate executive incident postmortem and FinOps audit report with 1-click export',
+    config: {
+      title: 'System Architecture & Incident Report Engine'
+    }
   }
 ];
