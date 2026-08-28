@@ -148,7 +148,7 @@
         isResolving = true;
         resolveTimeout = setTimeout(() => {
           isResolving = false;
-        }, 220);
+        }, 650);
       }
     }
 
@@ -192,26 +192,26 @@
     <a 
       href="/demo" 
       style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-      class="px-8 py-4 rounded-2xl font-bold transition-all duration-200 shadow-[0_6px_24px_rgba(245,158,11,0.35)] hover:shadow-[0_8px_32px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 text-center text-[15px] flex items-center justify-center gap-2.5 cursor-pointer">
-      <span class="text-white font-bold">Open Playground</span>
-      <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      class="px-6 py-2.5 rounded-full font-medium transition-all duration-200 shadow-[0_4px_16px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.35)] hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">
+      <span class="text-white">Open Playground</span>
+      <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
     
     <!-- Interactive CLI Copy Box -->
-    <div class="px-5 py-3.5 rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-slate-800 font-mono text-sm flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
+    <div class="px-5 py-2.5 rounded-full border border-slate-200/90 bg-white/90 backdrop-blur-md text-slate-800 font-mono text-xs flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
       <div class="flex items-center gap-2 select-all">
-        <span class="text-amber-500 font-bold select-none">$</span>
+        <span class="text-amber-500 font-semibold select-none">$</span>
         <span>npm create sola@latest</span>
       </div>
       <button 
         onclick={copyCliCommand}
         aria-label="Copy CLI command" 
-        class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1 text-xs font-sans font-semibold">
+        class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1 rounded-full transition-all cursor-pointer flex items-center gap-1 text-[10px] font-sans font-medium">
         {#if copied}
-          <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-emerald-600 font-mono">Copied!</span>
         {:else}
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         {/if}
       </button>
     </div>
@@ -234,8 +234,8 @@
       {#each scenarios as sc, i}
         <button 
           onclick={() => selectScenario(i)}
-          class="px-3 sm:px-4 py-2 rounded-2xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs font-black' : 'bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-white hover:text-slate-900'}">
-          <span class="w-2 h-2 rounded-full {activeIndex === i ? 'bg-amber-500' : 'bg-slate-300'}"></span>
+          class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs' : 'bg-white/80 text-slate-500 border border-slate-200/80 hover:bg-white hover:text-slate-800'}">
+          <span class="w-1.5 h-1.5 rounded-full {activeIndex === i ? 'bg-amber-500' : 'bg-slate-300'}"></span>
           <span>{sc.tabLabel}</span>
         </button>
       {/each}

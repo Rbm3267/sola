@@ -32,7 +32,7 @@
   // Staging state
   let pendingIntent = $state<IntentRecord | null>(null);
   let isUndoVisible = $state(false);
-  let undoProgress = $state(100);
+  let isProgressTriggered = $state(false);
   let undoInterval: any = null;
 
   // Drawer (Tier 2) state
@@ -89,26 +89,25 @@
     }
   }
 
-  // Tier 1: Optimistic Undo Flow
+  // Tier 1: Optimistic Undo Flow (Pure CSS Transition Driven)
   function startUndoTimer() {
     isUndoVisible = true;
-    undoProgress = 100;
-    const duration = 5000; // 5 seconds
-    const intervalTime = 50;
-    const step = (intervalTime / duration) * 100;
+    isProgressTriggered = false;
+    clearTimeout(undoInterval);
 
-    clearInterval(undoInterval);
-    undoInterval = setInterval(async () => {
-      undoProgress -= step;
-      if (undoProgress <= 0) {
-        clearInterval(undoInterval);
-        await commitIntent();
-      }
-    }, intervalTime);
+    // Let layout mount, then trigger transition
+    setTimeout(() => {
+      isProgressTriggered = true;
+    }, 50);
+
+    undoInterval = setTimeout(async () => {
+      isUndoVisible = false;
+      await commitIntent();
+    }, 5000);
   }
 
   async function handleUndo() {
-    clearInterval(undoInterval);
+    clearTimeout(undoInterval);
     isUndoVisible = false;
     if (pendingIntent && action.rollback) {
       try {
@@ -120,6 +119,16 @@
       }
     } else {
       pendingIntent = null;
+    }
+  }
+
+  // Confirm via Keyboard (A11y Fallback)
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      commitIntent();
+    } else if (e.key === 'Escape') {
+      isDrawerOpen = false;
     }
   }
 
@@ -280,7 +289,7 @@
       <span class="font-bold text-white">Staging: {action.title}</span>
       <!-- Progress Bar Timer -->
       <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
-        <div class="h-full bg-amber-500 transition-all duration-75" style="width: {undoProgress}%"></div>
+        <div class="h-full bg-amber-500 transition-all duration-[5000ms] ease-linear" style="width: {isProgressTriggered ? '0%' : '100%'}"></div>
       </div>
     </div>
     
