@@ -1,14 +1,14 @@
-// Sola Chrome Extension — Content Script (In-Situ Preview)
+// Sola Chrome Extension — Content Script (Live Page Preview)
 
 (function () {
   if (window.__SOLA_EXTENSION_INITIALIZED__) return;
   window.__SOLA_EXTENSION_INITIALIZED__ = true;
 
-  console.log('[Sola] In-situ preview content script mounted.');
+  console.log('[Sola] Live overlay preview content script mounted.');
 
   // Create isolated Shadow DOM host
   const hostDiv = document.createElement('div');
-  hostDiv.id = 'sola-in-situ-root';
+  hostDiv.id = 'sola-live overlay-root';
   hostDiv.style.position = 'fixed';
   hostDiv.style.bottom = '24px';
   hostDiv.style.right = '24px';
@@ -107,7 +107,7 @@
     </div>
     <div class="sola-card-preview" id="sola-drawer" style="display: none;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span id="sola-preview-title" style="font-weight: 700; font-size: 13px; color: #fff;">In-Situ Preview</span>
+        <span id="sola-preview-title" style="font-weight: 700; font-size: 13px; color: #fff;">Live Page Preview</span>
         <span class="sola-pill">Zero-VDOM</span>
       </div>
       <p id="sola-preview-desc" style="font-size: 11px; color: #94a3b8;">
@@ -142,7 +142,7 @@
     if (event.data && event.data.type === 'SOLA_MOUNT_IN_SITU') {
       drawer.style.display = 'flex';
       if (event.data.template) {
-        if (titleEl) titleEl.textContent = event.data.template.title || 'In-Situ Preview';
+        if (titleEl) titleEl.textContent = event.data.template.title || 'Live Page Preview';
         if (descEl) descEl.textContent = event.data.template.description || 'Mounted from Sola Design Community';
       }
     }

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Sola — View in My UI (In-Situ Preview)",
+  "name": "Sola — View in My UI (Live Page Preview)",
   "version": "0.9.0",
   "description": "Preview ambient zero-VDOM Sola UI components directly on top of your live web apps in a closed Shadow DOM.",
   "permissions": [

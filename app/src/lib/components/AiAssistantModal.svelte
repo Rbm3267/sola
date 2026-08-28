@@ -7,19 +7,20 @@
   let { isOpen = $bindable(false) } = $props<{ isOpen?: boolean }>();
 
   let prompt = $state('');
-  let messages = $state<Array<{ role: 'user' | 'assistant'; text: string }>>([
+  let messages = $state<Array<{ role: 'user' | 'assistant'; text: string; code?: string }>>([
     {
       role: 'assistant',
-      text: "Hello! I am Sola's AI Technical Assistant. Ask me anything about zero-VDOM signals, $data Google Sheet relays, ambient $intent synthesis, or how to drop Sola into your stack."
+      text: "I am **Sola Architect**, your autonomous UI & Systems Solutions Consultant. Ask me how to embed Sola into your tech stack (React 19, Next.js, Svelte 5, Vue, or legacy monoliths), connect live data signals (Postgres, Stripe, Sheets), or eliminate VDOM re-rendering overhead."
     }
   ]);
   let isLoading = $state(false);
+  let copiedIndex = $state<number | null>(null);
 
   const quickPrompts = [
-    "How does $data bind to Google Sheets?",
-    "Explain zero-VDOM signal reactivity",
-    "Show example of $intent compiling components",
-    "How do I use Sola with React or Vue?"
+    "How would Sola work in my existing UI?",
+    "How do I embed Sola components in React 19 / Next.js?",
+    "How do zero-VDOM signals eliminate re-rendering lag?",
+    "How do I connect a private PostgreSQL database?"
   ];
 
   async function sendMessage() {
@@ -35,13 +36,16 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          intent: `You are the Sola Framework AI Technical Assistant. Answer concisely with working code examples: ${userText}` 
+          mode: 'architect',
+          query: userText 
         })
       });
 
       const data = await res.json();
       let reply = '';
-      if (typeof data === 'string') {
+      if (data.reply) {
+        reply = data.reply;
+      } else if (typeof data === 'string') {
         reply = data;
       } else if (data.components) {
         reply = "Synthesized Component Specification:\n\n" + JSON.stringify(data.components, null, 2);
@@ -53,7 +57,7 @@
     } catch (e: any) {
       messages = [...messages, { 
         role: 'assistant', 
-        text: "Sola components compile directly into native reactive DOM nodes via @sola/compiler. Use createSignal() for local state, $intent for ambient generative resolution, and $data for live remote polling without virtual DOM overhead." 
+        text: "Sola components compile directly into native reactive DOM nodes via @sola/compiler. Use createSignal() for local state, and import components from @sola/ui for zero-VDOM mounting inside any host container." 
       }];
     } finally {
       isLoading = false;
@@ -65,12 +69,21 @@
     sendMessage();
   }
 
+  function copyMessage(index: number, text: string) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      copiedIndex = index;
+      setTimeout(() => { copiedIndex = null; }, 2000);
+    }
+  }
+
   onMount(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         isOpen = !isOpen;
-      } else if (e.key === 'Escape' && isOpen) {
+      }
+      if (e.key === 'Escape' && isOpen) {
         isOpen = false;
       }
     }
@@ -81,98 +94,116 @@
 
 {#if isOpen}
   <!-- Backdrop -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div 
-    transition:fade={{ duration: 200 }}
+    transition:fade={{ duration: 150 }}
     onclick={() => isOpen = false}
-    onkeydown={(e) => { if (e.key === 'Escape') isOpen = false; }}
-    role="dialog"
-    aria-modal="true"
-    tabindex="-1"
-    class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6"
-  >
-    <!-- Floating Luxury Command Palette Dialog -->
+    class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    
+    <!-- Modal Dialog Window -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div 
-      transition:fly={{ y: 20, duration: 300, easing: cubicOut }}
+      transition:fly={{ y: 20, duration: 250, easing: cubicOut }}
       onclick={(e) => e.stopPropagation()}
-      onkeydown={(e) => e.stopPropagation()}
-      role="document"
-      class="w-full max-w-3xl bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] min-h-[500px] relative z-10"
-    >
-      <!-- Header -->
-      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assistant-title"
+      class="bg-white border border-slate-200/90 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] max-w-2xl w-full flex flex-col overflow-hidden max-h-[85vh] relative">
+      
+      <!-- Top Title Header -->
+      <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
         <div class="flex items-center gap-3">
-          <SolaLogo size="xs" spinning={true} showGlow={false} />
+          <div class="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
+            <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
           <div>
-            <h3 class="text-sm font-black text-slate-900 font-mono flex items-center gap-2">
-              <span>Sola Ambient Intelligence Studio</span>
-              <span class="text-[10px] font-sans font-bold bg-amber-50 text-amber-900 px-2.5 py-0.5 rounded-full border border-amber-200">Live AI</span>
-            </h3>
+            <div class="flex items-center gap-2">
+              <h2 id="assistant-title" class="text-sm font-black text-slate-950 tracking-tight">Sola Architect</h2>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-900 font-mono text-[9px] font-bold">Solutions AI</span>
+            </div>
+            <p class="text-xs text-slate-500 font-normal">Autonomous UI & Systems Architecture Consultant</p>
           </div>
         </div>
+
         <button 
+          type="button"
           onclick={() => isOpen = false}
-          class="text-slate-400 hover:text-slate-700 p-2 rounded-xl hover:bg-slate-100 transition-all cursor-pointer"
-          aria-label="Close dialog"
-        >
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          aria-label="Close modal"
+          class="w-7 h-7 rounded-full bg-slate-200/60 hover:bg-slate-200 text-slate-500 hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
-      <!-- Message History Stream -->
-      <div class="flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col gap-5 min-h-[320px]">
-        {#each messages as msg}
+      <!-- Scrollable Message Conversation Stream -->
+      <div class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 font-sans text-xs sm:text-sm bg-white min-h-[260px]">
+        {#each messages as msg, idx}
           <div class="flex flex-col gap-1.5 {msg.role === 'user' ? 'items-end' : 'items-start'}">
-            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-              {msg.role === 'user' ? 'You' : 'Sola AI Assistant'}
-            </span>
-            <div class="max-w-[88%] p-5 rounded-3xl text-sm leading-relaxed whitespace-pre-wrap {msg.role === 'user' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-br-xs shadow-md' : 'bg-slate-50 border border-slate-200/90 text-slate-800 rounded-bl-xs font-mono text-xs'}">
-              {msg.text}
+            
+            <div class="flex items-center gap-1.5 px-1 text-[10px] font-mono text-slate-400 font-bold uppercase">
+              <span>{msg.role === 'user' ? 'You' : 'Sola Architect'}</span>
             </div>
+
+            <div class="p-4 rounded-2xl max-w-[92%] leading-relaxed {msg.role === 'user' ? 'bg-slate-900 text-white rounded-br-xs shadow-xs' : 'bg-slate-50 border border-slate-200/90 text-slate-800 rounded-bl-xs'}">
+              <div class="whitespace-pre-wrap font-sans">{msg.text}</div>
+            </div>
+
+            {#if msg.role === 'assistant'}
+              <button 
+                onclick={() => copyMessage(idx, msg.text)}
+                class="px-2 py-1 text-[10px] font-mono text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors cursor-pointer">
+                {#if copiedIndex === idx}
+                  <svg class="w-3 h-3 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="text-emerald-600 font-bold">Copied!</span>
+                {:else}
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <span>Copy Solution</span>
+                {/if}
+              </button>
+            {/if}
           </div>
         {/each}
 
         {#if isLoading}
-          <div class="flex items-center gap-2 text-slate-400 text-xs font-mono py-2" in:fade={{ duration: 150 }}>
-            <div class="w-4 h-4 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-            <span>Synthesizing architectural answer...</span>
+          <div class="flex items-center gap-2 text-xs font-mono text-slate-400 p-2">
+            <div class="w-3.5 h-3.5 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+            <span>Sola Architect is synthesizing technical solution...</span>
           </div>
         {/if}
       </div>
 
-      <!-- Quick Prompt Suggestions -->
-      {#if messages.length <= 1}
-        <div class="px-6 sm:px-8 py-3 border-t border-slate-100 flex flex-wrap gap-2 bg-slate-50/40">
-          {#each quickPrompts as qp}
-            <button 
-              onclick={() => pickPrompt(qp)}
-              class="text-xs text-slate-600 bg-white border border-slate-200/90 px-3.5 py-1.5 rounded-xl hover:border-amber-400 hover:text-amber-900 hover:bg-amber-50/60 transition-all cursor-pointer shadow-2xs">
-              {qp}
-            </button>
-          {/each}
-        </div>
-      {/if}
-
-      <!-- Generous Input Bar -->
-      <div class="p-4 sm:p-6 border-t border-slate-100 bg-white">
-        <form class="flex items-center gap-3 bg-slate-50/90 border border-slate-200/90 rounded-2xl p-2 focus-within:border-amber-400 focus-within:ring-4 focus-within:ring-amber-400/10 focus-within:bg-white transition-all shadow-xs" onsubmit={(e) => { e.preventDefault(); sendMessage(); }}>
-          <input 
-            type="text" 
-            bind:value={prompt}
-            placeholder="Ask about zero-VDOM compiler, $data Google Sheets, or ambient signals..."
-            class="flex-1 bg-transparent px-4 py-3 text-sm sm:text-base text-slate-900 placeholder-slate-400 border-0 outline-none focus:outline-none focus:ring-0 font-medium"
-          />
+      <!-- Quick Prompt Suggestion Pills -->
+      <div class="px-4 sm:px-6 py-2.5 bg-slate-50/80 border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <span class="text-[10px] font-mono font-bold uppercase text-slate-400 shrink-0">Ask:</span>
+        {#each quickPrompts as qp}
           <button 
-            type="submit" 
-            disabled={isLoading || !prompt.trim()}
-            style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-            class="font-bold text-sm text-white px-6 py-3.5 rounded-xl disabled:opacity-40 transition-all cursor-pointer flex items-center gap-2 shadow-[0_4px_16px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.35)] shrink-0"
-          >
-            <span>Ask Sola</span>
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            type="button"
+            onclick={() => pickPrompt(qp)}
+            class="px-2.5 py-1 rounded-full bg-white hover:bg-slate-100 border border-slate-200/80 text-slate-700 font-medium text-xs whitespace-nowrap transition-all shrink-0 cursor-pointer shadow-2xs">
+            {qp}
           </button>
-        </form>
+        {/each}
       </div>
+
+      <!-- Input Text Bar -->
+      <form 
+        onsubmit={(e) => { e.preventDefault(); sendMessage(); }}
+        class="p-3 sm:p-4 bg-white border-t border-slate-100 flex items-center gap-2">
+        <input 
+          type="text" 
+          bind:value={prompt}
+          placeholder="Ask Sola Architect (e.g. How do I embed this into my React app?)..." 
+          class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 font-sans transition-all" />
+        <button 
+          type="submit"
+          disabled={isLoading || !prompt.trim()}
+          aria-label="Send query"
+          class="px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
+          <span>Ask</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </form>
 
     </div>
   </div>

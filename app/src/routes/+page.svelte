@@ -29,7 +29,7 @@
           <span>The Sola Ecosystem</span>
         </div>
         <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight mb-4">
-          From Idea to In-Situ Production in Seconds
+          From Idea to Live Browser Overlay Production in Seconds
         </h2>
         <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
           Three interconnected pillars built to synthesize, preview, and share zero-VDOM reactive components across personal projects and global enterprise platforms.

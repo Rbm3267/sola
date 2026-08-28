@@ -75,11 +75,11 @@
         onclick={() => isAiModalOpen = true}
         class="flex items-center justify-between w-auto sm:w-60 md:w-64 h-9 sm:h-10 px-3 sm:px-4 rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-xs font-medium text-slate-500 hover:border-amber-400 hover:bg-white hover:text-slate-900 transition-all cursor-pointer shadow-xs group">
         <div class="flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500 group-hover:text-slate-900 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <span class="font-medium text-slate-700 hidden sm:inline">Search docs & specs...</span>
-          <span class="font-medium text-slate-700 sm:hidden">Search</span>
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 group-hover:text-emerald-700 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span class="font-medium text-slate-700 hidden sm:inline">Ask Sola Architect...</span>
+          <span class="font-medium text-slate-700 sm:hidden">Architect</span>
         </div>
-        <kbd class="hidden sm:inline text-[10px] font-mono bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500 font-bold group-hover:bg-amber-50 group-hover:text-amber-900 group-hover:border-amber-200 transition-colors">⌘K</kbd>
+        <kbd class="hidden sm:inline text-[10px] font-mono bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500 font-bold group-hover:bg-emerald-50 group-hover:text-emerald-900 group-hover:border-emerald-200 transition-colors">⌘K</kbd>
       </button>
 
       <!-- GitHub Link -->

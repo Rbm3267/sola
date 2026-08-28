@@ -195,20 +195,20 @@ export const SAAS_ECOSYSTEM: SaasIntegration[] = [
 
   // ── 6. Personal & Creator ──
   {
-    id: 'personal-workout-log',
-    name: 'Daily Fitness & Workout Tracker',
-    category: 'Personal & Creator',
-    badge: 'Personal',
-    description: 'Tactile rotary dial and volume gauge for tracking kettlebell training and daily habits.',
-    protocolUri: 'local://fitness/daily-log',
+    id: 'api-rate-limiter',
+    name: 'API Gateway Rate Limiter & Token Bucket',
+    category: 'Cloud & DevOps',
+    badge: 'Rate Limiter',
+    description: 'Tactile rotary dial and token bucket rate limiter for dynamic endpoint throttling.',
+    protocolUri: 'gateway://ratelimit/throttle',
     primaryComponent: 'TactileDialCard',
-    sampleIntent: 'Log 24kg kettlebell session with 85% volume goal',
+    sampleIntent: 'Set API rate limit throttle to 24k req/sec',
     config: {
-      title: 'Workout Weight & Reps Throttle',
+      title: 'API Rate Limit Throttle',
       value: 24,
-      min: 8,
-      max: 64,
-      unit: 'kg'
+      min: 5,
+      max: 100,
+      unit: 'k req/s'
     }
   },
   {

@@ -67,7 +67,7 @@
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-mono font-bold mb-2">
           <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-          <span>In-Situ Preview Simulator</span>
+          <span>Live UI Simulator</span>
         </div>
         <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-[-0.03em]">
           View on My UI
@@ -164,7 +164,7 @@
         
         <div class="flex-1 flex justify-center max-w-md mx-auto px-2">
           <div class="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-2.5 py-0.5 text-[10px] sm:text-[11px] font-mono text-slate-400 text-center truncate">
-            {activeMode === 'preset' ? `https://${selectedPreset}.app/workspace` : 'sandbox://in-situ-screenshot-stage'}
+            {activeMode === 'preset' ? `https://${selectedPreset}.app/workspace` : 'sandbox://live overlay-screenshot-stage'}
           </div>
         </div>
 
@@ -644,7 +644,7 @@
                   <DataCard config={{
                     title: "Sola Overlay Widget",
                     value: "$184,200",
-                    trend: "+24.8% Live In-Situ",
+                    trend: "+24.8% Live Live Browser Overlay",
                     icon: "trending-up"
                   }} />
                 </div>

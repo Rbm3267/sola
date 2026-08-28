@@ -1,278 +1,468 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
   import GaugeCard from '$lib/components/GaugeCard.svelte';
-  import TactileDialCard from '$lib/components/TactileDialCard.svelte';
   import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
-  import ListBlock from '$lib/components/ListBlock.svelte';
+  import TactileDialCard from '$lib/components/TactileDialCard.svelte';
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
-  import { goto } from '$app/navigation';
+  import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
+
+  // Active Filter & Search States (Svelte 5 Runes)
+  let selectedCategory = $state<string>('All');
+  let searchQuery = $state<string>('');
+  
+  // Extension & Simulator States
+  let isExtensionDetected = $state<boolean>(false);
+  let activeModalTemplate = $state<any | null>(null);
+  let toastMessage = $state<{ text: string; type: 'success' | 'info' | 'amber' } | null>(null);
+
+  const categories = [
+    'All',
+    'FinOps & Billing',
+    'Telemetry & APM',
+    'Operations & Governance',
+    'Product & SaaS',
+    'Executive & Mobile'
+  ];
 
   interface CommunityTemplate {
     id: string;
     title: string;
-    description: string;
-    tier: 'Personal & Creator' | 'Product & SaaS' | 'FinOps & Billing' | 'Telemetry & Systems' | 'Operations & Governance';
-    componentType: 'datacard' | 'gauge' | 'dial' | 'waterfall' | 'list' | 'incident';
+    author: {
+      name: string;
+      handle: string;
+      verified: boolean;
+      avatarBg: string;
+    };
+    category: string;
     stars: number;
     installs: string;
-    author: string;
+    desc: string;
     signals: string[];
-    config: any;
+    previewType: 'waterfall' | 'cluster' | 'dial' | 'incident' | 'datacard' | 'gauge';
+    previewConfig: any;
+    schema: Record<string, any>;
+    targetPreset: 'workspace' | 'fintech' | 'commerce' | 'aifrontdoor' | 'enterprise' | 'telemetry' | 'developer';
   }
 
   const templates: CommunityTemplate[] = [
     {
-      id: 'finops-arr-waterfall',
-      title: 'Subscription ARR Waterfall & Dunning',
-      description: 'Flow waterfall calculating gross MRR realization, gateway fees, and automated dunning trigger chips.',
-      tier: 'FinOps & Billing',
-      componentType: 'waterfall',
-      stars: 482,
-      installs: '12.4k',
-      author: '@alex_sre',
-      signals: ['finance/mrr', 'billing/churn'],
-      config: {
-        title: 'Monthly ARR Realization',
-        grossVolume: 184000,
-        computeExpense: 34000,
-        supportExpense: 16000,
-        tierDiscount: 8000
+      id: 'comm-01',
+      title: 'Subscription ARR Realization & Fee Waterfall',
+      author: { name: 'Elena Rostova', handle: 'elena.finops', verified: true, avatarBg: '#635bff' },
+      category: 'FinOps & Billing',
+      stars: 642,
+      installs: '18.4k',
+      desc: 'Zero-VDOM waterfall tracking gross volume, interchange deductions, and net payout batches.',
+      signals: ['stripe/gross_volume', 'billing/interchange_fees', 'payout/net_settlement'],
+      previewType: 'waterfall',
+      targetPreset: 'fintech',
+      previewConfig: {
+        title: 'Gross Payout Realization',
+        subtitle: 'Settlement pipeline to merchant bank',
+        grossVolume: 248000,
+        computeExpense: 38000,
+        supportExpense: 14000,
+        tierDiscount: 6400
+      },
+      schema: {
+        type: 'waterfall',
+        version: '1.2.0',
+        inputs: ['gross_volume', 'interchange', 'reserve'],
+        outputs: ['net_payout']
       }
     },
     {
-      id: 'creator-habit-dial',
-      title: 'Solo Creator Habit & Workout Log',
-      description: 'Tactile habit tracker with rotary weight dials, volume progress arcs, and optimistic completion triggers.',
-      tier: 'Personal & Creator',
-      componentType: 'dial',
-      stars: 318,
-      installs: '8.9k',
-      author: '@fitness_indie',
-      signals: ['user/streak', 'fitness/volume'],
-      config: {
-        title: 'Session Weight Throttle',
-        value: 24,
-        min: 8,
-        max: 48,
-        unit: 'kg',
-        subtext: 'Daily volume target: 85%'
-      }
-    },
-    {
-      id: 'k8s-cluster-saturation',
-      title: 'Cluster Saturation & Auto-Scaler',
-      description: 'Live telemetry HUD with node auto-scaling rotary dials, CPU rings, and sub-millisecond signal mesh stream.',
-      tier: 'Telemetry & Systems',
-      componentType: 'gauge',
-      stars: 620,
-      installs: '19.2k',
-      author: '@cloud_architect',
-      signals: ['cluster/nodes', 'cluster/cpu'],
-      config: {
-        title: 'Cluster CPU Saturation',
-        value: '78.4%',
-        percentage: 78,
-        subtext: 'Optimal operational envelope',
-        color: 'emerald'
-      }
-    },
-    {
-      id: 'sprint-cycle-tracker',
-      title: 'Product Sprint Cycles & Issues',
-      description: 'Keyboard-first issue triage list with cycle completion bars and reactive priority filters.',
-      tier: 'Product & SaaS',
-      componentType: 'list',
-      stars: 540,
-      installs: '15.8k',
-      author: '@pm_builder',
-      signals: ['sprint/velocity', 'issues/active'],
-      config: {
-        title: 'Active Sprint Cycle #14',
-        items: [
-          { label: 'Optimize Zero-VDOM Signal Batching', description: 'Priority: P0 • Assigned: Runtime Team', status: 'Active' },
-          { label: 'Implement Closed Shadow DOM Exporter', description: 'Priority: P1 • Assigned: Extension Team', status: 'Completed' },
-          { label: 'Multi-Region Relay Replication', description: 'Priority: P2 • In Staging Review', status: 'Pending' }
-        ]
-      }
-    },
-    {
-      id: 'incident-command-capsule',
-      title: 'Enterprise Incident Command Matrix',
-      description: 'P1 SLA countdown dial with blast-radius estimation and 1-click automated failover playbooks.',
-      tier: 'Operations & Governance',
-      componentType: 'incident',
-      stars: 712,
+      id: 'comm-02',
+      title: 'Cluster Saturation & Pod Mesh',
+      author: { name: 'Devin K.', handle: 'devops.dave', verified: true, avatarBg: '#0ea5e9' },
+      category: 'Telemetry & APM',
+      stars: 819,
       installs: '24.1k',
-      author: '@platform_governance',
-      signals: ['ops/incident_id', 'ops/sla_remain'],
-      config: {
+      desc: 'Real-time observability matrix with node load indicators, region tags, and sub-millisecond status rings.',
+      signals: ['k8s/node_load', 'telemetry/latency', 'cluster/shards'],
+      previewType: 'cluster',
+      targetPreset: 'telemetry',
+      previewConfig: {
+        title: 'Primary Ingress Cluster',
+        subtitle: '12 Attached Edge Microservices',
+        regions: [
+          { name: 'us-east-1 (Primary)', status: 'Optimal', lagMs: 0, tps: 14200 },
+          { name: 'us-west-2 (Replica)', status: 'Optimal', lagMs: 4, tps: 8900 },
+          { name: 'eu-central-1 (Replica)', status: 'Optimal', lagMs: 12, tps: 6400 }
+        ]
+      },
+      schema: {
+        type: 'cluster-matrix',
+        version: '2.0.0',
+        nodeCount: 12,
+        metrics: ['cpu', 'ram', 'network_io']
+      }
+    },
+    {
+      id: 'comm-03',
+      title: 'P1 Incident Rapid Triage & Playbook Dispatch',
+      author: { name: 'Marcus Vance', handle: 'marcus.sre', verified: true, avatarBg: '#f43f5e' },
+      category: 'Operations & Governance',
+      stars: 730,
+      installs: '19.8k',
+      desc: 'Critical incident HUD with active SLA countdown clocks, blast radius indicators, and 1-click playbooks.',
+      signals: ['ops/incident_state', 'oncall/roster', 'sla/countdown'],
+      previewType: 'incident',
+      targetPreset: 'enterprise',
+      previewConfig: {
         incidentId: 'INC009481',
         title: 'API Gateway Ingress Spike (EU-West)',
         severity: 'P1 - Critical Outage',
-        slaRemainingMin: 11,
+        slaRemainingMin: 9,
         blastRadius: '42,000 Active Sessions',
         playbooks: [
-          { id: 'pb-1', title: 'Route53 Edge DNS Failover', action: 'DNS Failover', automated: true },
-          { id: 'pb-2', title: 'Scale Container Workers (x4)', action: 'Auto-Scale', automated: true }
+          { id: 'pb-1', title: 'Route53 Edge DNS Failover', action: 'Route53 Failover', automated: true },
+          { id: 'pb-2', title: 'Scale Container Workers (x4)', action: 'Auto-Provision', automated: true }
         ]
+      },
+      schema: {
+        type: 'incident-matrix',
+        severity: 'P1',
+        slaThresholdMin: 15,
+        playbookIds: ['pb-1', 'pb-2']
       }
     },
     {
-      id: 'saas-mrr-growth',
-      title: 'B2B SaaS MRR & Net Retention',
-      description: 'Clean KPI summary cards tracking net expansion revenue with sub-millisecond signal updates.',
-      tier: 'Product & SaaS',
-      componentType: 'datacard',
-      stars: 395,
+      id: 'comm-04',
+      title: 'Tactile SLA Urgency & Capacity Dial',
+      author: { name: 'Sofia Chen', handle: 'sofia.design', verified: true, avatarBg: '#f59e0b' },
+      category: 'Executive & Mobile',
+      stars: 512,
       installs: '11.3k',
-      author: '@metrics_lead',
-      signals: ['saas/mrr', 'saas/ndr'],
-      config: {
-        title: 'Monthly Recurring Revenue',
-        value: '$142,800',
-        trend: '+18.4% vs last month',
+      desc: 'Apple-grade tactile rotary dial with 1-thumb touch tracking and physical haptic click feedback.',
+      signals: ['hardware/throttle', 'rate_limit/threshold', 'velocity/sprint'],
+      previewType: 'dial',
+      targetPreset: 'workspace',
+      previewConfig: {
+        title: 'Auto-Scaler Urgency Throttle',
+        value: 84,
+        unit: '%',
+        subtext: 'Rotary Sensitivity Limit'
+      },
+      schema: {
+        type: 'tactile-dial',
+        min: 0,
+        max: 100,
+        step: 1,
+        haptic: true
+      }
+    },
+    {
+      id: 'comm-05',
+      title: 'Live Net MRR Velocity & Sparkline HUD',
+      author: { name: 'Julian Thorne', handle: 'julian.saas', verified: false, avatarBg: '#10b981' },
+      category: 'Product & SaaS',
+      stars: 488,
+      installs: '13.7k',
+      desc: 'High-density SaaS KPI card with real-time reactive trend pills, directional vector badges, and SVG sparkline.',
+      signals: ['saas/arr', 'churn/velocity', 'pipeline/new_leads'],
+      previewType: 'datacard',
+      targetPreset: 'fintech',
+      previewConfig: {
+        title: 'Realized MRR Growth',
+        value: '$184,290',
+        trend: '+24.8%',
         icon: 'trending-up'
+      },
+      schema: {
+        type: 'datacard',
+        aggregation: 'sum',
+        sparklineSamples: 12
+      }
+    },
+    {
+      id: 'comm-06',
+      title: 'Zero-Egress Security & Compliance Score',
+      author: { name: 'SecOps Enclave', handle: 'secops.core', verified: true, avatarBg: '#8b5cf6' },
+      category: 'Operations & Governance',
+      stars: 395,
+      installs: '8.4k',
+      desc: 'Circular arc gauge tracking SOC2 compliance gates, air-gap policy diffs, and live egress isolation score.',
+      signals: ['soc2/audit_score', 'secops/egress_gates'],
+      previewType: 'gauge',
+      targetPreset: 'enterprise',
+      previewConfig: {
+        title: 'SOC2 Air-Gap Security Gate',
+        value: '94%',
+        percentage: 94,
+        subtext: 'Zero-Egress Compliant',
+        color: 'emerald'
+      },
+      schema: {
+        type: 'gauge',
+        targetScore: 90,
+        framework: 'SOC2-Type-II'
       }
     }
   ];
 
-  let searchQuery = $state('');
-  let selectedTier = $state<string>('All');
-  let selectedModalTemplate = $state<CommunityTemplate | null>(null);
-  let toastMessage = $state<string | null>(null);
+  // Filter derivation
+  let filteredTemplates = $derived.by(() => {
+    return templates.filter((t) => {
+      const matchCat = selectedCategory === 'All' || t.category === selectedCategory;
+      const q = searchQuery.toLowerCase().trim();
+      const matchSearch =
+        !q ||
+        t.title.toLowerCase().includes(q) ||
+        t.desc.toLowerCase().includes(q) ||
+        t.author.handle.toLowerCase().includes(q) ||
+        t.signals.some((s) => s.toLowerCase().includes(q));
+      return matchCat && matchSearch;
+    });
+  });
 
-  const tiers = ['All', 'Personal & Creator', 'Product & SaaS', 'FinOps & Billing', 'Telemetry & Systems', 'Operations & Governance'];
-
-  let filteredTemplates = $derived(
-    templates.filter(t => {
-      const matchTier = selectedTier === 'All' || t.tier === selectedTier;
-      const matchQuery = !searchQuery || 
-        t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.signals.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchTier && matchQuery;
-    })
-  );
-
-  function triggerForkToStudio(tmpl: CommunityTemplate) {
-    showToast(`Forked "${tmpl.title}" into Studio`);
-    setTimeout(() => {
-      goto(`/studio?template=${tmpl.id}`);
-    }, 600);
-  }
-
-  function openExtensionModal(tmpl: CommunityTemplate) {
-    selectedModalTemplate = tmpl;
-
-    // Broadcast postMessage to any active Sola Chrome Extension content script on the page
+  onMount(() => {
+    // Check if Sola Chrome Extension content script is present
     if (typeof window !== 'undefined') {
-      window.postMessage({
-        type: 'SOLA_MOUNT_IN_SITU',
-        source: 'sola_community',
-        template: {
-          id: tmpl.id,
-          title: tmpl.title,
-          description: tmpl.description,
-          componentType: tmpl.componentType,
-          config: tmpl.config
+      window.postMessage({ type: 'SOLA_PING_EXTENSION' }, '*');
+      const handleMessage = (e: MessageEvent) => {
+        if (e.data && (e.data.type === 'SOLA_EXTENSION_PONG' || e.data.type === 'SOLA_EXTENSION_READY')) {
+          isExtensionDetected = true;
         }
-      }, '*');
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
     }
-  }
+  });
 
-  function copyCode(tmpl: CommunityTemplate) {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(`npm i @sola/core @sola/ui\n// Component: ${tmpl.title}\n// Signals: ${tmpl.signals.join(', ')}`);
-      showToast('Copied integration snippet to clipboard');
-    }
-  }
-
-  function showToast(msg: string) {
-    toastMessage = msg;
+  function showToast(text: string, type: 'success' | 'info' | 'amber' = 'success') {
+    toastMessage = { text, type };
     setTimeout(() => {
-      if (toastMessage === msg) toastMessage = null;
-    }, 3000);
+      toastMessage = null;
+    }, 3500);
+  }
+
+  // 1. Broadcast directly to Sola Chrome Extension
+  function handleTestInExtension(tmpl: CommunityTemplate) {
+    if (typeof window !== 'undefined') {
+      window.postMessage(
+        {
+          type: 'SOLA_MOUNT_IN_SITU',
+          template: {
+            id: tmpl.id,
+            title: tmpl.title,
+            description: tmpl.desc,
+            previewType: tmpl.previewType,
+            schema: tmpl.schema,
+            config: tmpl.previewConfig
+          }
+        },
+        '*'
+      );
+      showToast(`Broadcasted "${tmpl.title}" to Sola Chrome Extension!`, 'success');
+    }
+  }
+
+  // 2. Open Live Host Simulator Modal
+  function openInSituModal(tmpl: CommunityTemplate) {
+    activeModalTemplate = tmpl;
+  }
+
+  // 3. Fork into Studio with schema payload
+  function handleForkToStudio(tmpl: CommunityTemplate) {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('sola_forked_template', JSON.stringify(tmpl));
+      } catch (e) {}
+      showToast(`Forking "${tmpl.title}" into Sola Design Studio...`, 'info');
+      setTimeout(() => {
+        window.location.href = `/studio?template=${encodeURIComponent(tmpl.id)}&preset=${encodeURIComponent(tmpl.targetPreset)}`;
+      }, 500);
+    }
   }
 </script>
 
 <svelte:head>
-  <title>Sola Design Community — Discover & Share UI Components</title>
+  <title>Sola Design Community — Discover & Mount Live Micro-Frontends</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#fafafa] text-slate-900 font-sans selection:bg-slate-200 selection:text-slate-900 overflow-x-hidden relative">
-  <Navbar />
+<!-- Toast Notification -->
+{#if toastMessage}
+  <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15)] flex items-center gap-3 border transition-all duration-300 backdrop-blur-xl {toastMessage.type === 'success' ? 'bg-slate-900 text-white border-emerald-500/50' : toastMessage.type === 'amber' ? 'bg-amber-50 text-amber-950 border-amber-300' : 'bg-slate-900 text-white border-slate-700'}">
+    <div class="w-2 h-2 rounded-full {toastMessage.type === 'success' ? 'bg-emerald-400 animate-ping' : toastMessage.type === 'amber' ? 'bg-amber-500' : 'bg-sky-400'}"></div>
+    <span class="text-xs font-mono font-bold tracking-tight">{toastMessage.text}</span>
+  </div>
+{/if}
 
-  <!-- Monochromatic Grid Texture -->
-  <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none"></div>
+<!-- Live Browser Overlay Host Picker Modal -->
+{#if activeModalTemplate}
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-2xl max-w-xl w-full p-6 sm:p-8 flex flex-col gap-6 relative overflow-hidden">
+      <!-- Ambient Glow -->
+      <div class="absolute -top-12 -right-12 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-  <!-- Toast Notification -->
-  {#if toastMessage}
-    <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white font-medium text-xs shadow-2xl flex items-center gap-2.5 animate-in">
-      <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      <span>{toastMessage}</span>
-    </div>
-  {/if}
-
-  <!-- Header Banner -->
-  <header class="relative z-10 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl px-4 sm:px-6 lg:px-8 py-12">
-    <div class="max-w-5xl mx-auto flex flex-col items-center text-center gap-4">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-bold uppercase bg-slate-100 text-slate-800 border border-slate-200">
-        <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-        <span>Open Component Registry</span>
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-slate-950 tracking-tight">Test Live Page Preview</h3>
+            <span class="text-xs font-mono text-slate-500">{activeModalTemplate.title}</span>
+          </div>
+        </div>
+        <button onclick={() => activeModalTemplate = null} class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center cursor-pointer transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-slate-950 tracking-[-0.03em]">
-        Discover, Fork, and Share Sola UI
-      </h1>
-      <p class="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed font-normal">
-        Explore community-crafted zero-VDOM components, presets, and action playbooks. 1-click fork into Studio or preview live in your Chrome Extension.
-      </p>
 
-      <!-- Search & Filters -->
-      <div class="w-full max-w-xl flex gap-2 mt-2">
-        <div class="relative flex-1">
-          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input 
-            type="text" 
-            bind:value={searchQuery}
-            placeholder="Search templates, authors, signals (e.g. mrr, cluster)..." 
-            class="w-full bg-white border border-slate-200/90 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 font-mono shadow-xs" />
+      <div class="flex flex-col gap-3">
+        <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Choose Test Environment:</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Option A: Chrome Extension -->
+          <button 
+            onclick={() => { handleTestInExtension(activeModalTemplate); activeModalTemplate = null; }}
+            class="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-100/80 hover:border-slate-300 flex flex-col gap-2 text-left cursor-pointer transition-all">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-slate-900">Active Chrome Tab</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Extension</span>
+            </div>
+            <p class="text-[11px] text-slate-600 leading-relaxed">
+              Injects directly into your current webpage via Shadow DOM with zero CSS bleed.
+            </p>
+          </button>
+
+          <!-- Option B: Built-in Sandbox Simulator -->
+          <a 
+            href="/preview?component={activeModalTemplate.previewType}&preset={activeModalTemplate.targetPreset}"
+            class="p-4 rounded-2xl border border-amber-200/80 bg-amber-50/40 hover:bg-amber-50 hover:border-amber-300 flex flex-col gap-2 text-left cursor-pointer transition-all text-decoration-none">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-amber-950">Host Simulator</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 font-bold">Web Sandbox</span>
+            </div>
+            <p class="text-[11px] text-amber-800/80 leading-relaxed">
+              Preview inside mock Workspace, Operations, Billing, or Telemetry dashboards.
+            </p>
+          </a>
         </div>
       </div>
 
-      <!-- Tier Filters -->
-      <div class="flex flex-wrap items-center justify-center gap-1.5 mt-2">
-        {#each tiers as tier}
+      <!-- Action Footer -->
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+        <span class="text-[11px] font-mono text-slate-400">Target Preset: <strong class="text-slate-700">{activeModalTemplate.targetPreset}</strong></span>
+        <div class="flex items-center gap-2">
+          <button onclick={() => activeModalTemplate = null} class="px-4 py-2 rounded-xl text-xs font-mono text-slate-600 hover:text-slate-900 cursor-pointer">
+            Cancel
+          </button>
           <button 
-            onclick={() => selectedTier = tier}
-            class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer {selectedTier === tier ? 'bg-slate-900 text-white shadow-sm' : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/90'}">
-            {tier}
+            onclick={() => handleForkToStudio(activeModalTemplate)} 
+            class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold cursor-pointer transition-all shadow-xs">
+            Fork to Studio ↗
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- Main Luxury Surface Container -->
+<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 font-sans selection:bg-amber-500/20 selection:text-amber-900">
+  <Navbar />
+
+  <!-- Hero & Extension Status Banner -->
+  <header class="relative border-b border-slate-200/80 bg-white/80 backdrop-blur-xl px-4 sm:px-6 lg:px-8 pt-12 pb-10 overflow-hidden">
+    <!-- Ambient Radial Specular Lighting -->
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[340px] bg-gradient-to-b from-amber-200/20 via-sky-200/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto flex flex-col items-center text-center gap-5 relative z-10">
+      
+      <!-- Status Badge & Chrome Extension Indicator -->
+      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-100/90 border border-slate-200/90 shadow-xs">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full {isExtensionDetected ? 'bg-emerald-400' : 'bg-amber-400'} opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 {isExtensionDetected ? 'bg-emerald-500' : 'bg-amber-500'}"></span>
+        </span>
+        <span class="text-xs font-mono font-bold text-slate-700">
+          Sola Community Registry • {isExtensionDetected ? 'Chrome Extension Connected' : 'Extension Ready for Live Browser Overlay Mounting'}
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-[-0.03em] max-w-4xl">
+        Discover, Test Live Browser Overlay, and Fork Sola Micro-Frontends
+      </h1>
+      
+      <p class="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed font-normal">
+        Community-crafted zero-VDOM components, real-time signal waterflows, and tactile dials. Mount in 1-click on your live application or fork directly into Studio.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="w-full max-w-xl relative mt-2">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <input 
+          type="text" 
+          bind:value={searchQuery}
+          placeholder="Search components, signals ($finance/mrr), authors..." 
+          class="w-full bg-white border border-slate-200/90 rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 font-mono shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] transition-all" />
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center justify-center gap-1.5 mt-2 select-none">
+        {#each categories as cat}
+          <button 
+            onclick={() => selectedCategory = cat}
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap {selectedCategory === cat ? 'bg-slate-950 text-white font-bold shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 border border-slate-200/60'}">
+            {cat}
           </button>
         {/each}
       </div>
     </div>
   </header>
 
-  <!-- Community Grid -->
-  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {#each filteredTemplates as tmpl}
-        <div class="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between gap-5 group">
+  <!-- Community Grid Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    
+    <!-- Section Toolbar Header -->
+    <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-200/80">
+      <div class="flex items-center gap-2 text-xs font-mono text-slate-500">
+        <span>Showing <strong class="text-slate-900">{filteredTemplates.length}</strong> live components</span>
+      </div>
+
+      <!-- Quick Action: Chrome Companion Helper -->
+      <div class="flex items-center gap-2">
+        <a 
+          href="/preview" 
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-amber-900 bg-amber-50 border border-amber-200 hover:bg-amber-100 transition-all text-decoration-none">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Open Full Live Host Simulator</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {#each filteredTemplates as tmpl (tmpl.id)}
+        <div class="group relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 hover:border-amber-500/40 rounded-3xl p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between gap-5 overflow-hidden">
           
-          <div class="flex flex-col gap-4">
-            <!-- Card Header -->
+          <!-- Subtle Specular Corner Sheen -->
+          <div class="absolute -right-12 -top-12 w-32 h-32 bg-amber-400/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none"></div>
+
+          <!-- Top Metadata Header -->
+          <div class="flex flex-col gap-3 relative z-10">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-mono font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
-                {tmpl.tier}
+              <!-- Category Pill -->
+              <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-600 bg-slate-100 border border-slate-200/80 px-2.5 py-0.5 rounded-full">
+                {tmpl.category}
               </span>
-              <div class="flex items-center gap-3 text-xs text-slate-500 font-mono">
+
+              <!-- Star & Install Metrics -->
+              <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
                 <span class="flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-500" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <span>{tmpl.stars}</span>
+                  <svg class="w-3 h-3 text-amber-400 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <strong class="text-slate-700">{tmpl.stars}</strong>
                 </span>
+                <span>·</span>
                 <span class="flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <svg class="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   <span>{tmpl.installs}</span>
                 </span>
               </div>
@@ -280,145 +470,89 @@
 
             <!-- Title & Description -->
             <div>
-              <h3 class="text-base font-black text-slate-950 tracking-tight mb-1 group-hover:text-amber-700 transition-colors">
+              <h3 class="text-base font-bold text-slate-950 group-hover:text-amber-600 transition-colors tracking-tight">
                 {tmpl.title}
               </h3>
-              <p class="text-xs text-slate-600 leading-relaxed">
-                {tmpl.description}
+              <p class="text-xs text-slate-500 leading-relaxed mt-1 line-clamp-2">
+                {tmpl.desc}
               </p>
             </div>
+          </div>
 
-            <!-- LIVE MINI COMPONENT PREVIEW STAGE -->
-            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 overflow-hidden min-h-[120px] flex items-center justify-center">
-              {#if tmpl.componentType === 'waterfall'}
-                <div class="w-full scale-90 transform-gpu origin-center">
-                  <FlowWaterfall config={tmpl.config} />
-                </div>
-              {:else if tmpl.componentType === 'dial'}
-                <div class="w-full scale-90 transform-gpu origin-center flex justify-center">
-                  <TactileDialCard config={tmpl.config} />
-                </div>
-              {:else if tmpl.componentType === 'gauge'}
-                <div class="w-full scale-90 transform-gpu origin-center flex justify-center">
-                  <GaugeCard config={tmpl.config} />
-                </div>
-              {:else if tmpl.componentType === 'list'}
-                <div class="w-full scale-90 transform-gpu origin-center">
-                  <ListBlock config={tmpl.config} />
-                </div>
-              {:else if tmpl.componentType === 'incident'}
-                <div class="w-full scale-90 transform-gpu origin-center">
-                  <IncidentTriageMatrix config={tmpl.config} />
-                </div>
-              {:else}
-                <div class="w-full scale-90 transform-gpu origin-center">
-                  <DataCard config={tmpl.config} />
-                </div>
+          <!-- LIVE MINI INTERACTIVE COMPONENT PREVIEW -->
+          <div class="relative rounded-2xl bg-slate-50/80 border border-slate-200/70 p-3 overflow-hidden shadow-inner min-h-[160px] flex items-center justify-center">
+            
+            <div class="w-full scale-[0.92] sm:scale-100 origin-center transition-transform">
+              {#if tmpl.previewType === 'waterfall'}
+                <FlowWaterfall config={tmpl.previewConfig} />
+              {:else if tmpl.previewType === 'cluster'}
+                <ClusterMatrix config={tmpl.previewConfig} />
+              {:else if tmpl.previewType === 'incident'}
+                <IncidentTriageMatrix config={tmpl.previewConfig} />
+              {:else if tmpl.previewType === 'datacard'}
+                <DataCard config={tmpl.previewConfig} />
+              {:else if tmpl.previewType === 'gauge'}
+                <GaugeCard config={tmpl.previewConfig} />
+              {:else if tmpl.previewType === 'dial'}
+                <TactileDialCard config={tmpl.previewConfig} />
               {/if}
             </div>
 
-            <!-- Signals Tags -->
-            <div class="flex flex-wrap gap-1.5">
+            <!-- Live Telemetry Watermark Pill -->
+            <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-md text-white font-mono text-[9px] font-bold flex items-center gap-1 shadow-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Zero-VDOM Live</span>
+            </div>
+          </div>
+
+          <!-- Signals & Author Row -->
+          <div class="flex flex-col gap-3 relative z-10 border-t border-slate-100 pt-3">
+            
+            <!-- Author Handle & Verified Badge -->
+            <div class="flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white font-mono shadow-xs" style="background-color: {tmpl.author.avatarBg}">
+                  {tmpl.author.name.charAt(0)}
+                </div>
+                <span class="font-mono text-slate-700 font-medium">{tmpl.author.handle}</span>
+                {#if tmpl.author.verified}
+                  <svg class="w-3.5 h-3.5 text-sky-500 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                {/if}
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">Host: {tmpl.targetPreset}</span>
+            </div>
+
+            <!-- Signal Badges -->
+            <div class="flex flex-wrap gap-1">
               {#each tmpl.signals as sig}
-                <span class="text-[10px] font-mono font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
+                <span class="text-[10px] font-mono text-slate-600 bg-white px-2 py-0.5 rounded-md border border-slate-200/90 shadow-xs">
                   ${sig}
                 </span>
               {/each}
             </div>
           </div>
 
-          <!-- Action Footer -->
-          <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-            <span class="text-[11px] font-mono text-slate-400">
-              by <strong class="text-slate-700">{tmpl.author}</strong>
-            </span>
+          <!-- Card Action Buttons -->
+          <div class="grid grid-cols-2 gap-2 relative z-10 pt-1">
+            <!-- Action 1: Fork to Studio -->
+            <button 
+              onclick={() => handleForkToStudio(tmpl)}
+              class="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono font-bold text-xs transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+              <span>Fork Studio</span>
+            </button>
 
-            <div class="flex items-center gap-2">
-              <!-- Fork to Studio -->
-              <button 
-                onclick={() => triggerForkToStudio(tmpl)}
-                class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white transition-all shadow-xs hover:shadow-md flex items-center gap-1.5 cursor-pointer">
-                <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
-                <span>Fork to Studio</span>
-              </button>
-
-              <!-- Test in My UI (Chrome Extension Bridge) -->
-              <button 
-                onclick={() => openExtensionModal(tmpl)}
-                class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer">
-                <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
-                <span>Test in UI</span>
-              </button>
-            </div>
+            <!-- Action 2: Test in My UI (Extension / Live Browser Overlay Modal) -->
+            <button 
+              onclick={() => openInSituModal(tmpl)}
+              class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Test in My UI</span>
+            </button>
           </div>
 
         </div>
       {/each}
     </div>
   </main>
-
-  <!-- CHROME EXTENSION IN-SITU PREVIEW MODAL -->
-  {#if selectedModalTemplate}
-    <div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
-      <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl flex flex-col gap-5 animate-in">
-        
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center border border-emerald-500/20">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
-            </div>
-            <div>
-              <h3 class="text-base font-black text-slate-950">In-Situ Preview Bridge</h3>
-              <p class="text-xs text-slate-500">Test "{selectedModalTemplate.title}" on your live UI</p>
-            </div>
-          </div>
-          <button 
-            onclick={() => selectedModalTemplate = null}
-            class="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-all cursor-pointer">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
-
-        <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
-          <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-start gap-3 text-emerald-950">
-            <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-            <div>
-              <strong class="font-bold">Live Chrome Extension Event Dispatched:</strong>
-              <p class="mt-0.5 text-[11px] text-emerald-800">
-                If the Sola Chrome Extension is active on your browser, this component has been injected into your active tab's Shadow DOM!
-              </p>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
-            <span class="font-bold text-slate-800">Test in Simulator or Install NPM:</span>
-            <div class="flex flex-col sm:flex-row gap-2 pt-1">
-              <a 
-                href="/preview?component={selectedModalTemplate.componentType === 'waterfall' ? 'waterfall' : (selectedModalTemplate.componentType === 'dial' ? 'dial' : (selectedModalTemplate.componentType === 'gauge' ? 'cluster' : 'incident'))}"
-                class="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-medium text-center text-xs flex items-center justify-center gap-2 cursor-pointer shadow-xs">
-                <span>Open in Web Simulator</span>
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </a>
-              <button 
-                onclick={() => copyCode(selectedModalTemplate!)}
-                class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-medium text-xs flex items-center justify-center gap-2 cursor-pointer">
-                <svg class="w-3.5 h-3.5 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <span>Copy NPM Code</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex justify-end pt-2">
-          <button 
-            onclick={() => selectedModalTemplate = null}
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer">
-            Close
-          </button>
-        </div>
-
-      </div>
-    </div>
-  {/if}
-
 </div>

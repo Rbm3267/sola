@@ -5,18 +5,50 @@ import { GEMINI_API_KEY } from '$env/static/private';
 export async function POST({ request }) {
   try {
     const data = await request.json();
-    const prompt = data.intent;
 
     if (!GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY is missing.');
     }
 
-    if (typeof prompt !== 'string' || prompt.trim().length === 0 || prompt.length > 1000) {
-      return json({ error: 'Invalid intent query. Maximum length is 1000 characters.' }, { status: 400 });
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+    // Mode 1: Sola Architect (Free-Form Solutions Architect & Framework Consultant)
+    if (data.mode === 'architect' || data.query) {
+      const query = (data.query || data.intent || '').trim();
+      if (!query || query.length > 2000) {
+        return json({ error: 'Invalid query. Maximum length is 2000 characters.' }, { status: 400 });
+      }
+
+      const architectSystemPrompt = `You are **Sola Architect**, the autonomous Principal UI & Systems Solutions Architect for the Sola Reactive Runtime ecosystem (@sola/core, @sola/ui, @sola/compiler, @sola/relay).
+
+Your Mission:
+1. Explain how Sola embeds and modernizes existing web applications (React 19, Next.js App Router, Svelte 5, Vue 3, Angular, or legacy enterprise platforms like ServiceNow, Stripe, Jira, and custom monoliths).
+2. Answer "How would this work in my UI?" with concrete architectural guidance, Shadow DOM isolation strategies, and exact copy-paste integration code snippets.
+3. Explain the Zero-VDOM 3.2 kB Signal Mesh (@sola/core) and how fine-grained signals eliminate virtual DOM reconciliation overhead and re-rendering lag.
+4. Show developers how to eliminate "No-Code React Form Pain" using Sola's declarative DynamicForm and DataCard schemas that configure from UI with 0 code changes.
+5. Provide guidance on the Sola Chrome Extension (Live Browser Overlay) for in-situ sandbox testing without production deployments.
+
+Formatting:
+- Structure your response with crisp markdown headers, bullet points, and syntax-highlighted code blocks (javascript, typescript, svelte, or bash).
+- Write production-grade, concise code snippets.
+- Maintain a world-class, confident, Apple / Linear / Stripe level polish.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: architectSystemPrompt + "\n\nUser Question: " + query,
+        config: {
+          temperature: 0.3
+        }
+      });
+
+      return json({ reply: response.text || 'I am ready to architect your Sola integration.' });
     }
 
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-    const cleanPrompt = prompt.trim();
+    // Mode 2: Generative UI Intent Compiler (JSON Component AST)
+    const prompt = (data.intent || '').trim();
+    if (!prompt || prompt.length > 1000) {
+      return json({ error: 'Invalid intent query. Maximum length is 1000 characters.' }, { status: 400 });
+    }
 
     const systemInstruction = `You are Sola's generative UI intent compiler.
 You synthesize world-class, luxury UI surfaces (Linear, Stripe, Apple Fitness grade polish).
@@ -35,25 +67,20 @@ Available Primitives:
    config: { title: string, events: Array<{ id: string, message: string, timestamp: string, type: 'info' | 'success' | 'warning' }> }
 6. 'ClusterMatrix': High-density distributed node matrix and cluster health grid.
    config: { title: string, subtitle?: string, nodes: Array<{ id: string, label: string, status: 'nominal' | 'warning' | 'critical' | 'draining' | 'idle', load?: number, latency?: string, region?: string }> }
-7. 'DiffAudit': Enterprise Platform Change Advisory Board (CAB) & drift review diff with 1-click approvals.
+7. 'DiffAudit': Enterprise Change review diff with 1-click approvals.
    config: { title: string, entityId: string, entityType: string, riskLevel: 'Low' | 'Moderate' | 'High' | 'Destructive', riskScore: number, requester: string, window: string, diffLines: Array<{ type: 'add' | 'remove' | 'context', content: string }> }
-8. 'FlowWaterfall': Financial revenue realization and APM request span latency breakdown.
+8. 'FlowWaterfall': Financial revenue realization and latency breakdown.
    config: { title: string, subtitle?: string, steps: Array<{ id: string, name: string, delta: number, type: 'start' | 'credit' | 'debit' | 'total', formattedValue: string }> }
 9. 'IncidentTriageMatrix': Mission-control P1 emergency incident triage capsule with countdown timer.
    config: { incidentId: string, title: string, severity: 'P1 - Critical' | 'P2 - High' | 'P3 - Moderate', slaRemainingMin: number, blastRadius: string, playbooks: Array<{ id: string, title: string, action: string, automated?: boolean }> }
 10. 'SchemaInspector': Database table schema explorer with types, row counts, and foreign key relations.
    config: { table: string, rowCount?: string, sizeBytes?: string, columns: Array<{ name: string, type: string, isPrimary?: boolean, isNullable?: boolean, foreignKey?: string }> }
 
-Output format: Return ONLY a JSON Array of component objects with an optional colSpan (1, 2, or 3).
-Example:
-[
-  { "component": "DataCard", "colSpan": 1, "config": { "title": "Revenue", "value": "$48,200", "trend": "+12.4%", "icon": "trending-up" } },
-  { "component": "GaugeCard", "colSpan": 1, "config": { "title": "SLA Compliance", "value": "99.4%", "percentage": 99, "subtext": "MTTR < 15m", "color": "emerald" } }
-]`;
+Output format: Return ONLY a JSON Array of component objects with an optional colSpan (1, 2, or 3).`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.6-flash',
-      contents: systemInstruction + "\n\nUser Intent: " + cleanPrompt,
+      model: 'gemini-2.5-flash',
+      contents: systemInstruction + "\n\nUser Intent: " + prompt,
       config: {
         responseMimeType: "application/json",
         temperature: 0.2
@@ -69,6 +96,6 @@ Example:
 
   } catch (err: any) {
     console.error('AI Intent Error:', err);
-    return json({ error: err.message || 'Failed to compile intent AST' }, { status: 500 });
+    return json({ error: err.message || 'Failed to process AI request' }, { status: 500 });
   }
 }

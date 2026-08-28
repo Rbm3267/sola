@@ -225,9 +225,9 @@
               FinOps & MRR
             </button>
             <button 
-              onclick={() => promptText = 'Create a personal habit and workout log with rotary dials and streak counters.'}
+              onclick={() => promptText = 'Create an API Gateway token bucket rate limiter with dynamic throttle dials and p99 latency gauge.'}
               class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
-              Fitness & Habits
+              API Rate Limiter
             </button>
             <button 
               onclick={() => promptText = 'Create a live cloud cluster telemetry HUD with worker auto-scaling rotary dials.'}
@@ -351,7 +351,7 @@
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold font-mono text-slate-400 uppercase">Stage Canvas:</span>
           <span class="text-xs font-bold text-white bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
-            {generatedPreset === 'fitness' ? 'Personal Fitness & Habit Log' : (generatedPreset === 'telemetry' ? 'APM & Telemetry HUD' : 'FinOps & Revenue Studio')}
+            {generatedPreset === 'ratelimit' ? 'API Gateway Rate Limiter' : (generatedPreset === 'telemetry' ? 'APM & Telemetry HUD' : 'FinOps & Revenue Studio')}
           </span>
         </div>
 
@@ -388,20 +388,20 @@
             supportExpense={Math.round(mrrValue * 0.08)}
             tierDiscount={Math.round(mrrValue * 0.04)} />
 
-        {:else if generatedPreset === 'fitness'}
-          <!-- Personal Creator / Fitness Preset -->
+        {:else if generatedPreset === 'ratelimit'}
+          <!-- API Gateway Rate Limiter Preset -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <DataCard config={{ title: "Habit Streak", value: `${habitStreak} Days`, trend: "+3 this week", icon: "zap" }} />
-            <GaugeCard config={{ title: "Daily Volume Goal", value: 85, max: 100, unit: "%", icon: "activity" }} />
-            <DataCard config={{ title: "Total Workouts", value: "48 Sessions", trend: "On Track", icon: "award" }} />
+            <DataCard config={{ title: "Gateway Ingress", value: "142.8k req/s", trend: "Optimal", icon: "activity" }} />
+            <GaugeCard config={{ title: "Token Bucket Load", value: 68, max: 100, unit: "%", icon: "activity" }} />
+            <DataCard config={{ title: "p99 Response", value: "4.2 ms", trend: "-1.1ms vs baseline", icon: "trending-up" }} />
           </div>
 
           <TactileDialCard 
-            title="Workout Weight & Reps Throttle" 
+            title="API Rate Limit Throttle" 
             value={clusterNodes * 2} 
-            min={8} 
+            min={4} 
             max={64} 
-            unit="kg" />
+            unit="k req/s" />
 
         {:else}
           <!-- Systems Telemetry Preset -->
