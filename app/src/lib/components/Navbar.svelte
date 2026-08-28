@@ -75,9 +75,9 @@
         onclick={() => isAiModalOpen = true}
         class="flex items-center justify-between w-auto sm:w-60 md:w-64 h-9 sm:h-10 px-3 sm:px-4 rounded-2xl border border-slate-200/90 bg-white/90 backdrop-blur-md text-xs font-medium text-slate-500 hover:border-amber-400 hover:bg-white hover:text-slate-900 transition-all cursor-pointer shadow-xs group">
         <div class="flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 group-hover:text-emerald-700 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          <span class="font-medium text-slate-700 hidden sm:inline">Ask Sola Architect...</span>
-          <span class="font-medium text-slate-700 sm:hidden">Architect</span>
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 group-hover:text-emerald-700 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg>
+          <span class="font-medium text-slate-700 hidden sm:inline">Ask Sola Arc...</span>
+          <span class="font-medium text-slate-700 sm:hidden">Arc</span>
         </div>
         <kbd class="hidden sm:inline text-[10px] font-mono bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500 font-bold group-hover:bg-emerald-50 group-hover:text-emerald-900 group-hover:border-emerald-200 transition-colors">⌘K</kbd>
       </button>
