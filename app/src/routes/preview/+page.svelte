@@ -166,87 +166,96 @@
           <div class="w-full max-w-4xl flex flex-col gap-4 sm:gap-6" style="color: {presets[selectedPreset].text}">
             
             {#if selectedPreset === 'servicenow'}
-              <!-- Authentic ServiceNow Service Portal / Employee Center Layout -->
+              <!-- Authentic ServiceNow Employee Center (/esc) Layout -->
               <div class="flex flex-col gap-4">
-                <!-- ServiceNow Service Portal Header Navigation Bar -->
-                <div class="flex items-center justify-between border-b pb-3 border-slate-700/80">
+                <!-- ServiceNow ESC Navigation Header -->
+                <div class="bg-[#183b38] -mx-3 -mt-3 sm:-mx-6 sm:-mt-6 p-4 rounded-t-2xl sm:rounded-t-3xl flex items-center justify-between text-white border-b border-[#24524e]">
                   <div class="flex items-center gap-3">
-                    <span class="px-2.5 py-1 rounded bg-[#81b5a1]/20 text-[#81b5a1] font-mono font-bold text-xs">ServiceNow Service Portal</span>
-                    <div class="hidden sm:flex items-center gap-3 text-xs font-sans text-slate-300 opacity-80">
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded bg-[#81b5a1] flex items-center justify-center font-bold text-xs text-[#0f2422]">sn</span>
+                      <span class="font-bold text-sm tracking-wide">Employee Center</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-4 text-xs font-sans text-teal-100/80 ml-4">
+                      <span class="hover:underline cursor-pointer">Request Something</span>
                       <span class="hover:underline cursor-pointer">Knowledge Base</span>
-                      <span>•</span>
-                      <span class="hover:underline cursor-pointer font-bold text-emerald-400">My Tickets (INC009481)</span>
-                      <span>•</span>
-                      <span class="hover:underline cursor-pointer">System Status</span>
+                      <span class="hover:underline cursor-pointer font-bold text-white border-b-2 border-[#81b5a1] pb-0.5">My Requests</span>
+                      <span class="hover:underline cursor-pointer">IT Support</span>
                     </div>
                   </div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">URL: /sp?id=ticket&sys_id=INC009481</span>
+                  <div class="flex items-center gap-3">
+                    <div class="relative hidden sm:block">
+                      <input type="text" placeholder="How can we help?" class="px-3 py-1.5 rounded-lg bg-[#24524e] text-white placeholder-teal-200/60 text-xs border border-teal-600/40 outline-none w-48 focus:w-64 transition-all" />
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-[#81b5a1] text-[#0f2422] font-bold text-xs flex items-center justify-center shadow-xs">JD</div>
                   </div>
                 </div>
 
-                <!-- ServiceNow Ticket Context Header -->
-                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
-                    <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wide">ServiceNow Ticket View • INC009481</div>
-                    <div class="text-sm font-bold text-slate-100">Production Database Ingress Latency & SLA Degradation</div>
-                  </div>
-                  <div class="flex items-center gap-2 shrink-0">
-                    <span class="px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-mono font-bold">P1 - Critical Outage</span>
-                    <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-mono font-bold">In Progress</span>
+                <!-- ServiceNow ESC Hero Search Banner -->
+                <div class="bg-[#214a46] -mx-3 sm:-mx-6 px-6 py-5 flex flex-col items-center justify-center text-center gap-2 border-b border-[#2d5f5a]">
+                  <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">How can we help you today, John?</h2>
+                  <div class="w-full max-w-xl relative mt-1">
+                    <input type="text" placeholder="Search for information, services, or ticket INC009481..." class="w-full px-4 py-2.5 rounded-xl bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm shadow-md outline-none border border-teal-300/40" />
                   </div>
                 </div>
 
-                <!-- ServiceNow Host Context + Injected Sola Component Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-                  <!-- ServiceNow Ticket Metadata Sidebar -->
-                  <div class="lg:col-span-4 flex flex-col gap-3 font-sans">
-                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-2.5 text-xs">
-                      <div class="text-[10px] font-mono uppercase text-slate-400 border-b border-slate-800 pb-1.5 font-bold">Ticket Information</div>
-                      
-                      <div class="flex items-center justify-between">
-                        <span class="opacity-60">Caller:</span>
-                        <span class="font-bold text-slate-200">Jason Statham</span>
-                      </div>
-                      
-                      <div class="flex items-center justify-between">
-                        <span class="opacity-60">Assignment Group:</span>
-                        <span class="font-mono text-emerald-400 text-[11px]">Cloud Infrastructure SRE</span>
+                <!-- ServiceNow Ticket View (/esc?id=ec_ticket_page) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start pt-2">
+                  <!-- ESC Ticket Summary & Stage Progress -->
+                  <div class="lg:col-span-5 flex flex-col gap-3 font-sans">
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col gap-3 text-xs">
+                      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <div>
+                          <div class="text-[10px] font-mono text-emerald-400 font-bold">ESC Ticket • INC009481</div>
+                          <div class="text-sm font-bold text-slate-100">Production Latency Spike</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold">In Progress</span>
                       </div>
 
-                      <div class="flex items-center justify-between">
-                        <span class="opacity-60">Opened:</span>
-                        <span class="font-mono opacity-80 text-[11px]">Today 08:14 AM EST</span>
+                      <!-- Stage Tracker -->
+                      <div class="flex flex-col gap-1.5 my-1">
+                        <span class="text-[10px] font-mono text-slate-400 uppercase">Workflow Stage</span>
+                        <div class="flex items-center justify-between text-[9px] font-mono text-slate-400">
+                          <span class="text-emerald-400 font-bold">✓ Submitted</span>
+                          <span class="text-emerald-400 font-bold">✓ Assigned</span>
+                          <span class="text-amber-400 font-bold">● Work in Progress</span>
+                          <span class="opacity-40">Resolved</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden flex">
+                          <div class="bg-emerald-500 h-full w-2/3"></div>
+                          <div class="bg-amber-500 h-full w-1/6 animate-pulse"></div>
+                        </div>
                       </div>
 
-                      <div class="flex items-center justify-between">
-                        <span class="opacity-60">Impacted CI:</span>
-                        <span class="font-mono text-amber-400 text-[11px]">aws-prod-aurora-pg</span>
+                      <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800 text-[11px]">
+                        <div>
+                          <span class="text-slate-500 block text-[10px]">Opened For:</span>
+                          <span class="font-bold text-slate-200">John Doe</span>
+                        </div>
+                        <div>
+                          <span class="text-slate-500 block text-[10px]">Assignment Group:</span>
+                          <span class="font-mono text-emerald-400">Cloud Infrastructure SRE</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-1.5 text-xs">
-                      <div class="text-[10px] font-mono uppercase text-slate-400 font-bold">SLA Target</div>
-                      <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden my-1">
-                        <div class="bg-red-500 h-full w-[85%] animate-pulse"></div>
-                      </div>
-                      <div class="text-[10px] font-mono text-red-400 font-bold">11 minutes before P1 SLA breach</div>
+                    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs">
+                      <span class="text-slate-400 font-mono text-[10px]">ServiceNow ESC URL:</span>
+                      <span class="font-mono text-emerald-400 text-[10px] bg-slate-800 px-2 py-0.5 rounded border border-slate-700">/esc?id=ec_ticket_page&sys_id=INC009481</span>
                     </div>
                   </div>
 
-                  <!-- Injected Sola Component Surface inside ServiceNow Widget Container -->
-                  <div class="lg:col-span-8 relative group w-full max-w-full">
-                    <!-- ServiceNow Widget Wrapper Header -->
-                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
-                      <span>ServiceNow Portal Widget (`sp-widget`)</span>
+                  <!-- Injected Sola Component Surface inside ServiceNow ESC Widget Container -->
+                  <div class="lg:col-span-7 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-[#81b5a1] text-[#0f2422] font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#0f2422] animate-ping"></span>
+                      <span>ServiceNow Employee Center Widget Slot</span>
                     </div>
 
                     {#if activeComponent === 'incident'}
                       <IncidentTriageMatrix config={{
                         incidentId: "INC009481",
-                        title: "ServiceNow ITSM • Ingress Latency Spike",
-                        severity: "P1 - Critical",
+                        title: "ServiceNow ESC • Ingress Latency Spike",
+                        severity: "P1 - Critical Outage",
                         slaRemainingMin: 11,
                         blastRadius: "42,000 Active Sessions",
                         playbooks: [
@@ -256,11 +265,11 @@
                         ]
                       }} />
                     {:else if activeComponent === 'cluster'}
-                      <ClusterMatrix config={{ title: "ServiceNow Attached Cluster Mesh", subtitle: "12 Primary & Read-Replica Shards" }} />
+                      <ClusterMatrix config={{ title: "ServiceNow ESC Attached Cluster Mesh", subtitle: "12 Primary & Read-Replica Shards" }} />
                     {:else if activeComponent === 'waterfall'}
-                      <FlowWaterfall config={{ title: "ServiceNow FinOps Cost Allocation", subtitle: "Monthly cloud allocation to ITSM cost centers" }} />
+                      <FlowWaterfall config={{ title: "ServiceNow ESC FinOps Allocation", subtitle: "Monthly cloud allocation to ITSM cost centers" }} />
                     {:else if activeComponent === 'datacard'}
-                      <DataCard config={{ title: "ServiceNow Open Incidents", value: "14 P1/P2", trend: "-4 vs yesterday", icon: "activity" }} />
+                      <DataCard config={{ title: "ServiceNow Open ESC Tickets", value: "14 Active", trend: "-4 vs yesterday", icon: "activity" }} />
                     {:else if activeComponent === 'dial'}
                       <TactileDialCard config={{ title: "ServiceNow SLA Breach Risk", value: 84, unit: "%", subtext: "Urgency throttle" }} />
                     {/if}
