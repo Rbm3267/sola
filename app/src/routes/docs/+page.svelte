@@ -222,15 +222,33 @@ export function mount(__target, props = {}) {
               <span>Getting Started</span>
             </div>
             <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Quickstart & Installation</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              Create a new Sola application in under 3 seconds using the official project generator:
+            
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Scaffold a New Project</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Use the official initializer to create a new Sola app scaffolded with Vite and Tailwind configuration:
             </p>
-            <div class="bg-slate-900 text-amber-400 p-5 rounded-2xl font-mono text-xs sm:text-sm mb-6 flex items-center justify-between shadow-inner">
-              <code>$ npm create sola@latest my-ambient-app</code>
+            <div class="bg-slate-900 text-amber-400 p-4 rounded-2xl font-mono text-xs sm:text-sm mb-6 shadow-inner">
+              <code>$ npm create sola@latest my-sola-app</code>
             </div>
-            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">
-              This configures Vite with <code class="font-mono text-xs bg-slate-50 px-2 py-1 rounded text-slate-800 border border-slate-200">vite-plugin-sola</code>, preconfigures Tailwind/UnoCSS styling, and sets up your first <code class="font-mono text-xs bg-slate-50 px-2 py-1 rounded text-slate-800 border border-slate-200">App.sola</code> component.
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Install Monorepo Packages Directly</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              If you are integrating Sola into an existing monorepo or standard Vite workspace, install the individual core packages from NPM:
             </p>
+            <div class="bg-slate-900 text-amber-400 p-4 rounded-2xl font-mono text-xs sm:text-sm mb-6 shadow-inner">
+              <code>$ npm install @sola/core @sola/compiler @sola/vite-plugin-sola</code>
+            </div>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Configure Vite Plugin</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Add the Sola plugin to your <code>vite.config.js</code> to enable compiling of <code>.sola</code> single-file components:
+            </p>
+            <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800 mb-6"><code>import { defineConfig } from 'vite';
+import sola from '@sola/vite-plugin-sola';
+
+export default defineConfig({
+  plugins: [sola()]
+});</code></pre>
           </div>
 
         {:else if activeSection === 'syntax'}
@@ -301,11 +319,41 @@ export function mount(__target, props = {}) {
               <span>Data Plurality</span>
             </div>
             <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Remote Data Signals ($data)</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              Connect Google Sheets, PostgreSQL, MySQL, or REST endpoints in a single line of declarative code. Sola manages connection lifecycle, auto-polling, and real-time reactive signals automatically:
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Connect Google Sheets, PostgreSQL, MySQL, or ServiceNow endpoints in a single line of declarative code. Sola manages connection lifecycle, auto-polling, and real-time reactive signals automatically:
             </p>
             <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 mb-6"><code>{dataExample}</code></pre>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Running Sola Relay</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Because Sola operates on a zero-knowledge data plane, database credentials are never sent to the cloud. Install and run Sola Relay locally in your subnet:
+            </p>
+            <div class="bg-slate-900 text-amber-400 p-4 rounded-2xl font-mono text-xs sm:text-sm mb-6 shadow-inner">
+              <code>$ npm install -g @sola/relay<br/>$ sola-relay --config ./relay.json --port 4040</code>
+            </div>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Configuring Datasources (relay.json)</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+              Define target connections in your local <code>relay.json</code> file:
+            </p>
+            <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800 mb-6"><code>{
+  "datasources": {
+    "finance-ops": {
+      "type": "googlesheets",
+      "sheetId": "1WwRxcYopR7nCVKiu3ZcYuPiqdeBASwkAtYAHjWV3x8w"
+    },
+    "postgres-replica": {
+      "type": "postgres",
+      "host": "localhost",
+      "database": "production_telemetry",
+      "user": "sola_read",
+      "password": "ENV_DB_PASSWORD"
+    }
+  }
+}</code></pre>
+
+            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Supported URI Protocols</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
               <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
                 <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">sheet://[id]</h4>
                 <p class="text-[11px] text-slate-500 leading-normal">Zero-backend Google Sheets reader. Auto-extracts column headers and streams row data.</p>
