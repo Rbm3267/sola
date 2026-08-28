@@ -166,49 +166,80 @@
           <div class="w-full max-w-4xl flex flex-col gap-4 sm:gap-6" style="color: {presets[selectedPreset].text}">
             
             {#if selectedPreset === 'servicenow'}
-              <!-- Authentic ServiceNow Portal Layout -->
+              <!-- Authentic ServiceNow Service Portal / Employee Center Layout -->
               <div class="flex flex-col gap-4">
-                <!-- ServiceNow Breadcrumb & Header Bar -->
-                <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
-                  <div class="flex items-center gap-2 text-xs font-mono">
-                    <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">ServiceNow Portal</span>
-                    <span class="opacity-40">&gt;</span>
-                    <span class="opacity-70">ITSM Incident Management</span>
-                    <span class="opacity-40">&gt;</span>
-                    <span class="font-bold text-amber-400">INC009481</span>
+                <!-- ServiceNow Service Portal Header Navigation Bar -->
+                <div class="flex items-center justify-between border-b pb-3 border-slate-700/80">
+                  <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-1 rounded bg-[#81b5a1]/20 text-[#81b5a1] font-mono font-bold text-xs">ServiceNow Service Portal</span>
+                    <div class="hidden sm:flex items-center gap-3 text-xs font-sans text-slate-300 opacity-80">
+                      <span class="hover:underline cursor-pointer">Knowledge Base</span>
+                      <span>•</span>
+                      <span class="hover:underline cursor-pointer font-bold text-emerald-400">My Tickets (INC009481)</span>
+                      <span>•</span>
+                      <span class="hover:underline cursor-pointer">System Status</span>
+                    </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Assignment: Tier 3 SRE Subnet</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">URL: /sp?id=ticket&sys_id=INC009481</span>
+                  </div>
+                </div>
+
+                <!-- ServiceNow Ticket Context Header -->
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wide">ServiceNow Ticket View • INC009481</div>
+                    <div class="text-sm font-bold text-slate-100">Production Database Ingress Latency & SLA Degradation</div>
+                  </div>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <span class="px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-mono font-bold">P1 - Critical Outage</span>
+                    <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-mono font-bold">In Progress</span>
                   </div>
                 </div>
 
                 <!-- ServiceNow Host Context + Injected Sola Component Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-                  <!-- ServiceNow Context Sidebar -->
+                  <!-- ServiceNow Ticket Metadata Sidebar -->
                   <div class="lg:col-span-4 flex flex-col gap-3 font-sans">
-                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-2">
-                      <div class="text-[10px] font-mono uppercase opacity-50">Caller / Impacted User</div>
-                      <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs">JS</div>
-                        <div>
-                          <div class="text-xs font-bold">Jason Statham (FinOps Ops)</div>
-                          <div class="text-[10px] opacity-60">j.statham@enterprise-corp.com</div>
-                        </div>
+                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-2.5 text-xs">
+                      <div class="text-[10px] font-mono uppercase text-slate-400 border-b border-slate-800 pb-1.5 font-bold">Ticket Information</div>
+                      
+                      <div class="flex items-center justify-between">
+                        <span class="opacity-60">Caller:</span>
+                        <span class="font-bold text-slate-200">Jason Statham</span>
+                      </div>
+                      
+                      <div class="flex items-center justify-between">
+                        <span class="opacity-60">Assignment Group:</span>
+                        <span class="font-mono text-emerald-400 text-[11px]">Cloud Infrastructure SRE</span>
+                      </div>
+
+                      <div class="flex items-center justify-between">
+                        <span class="opacity-60">Opened:</span>
+                        <span class="font-mono opacity-80 text-[11px]">Today 08:14 AM EST</span>
+                      </div>
+
+                      <div class="flex items-center justify-between">
+                        <span class="opacity-60">Impacted CI:</span>
+                        <span class="font-mono text-amber-400 text-[11px]">aws-prod-aurora-pg</span>
                       </div>
                     </div>
 
-                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-2">
-                      <div class="text-[10px] font-mono uppercase opacity-50">Configuration Item (CI)</div>
-                      <div class="text-xs font-bold font-mono text-emerald-400">aws-prod-us-east-1a-pg</div>
-                      <div class="text-[10px] opacity-60">Primary Aurora PostgreSQL Cluster</div>
+                    <div class="p-4 rounded-xl border bg-slate-900/60 border-slate-800 flex flex-col gap-1.5 text-xs">
+                      <div class="text-[10px] font-mono uppercase text-slate-400 font-bold">SLA Target</div>
+                      <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden my-1">
+                        <div class="bg-red-500 h-full w-[85%] animate-pulse"></div>
+                      </div>
+                      <div class="text-[10px] font-mono text-red-400 font-bold">11 minutes before P1 SLA breach</div>
                     </div>
                   </div>
 
-                  <!-- Injected Sola Component Surface -->
+                  <!-- Injected Sola Component Surface inside ServiceNow Widget Container -->
                   <div class="lg:col-span-8 relative group w-full max-w-full">
-                    <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                    <!-- ServiceNow Widget Wrapper Header -->
+                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
                       <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
-                      <span>Injected Sola ServiceNow Widget</span>
+                      <span>ServiceNow Portal Widget (`sp-widget`)</span>
                     </div>
 
                     {#if activeComponent === 'incident'}
