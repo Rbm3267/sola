@@ -150,38 +150,132 @@ Binds Google Sheets, ServiceNow, or PostgreSQL datasources with auto-polling.
 
 ---
 
-## 7. Host Embedding Rules (ServiceNow & React)
+## 7. Multi-Framework Integration Recipes
 
-### A. ServiceNow Service Portal Widget
-```javascript
-function(c, $element) {
-  var IncidentCard = window.SolaComponents.IncidentCard;
-  var unmount = IncidentCard($element.find('#mount-root')[0], {
-    sys_id: c.data.sys_id,
-    priority: 'P1'
-  });
-  $scope.$on('$destroy', function() { if (unmount) unmount(); });
+Sola components compile to lightweight (~3.2 kB) ES modules exposing `mount(el, props) => unmount()`. Below are production recipes for popular frontend frameworks:
+
+### A. React 18 / Next.js App Router (`useSolaSignal`)
+```tsx
+import React, { useEffect, useRef, useState } from 'react';
+import { mount } from '@sola/core';
+import IncidentWidget from './IncidentWidget.sola';
+
+export function SolaReactHost({ incidentId, severity }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const unmount = mount(containerRef.current, IncidentWidget, { incidentId, severity });
+    return () => unmount();
+  }, [incidentId, severity]);
+
+  return <div ref={containerRef} className="sola-react-wrapper" />;
 }
 ```
 
-### B. React Wrapper Component (`useEffect`)
-```jsx
-import React, { useEffect, useRef } from 'react';
-import MyWidget from './MyWidget.sola';
+### B. Vue 3 Composition API / Nuxt 3 (`useSolaRef`)
+```vue
+<script setup>
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { mount } from '@sola/core';
+import FinOpsWaterfall from './FinOpsWaterfall.sola';
 
-export function SolaReactHost({ props }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    const unmount = MyWidget(ref.current, props);
+const props = defineProps(['mrr', 'churn']);
+const container = ref(null);
+let unmountFn = null;
+
+onMounted(() => {
+  unmountFn = mount(container.value, FinOpsWaterfall, { mrr: props.mrr, churn: props.churn });
+});
+
+watch(props, (newProps) => {
+  if (unmountFn) unmountFn();
+  unmountFn = mount(container.value, FinOpsWaterfall, newProps);
+});
+
+onUnmounted(() => { if (unmountFn) unmountFn(); });
+</script>
+
+<template>
+  <div ref="container" class="sola-vue-wrapper" />
+</template>
+```
+
+### C. Svelte 5 Runes Bridge (`$state` / `$effect`)
+```svelte
+<script lang="ts">
+  import { mount } from '@sola/core';
+  import DataCard from './DataCard.sola';
+
+  let { value = "1,420 RPS", title = "Edge Ingress" } = $props();
+  let container: HTMLDivElement;
+
+  $effect(() => {
+    if (!container) return;
+    const unmount = mount(container, DataCard, { value, title });
     return () => unmount();
-  }, [props]);
-  return <div ref={ref} />;
+  });
+</script>
+
+<div bind:this={container} class="sola-svelte-wrapper" />
+```
+
+### D. Angular 17+ Signal Adapter
+```typescript
+import { Component, ElementRef, Input, EffectRef, effect, viewChild } from '@angular/core';
+import { mount } from '@sola/core';
+import ClusterMatrix from './ClusterMatrix.sola';
+
+@Component({
+  selector: 'app-sola-host',
+  standalone: true,
+  template: `<div #container class="sola-angular-wrapper"></div>`
+})
+export class SolaAngularHostComponent {
+  container = viewChild.required<ElementRef<HTMLDivElement>>('container');
+  @Input() nodes = 12;
+
+  constructor() {
+    effect((onCleanup) => {
+      const el = this.container().nativeElement;
+      const unmount = mount(el, ClusterMatrix, { nodes: this.nodes });
+      onCleanup(() => unmount());
+    });
+  }
 }
+```
+
+### E. Web Component Shadow DOM (`<sola-widget>`)
+```javascript
+class SolaWidgetElement extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: 'open' });
+    const props = JSON.parse(this.getAttribute('props') || '{}');
+    this._unmount = mount(shadow, window.SolaWidgetComponent, props);
+  }
+  disconnectedCallback() {
+    if (this._unmount) this._unmount();
+  }
+}
+customElements.define('sola-widget', SolaWidgetElement);
 ```
 
 ---
 
-## 8. Complete System Prompt for AI Coding Models
+## 8. Multi-Domain SaaS & Consumer Presets
+
+| Domain | Preset ID | Primary Primitives | Real-World Use Case |
+| :--- | :--- | :--- | :--- |
+| **FinOps & Billing** | `stripe` | `FlowWaterfall`, `DataCard` | Real-time MRR, ARR, churn rate, 1-click refund/dunning workflow. |
+| **Product & Sprint** | `linear` | `IncidentTriageMatrix`, `ListBlock` | Active cycle velocity, issue triage, P0 bug escalation. |
+| **Serverless Infrastructure** | `vercel` | `GaugeCard`, `StreamView` | Edge function latency, cold start %, 1-click container scaling. |
+| **Telemetry NOC** | `grafana` | `TactileDialCard`, `StreamView` | Real-time log stream, thermal dial, cluster load saturation. |
+| **E-Commerce Analytics** | `shopify` | `FlowWaterfall`, `DataCard` | Storefront conversion waterfall, cart abandonment recovery. |
+| **ITSM & Enterprise** | `servicenow` | `IncidentTriageMatrix`, `ListBlock` | Standard Ticket Page (`ec_ticket_page`) incident triage. |
+
+---
+
+## 9. Complete System Prompt for AI Coding Models
 
 ```xml
 <sola_rules>

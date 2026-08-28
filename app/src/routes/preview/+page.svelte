@@ -9,7 +9,7 @@
   import { fade, fly } from 'svelte/transition';
 
   type HostMode = 'preset' | 'screenshot';
-  type TemplatePreset = 'linear' | 'stripe' | 'servicenow' | 'grafana' | 'vercel';
+  type TemplatePreset = 'linear' | 'stripe' | 'shopify' | 'servicenow' | 'grafana' | 'vercel';
 
   let activeMode = $state<HostMode>('preset');
   let selectedPreset = $state<TemplatePreset>('linear');
@@ -34,6 +34,7 @@
   const presets: Record<TemplatePreset, { name: string; brand: string; theme: 'dark' | 'light'; bg: string; text: string; border: string; subtext: string }> = {
     linear: { name: 'Linear App', brand: '#5e6ad2', theme: 'dark', bg: '#0f1015', text: '#e2e8f0', border: '#232530', subtext: 'Ultra-Dark Keyboard-First Workspace' },
     stripe: { name: 'Stripe Dashboard', brand: '#635bff', theme: 'light', bg: '#f8fafc', text: '#0f172a', border: '#e2e8f0', subtext: 'Clean FinTech Light Surface' },
+    shopify: { name: 'Shopify Admin', brand: '#95bf47', theme: 'light', bg: '#f6f6f7', text: '#202223', border: '#e1e3e5', subtext: 'E-Commerce Storefront & Analytics' },
     servicenow: { name: 'ServiceNow Portal', brand: '#81b5a1', theme: 'dark', bg: '#16222f', text: '#f1f5f9', border: '#253545', subtext: 'High-Density Enterprise Navy Surface' },
     grafana: { name: 'Grafana Telemetry', brand: '#f97316', theme: 'dark', bg: '#111217', text: '#d8d9da', border: '#22252b', subtext: 'Real-Time Observability NOC' },
     vercel: { name: 'Vercel Console', brand: '#000000', theme: 'light', bg: '#ffffff', text: '#000000', border: '#eaeaea', subtext: 'Monochrome Edge Developer Platform' }
@@ -85,7 +86,7 @@
         
         {#if activeMode === 'preset'}
           <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
-            {#each (['linear', 'stripe', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
+            {#each (['linear', 'stripe', 'shopify', 'servicenow', 'grafana', 'vercel'] as TemplatePreset[]) as t}
               <button 
                 onclick={() => selectedPreset = t}
                 class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-slate-100'}">
@@ -336,6 +337,71 @@
                       }} />
                     {:else}
                       <ClusterMatrix config={{ title: "Stripe Payment Gateway Nodes", subtitle: "Active PCI-DSS Clusters" }} />
+                    {/if}
+                  </div>
+                </div>
+              </div>
+
+            {:else if selectedPreset === 'shopify'}
+              <!-- Authentic Shopify Admin & E-Commerce Storefront Analytics Layout -->
+              <div class="flex flex-col gap-4">
+                <!-- Shopify Top Navigation Bar -->
+                <div class="flex items-center justify-between border-b pb-3 border-slate-200">
+                  <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 rounded bg-[#95bf47] text-white font-bold text-xs flex items-center justify-center font-mono">S</div>
+                    <span class="font-bold text-sm text-slate-900 tracking-tight">Shopify Store Admin</span>
+                    <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold">Store: sola-apparel.myshopify.com</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-slate-500">Live Traffic:</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="text-xs font-mono font-bold text-emerald-600">842 online shoppers</span>
+                  </div>
+                </div>
+
+                <!-- Shopify KPI & Sola Widget Split Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                  <!-- Shopify Sales Metrics Column -->
+                  <div class="lg:col-span-4 flex flex-col gap-3">
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col gap-2">
+                      <span class="text-xs font-mono text-slate-500 uppercase font-bold">Today's Sales</span>
+                      <div class="text-2xl font-black text-slate-900 font-mono">$48,290.00</div>
+                      <span class="text-xs font-mono text-emerald-600 font-bold">↑ 18.4% vs yesterday</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col gap-2">
+                      <span class="text-xs font-mono text-slate-500 uppercase font-bold">Checkout Conversion</span>
+                      <div class="text-xl font-black text-slate-900 font-mono">3.84%</div>
+                      <span class="text-xs font-mono text-slate-500">2,410 Sessions Completed</span>
+                    </div>
+                  </div>
+
+                  <!-- Injected Sola Component Surface inside Shopify Admin -->
+                  <div class="lg:col-span-8 relative group w-full max-w-full">
+                    <div class="absolute -top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-[#95bf47] text-slate-950 font-mono text-[10px] font-black shadow-md flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                      <span>Shopify Admin App Extension (`@sola/ui`)</span>
+                    </div>
+
+                    {#if activeComponent === 'waterfall'}
+                      <FlowWaterfall config={{ title: "Shopify Store Conversion Realization", subtitle: "Visitors → Add to Cart → Reached Checkout → Purchased" }} />
+                    {:else if activeComponent === 'datacard'}
+                      <DataCard config={{ title: "Shopify Live Gross Volume", value: "$48,290", trend: "+18.4% today", icon: "shopping-bag" }} />
+                    {:else if activeComponent === 'dial'}
+                      <TactileDialCard config={{ title: "Shopify Cart Recovery Urgency", value: 92, unit: "%", subtext: "Automated SMS/Email throttle" }} />
+                    {:else if activeComponent === 'incident'}
+                      <IncidentTriageMatrix config={{
+                        incidentId: "CART-8812",
+                        title: "Shopify Checkout Drop-off Alert",
+                        severity: "P2 - High",
+                        slaRemainingMin: 18,
+                        blastRadius: "142 Abandoned Carts ($18,400)",
+                        playbooks: [
+                          { id: "pb-1", title: "Trigger 1-Click SMS Discount (10% Off)", action: "Klaviyo Hook", automated: true }
+                        ]
+                      }} />
+                    {:else}
+                      <ClusterMatrix config={{ title: "Shopify Edge Storefront Nodes", subtitle: "Global CDN Edge Replicas" }} />
                     {/if}
                   </div>
                 </div>

@@ -286,11 +286,111 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
     '      c.server.get({ action: "escalate", priority: newPriority });\n' +
     '    }\n' +
     '  });\n\n' +
-    '  // Clean up when ServiceNow destroys the widget scope\n' +
-    '  $scope.$on("$destroy", function() {\n' +
-    '    if (unmount) unmount();\n' +
-    '  });\n' +
-    '}';
+    '  const serviceNowWidgetCode = `// ServiceNow Service Portal Widget Client Controller
+function(c, $element, $scope) {
+  // Mount Sola fine-grained zero-VDOM widget into portal DOM container
+  var IncidentCard = window.SolaComponents.IncidentCard;
+  var unmount = IncidentCard($element.find('#sola-mount-root')[0], {
+    incidentId: c.data.sys_id || 'INC009481',
+    severity: 'P1 - Critical'
+  });
+
+  // Clean up reactive signal listeners when ServiceNow destroys widget instance
+  $scope.$on('$destroy', function() {
+    if (unmount) unmount();
+  });
+}`;
+
+  const reactHostCode = `import React, { useEffect, useRef } from 'react';
+import { mount } from '@sola/core';
+import IncidentTriageMatrix from './IncidentTriageMatrix.sola';
+
+export function SolaReactHost({ incidentId, severity }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const unmount = mount(containerRef.current, IncidentTriageMatrix, { incidentId, severity });
+    return () => unmount();
+  }, [incidentId, severity]);
+
+  return <div ref={containerRef} className="sola-react-host" />;
+}`;
+
+  const vueHostCode = `<script setup>
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { mount } from '@sola/core';
+import FlowWaterfall from './FlowWaterfall.sola';
+
+const props = defineProps(['mrr', 'churn']);
+const container = ref(null);
+let unmountFn = null;
+
+onMounted(() => {
+  unmountFn = mount(container.value, FlowWaterfall, { mrr: props.mrr, churn: props.churn });
+});
+
+watch(props, (newProps) => {
+  if (unmountFn) unmountFn();
+  unmountFn = mount(container.value, FlowWaterfall, newProps);
+});
+
+onUnmounted(() => { if (unmountFn) unmountFn(); });
+</` + `script>
+
+<template>
+  <div ref="container" class="sola-vue-host" />
+</template>`;
+
+  const svelteHostCode = `<` + `script lang="ts">
+  import { mount } from '@sola/core';
+  import DataCard from './DataCard.sola';
+
+  let { value = "1,420 RPS", title = "Edge Ingress" } = $props();
+  let container: HTMLDivElement;
+
+  $effect(() => {
+    if (!container) return;
+    const unmount = mount(container, DataCard, { value, title });
+    return () => unmount();
+  });
+</` + `script>
+
+<div bind:this={container} class="sola-svelte-host" />`;
+
+  const angularHostCode = `import { Component, ElementRef, Input, effect, viewChild } from '@angular/core';
+import { mount } from '@sola/core';
+import ClusterMatrix from './ClusterMatrix.sola';
+
+@Component({
+  selector: 'app-sola-host',
+  standalone: true,
+  template: \`<div #container class="sola-angular-host"></div>\`
+})
+export class SolaAngularHostComponent {
+  container = viewChild.required<ElementRef<HTMLDivElement>>('container');
+  @Input() nodes = 12;
+
+  constructor() {
+    effect((onCleanup) => {
+      const el = this.container().nativeElement;
+      const unmount = mount(el, ClusterMatrix, { nodes: this.nodes });
+      onCleanup(() => unmount());
+    });
+  }
+}`;
+
+  const webComponentCode = `class SolaWidgetElement extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: 'open' });
+    const props = JSON.parse(this.getAttribute('props') || '{}');
+    this._unmount = mount(shadow, window.SolaWidgetComponent, props);
+  }
+  disconnectedCallback() {
+    if (this._unmount) this._unmount();
+  }
+}
+customElements.define('sola-widget', SolaWidgetElement);`;
 
   const reactEmbedCode = 'import React, { useEffect, useRef } from "react";\n' +
     'import IncidentCard from "./IncidentCard.sola";\n\n' +
