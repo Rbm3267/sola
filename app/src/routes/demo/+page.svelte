@@ -378,27 +378,27 @@
 
     <!-- Production Dashboard Studio Controls Bar -->
     <!-- Production Dashboard Studio Controls Bar -->
-    <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col gap-4 mt-4">
+    <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-4 shadow-sm flex flex-col gap-4 mt-4">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <!-- Studio View Mode Switcher -->
-        <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 select-none overflow-x-auto no-scrollbar">
+        <div class="flex items-center gap-1 bg-slate-100/70 p-1 rounded-full border border-slate-200/50 select-none overflow-x-auto no-scrollbar">
           <button 
             onclick={() => viewMode = 'behavior'}
-            class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'behavior' ? 'bg-amber-500 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'behavior' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80' : 'text-slate-500 hover:text-slate-800'}">
+            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             <span>Behavioral Intent (Adaptive)</span>
           </button>
           <button 
             onclick={() => viewMode = 'mesh'}
-            class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'mesh' ? 'bg-amber-500 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'mesh' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80' : 'text-slate-500 hover:text-slate-800'}">
+            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             <span>Signal Mesh (Connected)</span>
           </button>
           <button 
             onclick={() => viewMode = 'custom'}
-            class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'custom' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'custom' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80' : 'text-slate-500 hover:text-slate-800'}">
+            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Custom Studio Grid ({widgets.length})</span>
           </button>
         </div>
@@ -409,13 +409,13 @@
             <button 
               onclick={exportSolaCode}
               style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-              class="text-xs font-mono font-bold px-4 py-2.5 rounded-xl text-white shadow-xs transition-all cursor-pointer flex items-center gap-1.5">
+              class="text-xs font-mono font-medium px-4 py-1.5 rounded-full text-white shadow-sm hover:brightness-105 active:scale-[0.97] transition-all cursor-pointer flex items-center gap-1.5">
               {#if copiedExport}
                 <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span class="text-white font-bold">Copied .sola!</span>
+                <span class="text-white">Copied .sola!</span>
               {:else}
                 <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-                <span class="text-white font-bold">Export Code</span>
+                <span class="text-white">Export Code</span>
               {/if}
             </button>
           </div>
@@ -425,22 +425,22 @@
       <!-- Presets bar in sub-row with clean border -->
       {#if viewMode === 'custom'}
         <div class="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
-          <span class="text-xs font-mono font-bold text-slate-400 uppercase mr-1">Presets:</span>
+          <span class="text-xs font-mono font-medium text-slate-400 uppercase mr-1">Presets:</span>
           <button 
             onclick={() => loadPreset('servicenow')}
-            class="text-xs font-mono font-bold px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-2">
+            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
             <span>ServiceNow ITSM</span>
           </button>
           <button 
             onclick={() => loadPreset('finance')}
-            class="text-xs font-mono font-bold px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-2">
+            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
             <span>Finance</span>
           </button>
           <button 
             onclick={() => loadPreset('cloud')}
-            class="text-xs font-mono font-bold px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-2">
+            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             <span>SaaS Cloud</span>
           </button>
