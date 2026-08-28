@@ -102,15 +102,15 @@
   const container = document.createElement('div');
   container.innerHTML = `
     <div class="sola-capsule" id="sola-trigger">
-      <span class="sola-pill">⚡ SOLA ACTIVE</span>
+      <span class="sola-pill">SOLA ACTIVE</span>
       <span style="font-weight: 600;">View in My UI</span>
     </div>
     <div class="sola-card-preview" id="sola-drawer" style="display: none;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-weight: 700; font-size: 13px; color: #fff;">In-Situ Preview</span>
+        <span id="sola-preview-title" style="font-weight: 700; font-size: 13px; color: #fff;">In-Situ Preview</span>
         <span class="sola-pill">Zero-VDOM</span>
       </div>
-      <p style="font-size: 11px; color: #94a3b8;">
+      <p id="sola-preview-desc" style="font-size: 11px; color: #94a3b8;">
         Live component mounted in Shadow DOM with 0 CSS collision.
       </p>
       <div style="background: #1e293b; padding: 8px; border-radius: 8px; font-family: monospace; font-size: 10px; color: #38bdf8;">
@@ -124,6 +124,8 @@
   const trigger = shadow.getElementById('sola-trigger');
   const drawer = shadow.getElementById('sola-drawer');
   const copyBtn = shadow.getElementById('sola-copy-code');
+  const titleEl = shadow.getElementById('sola-preview-title');
+  const descEl = shadow.getElementById('sola-preview-desc');
 
   trigger.addEventListener('click', () => {
     drawer.style.display = drawer.style.display === 'none' ? 'flex' : 'none';
@@ -131,15 +133,28 @@
 
   copyBtn.addEventListener('click', () => {
     navigator.clipboard.writeText("import { DataCard } from '@sola/ui';\nimport { createSignal } from '@sola/core';");
-    copyBtn.textContent = '✓ Copied!';
+    copyBtn.textContent = 'Copied!';
     setTimeout(() => copyBtn.textContent = 'Copy Integration Code', 2000);
   });
 
-  // Listen for messages from sidepanel
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'SHOW_PREVIEW') {
+  // Listen for messages from web pages (e.g. Sola Community / Studio)
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SOLA_MOUNT_IN_SITU') {
       drawer.style.display = 'flex';
-      sendResponse({ status: 'ok' });
+      if (event.data.template) {
+        if (titleEl) titleEl.textContent = event.data.template.title || 'In-Situ Preview';
+        if (descEl) descEl.textContent = event.data.template.description || 'Mounted from Sola Design Community';
+      }
     }
   });
+
+  // Listen for messages from extension sidepanel
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === 'SHOW_PREVIEW') {
+        drawer.style.display = 'flex';
+        sendResponse({ status: 'ok' });
+      }
+    });
+  }
 })();

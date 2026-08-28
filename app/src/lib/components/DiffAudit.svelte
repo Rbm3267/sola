@@ -89,7 +89,7 @@
     <div class="col-span-2 sm:col-span-1">
       <span class="text-[10px] text-slate-400 block uppercase">CAB Status</span>
       <span class="font-bold {approvalState === 'approved' ? 'text-emerald-600' : approvalState === 'rejected' ? 'text-rose-600' : 'text-amber-600'}">
-        {approvalState === 'approved' ? '✓ Approved for Release' : approvalState === 'rejected' ? '✕ Changes Rejected' : 'Pending 1 Signoff'}
+        {approvalState === 'approved' ? 'Approved for Release' : approvalState === 'rejected' ? 'Changes Rejected' : 'Pending 1 Signoff'}
       </span>
     </div>
   </div>

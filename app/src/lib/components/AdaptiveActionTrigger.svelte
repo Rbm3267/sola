@@ -328,7 +328,7 @@
       <button 
         onclick={() => isDrawerOpen = false}
         class="text-slate-400 hover:text-slate-600 text-sm">
-        ✕
+        
       </button>
     </div>
 

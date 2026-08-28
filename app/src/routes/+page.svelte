@@ -41,8 +41,8 @@
         <!-- Pillar 1: Sola Design Studio -->
         <div class="p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-500/40 transition-all flex flex-col justify-between gap-6 group">
           <div class="flex flex-col gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 flex items-center justify-center font-bold text-lg">
-              ⚡
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 flex items-center justify-center">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             </div>
             <h3 class="text-xl font-bold text-slate-950 group-hover:text-emerald-700 transition-colors">
               Sola Design Studio
@@ -53,15 +53,15 @@
           </div>
           <a href="/studio" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-900 group-hover:translate-x-1 transition-all">
             <span>Launch Studio</span>
-            <span>→</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
 
         <!-- Pillar 2: Chrome Browser Extension -->
         <div class="p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-sky-500/40 transition-all flex flex-col justify-between gap-6 group">
           <div class="flex flex-col gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-600 flex items-center justify-center font-bold text-lg">
-              🧩
+            <div class="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-600 flex items-center justify-center">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
             <h3 class="text-xl font-bold text-slate-950 group-hover:text-sky-700 transition-colors">
               "View in My UI" Extension
@@ -72,15 +72,15 @@
           </div>
           <a href="/preview" class="inline-flex items-center gap-1.5 text-xs font-bold text-sky-700 hover:text-sky-900 group-hover:translate-x-1 transition-all">
             <span>Try in Simulator</span>
-            <span>→</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
 
         <!-- Pillar 3: Sola Design Community -->
         <div class="p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-violet-500/40 transition-all flex flex-col justify-between gap-6 group">
           <div class="flex flex-col gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-600 flex items-center justify-center font-bold text-lg">
-              🌐
+            <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-600 flex items-center justify-center">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
             </div>
             <h3 class="text-xl font-bold text-slate-950 group-hover:text-violet-700 transition-colors">
               Sola Design Community
@@ -91,7 +91,7 @@
           </div>
           <a href="/community" class="inline-flex items-center gap-1.5 text-xs font-bold text-violet-700 hover:text-violet-900 group-hover:translate-x-1 transition-all">
             <span>Explore Community</span>
-            <span>→</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
 

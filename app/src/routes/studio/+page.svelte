@@ -190,17 +190,17 @@
         <button 
           onclick={() => inputMode = 'prompt'}
           class="flex-1 py-2 rounded-xl text-xs font-bold transition-all {inputMode === 'prompt' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200'}">
-          💬 Prompt
+          Prompt
         </button>
         <button 
           onclick={() => inputMode = 'data'}
           class="flex-1 py-2 rounded-xl text-xs font-bold transition-all {inputMode === 'data' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200'}">
-          📊 Data Drop
+          Data Drop
         </button>
         <button 
           onclick={() => inputMode = 'code'}
           class="flex-1 py-2 rounded-xl text-xs font-bold transition-all {inputMode === 'code' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200'}">
-          💻 Code Drop
+          Code Drop
         </button>
       </div>
 
@@ -222,17 +222,17 @@
             <button 
               onclick={() => promptText = 'Create a high-density FinOps dashboard with gross margin waterfall and churn gauge.'}
               class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
-              💳 FinOps & MRR
+              FinOps & MRR
             </button>
             <button 
               onclick={() => promptText = 'Create a personal habit and workout log with rotary dials and streak counters.'}
               class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
-              🏋️ Fitness & Habits
+              Fitness & Habits
             </button>
             <button 
               onclick={() => promptText = 'Create a live cloud cluster telemetry HUD with worker auto-scaling rotary dials.'}
               class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-750">
-              ⚙️ Cluster Telemetry
+              Cluster Telemetry
             </button>
           </div>
         </div>
@@ -283,7 +283,7 @@
           <span class="w-3.5 h-3.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></span>
           <span>{compileMessage} ({compileProgress}%)</span>
         {:else}
-          <span>⚡ Synthesize UI with Sola</span>
+          <span>Synthesize UI with Sola</span>
         {/if}
       </button>
 
@@ -360,12 +360,12 @@
           <button 
             onclick={() => activeTheme = 'obsidian'}
             class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all {activeTheme === 'obsidian' ? 'bg-slate-800 text-emerald-400 border border-emerald-500/30' : 'text-slate-500 hover:text-slate-300'}">
-            🌙 Obsidian
+            Obsidian Dark
           </button>
           <button 
             onclick={() => activeTheme = 'ivory'}
             class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all {activeTheme === 'ivory' ? 'bg-slate-200 text-slate-900 font-bold' : 'text-slate-500 hover:text-slate-300'}">
-            ☀️ Ivory
+            Ivory Light
           </button>
         </div>
       </div>
@@ -455,7 +455,7 @@
           <button 
             onclick={copyExportCode}
             class="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all cursor-pointer">
-            {copied ? '✓ Copied Code!' : 'Copy Code'}
+            {copied ? 'Copied Code!' : 'Copy Code'}
           </button>
         </div>
 
