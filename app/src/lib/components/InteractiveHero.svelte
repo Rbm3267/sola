@@ -190,6 +190,13 @@
   <!-- CTA Buttons -->
   <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 w-full sm:w-auto justify-center px-4">
     <a 
+      href="/studio" 
+      class="px-6 py-2.5 rounded-full font-bold transition-all duration-200 bg-slate-950 hover:bg-slate-800 text-white shadow-md hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">
+      <span>Launch Studio</span>
+      <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+
+    <a 
       href="/demo" 
       style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
       class="px-6 py-2.5 rounded-full font-medium transition-all duration-200 shadow-[0_4px_16px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.35)] hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">

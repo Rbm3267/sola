@@ -52,9 +52,15 @@
           <div class="w-3 h-3 rounded-full bg-slate-300"></div>
           <span class="ml-3 text-[11px] font-mono text-slate-500 tracking-wider font-bold uppercase">theme.sola.ts — Live Contrast Synthesizer</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-          <span class="text-[11px] font-mono font-bold text-slate-600">Reactive Theme Bus</span>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="text-[11px] font-mono font-bold text-slate-600 hidden sm:inline">Reactive Theme Bus</span>
+          </div>
+          <a href="/studio" class="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono text-[11px] font-bold transition-all shadow-xs">
+            <span>Open Studio</span>
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
         </div>
       </div>
 
