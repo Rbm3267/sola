@@ -320,80 +320,124 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
         {#if activeSection === 'quickstart'}
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Getting Started</span>
+              <span>Setup Guide</span>
             </div>
             <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Quickstart & Installation</h1>
-            
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Scaffold a New Project</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-              Use the official initializer to create a new Sola app scaffolded with Vite and Tailwind configuration:
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+              Get up and running with Sola in under 60 seconds using the automated CLI initializer or manual Vite integration.
             </p>
-            <div class="relative group mb-6">
-              <div class="bg-slate-900 text-amber-400 p-5 rounded-2xl font-mono text-xs sm:text-sm shadow-inner">
-                <code>$ {scaffoldCmd}</code>
-              </div>
-              <button 
-                onclick={() => handleCopy(scaffoldCmd, 'scaffold')}
-                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
-                {#if copiedId === 'scaffold'}
-                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                {:else}
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                {/if}
-              </button>
-            </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Install Monorepo Packages Directly</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-              If you are integrating Sola into an existing monorepo or standard Vite workspace, install the individual core packages from NPM:
-            </p>
-            <div class="relative group mb-6">
-              <div class="bg-slate-900 text-amber-400 p-5 rounded-2xl font-mono text-xs sm:text-sm shadow-inner">
-                <code>$ {installCmd}</code>
+            <div class="flex flex-col gap-8">
+              <!-- Step 1 -->
+              <div class="flex gap-4 items-start">
+                <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">1</div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-slate-950 text-sm font-mono mb-1">Scaffold New Application</h3>
+                  <p class="text-xs text-slate-600 mb-3">Create a pre-configured project with Vite, Sola compiler plugins, and Tailwind support:</p>
+                  <div class="relative group">
+                    <div class="bg-slate-950 text-amber-400 p-4 rounded-xl font-mono text-xs shadow-inner flex items-center justify-between border border-slate-800">
+                      <code>$ {scaffoldCmd}</code>
+                    </div>
+                    <button 
+                      onclick={() => handleCopy(scaffoldCmd, 'scaffold')}
+                      class="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                      {#if copiedId === 'scaffold'}
+                        <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      {:else}
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      {/if}
+                    </button>
+                  </div>
+                </div>
               </div>
-              <button 
-                onclick={() => handleCopy(installCmd, 'install')}
-                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
-                {#if copiedId === 'install'}
-                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                {:else}
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                {/if}
-              </button>
-            </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Configure Vite Plugin</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-              Add the Sola plugin to your <code>vite.config.js</code> to enable compiling of <code>.sola</code> single-file components:
-            </p>
-            <div class="relative group mb-6">
-              <pre class="bg-slate-900 text-amber-200 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{viteConfigCode}</code></pre>
-              <button 
-                onclick={() => handleCopy(viteConfigCode, 'vite-config')}
-                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
-                {#if copiedId === 'vite-config'}
-                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                {:else}
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                {/if}
-              </button>
+              <!-- Step 2 -->
+              <div class="flex gap-4 items-start">
+                <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">2</div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-slate-950 text-sm font-mono mb-1">Install Monorepo Packages (Existing App)</h3>
+                  <p class="text-xs text-slate-600 mb-3">Add Sola runtime and compiler directly to any existing Vite frontend repository:</p>
+                  <div class="relative group">
+                    <div class="bg-slate-950 text-amber-400 p-4 rounded-xl font-mono text-xs shadow-inner flex items-center justify-between border border-slate-800">
+                      <code>$ {installCmd}</code>
+                    </div>
+                    <button 
+                      onclick={() => handleCopy(installCmd, 'install')}
+                      class="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                      {#if copiedId === 'install'}
+                        <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      {:else}
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      {/if}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="flex gap-4 items-start">
+                <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">3</div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-slate-950 text-sm font-mono mb-1">Register Vite Plugin</h3>
+                  <p class="text-xs text-slate-600 mb-3">Add the AST compiler hook into <code>vite.config.js</code> to handle <code>.sola</code> file resolution:</p>
+                  <div class="relative group">
+                    <pre class="bg-slate-950 text-amber-200 p-4 rounded-xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{viteConfigCode}</code></pre>
+                    <button 
+                      onclick={() => handleCopy(viteConfigCode, 'vite-config')}
+                      class="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                      {#if copiedId === 'vite-config'}
+                        <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      {:else}
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      {/if}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
         {:else if activeSection === 'syntax'}
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Syntax Reference</span>
+              <span>Anatomy of .sola</span>
             </div>
             <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">The .sola Component Format</h1>
             <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              Sola components are single-file, declarative modules that combine logic, layout, and scoped styles without virtual DOM runtime overhead:
+              A single-file <code>.sola</code> component encapsulates logic, HTML template structure, and scoped CSS into a zero-VDOM native ES module.
             </p>
+
+            <!-- 3-Part Architecture Breakdown Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div class="p-4 border border-slate-200 rounded-2xl bg-amber-500/5 border-amber-500/20">
+                <span class="text-[10px] font-mono font-bold text-amber-900 uppercase">Part 1</span>
+                <h4 class="font-mono font-bold text-slate-900 text-xs mt-1 mb-1">&lt;script&gt; Block</h4>
+                <p class="text-[11px] text-slate-600 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>), AI macros (<code>$intent</code>), and event handlers.</p>
+              </div>
+
+              <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50">
+                <span class="text-[10px] font-mono font-bold text-slate-500 uppercase">Part 2</span>
+                <h4 class="font-mono font-bold text-slate-900 text-xs mt-1 mb-1">HTML Template</h4>
+                <p class="text-[11px] text-slate-600 leading-normal">Declarative markup with fine-grained expression bindings <code>&#123;count&#125;</code> and logic blocks <code>&#123;#if&#125;</code>.</p>
+              </div>
+
+              <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50">
+                <span class="text-[10px] font-mono font-bold text-slate-500 uppercase">Part 3</span>
+                <h4 class="font-mono font-bold text-slate-900 text-xs mt-1 mb-1">&lt;style&gt; Scoped CSS</h4>
+                <p class="text-[11px] text-slate-600 leading-normal">Component styles are automatically hashed per-selector at compile time (zero global bleed).</p>
+              </div>
+            </div>
+
+            <!-- Full Code Example -->
             <div class="relative group mb-8">
-              <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{syntaxExample}</code></pre>
+              <div class="bg-slate-900 text-slate-400 text-[10px] font-mono px-4 py-2 rounded-t-2xl border-b border-slate-800 flex items-center justify-between">
+                <span>Component.sola</span>
+                <span>Single-File Component</span>
+              </div>
+              <pre class="bg-slate-950 text-amber-200 p-6 rounded-b-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800 border-t-0"><code>{syntaxExample}</code></pre>
               <button 
                 onclick={() => handleCopy(syntaxExample, 'syntax')}
-                class="absolute top-3 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
+                class="absolute top-10 right-3 p-1.5 rounded-lg bg-slate-800 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-white transition-all cursor-pointer">
                 {#if copiedId === 'syntax'}
                   <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 {:else}
