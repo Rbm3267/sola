@@ -1,16 +1,19 @@
 import { json } from '@sveltejs/kit';
 import { GoogleGenAI } from '@google/genai';
-import { GEMINI_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export async function POST({ request }) {
   try {
     const data = await request.json();
+    const apiKey = env.GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
-    if (!GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY is missing.');
+    if (!apiKey) {
+      return json({ 
+        reply: "Sola Arc is running in sovereign offline mode. Sola components compile directly into native reactive DOM nodes via @sola/compiler with zero-VDOM signals. For live AI synthesis, configure GEMINI_API_KEY in your environment." 
+      });
     }
 
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey });
 
     // Mode 1: Sola Architect (Free-Form Solutions Architect & Framework Consultant)
     if (data.mode === 'architect' || data.query) {
