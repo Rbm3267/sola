@@ -271,44 +271,42 @@ export default function SolaCustomCanvas() {
 
   <!-- 1. Top Navigation Bar -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3.5 shadow-xs">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       
       <!-- Studio Canvas Branding & Layout Presets -->
-      <div class="flex items-center gap-3">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-sm shadow-xs">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-sm shadow-xs shrink-0">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-black tracking-tight text-slate-950 text-sm">Studio Canvas</span>
-              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-full">Drag & Drop</span>
-            </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-black tracking-tight text-slate-950 text-sm whitespace-nowrap">Studio Canvas</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-full whitespace-nowrap">Drag & Drop</span>
           </div>
         </div>
 
         <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
 
         <!-- Sample Layout Selector -->
-        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs font-medium text-slate-600">
+        <div class="flex items-center overflow-x-auto w-full sm:w-auto bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs font-medium text-slate-600 no-scrollbar">
           <button
             onclick={() => loadSample('general')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer {selectedPresetKey === 'general' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'general' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
             Dashboard
           </button>
           <button
             onclick={() => loadSample('product')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer {selectedPresetKey === 'product' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'product' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
             Tasks
           </button>
           <button
             onclick={() => loadSample('ecommerce')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer {selectedPresetKey === 'ecommerce' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'ecommerce' ? 'bg-white text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900'}">
             E-Commerce
           </button>
           <button
             onclick={clearCanvas}
-            class="px-2.5 py-1 rounded-lg text-rose-700 hover:bg-rose-50 transition-all cursor-pointer {selectedPresetKey === 'blank' ? 'bg-white text-rose-800 shadow-xs font-bold' : ''}">
+            class="px-2.5 py-1 rounded-lg text-rose-700 hover:bg-rose-50 transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'blank' ? 'bg-white text-rose-800 shadow-xs font-bold' : ''}">
             Clear
           </button>
         </div>
@@ -334,7 +332,7 @@ export default function SolaCustomCanvas() {
   <!-- 2. Universal Horizontal Component Shelf (Figma Style) -->
   <div class="bg-white border-b border-slate-200/70 px-4 sm:px-6 lg:px-8 py-2.5">
     <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-3 py-0.5 no-scrollbar">
-      <div class="flex items-center gap-2 text-xs font-medium text-slate-500">
+      <div class="flex items-center gap-2 text-xs font-medium text-slate-500 whitespace-nowrap w-full">
         <span class="font-bold text-slate-700 uppercase tracking-wider text-[10px] pl-1">Insert to Canvas:</span>
         
         <button
@@ -824,7 +822,7 @@ export default function SolaCustomCanvas() {
   {/if}
 
   <!-- Floating Arc Copilot -->
-  <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-2xl px-4 pointer-events-none">
+  <div class="fixed bottom-28 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-2xl px-4 pointer-events-none">
     <div class="pointer-events-auto bg-white/70 backdrop-blur-2xl border border-slate-200/50 p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center gap-2 ring-1 ring-slate-900/5">
       <form
         onsubmit={(e) => {
