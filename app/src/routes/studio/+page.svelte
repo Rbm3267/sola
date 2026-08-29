@@ -447,7 +447,7 @@ export default function SolaCustomCanvas() {
               ondrop={(e) => onDrop(e, card.id)}
               ondragend={onDragEnd}
               onclick={() => (activeCardId = card.id)}
-              class="group relative bg-white rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md select-none {card.cols === 3 ?  dark:bg-[#0f172a]"lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'} {draggedCardId === card.id ? 'opacity-40 scale-[0.98]' : ''} {dragOverCardId === card.id ? 'ring-2 ring-emerald-500 border-dashed border-emerald-400 bg-emerald-50 dark:bg-emerald-500/10/20' : ''}">
+              class="group relative bg-white rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md select-none {card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'} {draggedCardId === card.id ? 'opacity-40 scale-[0.98]' : ''} {dragOverCardId === card.id ? 'ring-2 ring-emerald-500 border-dashed border-emerald-400 bg-emerald-50 dark:bg-emerald-500/10/20' : ''}">
               
               <!-- Card Action & Drag Header -->
               <div class="px-5 pt-4 pb-3 flex items-center justify-between border-b border-slate-100">
