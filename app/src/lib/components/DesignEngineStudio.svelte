@@ -50,7 +50,7 @@
           <div class="w-3 h-3 rounded-full bg-slate-300"></div>
           <div class="w-3 h-3 rounded-full bg-slate-300"></div>
           <div class="w-3 h-3 rounded-full bg-slate-300"></div>
-          <span class="ml-3 text-[11px] font-mono text-slate-500 tracking-wider font-bold uppercase">theme.sola.ts — Live Contrast Synthesizer</span>
+          <span class="ml-3 text-[11px] font-mono text-slate-500 tracking-wider font-bold uppercase">theme.sola.ts — Live Contrast Generator</span>
         </div>
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-2">
@@ -112,7 +112,7 @@
 
           <!-- Derived Tokens -->
           <div>
-            <span class="block text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-3">Synthesized CSS Tokens</span>
+            <span class="block text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-3">Generated CSS Tokens</span>
             <div class="grid grid-cols-3 gap-3">
               <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-1.5">
                 <div class="h-6 rounded-lg border border-slate-200/60" style="background-color: {selectedColor}15;"></div>

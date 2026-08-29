@@ -32,7 +32,7 @@
           From Idea to Live Browser Overlay Production in Seconds
         </h2>
         <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
-          Three interconnected pillars built to synthesize, preview, and share zero-VDOM reactive components across personal projects and global enterprise platforms.
+          Three interconnected pillars built to design, preview, and share zero-VDOM reactive components across personal projects and global enterprise platforms.
         </p>
       </div>
 

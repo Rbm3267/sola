@@ -221,7 +221,7 @@
 
         <!-- Explainer -->
         <p class="text-[11px] text-slate-400 leading-relaxed">
-          1-thumb mobile triggers to synthesize and preview zero-VDOM components on your screen:
+          1-thumb mobile triggers to generate and preview zero-VDOM components on your screen:
         </p>
 
         <!-- 1-Tap Quick Intent Grid -->

@@ -179,7 +179,7 @@
 
   <!-- Main Headline -->
   <h1 class="text-3xl sm:text-5xl md:text-7xl font-black text-slate-900 tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
-    UI that synthesizes from <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">intent</span>.
+    UI that builds from <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">intent</span>.
   </h1>
 
   <!-- Subheadline -->
@@ -301,7 +301,7 @@
             <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] gap-3">
               <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold shadow-xs">
                 <div class="w-3.5 h-3.5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-                <span>Synthesizing zero-VDOM components...</span>
+                <span>Building zero-VDOM components...</span>
               </div>
             </div>
           {:else}

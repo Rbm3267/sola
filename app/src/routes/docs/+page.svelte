@@ -400,7 +400,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
           Documentation that explains itself.
         </h2>
         <p class="text-slate-500 text-xs sm:text-sm mb-6 leading-relaxed">
-          Ask any architectural or syntax question. Sola will synthesize live working examples on the fly.
+          Ask any architectural or syntax question. Sola will generate live working examples on the fly.
         </p>
 
         <form class="flex items-center gap-3 bg-slate-50 border border-slate-200/90 p-1.5 rounded-2xl" onsubmit={(e) => { e.preventDefault(); askSolaAi(); }}>
@@ -418,7 +418,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
             class="font-medium text-xs text-white px-5 py-2.5 rounded-xl transition-all disabled:opacity-40 flex items-center gap-2 cursor-pointer shadow-sm shrink-0 active:scale-[0.97]">
             {#if askLoading}
               <div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Synthesizing...</span>
+              <span>Generating...</span>
             {:else}
               <span>Ask AI</span>
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>

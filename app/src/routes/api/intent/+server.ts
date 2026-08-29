@@ -9,7 +9,7 @@ export async function POST({ request }) {
 
     if (!apiKey) {
       return json({ 
-        reply: "Sola Arc is running in sovereign offline mode. Sola components compile directly into native reactive DOM nodes via @sola/compiler with zero-VDOM signals. For live AI synthesis, configure GEMINI_API_KEY in your environment." 
+        reply: "Sola Arc is running in sovereign offline mode. Sola components compile directly into native reactive DOM nodes via @sola/compiler with zero-VDOM signals. For live AI generation, configure GEMINI_API_KEY in your environment." 
       });
     }
 
@@ -54,7 +54,7 @@ Formatting:
     }
 
     const systemInstruction = `You are Sola's generative UI intent compiler.
-You synthesize world-class, luxury UI surfaces (Linear, Stripe, Apple Fitness grade polish).
+You build clean, modern, world-class UI surfaces (Linear, Stripe, Apple Fitness grade polish).
 Given a user intent, output a structured JSON array of components to render.
 
 Available Primitives:

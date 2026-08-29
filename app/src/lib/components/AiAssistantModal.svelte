@@ -48,7 +48,7 @@
       } else if (typeof data === 'string') {
         reply = data;
       } else if (data.components) {
-        reply = "Synthesized Component Specification:\n\n" + JSON.stringify(data.components, null, 2);
+        reply = "Generated Component Specification:\n\n" + JSON.stringify(data.components, null, 2);
       } else {
         reply = JSON.stringify(data, null, 2);
       }
@@ -168,7 +168,7 @@
         {#if isLoading}
           <div class="flex items-center gap-2 text-xs font-mono text-slate-400 p-2">
             <div class="w-3.5 h-3.5 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-            <span>Sola Arc is synthesizing technical solution...</span>
+            <span>Sola Arc is drafting technical solution...</span>
           </div>
         {/if}
       </div>

@@ -1,15 +1,15 @@
 <script lang="ts">
   let { 
-    state = 'idle', // 'idle' | 'synthesizing' | 'listening' | 'mounted'
+    state = 'idle', // 'idle' | 'generating' | 'listening' | 'mounted'
     size = 200,
     showTelemetry = true
   } = $props<{
-    state?: 'idle' | 'synthesizing' | 'listening' | 'mounted';
+    state?: 'idle' | 'generating' | 'listening' | 'mounted';
     size?: number;
     showTelemetry?: boolean;
   }>();
 
-  const isSynthesizing = $derived(state === 'synthesizing');
+  const isGenerating = $derived(state === 'generating');
   const isListening = $derived(state === 'listening');
 </script>
 
@@ -20,7 +20,7 @@
     <!-- Outer Ambient Solar Halo -->
     <div 
       class="absolute inset-0 rounded-full transition-all duration-700 pointer-events-none"
-      style="background: radial-gradient(circle, rgba(245,158,11,{isSynthesizing ? '0.22' : '0.12'}) 0%, rgba(245,158,11,0) 70%); transform: scale({isSynthesizing ? '1.3' : '1.1'});"
+      style="background: radial-gradient(circle, rgba(245,158,11,{isGenerating ? '0.22' : '0.12'}) 0%, rgba(245,158,11,0) 70%); transform: scale({isGenerating ? '1.3' : '1.1'});"
     ></div>
 
     <!-- Geometric SVG Precision Rings -->
@@ -44,7 +44,7 @@
         stroke="url(#solar-gradient)" 
         stroke-width="1.5" 
         stroke-dasharray="14 10"
-        class="origin-center {isSynthesizing ? 'animate-spin-fast' : 'animate-spin-slow'}"
+        class="origin-center {isGenerating ? 'animate-spin-fast' : 'animate-spin-slow'}"
       />
 
       <!-- Counter-Rotating Inner Iris Ring -->
@@ -64,7 +64,7 @@
         cy="50" 
         r="18" 
         fill="url(#core-glow)"
-        class="transition-transform duration-500 {isSynthesizing ? 'scale-110' : 'scale-100'}"
+        class="transition-transform duration-500 {isGenerating ? 'scale-110' : 'scale-100'}"
       />
 
       <circle 
@@ -101,9 +101,9 @@
   {#if showTelemetry}
     <div class="mt-4 flex flex-col items-center gap-1.5 text-center">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-amber-200/80 shadow-xs">
-        <span class="w-2 h-2 rounded-full bg-amber-500 {isSynthesizing ? 'animate-ping' : ''}"></span>
+        <span class="w-2 h-2 rounded-full bg-amber-500 {isGenerating ? 'animate-ping' : ''}"></span>
         <span class="text-xs font-mono font-bold text-slate-800 uppercase tracking-wider">
-          {isSynthesizing ? 'Synthesizing Reactive DOM Tree...' : isListening ? 'Listening on Intent Stream...' : 'Ambient Intent Engine Active'}
+          {isGenerating ? 'Building Reactive DOM Tree...' : isListening ? 'Listening on Intent Stream...' : 'Ambient Intent Engine Active'}
         </span>
       </div>
       <span class="text-[11px] font-mono text-slate-500">

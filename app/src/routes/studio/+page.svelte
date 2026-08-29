@@ -184,7 +184,7 @@
     cards = [...cards];
   }
 
-  // --- Sola Arc AI Synthesis ---
+  // --- Sola Arc AI Generation ---
   async function runArcPrompt() {
     if (!arcPromptInput.trim() || isGeneratingArc) return;
     isGeneratingArc = true;
@@ -199,19 +199,19 @@
 
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        const synthesized: StudioCard[] = data.map((item: any, idx: number) => ({
+        const generated: StudioCard[] = data.map((item: any, idx: number) => ({
           id: 'arc_' + idx + '_' + Math.random().toString(36).substring(2, 7),
           type: item.component === 'GaugeCard' ? 'progress' : item.component === 'FlowWaterfall' ? 'waterfall' : item.component === 'TactileDialCard' ? 'slider' : item.component === 'DynamicForm' ? 'form' : item.component === 'ListBlock' ? 'feed' : 'stat',
           title: item.config?.title || 'Custom Component',
-          subtitle: item.config?.subtitle || 'Synthesized by Sola Arc',
+          subtitle: item.config?.subtitle || 'Designed with Sola Arc',
           cols: (item.colSpan || 1) as 1 | 2 | 3,
           value: item.config?.value || (item.component === 'GaugeCard' ? 75 : '$45,000'),
           delta: item.config?.trend || '+12.5%',
           accentColor: 'emerald',
           config: item.config
         }));
-        cards = synthesized;
-        activeCardId = synthesized[0].id;
+        cards = generated;
+        activeCardId = generated[0].id;
       }
     } catch {
       // Fallback

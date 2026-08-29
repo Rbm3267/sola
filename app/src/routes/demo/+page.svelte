@@ -163,7 +163,7 @@
       });
 
       const rawText = await res.text();
-      if (!res.ok) throw new Error('Intent synthesis failed');
+      if (!res.ok) throw new Error('Intent generation failed');
 
       let cleanText = rawText.trim();
       if (cleanText.startsWith('```json')) {
@@ -173,7 +173,7 @@
       const generated = JSON.parse(cleanText);
       const newItems = Array.isArray(generated) ? generated : [generated];
 
-      // Append new synthesized widgets to the top of the canvas
+      // Append new generated widgets to the top of the canvas
       const converted: DashboardWidget[] = newItems.map((item: any, idx: number) => ({
         id: `gen-${Date.now()}-${idx}`,
         component: item.component || 'DataCard',
@@ -186,7 +186,7 @@
       intentQuery = '';
     } catch (e: any) {
       console.error(e);
-      errorMsg = e.message || 'Failed to synthesize components.';
+      errorMsg = e.message || 'Failed to generate components.';
     } finally {
       isLoading = false;
     }
@@ -455,7 +455,7 @@
       <!-- LIVE INTER-WIDGET SIGNAL TELEMETRY MESH -->
       <SignalMeshConsole />
     {:else}
-      <!-- Active Synthesizing Elegant Light Banner -->
+      <!-- Active Generating Elegant Light Banner -->
       {#if isLoading}
         <div 
           transition:fly={{ y: 20, duration: 300 }}
@@ -463,7 +463,7 @@
         >
           <div class="flex items-center gap-3">
             <div class="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-sm font-mono font-bold text-slate-800 uppercase tracking-wider">Synthesizing Reactive DOM Tree...</span>
+            <span class="text-sm font-mono font-bold text-slate-800 uppercase tracking-wider">Building Reactive DOM Tree...</span>
           </div>
           <span class="text-xs font-mono text-slate-500 mt-2">Zero-VDOM AST compilation via Gemini 3.6 Flash</span>
         </div>
