@@ -12,7 +12,7 @@
 
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
     <!-- Header -->
-    <div class="border-b border-slate-200/80 pb-8 mb-10 dark:border-white/5">
+    <div class="border-b border-slate-900/[0.03] pb-8 mb-10 dark:border-white/5">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20/80 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold mb-3">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
         <span>Official Privacy Policy</span>
@@ -150,7 +150,7 @@
       </section>
 
       <!-- 6. Changes & Contact -->
-      <section class="space-y-3 border-t border-slate-200/80 pt-6 dark:border-white/5">
+      <section class="space-y-3 border-t border-slate-900/[0.03]/80 pt-6 dark:border-white/5">
         <h2 class="text-xl font-bold text-slate-950 tracking-tight">6. Contact & Inquiries</h2>
         <p>
           If you have any questions, inquiries, or privacy requests regarding this Privacy Policy or our software, please contact:

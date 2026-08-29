@@ -76,7 +76,7 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col gap-8">
     
     <!-- Hero Title & Search Header -->
-    <div class="flex flex-col gap-6 border-b border-slate-200/80 pb-8 dark:border-white/5">
+    <div class="flex flex-col gap-6 border-b border-slate-900/[0.03] pb-8 dark:border-white/5">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 dark:text-amber-300 text-xs font-mono font-bold mb-3">

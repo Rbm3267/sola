@@ -389,7 +389,7 @@
   <Navbar />
 
   <!-- Hero & Extension Status Banner -->
-  <header class="relative border-b border-slate-200 dark:border-white/[0.04] bg-white dark:bg-white/[0.02] backdrop-blur-xl px-4 sm:px-6 lg:px-8 pt-12 pb-10 overflow-hidden">
+  <header class="relative border-b border-slate-900/[0.03] dark:border-white/[0.03] bg-white dark:bg-white/[0.02] backdrop-blur-xl px-4 sm:px-6 lg:px-8 pt-12 pb-10 overflow-hidden">
     <!-- Ambient Radial Specular Lighting -->
     <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[340px] bg-gradient-to-b from-amber-200/20 via-sky-200/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
@@ -444,7 +444,7 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     
     <!-- Section Toolbar Header -->
-    <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-200 dark:border-white/[0.04]">
+    <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-900/[0.03] dark:border-white/[0.03]">
       <div class="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
         <span>Showing <strong class="text-slate-900 dark:text-white">{filteredTemplates.length}</strong> live components</span>
       </div>

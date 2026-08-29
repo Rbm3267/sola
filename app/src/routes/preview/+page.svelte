@@ -84,7 +84,7 @@
     </div>
 
     <!-- Live Testing Ground (Replaces the Mock UI frames) -->
-    <div class="flex flex-col gap-6 pt-10 border-t border-slate-200 dark:border-white/10">
+    <div class="flex flex-col gap-6 pt-10 border-t border-slate-900/[0.03] dark:border-white/[0.03]">
       <div class="text-center max-w-2xl mx-auto mb-4">
         <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Test the Extension Right Here.</h2>
         <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">

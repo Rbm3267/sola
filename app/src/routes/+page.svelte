@@ -23,7 +23,7 @@
     <InteractiveHero />
 
     <!-- THE 3 CORE PILLARS SECTION -->
-    <section class="w-full py-16 border-t border-slate-200 dark:border-white/[0.04] relative">
+    <section class="w-full py-16 relative">
       <div class="text-center max-w-3xl mx-auto mb-14">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold mb-3">
           <span>The Sola Ecosystem</span>

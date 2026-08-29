@@ -271,25 +271,25 @@ export default function SolaCustomCanvas() {
   <Navbar />
 
   <!-- 1. Top Navigation Bar -->
-  <header class="sticky top-16 z-30 bg-white/90 dark:bg-[#090d19]/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/10 px-4 sm:px-6 lg:px-8 py-3 shadow-2xs">
+  <header class="sticky top-16 z-30 bg-white/70 dark:bg-[#090d19]/75 backdrop-blur-xl border-b border-slate-900/[0.03] dark:border-white/[0.04] px-4 sm:px-6 lg:px-8 py-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_-6px_rgba(0,0,0,0.3)]">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       
       <!-- Studio Canvas Branding & Layout Presets -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
         <div class="flex items-center gap-2 shrink-0">
-          <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm shadow-xs shrink-0">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/60 dark:border-emerald-500/20 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm shadow-2xs shrink-0">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </div>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="font-black tracking-tight text-slate-900 dark:text-white text-sm whitespace-nowrap">Studio Canvas</span>
-            <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10 rounded-full whitespace-nowrap">Drag & Drop</span>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100/80 dark:bg-white/10 text-slate-700 dark:text-slate-300 rounded-full whitespace-nowrap">Drag & Drop</span>
           </div>
         </div>
 
-        <div class="h-4 w-px bg-slate-200 dark:bg-white/10 hidden sm:block"></div>
+        <div class="h-4 w-px bg-slate-200/60 dark:bg-white/10 hidden sm:block"></div>
 
         <!-- Sample Layout Selector -->
-        <div class="flex items-center overflow-x-auto w-full sm:w-auto bg-slate-100 dark:bg-white/5 p-1 rounded-xl border border-slate-200/80 dark:border-white/10 text-xs font-medium no-scrollbar">
+        <div class="flex items-center overflow-x-auto w-full sm:w-auto bg-slate-100/70 dark:bg-white/5 p-1 rounded-xl text-xs font-medium no-scrollbar">
           <button
             onclick={() => loadSample('general')}
             class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'general' ? 'bg-white dark:bg-white/15 text-slate-900 dark:text-white shadow-xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
@@ -328,7 +328,7 @@ export default function SolaCustomCanvas() {
   </header>
 
   <!-- 2. Universal Horizontal Component Shelf (Figma Style) -->
-  <div class="bg-white/60 dark:bg-[#090d19]/60 backdrop-blur-md border-b border-slate-200/80 dark:border-white/10 px-4 sm:px-6 lg:px-8 py-2.5">
+  <div class="bg-white/50 dark:bg-[#090d19]/50 backdrop-blur-md border-b border-slate-900/[0.02] dark:border-white/[0.03] px-4 sm:px-6 lg:px-8 py-2.5">
     <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-3 py-0.5 no-scrollbar">
       <div class="flex items-center gap-2 text-xs font-medium whitespace-nowrap w-full">
         <span class="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] pl-1">Insert to Canvas:</span>
