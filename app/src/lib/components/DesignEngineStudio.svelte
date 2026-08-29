@@ -140,7 +140,7 @@
       <div class="lg:col-span-6 p-8 sm:p-10 bg-[#fbfbfb] flex flex-col justify-between relative overflow-hidden">
         
         <!-- Subtle Specular Grid -->
-        <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-40 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:16px_16px] opacity-30 dark:opacity-20 pointer-events-none"></div>
 
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-6">

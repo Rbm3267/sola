@@ -205,7 +205,7 @@
         <div class="bg-white border border-slate-200/90 rounded-3xl p-4 sm:p-8 shadow-sm min-h-[460px] flex items-center justify-center relative overflow-hidden dark:bg-[#0f172a] dark:border-white/5">
           
           <!-- Subtle Grid Texture -->
-          <div class="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-35 pointer-events-none"></div>
+          <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:16px_16px] opacity-30 dark:opacity-20 pointer-events-none"></div>
 
           {#if viewMode === 'preview'}
             <div class="w-full max-w-xl relative z-10 flex flex-col items-center gap-6">
