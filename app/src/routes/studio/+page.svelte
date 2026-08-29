@@ -392,7 +392,7 @@ export default function SolaCustomCanvas() {
   </div>
 
   <!-- 3. Main Live Canvas (Drag-and-Drop & Snap-to-Grid) -->
-  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 items-start">
+  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6 items-start">
     
     <!-- Canvas Grid Area -->
     <main class="flex-1 w-full">
@@ -654,7 +654,7 @@ export default function SolaCustomCanvas() {
 
     <!-- 4. Slide-over Property Inspector for Active Card -->
     {#if activeCard}
-      <aside class="w-80 shrink-0 bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-4 sticky top-24">
+      <aside class="w-full lg:w-80 shrink-0 bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-4 lg:sticky lg:top-24 mb-40 lg:mb-0">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-emerald-600"></div>
