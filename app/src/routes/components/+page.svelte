@@ -4,94 +4,90 @@
   import GaugeCard from '$lib/components/GaugeCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
-  import StreamView from '$lib/components/StreamView.svelte';
   import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
-  import DiffAudit from '$lib/components/DiffAudit.svelte';
   import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
-  import SchemaInspector from '$lib/components/SchemaInspector.svelte';
   import TactileDialCard from '$lib/components/TactileDialCard.svelte';
-  import ReportDocViewer from '$lib/components/ReportDocViewer.svelte';
-  import ActionReportGenerator from '$lib/components/ActionReportGenerator.svelte';
-  import { SAAS_ECOSYSTEM, type SaasIntegration } from '$lib/data/ecosystem';
+  import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { fade, fly } from 'svelte/transition';
 
-  // Active Category Ecosystem
   let activeCategory = $state<string>('All');
   let searchQuery = $state<string>('');
-  let selectedIntegration = $state<SaasIntegration>(SAAS_ECOSYSTEM[0]);
-  let viewMode = $state<'preview' | 'embed' | 'protocol'>('preview');
-  let embedFramework = $state<'react' | 'vue' | 'html' | 'svelte'>('react');
+  let selectedComponent = $state<CatalogComponent>(COMPONENT_CATALOG[0]);
+  let codeTab = $state<'sola' | 'react' | 'svelte' | 'html'>('sola');
 
-  // Interactive component states
-  let isToggleOn = $state(true);
-  let isModalOpen = $state(false);
-  let toasts = $state<Array<{ id: number; text: string; type: string }>>([]);
-  let gaugePercent = $state(78);
+  // Interactive Live Playground State
+  let liveProps = $state<Record<string, any>>({ ...COMPONENT_CATALOG[0].defaultConfig });
 
-  function triggerToast(msg?: string) {
-    const id = Date.now();
-    toasts = [...toasts, { id, text: msg || `Signal ${id.toString().slice(-4)} dispatched`, type: 'success' }];
-    setTimeout(() => {
-      toasts = toasts.filter(t => t.id !== id);
-    }, 3000);
+  // Update liveProps whenever selected component changes
+  function selectComponent(comp: CatalogComponent) {
+    selectedComponent = comp;
+    liveProps = { ...comp.defaultConfig };
+  }
+
+  // Copy Feedback State
+  let copied = $state(false);
+  function copyCode(text: string) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      copied = true;
+      setTimeout(() => (copied = false), 2000);
+    }
   }
 
   const categories = [
     'All',
-    ...Array.from(new Set(SAAS_ECOSYSTEM.map(item => item.category)))
+    'Metrics & KPIs',
+    'Gauges & Rings',
+    'Controllers & Sliders',
+    'Flows & Cascades',
+    'Lists & Feeds',
+    'Matrices & Graphs',
+    'Forms & Inputs',
+    'Status & HUD'
   ];
 
-  
-
-  const filteredIntegrations = $derived(
-    SAAS_ECOSYSTEM.filter(item => {
+  const filteredComponents = $derived(
+    COMPONENT_CATALOG.filter(item => {
       const matchCat = activeCategory === 'All' || item.category === activeCategory;
-      const matchQuery = searchQuery.trim() === '' || 
+      const matchQuery =
+        searchQuery.trim() === '' ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.badge.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.protocolUri.toLowerCase().includes(searchQuery.toLowerCase());
+        item.category.toLowerCase().includes(searchQuery.toLowerCase());
       return matchCat && matchQuery;
     })
   );
+
+  const activeCodeSnippet = $derived(selectedComponent.codeSnippets[codeTab]);
 </script>
 
-<div class="flex flex-col w-full">
-  
-  <Navbar />
+<svelte:head>
+  <title>Component Catalog — Sola Design System</title>
+</svelte:head>
 
-  <!-- Toast Notification Container -->
-  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none">
-    {#each toasts as toast (toast.id)}
-      <div 
-        transition:fly={{ y: 20, duration: 250 }}
-        class="bg-slate-900 dark:bg-[#090d19] text-white text-xs font-mono px-4 py-3 rounded-2xl shadow-xl border border-slate-800 flex items-center gap-3 pointer-events-auto">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-        <span>{toast.text}</span>
-      </div>
-    {/each}
-  </div>
+<div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
+  <Navbar />
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col gap-8">
     
-    <!-- Hero Title & Search Header -->
-    <div class="flex flex-col gap-6 border-b border-slate-900/[0.03] pb-8 dark:border-white/5">
+    <!-- Hero Header -->
+    <header class="flex flex-col gap-4 border-b border-slate-900/[0.03] dark:border-white/[0.04] pb-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 dark:text-amber-300 text-xs font-mono font-bold mb-3">
-            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <span>Enterprise Integration & Component Matrix</span>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-xs font-mono font-bold mb-2 shadow-2xs">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Sola Component Catalog</span>
           </div>
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-[-0.03em]">
-            SaaS & Component Ecosystem
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+            Foundational UI Building Blocks
           </h1>
-          <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-2xl mt-2 leading-relaxed">
-            Surface live telemetry, incident triage, and real-time data across hundreds of cloud platforms, enterprise SaaS, AI protocols, and database relays.
+          <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
+            Domain-agnostic reactive primitives designed to present, monitor, and manipulate data across personal projects and enterprise SaaS.
           </p>
         </div>
 
-        <!-- Search Input Field -->
+        <!-- Search Input -->
         <div class="w-full md:w-80 relative">
           <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -99,241 +95,269 @@
           <input 
             type="text" 
             bind:value={searchQuery}
-            placeholder="Search platforms, protocols, components..."
-            class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-slate-200/90 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-xs dark:bg-[#0f172a] dark:text-slate-100 dark:border-white/5"
+            placeholder="Search component catalog..."
+            class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 shadow-2xs transition-all"
           />
-          {#if searchQuery}
-            <button 
-              onclick={() => searchQuery = ''}
-              aria-label="Clear search"
-              class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 dark:text-slate-300 cursor-pointer">
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          {/if}
         </div>
       </div>
 
-      <!-- Category Filter Chips (Scrollbar-Free) -->
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 select-none">
-        {#each categories as cat}
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
+        {#each categories as category}
           <button 
-            onclick={() => activeCategory = cat}
-            class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 {activeCategory === cat ? 'bg-amber-500 text-white shadow-xs font-black' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200 hover:text-slate-900'}">
-            {cat}
+            onclick={() => activeCategory = category}
+            class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-slate-950 dark:bg-emerald-500 text-white dark:text-slate-950 shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
+            {category}
           </button>
         {/each}
       </div>
-    </div>
+    </header>
 
-    <!-- 2-Column Catalog & Live Interactive Stage -->
+    <!-- Standardized 2-Column Catalog & Inspector Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- Integrations Sidebar Drawer -->
-      <aside class="lg:col-span-5 bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col gap-3 dark:bg-[#0f172a] dark:border-white/5">
-        <div class="flex items-center justify-between px-2">
-          <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
-            Integrations & Surfaces ({filteredIntegrations.length})
-          </span>
-          <span class="text-[10px] font-mono bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">
-            Live Protocol Bindings
-          </span>
+      <!-- Left Column: Component List Directory (4 cols) -->
+      <div class="lg:col-span-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between px-1 text-xs font-mono font-bold text-slate-400">
+          <span>CATALOG PRIMITIVES ({filteredComponents.length})</span>
+          <span>Zero-VDOM</span>
         </div>
 
-        <!-- Scrollable Button List -->
-        <div class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible no-scrollbar pb-2 lg:pb-0 max-h-[620px] lg:overflow-y-auto">
-          {#each filteredIntegrations as item}
+        <div class="flex flex-col gap-2.5 max-h-[750px] overflow-y-auto pr-1">
+          {#each filteredComponents as comp (comp.id)}
             <button 
-              onclick={() => selectedIntegration = item}
-              class="shrink-0 lg:shrink text-left px-4 py-3 rounded-2xl transition-all duration-200 flex items-center justify-between gap-3 group cursor-pointer {selectedIntegration.id === item.id ? 'bg-amber-500/10 border border-amber-500/30 shadow-xs' : 'hover:bg-slate-50 border border-slate-100 lg:border-transparent'}">
-              <div class="flex-1 min-w-0">
+              onclick={() => selectComponent(comp)}
+              class="w-full text-left p-4 rounded-2xl border transition-all duration-200 flex flex-col gap-2 cursor-pointer shadow-2xs group {selectedComponent.id === comp.id ? 'bg-white dark:bg-emerald-500/10 border-emerald-500 ring-2 ring-emerald-500/20 shadow-md' : 'bg-white dark:bg-white/5 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.08]' }">
+              
+              <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <span class="text-xs sm:text-sm font-bold {selectedIntegration.id === item.id ? 'text-amber-950 dark:text-amber-400 font-black' : 'text-slate-800 dark:text-slate-300'} font-mono truncate">{item.name}</span>
+                  <span class="w-2 h-2 rounded-full {selectedComponent.id === comp.id ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-700'}"></span>
+                  <span class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    {comp.name}
+                  </span>
                 </div>
-                <div class="text-[11px] {selectedIntegration.id === item.id ? 'text-amber-800 dark:text-amber-300/80' : 'text-slate-500'} line-clamp-1 mt-0.5">{item.description}</div>
-                <div class="text-[10px] font-mono text-amber-700 dark:text-amber-400 dark:text-amber-400/80 truncate mt-1">
-                  <code>{item.protocolUri}</code>
-                </div>
+                {#if comp.badge}
+                  <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">
+                    {comp.badge}
+                  </span>
+                {/if}
               </div>
-              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0 {selectedIntegration.id === item.id ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400'}">
-                {item.badge}
-              </span>
+
+              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                {comp.description}
+              </p>
+
+              <div class="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-400">
+                <span class="text-emerald-600 dark:text-emerald-400 font-bold">{comp.category}</span>
+                <span>.{comp.componentName}</span>
+              </div>
             </button>
           {/each}
         </div>
-      </aside>
+      </div>
 
-      <!-- Live Stage Area & Code Inspector -->
-      <section class="lg:col-span-7 flex flex-col gap-6">
+      <!-- Right Column: Interactive Stage & Code Generator (8 cols) -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
         
-        <!-- Component Header & View Switcher Bar -->
-        <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 dark:bg-[#0f172a] dark:border-white/5">
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2.5 mb-1">
-              <span class="text-xs font-mono font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-500/20 px-2.5 py-0.5 rounded-full">{selectedIntegration.badge}</span>
-              <span class="text-xs font-mono text-slate-500">• {selectedIntegration.primaryComponent}</span>
+        <!-- Component Header & Actions -->
+        <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 mb-1">
+              <span>{selectedComponent.category}</span>
+              <span>•</span>
+              <span class="text-slate-400">{selectedComponent.componentName}.sola</span>
             </div>
-            <h2 class="text-lg sm:text-xl font-black text-slate-900 font-mono truncate dark:text-slate-100">
-              {selectedIntegration.name}
+            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              {selectedComponent.name}
             </h2>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-              {selectedIntegration.description}
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {selectedComponent.tagline}
             </p>
           </div>
 
-          <!-- View Mode Switcher -->
-          <div class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto shrink-0 select-none dark:border-white/5">
-            <button 
-              onclick={() => viewMode = 'preview'}
-              class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}">
-              Live Preview
-            </button>
-            <button 
-              onclick={() => viewMode = 'embed'}
-              class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'embed' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}">
-              1-Click Embed
-            </button>
-            <a 
-              href='/studio'
-              class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-xs hover:bg-amber-600 flex items-center gap-1.5">
-              <span>Open in Studio</span>
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </a>
-          </div>
+          <!-- Open in Studio Action Button -->
+          <a 
+            href="/studio" 
+            class="px-5 py-2.5 rounded-xl bg-slate-950 dark:bg-emerald-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-emerald-400 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer shrink-0">
+            <span>Drop in Studio</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
         </div>
 
-        <!-- Stage Area Canvas -->
-        <div class="bg-white border border-slate-200/90 rounded-3xl p-4 sm:p-8 shadow-sm min-h-[460px] flex items-center justify-center relative overflow-hidden dark:bg-[#0f172a] dark:border-white/5">
-          
-          <!-- Subtle Grid Texture -->
-          <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:16px_16px] opacity-30 dark:opacity-20 pointer-events-none"></div>
+        <!-- Live Interactive Stage Container -->
+        <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
+                Live Interactive Stage
+              </h3>
+            </div>
+            <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-200 dark:border-emerald-500/20">
+              Compiled DOM
+            </span>
+          </div>
 
-          {#if viewMode === 'preview'}
-            <div class="w-full max-w-xl relative z-10 flex flex-col items-center gap-6">
-              
-              {#if selectedIntegration.primaryComponent === 'IncidentTriageMatrix'}
-                <div class="w-full">
-                  <IncidentTriageMatrix config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'DiffAudit'}
-                <div class="w-full">
-                  <DiffAudit config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'ClusterMatrix'}
-                <div class="w-full">
-                  <ClusterMatrix config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'FlowWaterfall'}
-                <div class="w-full">
-                  <FlowWaterfall config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'SchemaInspector'}
-                <div class="w-full">
-                  <SchemaInspector config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'TactileDialCard'}
-                <div class="w-full">
-                  <TactileDialCard config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'DataCard'}
-                <div class="w-full">
-                  <DataCard config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'GaugeCard'}
-                <div class="w-full">
-                  <GaugeCard config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'StreamView'}
-                <div class="w-full">
-                  <StreamView config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'ListBlock'}
-                <div class="w-full">
-                  <ListBlock config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'ReportDocViewer'}
-                <div class="w-full">
-                  <ReportDocViewer config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'ActionReportGenerator'}
-                <div class="w-full">
-                  <ActionReportGenerator config={selectedIntegration.config} />
-                </div>
-              {:else if selectedIntegration.primaryComponent === 'DynamicForm'}
-                <div class="w-full">
-                  <DynamicForm config={selectedIntegration.config} onSubmit={() => triggerToast()} />
+          <!-- Dynamic Component Mount -->
+          <div class="min-h-[220px] flex items-center justify-center p-6 bg-slate-50 dark:bg-[#090d19] border border-slate-100 dark:border-white/5 rounded-2xl w-full">
+            {#if selectedComponent.componentName === 'DataCard'}
+              <div class="w-full max-w-sm">
+                <DataCard config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'GaugeCard'}
+              <div class="w-full max-w-sm">
+                <GaugeCard config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'TactileDialCard'}
+              <div class="w-full max-w-sm">
+                <TactileDialCard config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'FlowWaterfall'}
+              <div class="w-full">
+                <FlowWaterfall config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'ListBlock'}
+              <div class="w-full">
+                <ListBlock config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'DynamicForm'}
+              <div class="w-full max-w-md">
+                <DynamicForm config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'ClusterMatrix'}
+              <div class="w-full">
+                <ClusterMatrix config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'IncidentTriageMatrix'}
+              <div class="w-full">
+                <IncidentTriageMatrix config={liveProps} />
+              </div>
+            {/if}
+          </div>
+
+          <!-- Live Props Customizer / Playground Controls -->
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 space-y-4">
+            <h4 class="text-xs font-bold font-mono text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+              Component Properties Playground
+            </h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              {#if liveProps.title !== undefined}
+                <div>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Title Prop</label>
+                  <input 
+                    type="text" 
+                    bind:value={liveProps.title} 
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                  />
                 </div>
               {/if}
 
-            </div>
-          {:else if viewMode === 'embed'}
-            <div class="w-full max-w-xl relative z-10 flex flex-col gap-4">
-              <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                <span class="text-xs font-mono font-bold text-slate-400 uppercase">Framework:</span>
-                {#each ['react', 'vue', 'html', 'svelte'] as fw}
-                  <button 
-                    onclick={() => embedFramework = fw as any}
-                    class="px-3 py-1 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer {embedFramework === fw ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
-                    {fw.toUpperCase()}
-                  </button>
-                {/each}
-              </div>
-
-              <pre class="p-5 rounded-2xl bg-slate-900 dark:bg-[#090d19] text-white font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{#if embedFramework === 'react'}// React / Next.js Binding for {selectedIntegration.badge}:
-import &#123; useSola &#125; from '@sola/react';
-import &#123; {selectedIntegration.primaryComponent} &#125; from '@sola/ui/{selectedIntegration.primaryComponent}';
-
-export function {selectedIntegration.badge.replace(/[^a-zA-Z]/g, '')}Widget() &#123;
-  const ref = useSola({selectedIntegration.primaryComponent}, &#123;
-    source: "{selectedIntegration.protocolUri}"
-  &#125;);
-  return &lt;div ref=&#123;ref&#125; /&gt;;
-&#125;{:else if embedFramework === 'vue'}&lt;template&gt;
-  &lt;div ref="container" /&gt;
-&lt;/template&gt;
-&lt;script setup&gt;
-import &#123; onMounted, ref &#125; from 'vue';
-import &#123; {selectedIntegration.primaryComponent} &#125; from '@sola/ui/{selectedIntegration.primaryComponent}';
-
-const container = ref(null);
-onMounted(() =&gt; {selectedIntegration.primaryComponent}(container.value, &#123;
-  source: "{selectedIntegration.protocolUri}"
-&#125;));
-&lt;/script&gt;{:else if embedFramework === 'html'}&lt;!-- Zero-Framework Vanilla CDN Drop --&gt;
-&lt;div id="sola-root"&gt;&lt;/div&gt;
-&lt;script type="module"&gt;
-  import &#123; {selectedIntegration.primaryComponent} &#125; from 'https://cdn.sola-air.dev/ui/{selectedIntegration.primaryComponent}.js';
-  {selectedIntegration.primaryComponent}(document.getElementById('sola-root'), &#123;
-    source: "{selectedIntegration.protocolUri}"
-  &#125;);
-&lt;/script&gt;{:else}&lt;script&gt;
-  // Native Sola Declarative Signal
-  import &#123; {selectedIntegration.primaryComponent} &#125; from '@sola/ui/{selectedIntegration.primaryComponent}';
-  const data = $data("{selectedIntegration.protocolUri}");
-&lt;/script&gt;
-
-&lt;{selectedIntegration.primaryComponent} data=&#123;data&#125; /&gt;{/if}</code></pre>
-            </div>
-          {:else}
-            <div class="w-full max-w-xl relative z-10 flex flex-col gap-4">
-              <div class="p-5 rounded-2xl bg-slate-900 dark:bg-[#090d19] text-white font-mono text-xs border border-slate-800 flex flex-col gap-3">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <span class="text-amber-400 font-bold">Protocol Relay Endpoint</span>
-                  <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">HTTP/2 SSE</span>
+              {#if liveProps.value !== undefined}
+                <div>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Value Prop</label>
+                  <input 
+                    type="text" 
+                    bind:value={liveProps.value} 
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                  />
                 </div>
-                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-amber-300 break-all select-all">
-                  {selectedIntegration.protocolUri}
-                </div>
-                <div class="text-slate-400 text-[11px] leading-relaxed">
-                  Natural Language Intent:
-                  <div class="text-slate-200 font-bold mt-1">"{selectedIntegration.sampleIntent}"</div>
-                </div>
-              </div>
-            </div>
-          {/if}
+              {/if}
 
+              {#if liveProps.trend !== undefined}
+                <div>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Trend Badge</label>
+                  <input 
+                    type="text" 
+                    bind:value={liveProps.trend} 
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+              {/if}
+
+              {#if liveProps.percentage !== undefined}
+                <div>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">
+                    Percentage ({liveProps.percentage}%)
+                  </label>
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    bind:value={liveProps.percentage} 
+                    class="w-full accent-emerald-500 cursor-pointer"
+                  />
+                </div>
+              {/if}
+
+              {#if liveProps.color !== undefined}
+                <div>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Accent Theme</label>
+                  <select 
+                    bind:value={liveProps.color}
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500">
+                    <option value="emerald">Emerald</option>
+                    <option value="sky">Sky Blue</option>
+                    <option value="amber">Amber</option>
+                    <option value="violet">Violet</option>
+                    <option value="rose">Rose</option>
+                  </select>
+                </div>
+              {/if}
+            </div>
+          </div>
         </div>
 
-      </section>
+        <!-- Multi-Target Code Generator Box -->
+        <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/5 pb-3">
+            <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
+              Component Code Export
+            </h3>
+
+            <!-- Code Framework Tabs -->
+            <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-xl text-xs font-mono">
+              <button 
+                onclick={() => codeTab = 'sola'} 
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'sola' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                .sola
+              </button>
+              <button 
+                onclick={() => codeTab = 'react'} 
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'react' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                React 19
+              </button>
+              <button 
+                onclick={() => codeTab = 'svelte'} 
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'svelte' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                Svelte 5
+              </button>
+              <button 
+                onclick={() => codeTab = 'html'} 
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'html' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                Web Component
+              </button>
+            </div>
+          </div>
+
+          <!-- Code Snippet Output Window -->
+          <div class="relative group">
+            <pre class="bg-slate-950 text-emerald-300 p-5 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{activeCodeSnippet}</code></pre>
+            <button 
+              onclick={() => copyCode(activeCodeSnippet)}
+              class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
+              {#if copied}
+                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span class="text-emerald-400">Copied!</span>
+              {:else}
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copy</span>
+              {/if}
+            </button>
+          </div>
+        </div>
+
+      </div>
 
     </div>
 
