@@ -69,10 +69,10 @@
           <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
           <span>Live UI Simulator</span>
         </div>
-        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-[-0.03em]">
+        <h1 class="text-2xl sm:text-[#475569] dark:text-slate-400xl lg:text-[#475569] dark:text-slate-400xl font-black text-slate-950 tracking-[-0.03em]">
           View on My UI
         </h1>
-        <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
+        <p class="text-slate-600 dark:text-slate-400 dark:text-slate-400 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
           Simulate how Sola's zero-VDOM components, ambient signals, and Dynamic Island HUD seamlessly mount inside your existing application.
         </p>
       </div>
@@ -81,12 +81,12 @@
       <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 shadow-xs self-start md:self-auto select-none overflow-x-auto no-scrollbar max-w-full dark:border-white/5">
         <button 
           onclick={() => activeMode = 'preset'}
-          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'preset' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'preset' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
           Enterprise Host Presets
         </button>
         <button 
           onclick={() => activeMode = 'screenshot'}
-          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'screenshot' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'screenshot' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
           Upload Screenshot / Figma
         </button>
       </div>
@@ -104,7 +104,7 @@
             {#each (['workspace', 'fintech', 'commerce', 'aifrontdoor', 'enterprise', 'telemetry', 'developer'] as TemplatePreset[]) as t}
               <button 
                 onclick={() => selectedPreset = t}
-                class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 border border-slate-200/60 hover:bg-slate-100'}">
+                class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 dark:text-slate-400 border border-slate-200/60 hover:bg-slate-100'}">
                 <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background-color: {presets[t].brand}"></span>
                 <span>{presets[t].name}</span>
               </button>
@@ -125,27 +125,27 @@
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
           <button 
             onclick={() => activeComponent = 'incident'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:bg-slate-200'}">
             P1 Incident Matrix
           </button>
           <button 
             onclick={() => activeComponent = 'cluster'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:bg-slate-200'}">
             Node Cluster Mesh
           </button>
           <button 
             onclick={() => activeComponent = 'waterfall'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:bg-slate-200'}">
             Revenue Waterfall
           </button>
           <button 
             onclick={() => activeComponent = 'datacard'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:bg-slate-200'}">
             KPI DataCard
           </button>
           <button 
             onclick={() => activeComponent = 'dial'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 dark:text-slate-400 hover:bg-slate-200'}">
             Tactile Touch Dial
           </button>
         </div>
@@ -598,7 +598,7 @@
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 76 65"><path d="M37.5274 0L75.0548 65H0L37.5274 0Z"/></svg>
                     <span class="font-bold">Vercel Console</span>
                     <span class="text-slate-400">/</span>
-                    <span class="text-slate-600 dark:text-slate-400">sola-air</span>
+                    <span class="text-slate-600 dark:text-slate-400 dark:text-slate-400">sola-air</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold">● Ready</span>
@@ -651,7 +651,7 @@
               </div>
             {:else}
               <label class="w-full p-10 sm:p-16 border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-3xl text-center flex flex-col items-center gap-3 cursor-pointer transition-all">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 dark:text-slate-400 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                 <div class="text-xs sm:text-sm font-mono text-slate-300 font-bold">Drop your Figma frame or App screenshot here</div>
                 <p class="text-[10px] sm:text-xs font-mono text-slate-500 dark:text-slate-400">Supports PNG, JPG, WebP. Sola anchors live components over your mockup.</p>
                 <input type="file" accept="image/*" onchange={handleFileUpload} class="hidden" />
