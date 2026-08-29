@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Button from '$lib/components/primitives/Button.svelte';
+  import Badge from '$lib/components/primitives/Badge.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
 
   // --- 1. Universal Canvas Card Data Model ---
@@ -235,8 +237,8 @@ export default function SolaCustomCanvas() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8 bg-[#fafafa] dark:bg-[#090d19]">
       ${cards.map(c => `{/* ${c.title} */}
-      <div className="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a] rounded-3xl border border-slate-200/90 p-6 shadow-xs">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">${c.title}</h3>
+      <div className="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-white/5 rounded-3xl border border-slate-200/90 p-6 shadow-xs">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">${c.title}</h3>
         <p className="text-3xl font-bold font-mono text-slate-900 dark:text-slate-100 mt-2">${c.value}</p>
       </div>`).join('\n      ')}
     </div>
@@ -247,7 +249,7 @@ export default function SolaCustomCanvas() {
         '  // Sola Canvas (Svelte 5 Runes)\n' +
         '<' + '/script>\n\n' +
         '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8 bg-[#fafafa] dark:bg-[#090d19]">\n' +
-        cards.map(c => `  <!-- ${c.title} -->\n  <div class="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a] rounded-3xl border border-slate-200/90 p-6 shadow-xs">\n    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">${c.title}</h3>\n    <div class="text-3xl font-bold font-mono text-slate-900 dark:text-slate-100 mt-2 dark:text-slate-100">${c.value}</div>\n  </div>`).join('\n') +
+        cards.map(c => `  <!-- ${c.title} -->\n  <div class="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-white/5 rounded-3xl border border-slate-200/90 p-6 shadow-xs">\n    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">${c.title}</h3>\n    <div class="text-3xl font-bold font-mono text-slate-900 dark:text-slate-100 mt-2 dark:text-slate-100">${c.value}</div>\n  </div>`).join('\n') +
         '\n</div>';
     } else {
       return '<!-- Web Component Mount -->\n' +
@@ -270,11 +272,11 @@ export default function SolaCustomCanvas() {
 </svelte:head>
 
 <!-- Outer Container: Pure Light Ivory Theme -->
-<div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900 dark:text-slate-100">
+<div class="flex flex-col w-full">
   <Navbar />
 
   <!-- 1. Top Navigation Bar -->
-  <header class="sticky top-0 z-30 bg-white dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3.5 shadow-xs dark:bg-[#0f172a] dark:border-white/5">
+  <header class="sticky top-0 z-30 bg-white dark:bg-white/5/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3.5 shadow-xs dark:bg-white/5 dark:border-white/5">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       
       <!-- Studio Canvas Branding & Layout Presets -->
@@ -292,27 +294,27 @@ export default function SolaCustomCanvas() {
         <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
 
         <!-- Sample Layout Selector -->
-        <div class="flex items-center overflow-x-auto w-full sm:w-auto bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs font-medium text-slate-600 dark:text-slate-400 no-scrollbar dark:border-white/5">
-          <button
+        <div class="flex items-center overflow-x-auto w-full sm:w-auto bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs font-medium text-slate-600 dark:text-slate-400 dark:text-slate-200 no-scrollbar dark:border-white/5">
+          <Button
             onclick={() => loadSample('general')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'general' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900 dark:text-slate-100'}">
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'general' ? 'bg-white dark:bg-white/5 text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900 dark:text-slate-100'}">
             Dashboard
-          </button>
-          <button
+          </Button>
+          <Button
             onclick={() => loadSample('product')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'product' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900 dark:text-slate-100'}">
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'product' ? 'bg-white dark:bg-white/5 text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900 dark:text-slate-100'}">
             Tasks
-          </button>
-          <button
+          </Button>
+          <Button
             onclick={() => loadSample('ecommerce')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'ecommerce' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900 dark:text-slate-100'}">
+            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'ecommerce' ? 'bg-white dark:bg-white/5 text-slate-950 shadow-xs font-bold' : 'hover:text-slate-900 dark:text-slate-100'}">
             E-Commerce
-          </button>
-          <button
+          </Button>
+          <Button
             onclick={clearCanvas}
-            class="px-2.5 py-1 rounded-lg text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:bg-rose-500/10 transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'blank' ? 'bg-white dark:bg-[#0f172a] text-rose-800 dark:text-rose-300 shadow-xs font-bold' : ''}">
+            class="px-2.5 py-1 rounded-lg text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:bg-rose-500/10 transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'blank' ? 'bg-white dark:bg-white/5 text-rose-800 dark:text-rose-300 shadow-xs font-bold' : ''}">
             Clear
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -321,90 +323,90 @@ export default function SolaCustomCanvas() {
 
       <!-- Right: Export Action -->
       <div class="flex items-center gap-2">
-        <button
+        <Button
           onclick={() => (exportModalOpen = true)}
           class="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-950 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
           <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
           <span>Export Code</span>
-        </button>
+        </Button>
       </div>
     </div>
   </header>
 
   <!-- 2. Universal Horizontal Component Shelf (Figma Style) -->
-  <div class="bg-white dark:bg-[#0f172a] border-b border-slate-200/70 px-4 sm:px-6 lg:px-8 py-2.5 dark:bg-[#0f172a] dark:border-white/5">
+  <div class="bg-white dark:bg-white/5 border-b border-slate-200/70 px-4 sm:px-6 lg:px-8 py-2.5 dark:bg-white/5 dark:border-white/5">
     <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-3 py-0.5 no-scrollbar">
-      <div class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap w-full">
+      <div class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-300 whitespace-nowrap w-full">
         <span class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10px] pl-1">Insert to Canvas:</span>
         
-        <button
+        <Button
           onclick={() => addComponent('stat')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
           <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
           <span>+ Metric Tile</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('progress')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
           <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           <span>+ Progress Ring</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('waterfall')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
           <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
           <span>+ Step Breakdown</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('slider')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
           <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/></svg>
           <span>+ Control Slider</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('form')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs dark:bg-[#090d19] dark:border-white/5">
-          <svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 dark:text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           <span>+ Input Form</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('feed')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs dark:bg-[#090d19] dark:border-white/5">
-          <svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 dark:text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           <span>+ Activity Feed</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('status')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
           <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span>+ Status Card</span>
-        </button>
+        </Button>
         
         <!-- Premium Components -->
-        <button
+        <Button
           onclick={() => addComponent('node_graph')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-100 hover:text-white border border-slate-700 rounded-xl transition-all cursor-pointer shadow-md">
           <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
           <span>+ Kinetic Graph</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           onclick={() => addComponent('radial_dial')}
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-100 hover:text-white border border-slate-700 rounded-xl transition-all cursor-pointer shadow-md">
           <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
           <span>+ Haptic Dial</span>
-        </button>
+        </Button>
       </div>
 
-      <div class="text-[11px] text-slate-400 font-mono font-medium whitespace-nowrap">
+      <div class="text-[11px] text-slate-400 dark:text-slate-200 font-mono font-medium whitespace-nowrap">
         {cards.length} {cards.length === 1 ? 'component' : 'components'} active
       </div>
     </div>
@@ -416,23 +418,23 @@ export default function SolaCustomCanvas() {
     <!-- Canvas Grid Area -->
     <main class="flex-1 w-full">
       {#if cards.length === 0}
-        <div class="min-h-[420px] rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center bg-white dark:bg-[#0f172a]/70 dark:bg-[#0f172a] dark:border-white/5">
-          <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 dark:text-slate-400 flex items-center justify-center mb-3">
+        <div class="min-h-[420px] rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center bg-white dark:bg-white/5/70 dark:bg-white/5 dark:border-white/5">
+          <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 dark:text-slate-300 flex items-center justify-center mb-3">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
           <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 mb-1 dark:text-slate-100">Canvas is empty</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mb-5">Click any component from the top ribbon or type a prompt for Sola Arc.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-300 max-w-sm mb-5">Click any component from the top ribbon or type a prompt for Sola Arc.</p>
           <div class="flex items-center gap-2">
-            <button
+            <Button
               onclick={() => addComponent('stat')}
               class="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
               + Add Metric Tile
-            </button>
-            <button
+            </Button>
+            <Button
               onclick={() => loadSample('general')}
-              class="px-4 py-2 bg-white dark:bg-[#0f172a] hover:bg-slate-50 text-slate-800 dark:text-slate-200 border border-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer dark:bg-[#0f172a] dark:text-slate-200 dark:border-white/5">
+              class="px-4 py-2 bg-white dark:bg-white/5 hover:bg-slate-50 text-slate-800 dark:text-slate-200 border border-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer dark:bg-white/5 dark:text-slate-200 dark:border-white/5">
               Load Sample Dashboard
-            </button>
+            </Button>
           </div>
         </div>
       {:else}
@@ -447,13 +449,13 @@ export default function SolaCustomCanvas() {
               ondrop={(e) => onDrop(e, card.id)}
               ondragend={onDragEnd}
               onclick={() => (activeCardId = card.id)}
-              class="group relative bg-white dark:bg-[#0f172a] rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md select-none {card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'} {draggedCardId === card.id ? 'opacity-40 scale-[0.98]' : ''} {dragOverCardId === card.id ? 'ring-2 ring-emerald-500 border-dashed border-emerald-400 bg-emerald-50 dark:bg-emerald-500/10/20' : ''}">
+              class="group relative bg-white dark:bg-white/5 rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md select-none {card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'} {draggedCardId === card.id ? 'opacity-40 scale-[0.98]' : ''} {dragOverCardId === card.id ? 'ring-2 ring-emerald-500 border-dashed border-emerald-400 bg-emerald-50 dark:bg-emerald-500/10/20' : ''}">
               
               <!-- Card Action & Drag Header -->
               <div class="px-5 pt-4 pb-3 flex items-center justify-between border-b border-slate-100">
                 <!-- Grab Handle & Title -->
                 <div class="flex items-center gap-2">
-                  <div class="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-700 dark:text-slate-300 p-1 rounded-md hover:bg-slate-100" title="Drag to move card">
+                  <div class="cursor-grab active:cursor-grabbing text-slate-400 dark:text-slate-200 hover:text-slate-700 dark:text-slate-300 p-1 rounded-md hover:bg-slate-100" title="Drag to move card">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
                   </div>
                   <div>
@@ -461,9 +463,9 @@ export default function SolaCustomCanvas() {
                       type="text" 
                       bind:value={card.title} 
                       onclick={(e) => e.stopPropagation()}
-                      class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 bg-transparent hover:bg-slate-50 focus:bg-white dark:bg-[#0f172a] focus:outline-emerald-500 rounded px-1 -ml-1 dark:bg-[#0f172a] dark:text-slate-200" />
+                      class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 bg-transparent hover:bg-slate-50 focus:bg-white dark:bg-white/5 focus:outline-emerald-500 rounded px-1 -ml-1 dark:bg-white/5 dark:text-slate-200" />
                     {#if card.subtitle}
-                      <p class="text-[11px] text-slate-400 mt-0.5 ml-1">{card.subtitle}</p>
+                      <p class="text-[11px] text-slate-400 dark:text-slate-200 mt-0.5 ml-1">{card.subtitle}</p>
                     {/if}
                   </div>
                 </div>
@@ -472,41 +474,41 @@ export default function SolaCustomCanvas() {
                 <div class="flex items-center gap-1.5" onclick={(e) => e.stopPropagation()}>
                   <!-- Snap Width Controls -->
                   <div class="flex items-center bg-slate-100 rounded-lg p-0.5">
-                    <button
+                    <Button
                       onclick={(e) => setCols(card, 1, e)}
-                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 1 ? 'bg-white dark:bg-[#0f172a] font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}"
+                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 1 ? 'bg-white dark:bg-white/5 font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:text-slate-100'}"
                       title="1 Column">
                       1x
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onclick={(e) => setCols(card, 2, e)}
-                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 2 ? 'bg-white dark:bg-[#0f172a] font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}"
+                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 2 ? 'bg-white dark:bg-white/5 font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:text-slate-100'}"
                       title="2 Columns">
                       2x
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onclick={(e) => setCols(card, 3, e)}
-                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 3 ? 'bg-white dark:bg-[#0f172a] font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}"
+                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 3 ? 'bg-white dark:bg-white/5 font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:text-slate-100'}"
                       title="Full Width">
                       3x
-                    </button>
+                    </Button>
                   </div>
 
                   <!-- Clone -->
-                  <button
+                  <Button
                     onclick={(e) => duplicateCard(card, e)}
-                    class="p-1 hover:bg-slate-100 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100 cursor-pointer dark:text-slate-100"
+                    class="p-1 hover:bg-slate-100 rounded-lg text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:text-slate-100 cursor-pointer dark:text-slate-100"
                     title="Duplicate">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
+                  </Button>
 
                   <!-- Delete -->
-                  <button
+                  <Button
                     onclick={(e) => removeCard(card.id, e)}
-                    class="p-1 hover:bg-rose-50 dark:bg-rose-500/10 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:text-rose-400 cursor-pointer"
+                    class="p-1 hover:bg-rose-50 dark:bg-rose-500/10 rounded-lg text-slate-500 dark:text-slate-300 hover:text-rose-600 dark:text-rose-400 cursor-pointer"
                     title="Delete">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -519,16 +521,16 @@ export default function SolaCustomCanvas() {
                       type="text" 
                       bind:value={card.value} 
                       onclick={(e) => e.stopPropagation()}
-                      class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 font-mono bg-transparent hover:bg-slate-50 focus:bg-white dark:bg-[#0f172a] focus:outline-emerald-500 rounded px-1 -ml-1 w-48 dark:bg-[#0f172a] dark:text-slate-100" />
+                      class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 font-mono bg-transparent hover:bg-slate-50 focus:bg-white dark:bg-white/5 focus:outline-emerald-500 rounded px-1 -ml-1 w-48 dark:bg-white/5 dark:text-slate-100" />
                     {#if card.delta}
                       <span class="flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-500/20/60 font-mono">
                         {card.delta}
                       </span>
                     {/if}
                   </div>
-                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-200 font-mono">
                     <span>Direct editable value</span>
-                    <span class="font-medium text-slate-600 dark:text-slate-400">Zero-VDOM</span>
+                    <span class="font-medium text-slate-600 dark:text-slate-400 dark:text-slate-200">Zero-VDOM</span>
                   </div>
 
                 <!-- TYPE: PROGRESS RING -->
@@ -558,7 +560,7 @@ export default function SolaCustomCanvas() {
                     </div>
                     <div class="flex-1 space-y-2">
                       <div class="flex justify-between text-xs">
-                        <span class="text-slate-500 dark:text-slate-400">Completion Target</span>
+                        <span class="text-slate-500 dark:text-slate-300">Completion Target</span>
                         <span class="font-semibold text-slate-800 dark:text-slate-200">&gt; 70%</span>
                       </div>
                       <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
@@ -591,7 +593,7 @@ export default function SolaCustomCanvas() {
                           <div
                             class="w-full rounded-t-lg transition-all duration-500 {bar.val < 0 ? 'bg-rose-400' : 'bg-emerald-600'}"
                             style="height: {Math.min(100, Math.max(15, Math.abs(bar.val)))}%"></div>
-                          <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400 truncate w-full text-center">{bar.name}</span>
+                          <span class="text-[10px] font-medium text-slate-500 dark:text-slate-300 truncate w-full text-center">{bar.name}</span>
                         </div>
                       {/each}
                     </div>
@@ -608,7 +610,7 @@ export default function SolaCustomCanvas() {
                       bind:value={card.value}
                       onclick={(e) => e.stopPropagation()}
                       class="w-full accent-emerald-600 cursor-pointer h-2 bg-slate-100 rounded-lg" />
-                    <div class="w-full flex justify-between text-[10px] font-semibold text-slate-400 mt-2 font-mono">
+                    <div class="w-full flex justify-between text-[10px] font-semibold text-slate-400 dark:text-slate-200 mt-2 font-mono">
                       <span>0% (Min)</span>
                       <span>50% (Mid)</span>
                       <span>100% (Max)</span>
@@ -631,7 +633,7 @@ export default function SolaCustomCanvas() {
                 {:else if card.type === 'form'}
                   <div class="space-y-3">
                     <div>
-                      <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Configuration Field</label>
+                      <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 dark:text-slate-200 mb-1">Configuration Field</label>
                       <input
                         type="text"
                         value="sample-input-value"
@@ -639,7 +641,7 @@ export default function SolaCustomCanvas() {
                         class="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 dark:text-slate-200 dark:bg-[#090d19] dark:text-slate-200 dark:border-white/5" />
                     </div>
                     <div class="flex items-center justify-between pt-1">
-                      <span class="text-xs font-medium text-slate-600 dark:text-slate-400">Active Switch</span>
+                      <span class="text-xs font-medium text-slate-600 dark:text-slate-400 dark:text-slate-200">Active Switch</span>
                       <input type="checkbox" checked class="accent-emerald-600 rounded w-4 h-4 cursor-pointer" onclick={(e) => e.stopPropagation()} />
                     </div>
                   </div>
@@ -651,14 +653,14 @@ export default function SolaCustomCanvas() {
                       <div class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] flex items-center justify-center shrink-0">1</div>
                       <div>
                         <p class="text-slate-800 dark:text-slate-200 font-medium text-[11px] dark:text-slate-200">Primary event registered</p>
-                        <span class="text-[10px] text-slate-400">Just now</span>
+                        <span class="text-[10px] text-slate-400 dark:text-slate-200">Just now</span>
                       </div>
                     </div>
                     <div class="flex items-start gap-2.5">
                       <div class="w-5 h-5 rounded-full bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-400 font-bold text-[10px] flex items-center justify-center shrink-0">2</div>
                       <div>
                         <p class="text-slate-800 dark:text-slate-200 font-medium text-[11px] dark:text-slate-200">State update acknowledged</p>
-                        <span class="text-[10px] text-slate-400">3 min ago</span>
+                        <span class="text-[10px] text-slate-400 dark:text-slate-200">3 min ago</span>
                       </div>
                     </div>
                   </div>
@@ -673,15 +675,15 @@ export default function SolaCustomCanvas() {
 
     <!-- 4. Slide-over Property Inspector for Active Card -->
     {#if activeCard}
-      <aside class="w-full lg:w-80 shrink-0 bg-white dark:bg-[#0f172a] rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-4 lg:sticky lg:top-24 mb-40 lg:mb-0 dark:bg-[#0f172a] dark:border-white/5">
+      <aside class="w-full lg:w-80 shrink-0 bg-white dark:bg-white/5 rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-4 lg:sticky lg:top-24 mb-40 lg:mb-0 dark:bg-white/5 dark:border-white/5">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-emerald-600"></div>
             <h3 class="font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-slate-100">Card Inspector</h3>
           </div>
-          <button onclick={() => (activeCardId = null)} class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 dark:text-slate-400 flex items-center justify-center text-xs cursor-pointer">
+          <Button onclick={() => (activeCardId = null)} class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 dark:text-slate-300 flex items-center justify-center text-xs cursor-pointer">
             &times;
-          </button>
+          </Button>
         </div>
 
         <div class="space-y-3.5 text-xs">
@@ -691,7 +693,7 @@ export default function SolaCustomCanvas() {
             <input
               type="text"
               bind:value={activeCard.title}
-              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white dark:bg-[#0f172a] focus:border-emerald-500 outline-none font-sans dark:bg-[#0f172a] dark:border-white/5" />
+              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white dark:bg-white/5 focus:border-emerald-500 outline-none font-sans dark:bg-white/5 dark:border-white/5" />
           </div>
 
           <!-- Subtitle Edit -->
@@ -700,7 +702,7 @@ export default function SolaCustomCanvas() {
             <input
               type="text"
               bind:value={activeCard.subtitle}
-              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white dark:bg-[#0f172a] focus:border-emerald-500 outline-none font-sans dark:bg-[#0f172a] dark:border-white/5" />
+              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white dark:bg-white/5 focus:border-emerald-500 outline-none font-sans dark:bg-white/5 dark:border-white/5" />
           </div>
 
           <!-- Value Edit -->
@@ -709,35 +711,35 @@ export default function SolaCustomCanvas() {
             <input
               type="text"
               bind:value={activeCard.value}
-              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white dark:bg-[#0f172a] focus:border-emerald-500 outline-none font-sans font-mono dark:bg-[#0f172a] dark:border-white/5" />
+              class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white dark:bg-white/5 focus:border-emerald-500 outline-none font-sans font-mono dark:bg-white/5 dark:border-white/5" />
           </div>
 
           <!-- Column Width Snap -->
           <div>
             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Grid Column Span</label>
             <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl">
-              <button
+              <Button
                 onclick={() => activeCard && (activeCard.cols = 1)}
-                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 1 ? 'bg-white dark:bg-[#0f172a] shadow-xs text-slate-950 font-bold' : 'text-slate-500 dark:text-slate-400'}">
+                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 1 ? 'bg-white dark:bg-white/5 shadow-xs text-slate-950 font-bold' : 'text-slate-500 dark:text-slate-300'}">
                 1 Col
-              </button>
-              <button
+              </Button>
+              <Button
                 onclick={() => activeCard && (activeCard.cols = 2)}
-                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 2 ? 'bg-white dark:bg-[#0f172a] shadow-xs text-slate-950 font-bold' : 'text-slate-500 dark:text-slate-400'}">
+                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 2 ? 'bg-white dark:bg-white/5 shadow-xs text-slate-950 font-bold' : 'text-slate-500 dark:text-slate-300'}">
                 2 Col
-              </button>
-              <button
+              </Button>
+              <Button
                 onclick={() => activeCard && (activeCard.cols = 3)}
-                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 3 ? 'bg-white dark:bg-[#0f172a] shadow-xs text-slate-950 font-bold' : 'text-slate-500 dark:text-slate-400'}">
+                class="py-1 rounded-lg font-medium cursor-pointer {activeCard.cols === 3 ? 'bg-white dark:bg-white/5 shadow-xs text-slate-950 font-bold' : 'text-slate-500 dark:text-slate-300'}">
                 3 Col
-              </button>
+              </Button>
             </div>
           </div>
 
           <!-- JSON Config Editor -->
           {#if activeCard.config}
             <div class="pt-3 border-t border-slate-100">
-              <label class="block text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-2">Component Data (JSON)</label>
+              <label class="block text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 dark:text-slate-200 mb-2">Component Data (JSON)</label>
               <textarea
                 value={JSON.stringify(activeCard.config, null, 2)}
                 onchange={(e) => {
@@ -754,16 +756,16 @@ export default function SolaCustomCanvas() {
 
           <!-- Actions -->
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <button
+            <Button
               onclick={() => duplicateCard(activeCard)}
               class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-xl font-medium transition-all cursor-pointer">
               Duplicate
-            </button>
-            <button
+            </Button>
+            <Button
               onclick={() => removeCard(activeCard.id)}
               class="px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 rounded-xl font-medium transition-all cursor-pointer">
               Delete
-            </button>
+            </Button>
           </div>
         </div>
       </aside>
@@ -773,37 +775,37 @@ export default function SolaCustomCanvas() {
   <!-- 5. Code Export Modal -->
   {#if exportModalOpen}
     <div class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4">
-      <div class="bg-white dark:bg-[#0f172a] w-full max-w-3xl rounded-3xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[85vh] dark:bg-[#0f172a] dark:border-white/5">
+      <div class="bg-white dark:bg-white/5 w-full max-w-3xl rounded-3xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[85vh] dark:bg-white/5 dark:border-white/5">
         <!-- Modal Header -->
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
           <div>
             <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100">Export Canvas Code</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Clean, production-ready component code.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-300 mt-0.5">Clean, production-ready component code.</p>
           </div>
-          <button
+          <Button
             onclick={() => (exportModalOpen = false)}
-            class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 dark:text-slate-400 font-bold cursor-pointer">
+            class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 dark:text-slate-400 dark:text-slate-200 font-bold cursor-pointer">
             &times;
-          </button>
+          </Button>
         </div>
 
         <!-- Framework Selector Tabs -->
         <div class="px-6 pt-3 flex items-center gap-2 bg-slate-50 border-b border-slate-100 dark:bg-[#090d19]">
-          <button
+          <Button
             onclick={() => (exportTab = 'react')}
-            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'react' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'react' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 dark:text-slate-300 hover:text-slate-800 dark:text-slate-200'}">
             React 19 (JSX)
-          </button>
-          <button
+          </Button>
+          <Button
             onclick={() => (exportTab = 'svelte')}
-            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'svelte' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'svelte' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 dark:text-slate-300 hover:text-slate-800 dark:text-slate-200'}">
             Svelte 5 (Runes)
-          </button>
-          <button
+          </Button>
+          <Button
             onclick={() => (exportTab = 'webcomponent')}
-            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'webcomponent' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'webcomponent' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 dark:text-slate-300 hover:text-slate-800 dark:text-slate-200'}">
             HTML / Web Component
-          </button>
+          </Button>
         </div>
 
         <!-- Code Box -->
@@ -813,7 +815,7 @@ export default function SolaCustomCanvas() {
 
         <!-- Modal Footer -->
         <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between dark:bg-[#090d19]">
-          <span class="text-xs text-slate-500 dark:text-slate-400">
+          <span class="text-xs text-slate-500 dark:text-slate-300">
             {#if copyNotification}
               <span class="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -824,16 +826,16 @@ export default function SolaCustomCanvas() {
             {/if}
           </span>
           <div class="flex items-center gap-2">
-            <button
+            <Button
               onclick={copyCode}
-              class="px-4 py-2 bg-white dark:bg-[#0f172a] hover:bg-slate-100 border border-slate-200 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer dark:bg-[#0f172a] dark:text-slate-200 dark:border-white/5">
+              class="px-4 py-2 bg-white dark:bg-white/5 hover:bg-slate-100 border border-slate-200 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer dark:bg-white/5 dark:text-slate-200 dark:border-white/5">
               Copy Code
-            </button>
-            <button
+            </Button>
+            <Button
               onclick={() => (exportModalOpen = false)}
               class="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
               Done
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -842,7 +844,7 @@ export default function SolaCustomCanvas() {
 
   <!-- Floating Arc Copilot -->
   <div class="fixed bottom-28 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-2xl px-4 pointer-events-none">
-    <div class="pointer-events-auto bg-white dark:bg-[#0f172a]/70 backdrop-blur-2xl border border-slate-200/50 p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center gap-2 ring-1 ring-slate-900/5 dark:bg-[#0f172a] dark:border-white/5">
+    <div class="pointer-events-auto bg-white dark:bg-white/5/70 backdrop-blur-2xl border border-slate-200/50 p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center gap-2 ring-1 ring-slate-900/5 dark:bg-white/5 dark:border-white/5">
       <form
         onsubmit={(e) => {
           e.preventDefault();
@@ -859,7 +861,7 @@ export default function SolaCustomCanvas() {
           bind:value={arcPromptInput}
           placeholder="Ask Sola Arc to build a layout or component..."
           class="w-full pl-11 pr-32 py-3 bg-transparent text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 outline-none font-sans dark:text-slate-100" />
-        <button
+        <Button
           type="submit"
           disabled={isGeneratingArc || !arcPromptInput.trim()}
           class="absolute right-1 px-4 py-2 bg-slate-950 hover:bg-slate-800 disabled:opacity-40 text-white rounded-xl text-xs font-semibold transition-all shadow-md flex items-center gap-2 cursor-pointer">
@@ -869,7 +871,7 @@ export default function SolaCustomCanvas() {
           {:else}
             <span>Build with Arc</span>
           {/if}
-        </button>
+        </Button>
       </form>
     </div>
   </div>

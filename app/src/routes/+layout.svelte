@@ -23,6 +23,8 @@
 	<link rel="canonical" href="https://sola-air.dev" />
 </svelte:head>
 
-{@render children()}
+<div class="min-h-screen flex flex-col w-full transition-colors duration-200">
+	{@render children()}
+</div>
 
 <MobileHudCapsule />

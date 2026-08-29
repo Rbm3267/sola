@@ -286,7 +286,7 @@
   }
 </script>
 
-<div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-950 dark:text-white font-sans selection:bg-slate-200 selection:text-slate-900 dark:text-white pb-24">
+<div class="flex flex-col w-full">
   <Navbar />
   
   <!-- Precision Monochromatic Grid Texture -->

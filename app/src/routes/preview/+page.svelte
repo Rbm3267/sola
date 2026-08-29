@@ -1,11 +1,13 @@
 <script lang="ts">
+  import Button from '$lib/components/primitives/Button.svelte';
+  import Badge from '$lib/components/primitives/Badge.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import { fade, slide } from 'svelte/transition';
 
   let currentStep = $state(1);
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-[#090d19] dark:via-[#0f172a] dark:to-[#090d19] text-slate-900 dark:text-slate-100 flex flex-col font-sans overflow-x-hidden w-full max-w-full">
+<div class="flex flex-col w-full">
   <Navbar />
 
   <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 flex flex-col gap-16 lg:gap-24">
@@ -53,31 +55,31 @@
           
           <div class="space-y-4">
             <!-- Step 1 -->
-            <button onclick={() => currentStep = 1} class="w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all border {currentStep === 1 ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20' : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-white/5'} cursor-pointer">
+            <Button onclick={() => currentStep = 1} class="w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all border {currentStep === 1 ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20' : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-white/5'} cursor-pointer">
               <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 {currentStep === 1 ? 'bg-amber-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}">1</div>
               <div>
                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Add to Chrome</h4>
                 <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Click the button above to securely install the official Sola extension directly from the Chrome Web Store.</p>
               </div>
-            </button>
+            </Button>
             
             <!-- Step 2 -->
-            <button onclick={() => currentStep = 2} class="w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all border {currentStep === 2 ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20' : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-white/5'} cursor-pointer">
+            <Button onclick={() => currentStep = 2} class="w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all border {currentStep === 2 ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20' : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-white/5'} cursor-pointer">
               <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 {currentStep === 2 ? 'bg-amber-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}">2</div>
               <div>
                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Open Target Web App</h4>
                 <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Navigate to your localhost environment, preview deployment, or a live SaaS dashboard.</p>
               </div>
-            </button>
+            </Button>
             
             <!-- Step 3 -->
-            <button onclick={() => currentStep = 3} class="w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all border {currentStep === 3 ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20' : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-white/5'} cursor-pointer">
+            <Button onclick={() => currentStep = 3} class="w-full text-left flex items-start gap-4 p-4 rounded-2xl transition-all border {currentStep === 3 ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20' : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-white/5'} cursor-pointer">
               <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 {currentStep === 3 ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}">3</div>
               <div>
                 <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm">Inject via Sidepanel</h4>
                 <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Click the Sola extension icon in your browser toolbar to mount the ambient widgets.</p>
               </div>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -307,7 +307,7 @@
 
 <!-- Toast Notification -->
 {#if toastMessage}
-  <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15)] flex items-center gap-3 border transition-all duration-300 backdrop-blur-xl {toastMessage.type === 'success' ? 'bg-slate-900 text-white border-emerald-500/50' : toastMessage.type === 'amber' ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-950 border-amber-300 dark:border-amber-500/30' : 'bg-slate-900 text-white border-slate-700'}">
+  <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15)] flex items-center gap-3 border transition-all duration-300 backdrop-blur-xl {toastMessage.type === 'success' ? 'bg-slate-900 text-white border-emerald-500/50' : toastMessage.type === 'amber' ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-950 dark:text-amber-400 border-amber-300 dark:border-amber-500/30' : 'bg-slate-900 text-white border-slate-700'}">
     <div class="w-2 h-2 rounded-full {toastMessage.type === 'success' ? 'bg-emerald-400 animate-ping' : toastMessage.type === 'amber' ? 'bg-amber-500' : 'bg-sky-400'}"></div>
     <span class="text-xs font-mono font-bold tracking-tight">{toastMessage.text}</span>
   </div>
@@ -326,11 +326,11 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
           <div>
-            <h3 class="text-base font-black text-slate-950 dark:text-white tracking-tight">Test Live Page Preview</h3>
+            <h3 class="text-base font-black text-slate-950 tracking-tight">Test Live Page Preview</h3>
             <span class="text-xs font-mono text-slate-500 dark:text-slate-400">{activeModalTemplate.title}</span>
           </div>
         </div>
-        <button onclick={() => activeModalTemplate = null} class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/[0.08] hover:bg-slate-200 text-slate-500 dark:text-slate-400 flex items-center justify-center cursor-pointer transition-colors">
+        <button aria-label="Close" onclick={() => activeModalTemplate = null} class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/[0.08] hover:bg-slate-200 text-slate-500 dark:text-slate-400 flex items-center justify-center cursor-pointer transition-colors">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
@@ -356,8 +356,8 @@
             href="/preview?component={activeModalTemplate.previewType}&preset={activeModalTemplate.targetPreset}"
             class="p-4 rounded-2xl border border-amber-200 dark:border-amber-500/20/80 bg-amber-50 dark:bg-amber-500/10/40 hover:bg-amber-50 dark:bg-amber-500/10 hover:border-amber-300 dark:border-amber-500/30 flex flex-col gap-2 text-left cursor-pointer transition-all text-decoration-none">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-mono font-bold text-amber-950">Host Simulator</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 font-bold">Web Sandbox</span>
+              <span class="text-xs font-mono font-bold text-amber-950 dark:text-amber-400">Host Simulator</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 dark:text-amber-300 font-bold">Web Sandbox</span>
             </div>
             <p class="text-[11px] text-amber-800 dark:text-amber-300/80 leading-relaxed">
               Preview inside mock Workspace, Operations, Billing, or Telemetry dashboards.
@@ -385,7 +385,7 @@
 {/if}
 
 <!-- Main Luxury Surface Container -->
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-[#090d19] dark:via-[#0f172a] dark:to-[#090d19] text-slate-900 dark:text-slate-100 dark:text-white font-sans selection:bg-amber-500/20 selection:text-amber-900">
+<div class="flex flex-col w-full">
   <Navbar />
 
   <!-- Hero & Extension Status Banner -->
@@ -407,7 +407,7 @@
       </div>
 
       <!-- Headline -->
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-[-0.03em] max-w-4xl">
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-[-0.03em] max-w-4xl">
         Discover, Test Live Browser Overlay, and Fork Sola Micro-Frontends
       </h1>
       
@@ -453,7 +453,7 @@
       <div class="flex items-center gap-2">
         <a 
           href="/preview" 
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 hover:bg-amber-100 dark:bg-amber-500/20 transition-all text-decoration-none">
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 hover:bg-amber-100 dark:bg-amber-500/20 transition-all text-decoration-none">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span>Open Full Live Host Simulator</span>
         </a>
@@ -492,7 +492,7 @@
 
             <!-- Title & Description -->
             <div>
-              <h3 class="text-base font-bold text-slate-950 dark:text-white group-hover:text-amber-600 dark:text-amber-400 transition-colors tracking-tight">
+              <h3 class="text-base font-bold text-slate-950 group-hover:text-amber-600 dark:text-amber-400 transition-colors tracking-tight">
                 {tmpl.title}
               </h3>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-1 line-clamp-2">
@@ -569,7 +569,7 @@
             <!-- Action 2: Test in My UI (Extension / Live Browser Overlay Modal) -->
             <button 
               onclick={() => openInSituModal(tmpl)}
-              class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 dark:text-white font-mono font-bold text-xs transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
+              class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               <span>Test in My UI</span>
             </button>

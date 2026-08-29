@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Button from '$lib/components/primitives/Button.svelte';
+  import Badge from '$lib/components/primitives/Badge.svelte';
   import { page } from '$app/stores';
   import SolaLogo from './SolaLogo.svelte';
   import AiAssistantModal from './AiAssistantModal.svelte';
@@ -71,7 +73,7 @@
     <!-- Right Utility Area -->
     <div class="flex items-center gap-2 sm:gap-3">
       <!-- AI Ask Command Button -->
-      <button 
+      <Button 
         type="button"
         onclick={() => isAiModalOpen = true}
         class="flex items-center justify-between w-auto sm:w-60 md:w-64 h-9 sm:h-10 px-3 sm:px-4 rounded-2xl border border-slate-200 dark:border-white/[0.04] bg-white dark:bg-white/[0.02] backdrop-blur-md text-xs font-medium text-slate-500  hover:border-amber-400 hover:bg-white dark:bg-white/[0.02] hover:text-slate-900 dark:text-white transition-all cursor-pointer shadow-xs group">
@@ -81,10 +83,10 @@
           <span class="font-medium text-slate-700  sm:hidden">Arc</span>
         </div>
         <kbd class="hidden sm:inline text-[10px] font-mono bg-slate-100 dark:bg-white/[0.08] dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] px-1.5 py-0.5 rounded text-slate-500  font-bold group-hover:bg-emerald-50 dark:bg-emerald-500/10 group-hover:text-emerald-900 dark:hover:text-emerald-300 group-hover:border-emerald-200 dark:border-emerald-500/20 transition-colors">⌘K</kbd>
-      </button>
+      </Button>
 
       <!-- Theme Toggle -->
-      <button 
+      <Button 
         type="button"
         onclick={() => theme.toggle()}
         class="p-2 text-slate-500  hover:text-slate-950 dark:text-slate-50 dark:hover:text-white hover:bg-slate-100 dark:bg-white/[0.08] dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer" 
@@ -96,7 +98,7 @@
           <!-- Moon Icon -->
           <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         {/if}
-      </button>
+      </Button>
 
       <!-- GitHub Link -->
       <a 
@@ -109,7 +111,7 @@
       </a>
 
       <!-- Mobile Hamburger Button -->
-      <button 
+      <Button 
         type="button"
         onclick={() => isMobileMenuOpen = !isMobileMenuOpen}
         class="md:hidden p-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 dark:text-white hover:bg-slate-100 dark:bg-white/[0.08] dark:bg-white/[0.08] rounded-xl transition-all cursor-pointer"
@@ -119,7 +121,7 @@
         {:else}
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
         {/if}
-      </button>
+      </Button>
     </div>
 
   </div>

@@ -7,7 +7,7 @@
   <meta name="description" content="Official Privacy Policy for Sola and the Sola Chrome Extension (View in My UI)." />
 </svelte:head>
 
-<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 dark:bg-emerald-500/20 selection:text-emerald-900 dark:text-slate-100">
+<div class="flex flex-col w-full">
   <Navbar />
 
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">

@@ -9,7 +9,8 @@
     loading = false,
     disabled = false,
     fluid = false,
-    className = "",
+    class: className = "",
+    type = "button",
     onclick,
     children,
     iconLeft,
@@ -22,7 +23,8 @@
     loading?: boolean;
     disabled?: boolean;
     fluid?: boolean;
-    className?: string;
+    class?: string;
+    type?: "button" | "submit" | "reset";
     onclick?: (e: MouseEvent) => void;
     children?: Snippet;
     iconLeft?: Snippet;
@@ -103,7 +105,7 @@
 </script>
 
 <button
-  type="button"
+  type={type}
   {disabled}
   class="
     inline-flex items-center justify-center gap-2 font-mono font-medium transition-all duration-200

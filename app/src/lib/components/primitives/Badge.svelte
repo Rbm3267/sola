@@ -6,7 +6,7 @@
     color = "slate",
     size = "md",
     radius = "full",
-    className = "",
+    class: className = "",
     children,
     icon
   } = $props<{
@@ -14,7 +14,7 @@
     color?: "emerald" | "sky" | "amber" | "rose" | "indigo" | "slate";
     size?: "sm" | "md" | "lg";
     radius?: "sm" | "md" | "lg" | "full";
-    className?: string;
+    class?: string;
     children?: Snippet;
     icon?: Snippet;
   }>();

@@ -384,7 +384,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
     '}';;
 </script>
 
-<div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-white font-sans selection:bg-amber-100 dark:bg-amber-500/20 selection:text-amber-900 pb-20">
+<div class="flex flex-col w-full">
   <Navbar />
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

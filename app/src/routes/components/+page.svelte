@@ -39,39 +39,10 @@
 
   const categories = [
     'All',
-    'ITSM & Security',
-    'Cloud & DevOps',
-    'Observability',
-    'Databases',
-    'Billing & Finance',
-    'AI & Agents',
-    'Solo & MCP'
+    ...Array.from(new Set(SAAS_ECOSYSTEM.map(item => item.category)))
   ];
 
-  function getPresetForIntegration(item: SaasIntegration): string {
-    const b = (item.badge || '').toLowerCase();
-    const id = (item.id || '').toLowerCase();
-    if (b.includes('servicenow') || id.includes('servicenow')) return 'servicenow';
-    if (b.includes('stripe') || id.includes('stripe') || id.includes('finance')) return 'stripe';
-    if (b.includes('shopify') || id.includes('shopify') || id.includes('cart')) return 'shopify';
-    if (b.includes('moveworks') || id.includes('moveworks')) return 'moveworks';
-    if (b.includes('linear') || id.includes('linear')) return 'linear';
-    if (b.includes('grafana') || b.includes('datadog') || id.includes('telemetry')) return 'grafana';
-    if (b.includes('vercel') || b.includes('cloudflare') || b.includes('aws') || id.includes('cloud')) return 'vercel';
-    return 'servicenow';
-  }
-
-  function getComponentParam(compName: string): string {
-    switch (compName) {
-      case 'IncidentTriageMatrix': return 'incident';
-      case 'ClusterMatrix': return 'cluster';
-      case 'FlowWaterfall': return 'waterfall';
-      case 'TactileDialCard': return 'dial';
-      case 'DataCard': return 'datacard';
-      case 'GaugeCard': return 'dial';
-      default: return 'incident';
-    }
-  }
+  
 
   const filteredIntegrations = $derived(
     SAAS_ECOSYSTEM.filter(item => {
@@ -86,7 +57,7 @@
   );
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-[#090d19] dark:via-[#0f172a] dark:to-[#090d19] text-slate-900 dark:text-slate-100 flex flex-col font-sans">
+<div class="flex flex-col w-full">
   
   <Navbar />
 
@@ -222,9 +193,9 @@
               1-Click Embed
             </button>
             <a 
-              href={'/preview?preset=' + getPresetForIntegration(selectedIntegration) + '&component=' + getComponentParam(selectedIntegration.primaryComponent)}
+              href='/studio'
               class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-xs hover:bg-amber-600 flex items-center gap-1.5">
-              <span>View on My UI</span>
+              <span>Open in Studio</span>
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
           </div>
