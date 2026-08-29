@@ -738,5 +738,176 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
       svelte: `<script>\n  import { FunnelChart } from '@sola/ui';\n</script>\n\n<FunnelChart config={{\n  title: "Signup Funnel",\n  stages: [\n    { label: "Page Views", value: 48200 },\n    { label: "Sign Up", value: 12400 }\n  ]\n}} />`,
       html: `<sola-funnel-chart title="Signup Funnel"></sola-funnel-chart>`
     }
+  },
+
+  // ───────────────────────────────────────────
+  // 23. Toast Stack (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'toast-stack',
+    name: 'Toast Notification Stack',
+    category: 'Status & HUD',
+    description: 'Auto-dismissing stacked notification toasts with severity icons, progress countdown bars, and configurable duration and position.',
+    tagline: 'Transient feedback, success confirmations, and error alerts',
+    badge: 'New',
+    componentName: 'ToastStack',
+    defaultConfig: {
+      position: 'bottom-right',
+      toasts: [
+        { id: 1, title: 'Changes saved', message: 'Your configuration has been applied.', severity: 'success', duration: 4000 },
+        { id: 2, title: 'New deployment', message: 'v2.4.1 is rolling out to production.', severity: 'info', duration: 5000 }
+      ]
+    },
+    props: [
+      { name: 'position', type: 'string', defaultValue: 'bottom-right', description: 'Screen anchor position', options: ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center'] },
+      { name: 'toasts', type: 'Array<Toast>', defaultValue: [], description: 'Array of toast objects with title, message, severity, and duration' },
+      { name: 'maxVisible', type: 'number', defaultValue: 5, description: 'Maximum toasts visible at once before stacking' },
+      { name: 'defaultDuration', type: 'number', defaultValue: 4000, description: 'Auto-dismiss duration in milliseconds (0 = persistent)' }
+    ],
+    codeSnippets: {
+      sola: `<ToastStack position="bottom-right" />\n\n// Dispatch from anywhere:\ntoast.success("Changes saved");\ntoast.error("Deploy failed", { duration: 8000 });\ntoast.info("New version available");`,
+      react: `import { ToastProvider, useToast } from '@sola/ui';\n\nexport function App() {\n  return (\n    <ToastProvider position="bottom-right">\n      <Dashboard />\n    </ToastProvider>\n  );\n}\n\nfunction Dashboard() {\n  const toast = useToast();\n  return (\n    <button onClick={() => toast.success("Saved!")}>\n      Save\n    </button>\n  );\n}`,
+      svelte: `<script>\n  import { ToastStack, toast } from '@sola/ui';\n</script>\n\n<button onclick={() => toast.success("Changes saved")}>\n  Save\n</button>\n\n<ToastStack position="bottom-right" />`,
+      html: `<sola-toast-stack position="bottom-right"></sola-toast-stack>\n\n<script>\n  document.querySelector('sola-toast-stack')\n    .dispatch({ title: "Saved!", severity: "success" });\n</script>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 24. Inline Callout (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'inline-callout',
+    name: 'Inline Callout Block',
+    category: 'Status & HUD',
+    description: 'Contextual inline callout with left accent border, severity icon, rich text body, and optional action link — similar to GitHub-style alerts.',
+    tagline: 'Tips, warnings, notes, and contextual inline notices',
+    badge: 'New',
+    componentName: 'InlineCallout',
+    defaultConfig: {
+      variant: 'info',
+      title: 'Breaking Change',
+      message: 'The `config` prop now accepts a typed schema object instead of a plain record. See the migration guide for details.',
+      actionLabel: 'View Migration Guide',
+      actionHref: '/docs#migration',
+      dismissible: false
+    },
+    props: [
+      { name: 'variant', type: 'string', defaultValue: 'info', description: 'Callout visual style', options: ['note', 'tip', 'info', 'warning', 'caution', 'success'] },
+      { name: 'title', type: 'string', defaultValue: '', description: 'Optional bold heading' },
+      { name: 'message', type: 'string', defaultValue: 'Callout message.', description: 'Body text content' },
+      { name: 'actionLabel', type: 'string', defaultValue: '', description: 'Optional inline action link text' },
+      { name: 'actionHref', type: 'string', defaultValue: '', description: 'Action link URL' },
+      { name: 'dismissible', type: 'boolean', defaultValue: false, description: 'Whether the callout can be dismissed' }
+    ],
+    codeSnippets: {
+      sola: `<InlineCallout\n  variant="warning"\n  title="Breaking Change"\n  message="The config prop schema has changed."\n  actionLabel="Migration Guide"\n  actionHref="/docs#migration"\n/>`,
+      react: `import { InlineCallout } from '@sola/ui';\n\nexport function DeprecationNotice() {\n  return (\n    <InlineCallout\n      variant="warning"\n      title="Breaking Change"\n      message="The config prop schema has changed."\n      actionLabel="Migration Guide"\n      actionHref="/docs#migration"\n    />\n  );\n}`,
+      svelte: `<script>\n  import { InlineCallout } from '@sola/ui';\n</script>\n\n<InlineCallout\n  variant="warning"\n  title="Breaking Change"\n  message="The config prop schema has changed."\n  actionLabel="Migration Guide"\n  actionHref="/docs#migration"\n/>`,
+      html: `<sola-inline-callout\n  variant="warning"\n  title="Breaking Change"\n  message="The config prop schema has changed."\n></sola-inline-callout>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 25. Notification Badge (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'notification-badge',
+    name: 'Counter Badge & Status Dot',
+    category: 'Status & HUD',
+    description: 'Compact notification counter badge or pulsing status dot that overlays any element — with configurable threshold, color, and animation.',
+    tagline: 'Unread counts, status indicators, and attention dots',
+    badge: 'New',
+    componentName: 'NotificationBadge',
+    defaultConfig: {
+      count: 12,
+      maxCount: 99,
+      color: 'rose',
+      showZero: false,
+      pulse: true,
+      variant: 'counter'
+    },
+    props: [
+      { name: 'count', type: 'number', defaultValue: 12, description: 'Notification count to display' },
+      { name: 'maxCount', type: 'number', defaultValue: 99, description: 'Threshold before showing "99+"' },
+      { name: 'color', type: 'string', defaultValue: 'rose', description: 'Badge accent color', options: ['rose', 'emerald', 'amber', 'sky', 'violet'] },
+      { name: 'showZero', type: 'boolean', defaultValue: false, description: 'Whether to show badge when count is 0' },
+      { name: 'pulse', type: 'boolean', defaultValue: false, description: 'Enable pulse animation for attention' },
+      { name: 'variant', type: 'string', defaultValue: 'counter', description: 'Badge variant', options: ['counter', 'dot', 'ping'] }
+    ],
+    codeSnippets: {
+      sola: `<NotificationBadge count={12} color="rose">\n  <IconButton icon="bell" />\n</NotificationBadge>\n\n<!-- Status dot variant -->\n<NotificationBadge variant="dot" color="emerald" pulse />\n\n<!-- Overflow threshold -->\n<NotificationBadge count={142} maxCount={99} />`,
+      react: `import { NotificationBadge } from '@sola/ui';\n\nexport function NavBell() {\n  return (\n    <NotificationBadge count={12} color="rose">\n      <button aria-label="Notifications">\n        <BellIcon />\n      </button>\n    </NotificationBadge>\n  );\n}`,
+      svelte: `<script>\n  import { NotificationBadge } from '@sola/ui';\n  let unread = $state(12);\n</script>\n\n<NotificationBadge count={unread} color="rose">\n  <button aria-label="Notifications">\n    <!-- bell icon -->\n  </button>\n</NotificationBadge>`,
+      html: `<sola-notification-badge count="12" color="rose">\n  <button>Notifications</button>\n</sola-notification-badge>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 26. Snackbar (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'snackbar',
+    name: 'Action Snackbar',
+    category: 'Status & HUD',
+    description: 'Bottom-anchored snackbar with message text, optional undo/action button, auto-dismiss timer, and swipe-to-dismiss gesture support.',
+    tagline: 'Undo confirmations, quick actions, and bottom-sheet notices',
+    badge: 'New',
+    componentName: 'Snackbar',
+    defaultConfig: {
+      message: '3 items moved to archive.',
+      actionLabel: 'Undo',
+      duration: 6000,
+      position: 'bottom-center',
+      icon: 'archive'
+    },
+    props: [
+      { name: 'message', type: 'string', defaultValue: 'Action completed.', description: 'Snackbar body text' },
+      { name: 'actionLabel', type: 'string', defaultValue: '', description: 'Optional action button text (e.g. "Undo")' },
+      { name: 'duration', type: 'number', defaultValue: 6000, description: 'Auto-dismiss in ms (0 = persistent)' },
+      { name: 'position', type: 'string', defaultValue: 'bottom-center', description: 'Anchor position', options: ['bottom-center', 'bottom-left', 'bottom-right'] },
+      { name: 'icon', type: 'string', defaultValue: '', description: 'Optional leading icon identifier' }
+    ],
+    codeSnippets: {
+      sola: `<Snackbar\n  message="3 items moved to archive."\n  actionLabel="Undo"\n  duration={6000}\n  onAction={() => undoArchive()}\n/>`,
+      react: `import { useSnackbar } from '@sola/ui';\n\nexport function ArchiveButton() {\n  const snackbar = useSnackbar();\n\n  const handleArchive = () => {\n    archiveItems(selected);\n    snackbar.show({\n      message: "3 items archived.",\n      actionLabel: "Undo",\n      onAction: () => undoArchive()\n    });\n  };\n\n  return <button onClick={handleArchive}>Archive</button>;\n}`,
+      svelte: `<script>\n  import { Snackbar, snackbar } from '@sola/ui';\n\n  function handleArchive() {\n    archiveItems(selected);\n    snackbar.show({\n      message: "3 items archived.",\n      actionLabel: "Undo",\n      onAction: () => undoArchive()\n    });\n  }\n</script>\n\n<button onclick={handleArchive}>Archive</button>\n<Snackbar />`,
+      html: `<sola-snackbar\n  message="3 items moved to archive."\n  action-label="Undo"\n  duration="6000"\n></sola-snackbar>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 27. Notification Center (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'notification-center',
+    name: 'Notification Center Dropdown',
+    category: 'Status & HUD',
+    description: 'Dropdown panel listing recent notifications grouped by time, with read/unread states, action links, mark-all-read, and scroll pagination.',
+    tagline: 'Inbox feeds, notification history, and message centers',
+    badge: 'New',
+    componentName: 'NotificationCenter',
+    defaultConfig: {
+      title: 'Notifications',
+      unreadCount: 4,
+      notifications: [
+        { id: '1', title: 'Deployment succeeded', message: 'v2.4.1 is live on production.', time: '2 min ago', read: false, severity: 'success' },
+        { id: '2', title: 'PR review requested', message: 'Alex requested your review on #847.', time: '15 min ago', read: false, severity: 'info' },
+        { id: '3', title: 'Memory alert resolved', message: 'us-east-1a memory usage back to 62%.', time: '1 hr ago', read: true, severity: 'warning' },
+        { id: '4', title: 'Weekly report ready', message: 'Your performance summary is available.', time: '3 hrs ago', read: true, severity: 'info' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Notifications', description: 'Panel heading' },
+      { name: 'notifications', type: 'Array<Notification>', defaultValue: [], description: 'Array of notification items' },
+      { name: 'unreadCount', type: 'number', defaultValue: 0, description: 'Count of unread notifications' },
+      { name: 'maxVisible', type: 'number', defaultValue: 10, description: 'Items visible before scroll pagination' },
+      { name: 'groupByTime', type: 'boolean', defaultValue: true, description: 'Group notifications by time period (Today, Earlier)' }
+    ],
+    codeSnippets: {
+      sola: `<NotificationCenter\n  title="Notifications"\n  notifications={[\n    { title: "Deploy succeeded", time: "2m ago", severity: "success", read: false },\n    { title: "PR review", time: "15m ago", severity: "info", read: false }\n  ]}\n  onMarkAllRead={() => markAllRead()}\n/>`,
+      react: `import { NotificationCenter } from '@sola/ui';\n\nexport function NavNotifications() {\n  const [items, setItems] = useState(notifications);\n  return (\n    <NotificationCenter\n      notifications={items}\n      onMarkAllRead={() => setItems(\n        items.map(n => ({ ...n, read: true }))\n      )}\n      onItemClick={(id) => router.push(\`/detail/\${id}\`)}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { NotificationCenter } from '@sola/ui';\n  let items = $state(notifications);\n</script>\n\n<NotificationCenter\n  notifications={items}\n  onMarkAllRead={() => {\n    items = items.map(n => ({ ...n, read: true }));\n  }}\n/>`,
+      html: `<sola-notification-center\n  title="Notifications"\n></sola-notification-center>`
+    }
   }
 ];
