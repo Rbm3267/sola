@@ -3,7 +3,6 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme.svelte';
-	import MobileHudCapsule from '$lib/components/MobileHudCapsule.svelte';
 
 	let { children } = $props();
 
@@ -26,5 +25,3 @@
 <div class="min-h-screen flex flex-col w-full transition-colors duration-200">
 	{@render children()}
 </div>
-
-<MobileHudCapsule />
