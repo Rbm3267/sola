@@ -8,6 +8,10 @@
   import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
   import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
   import TactileDialCard from '$lib/components/TactileDialCard.svelte';
+  import StreamView from '$lib/components/StreamView.svelte';
+  import DiffAudit from '$lib/components/DiffAudit.svelte';
+  import SchemaInspector from '$lib/components/SchemaInspector.svelte';
+  import SentinelCapsule from '$lib/components/SentinelCapsule.svelte';
   import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { fade, fly } from 'svelte/transition';
 
@@ -231,6 +235,44 @@
             {:else if selectedComponent.componentName === 'IncidentTriageMatrix'}
               <div class="w-full">
                 <IncidentTriageMatrix config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'StreamView'}
+              <div class="w-full">
+                <StreamView config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'DiffAudit'}
+              <div class="w-full">
+                <DiffAudit config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'SchemaInspector'}
+              <div class="w-full">
+                <SchemaInspector config={liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'SentinelCapsule'}
+              <div class="w-full max-w-lg">
+                <SentinelCapsule {...liveProps} />
+              </div>
+            {:else}
+              <!-- New components show schema-driven preview card -->
+              <div class="w-full max-w-md flex flex-col items-center gap-5 py-6">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center">
+                  <svg class="w-7 h-7 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                </div>
+                <div class="text-center">
+                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">{selectedComponent.name}</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs leading-relaxed">{selectedComponent.description}</p>
+                </div>
+                <div class="w-full bg-slate-950 rounded-xl p-4 text-xs font-mono text-emerald-300 overflow-x-auto">
+                  <pre><code>{selectedComponent.codeSnippets.sola}</code></pre>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 text-[10px] font-mono font-bold border border-amber-200 dark:border-amber-500/20">
+                    Schema Ready
+                  </span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 text-[10px] font-mono font-bold border border-slate-200 dark:border-white/10">
+                    Use via @sola/ui
+                  </span>
+                </div>
               </div>
             {/if}
           </div>

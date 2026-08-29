@@ -264,5 +264,479 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
       svelte: `<script>\n  import { IncidentTriageMatrix } from '@sola/ui';\n</script>\n\n<IncidentTriageMatrix config={{\n  title: "Live Priority Radar",\n  incidents: [{ id: "T-100", service: "Auth API", severity: "P1", status: "Active" }]\n}} />`,
       html: `<sola-incident-triage title="Live Priority Radar"></sola-incident-triage>`
     }
+  },
+
+  // ───────────────────────────────────────────
+  // 9. StreamView (existing component)
+  // ───────────────────────────────────────────
+  {
+    id: 'stream-view',
+    name: 'Live Event Stream',
+    category: 'Lists & Feeds',
+    description: 'Real-time chronological event log with typed severity indicators, sub-millisecond timestamps, and auto-scrolling tail.',
+    tagline: 'Live event streams, audit logs, and system output tails',
+    badge: 'Streaming',
+    componentName: 'StreamView',
+    defaultConfig: {
+      title: 'Runtime Event Log',
+      events: [
+        { id: '1', message: 'Runtime attached to DOM root', timestamp: '00:01.02', type: 'success' },
+        { id: '2', message: 'Signal effect registered', timestamp: '00:01.18', type: 'info' },
+        { id: '3', message: 'Batch flush completed (0.4ms)', timestamp: '00:01.45', type: 'info' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Live Stream', description: 'Stream header label' },
+      { name: 'events', type: 'Array<Event>', defaultValue: [], description: 'Array of event objects with id, message, timestamp, and type' }
+    ],
+    codeSnippets: {
+      sola: `<StreamView\n  title="Runtime Event Log"\n  events={[\n    { id: "1", message: "Connected", timestamp: "00:01.02", type: "success" }\n  ]}\n/>`,
+      react: `import { StreamView } from '@sola/ui';\n\nexport function EventLog() {\n  return (\n    <StreamView\n      title="Runtime Event Log"\n      events={[\n        { id: "1", message: "Connected", timestamp: "00:01.02", type: "success" }\n      ]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { StreamView } from '@sola/ui';\n</script>\n\n<StreamView config={{\n  title: "Runtime Event Log",\n  events: [{ id: "1", message: "Connected", timestamp: "00:01.02", type: "success" }]\n}} />`,
+      html: `<sola-stream-view title="Runtime Event Log"></sola-stream-view>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 10. DiffAudit (existing component)
+  // ───────────────────────────────────────────
+  {
+    id: 'diff-audit',
+    name: 'Diff & Change Audit',
+    category: 'Status & HUD',
+    description: 'Side-by-side or inline diff viewer with risk scoring, approval workflows, and line-level add/remove highlighting.',
+    tagline: 'Configuration diffs, change reviews, and audit trails',
+    badge: 'Audit',
+    componentName: 'DiffAudit',
+    defaultConfig: {
+      title: 'Configuration Change Review',
+      entityId: 'CFG-2847',
+      entityType: 'Firewall Policy',
+      riskLevel: 'Moderate',
+      riskScore: 45,
+      requester: 'Platform Engineering',
+      window: 'Maintenance Window B (02:00–04:00 UTC)',
+      diffLines: [
+        { type: 'context', content: 'rule: allow_ingress_443' },
+        { type: 'remove', content: 'source_range: 10.0.0.0/8' },
+        { type: 'add', content: 'source_range: 172.16.0.0/12' },
+        { type: 'context', content: 'protocol: TCP' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Change Review', description: 'Audit card title' },
+      { name: 'entityId', type: 'string', defaultValue: 'CFG-001', description: 'Change request identifier' },
+      { name: 'riskLevel', type: 'string', defaultValue: 'Moderate', description: 'Risk severity level', options: ['Low', 'Moderate', 'High', 'Destructive'] },
+      { name: 'riskScore', type: 'number', defaultValue: 45, description: 'Numerical risk score (0–100)' }
+    ],
+    codeSnippets: {
+      sola: `<DiffAudit\n  title="Config Change Review"\n  entityId="CFG-2847"\n  riskLevel="Moderate"\n  riskScore={45}\n/>`,
+      react: `import { DiffAudit } from '@sola/ui';\n\nexport function ChangeReview() {\n  return (\n    <DiffAudit\n      title="Config Change Review"\n      entityId="CFG-2847"\n      riskLevel="Moderate"\n      riskScore={45}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { DiffAudit } from '@sola/ui';\n</script>\n\n<DiffAudit config={{\n  title: "Config Change Review",\n  entityId: "CFG-2847",\n  riskLevel: "Moderate",\n  riskScore: 45\n}} />`,
+      html: `<sola-diff-audit\n  title="Config Change Review"\n  entity-id="CFG-2847"\n  risk-level="Moderate"\n></sola-diff-audit>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 11. SchemaInspector (existing component)
+  // ───────────────────────────────────────────
+  {
+    id: 'schema-inspector',
+    name: 'Schema & Table Inspector',
+    category: 'Matrices & Graphs',
+    description: 'Database table schema viewer displaying columns, types, primary keys, foreign key relationships, and table statistics.',
+    tagline: 'Database schemas, API contracts, and type introspection',
+    badge: 'Introspection',
+    componentName: 'SchemaInspector',
+    defaultConfig: {
+      table: 'users',
+      rowCount: '2.4M',
+      sizeBytes: '1.8 GB',
+      bloatPct: 3.2,
+      columns: [
+        { name: 'id', type: 'UUID', isPrimary: true, isNullable: false },
+        { name: 'email', type: 'VARCHAR(255)', isNullable: false },
+        { name: 'created_at', type: 'TIMESTAMPTZ', isNullable: false },
+        { name: 'org_id', type: 'UUID', isNullable: true, foreignKey: 'organizations.id' }
+      ]
+    },
+    props: [
+      { name: 'table', type: 'string', defaultValue: 'users', description: 'Table or entity name' },
+      { name: 'rowCount', type: 'string', defaultValue: '2.4M', description: 'Formatted row count' },
+      { name: 'sizeBytes', type: 'string', defaultValue: '1.8 GB', description: 'Table size on disk' },
+      { name: 'columns', type: 'Array<Column>', defaultValue: [], description: 'Column definitions array' }
+    ],
+    codeSnippets: {
+      sola: `<SchemaInspector\n  table="users"\n  rowCount="2.4M"\n  sizeBytes="1.8 GB"\n  columns={[\n    { name: "id", type: "UUID", isPrimary: true }\n  ]}\n/>`,
+      react: `import { SchemaInspector } from '@sola/ui';\n\nexport function TableView() {\n  return (\n    <SchemaInspector\n      table="users"\n      rowCount="2.4M"\n      columns={[\n        { name: "id", type: "UUID", isPrimary: true }\n      ]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { SchemaInspector } from '@sola/ui';\n</script>\n\n<SchemaInspector config={{\n  table: "users",\n  rowCount: "2.4M",\n  columns: [{ name: "id", type: "UUID", isPrimary: true }]\n}} />`,
+      html: `<sola-schema-inspector table="users" row-count="2.4M"></sola-schema-inspector>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 12. SentinelCapsule (existing component)
+  // ───────────────────────────────────────────
+  {
+    id: 'sentinel-capsule',
+    name: 'System Health Capsule',
+    category: 'Status & HUD',
+    description: 'Compact always-on health indicator capsule with flow index, friction count, circuit breaker state, and expandable alert drawer.',
+    tagline: 'Health beacons, system vitals, and circuit breaker HUDs',
+    badge: 'Sentinel',
+    componentName: 'SentinelCapsule',
+    defaultConfig: {
+      flowIndex: 99.8,
+      frictionCount: 0,
+      isCircuitBreakerActive: false
+    },
+    props: [
+      { name: 'flowIndex', type: 'number', defaultValue: 99.8, description: 'System flow health percentage (0–100)' },
+      { name: 'frictionCount', type: 'number', defaultValue: 0, description: 'Active friction or error count' },
+      { name: 'isCircuitBreakerActive', type: 'boolean', defaultValue: false, description: 'Whether circuit breaker is tripped' }
+    ],
+    codeSnippets: {
+      sola: `<SentinelCapsule\n  flowIndex={99.8}\n  frictionCount={0}\n  isCircuitBreakerActive={false}\n/>`,
+      react: `import { SentinelCapsule } from '@sola/ui';\n\nexport function HealthBeacon() {\n  return (\n    <SentinelCapsule\n      flowIndex={99.8}\n      frictionCount={0}\n      isCircuitBreakerActive={false}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { SentinelCapsule } from '@sola/ui';\n</script>\n\n<SentinelCapsule\n  flowIndex={99.8}\n  frictionCount={0}\n  isCircuitBreakerActive={false}\n/>`,
+      html: `<sola-sentinel-capsule\n  flow-index="99.8"\n  friction-count="0"\n></sola-sentinel-capsule>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 13. Sparkline Tile (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'sparkline-tile',
+    name: 'Sparkline Metric Tile',
+    category: 'Metrics & KPIs',
+    description: 'Compact metric tile with inline SVG sparkline trend chart, current value, and percentage delta badge.',
+    tagline: 'Mini trend charts, inline sparklines, and micro time-series',
+    badge: 'New',
+    componentName: 'SparklineTile',
+    defaultConfig: {
+      title: 'Active Sessions',
+      value: '12,847',
+      trend: '+8.3%',
+      trendDirection: 'up',
+      sparkData: [22, 28, 35, 31, 42, 38, 52, 48, 61, 55, 64, 72]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Metric', description: 'Tile label' },
+      { name: 'value', type: 'string', defaultValue: '12,847', description: 'Primary display value' },
+      { name: 'trend', type: 'string', defaultValue: '+8.3%', description: 'Trend percentage' },
+      { name: 'trendDirection', type: 'string', defaultValue: 'up', description: 'Trend direction', options: ['up', 'down', 'flat'] },
+      { name: 'sparkData', type: 'number[]', defaultValue: [22, 28, 35, 31, 42], description: 'Array of numeric data points for sparkline' }
+    ],
+    codeSnippets: {
+      sola: `<SparklineTile\n  title="Active Sessions"\n  value="12,847"\n  trend="+8.3%"\n  trendDirection="up"\n  sparkData={[22, 28, 35, 31, 42, 38, 52]}\n/>`,
+      react: `import { SparklineTile } from '@sola/ui';\n\nexport function SessionMetric() {\n  return (\n    <SparklineTile\n      title="Active Sessions"\n      value="12,847"\n      trend="+8.3%"\n      sparkData={[22, 28, 35, 31, 42, 38, 52]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { SparklineTile } from '@sola/ui';\n</script>\n\n<SparklineTile config={{\n  title: "Active Sessions",\n  value: "12,847",\n  trend: "+8.3%",\n  sparkData: [22, 28, 35, 31, 42, 38, 52]\n}} />`,
+      html: `<sola-sparkline-tile\n  title="Active Sessions"\n  value="12,847"\n  trend="+8.3%"\n></sola-sparkline-tile>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 14. Comparison Card (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'comparison-card',
+    name: 'Side-by-Side Comparison',
+    category: 'Metrics & KPIs',
+    description: 'Dual-column metric comparison card showing before/after, plan vs actual, or A/B test results with delta highlighting.',
+    tagline: 'A/B comparisons, plan vs actual, and before/after deltas',
+    badge: 'New',
+    componentName: 'ComparisonCard',
+    defaultConfig: {
+      title: 'Plan vs Actual',
+      labelA: 'Target',
+      labelB: 'Actual',
+      valueA: '$240,000',
+      valueB: '$318,400',
+      delta: '+32.7%',
+      deltaType: 'positive'
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Comparison', description: 'Card heading' },
+      { name: 'labelA', type: 'string', defaultValue: 'Target', description: 'Left column label' },
+      { name: 'labelB', type: 'string', defaultValue: 'Actual', description: 'Right column label' },
+      { name: 'valueA', type: 'string', defaultValue: '$240,000', description: 'Left column value' },
+      { name: 'valueB', type: 'string', defaultValue: '$318,400', description: 'Right column value' },
+      { name: 'delta', type: 'string', defaultValue: '+32.7%', description: 'Delta between values' },
+      { name: 'deltaType', type: 'string', defaultValue: 'positive', description: 'Delta coloring', options: ['positive', 'negative', 'neutral'] }
+    ],
+    codeSnippets: {
+      sola: `<ComparisonCard\n  title="Plan vs Actual"\n  labelA="Target" valueA="$240,000"\n  labelB="Actual" valueB="$318,400"\n  delta="+32.7%" deltaType="positive"\n/>`,
+      react: `import { ComparisonCard } from '@sola/ui';\n\nexport function PlanActual() {\n  return (\n    <ComparisonCard\n      title="Plan vs Actual"\n      labelA="Target" valueA="$240,000"\n      labelB="Actual" valueB="$318,400"\n      delta="+32.7%"\n    />\n  );\n}`,
+      svelte: `<script>\n  import { ComparisonCard } from '@sola/ui';\n</script>\n\n<ComparisonCard config={{\n  title: "Plan vs Actual",\n  labelA: "Target", valueA: "$240,000",\n  labelB: "Actual", valueB: "$318,400",\n  delta: "+32.7%"\n}} />`,
+      html: `<sola-comparison-card\n  title="Plan vs Actual"\n  label-a="Target" value-a="$240,000"\n  label-b="Actual" value-b="$318,400"\n></sola-comparison-card>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 15. Progress Steps (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'progress-steps',
+    name: 'Multi-Step Progress Bar',
+    category: 'Status & HUD',
+    description: 'Horizontal multi-step progress indicator with labeled stages, completion states, and active step highlighting.',
+    tagline: 'Wizards, onboarding flows, and pipeline stage tracking',
+    badge: 'New',
+    componentName: 'ProgressSteps',
+    defaultConfig: {
+      title: 'Deployment Pipeline',
+      steps: [
+        { label: 'Build', status: 'completed' },
+        { label: 'Test', status: 'completed' },
+        { label: 'Staging', status: 'active' },
+        { label: 'Production', status: 'pending' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Pipeline', description: 'Progress bar heading' },
+      { name: 'steps', type: 'Array<Step>', defaultValue: [], description: 'Array of steps with label and status (completed/active/pending)' }
+    ],
+    codeSnippets: {
+      sola: `<ProgressSteps\n  title="Deployment Pipeline"\n  steps={[\n    { label: "Build", status: "completed" },\n    { label: "Test", status: "active" },\n    { label: "Deploy", status: "pending" }\n  ]}\n/>`,
+      react: `import { ProgressSteps } from '@sola/ui';\n\nexport function Pipeline() {\n  return (\n    <ProgressSteps\n      title="Deployment Pipeline"\n      steps={[\n        { label: "Build", status: "completed" },\n        { label: "Test", status: "active" },\n        { label: "Deploy", status: "pending" }\n      ]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { ProgressSteps } from '@sola/ui';\n</script>\n\n<ProgressSteps config={{\n  title: "Deployment Pipeline",\n  steps: [\n    { label: "Build", status: "completed" },\n    { label: "Test", status: "active" }\n  ]\n}} />`,
+      html: `<sola-progress-steps title="Deployment Pipeline"></sola-progress-steps>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 16. Counter Ticker (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'counter-ticker',
+    name: 'Animated Counter Ticker',
+    category: 'Metrics & KPIs',
+    description: 'Spring-animated numerical counter with easing transitions, configurable formatting (currency, percent, integer), and suffix labels.',
+    tagline: 'Animated counters, live tickers, and real-time numerics',
+    badge: 'New',
+    componentName: 'CounterTicker',
+    defaultConfig: {
+      title: 'Total Revenue',
+      value: 1284930,
+      prefix: '$',
+      suffix: '',
+      format: 'currency',
+      animationDuration: 1200
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Counter', description: 'Counter label' },
+      { name: 'value', type: 'number', defaultValue: 1284930, description: 'Target numeric value to animate to' },
+      { name: 'prefix', type: 'string', defaultValue: '$', description: 'Prefix character (e.g. $, €)' },
+      { name: 'suffix', type: 'string', defaultValue: '', description: 'Suffix string (e.g. users, ms)' },
+      { name: 'format', type: 'string', defaultValue: 'currency', description: 'Number format', options: ['currency', 'percent', 'integer', 'decimal'] }
+    ],
+    codeSnippets: {
+      sola: `<CounterTicker\n  title="Total Revenue"\n  value={1284930}\n  prefix="$"\n  format="currency"\n/>`,
+      react: `import { CounterTicker } from '@sola/ui';\n\nexport function RevenueTicker() {\n  return (\n    <CounterTicker\n      title="Total Revenue"\n      value={1284930}\n      prefix="$"\n      format="currency"\n    />\n  );\n}`,
+      svelte: `<script>\n  import { CounterTicker } from '@sola/ui';\n</script>\n\n<CounterTicker config={{\n  title: "Total Revenue",\n  value: 1284930,\n  prefix: "$",\n  format: "currency"\n}} />`,
+      html: `<sola-counter-ticker\n  title="Total Revenue"\n  value="1284930"\n  prefix="$"\n></sola-counter-ticker>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 17. Toggle Switch (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'toggle-switch',
+    name: 'Labeled Toggle Switch',
+    category: 'Controllers & Sliders',
+    description: 'Accessible on/off toggle with configurable labels, smooth spring transitions, and optional description text.',
+    tagline: 'Feature flags, preferences, and boolean state controls',
+    badge: 'New',
+    componentName: 'ToggleSwitch',
+    defaultConfig: {
+      label: 'Enable Dark Mode',
+      description: 'Switch between light and dark interface themes',
+      checked: true,
+      size: 'default'
+    },
+    props: [
+      { name: 'label', type: 'string', defaultValue: 'Enable Feature', description: 'Toggle label text' },
+      { name: 'description', type: 'string', defaultValue: '', description: 'Optional description below the label' },
+      { name: 'checked', type: 'boolean', defaultValue: false, description: 'Toggle state' },
+      { name: 'size', type: 'string', defaultValue: 'default', description: 'Toggle size variant', options: ['sm', 'default', 'lg'] }
+    ],
+    codeSnippets: {
+      sola: `<ToggleSwitch\n  label="Enable Dark Mode"\n  description="Switch between themes"\n  checked={true}\n/>`,
+      react: `import { ToggleSwitch } from '@sola/ui';\nimport { useState } from 'react';\n\nexport function ThemeToggle() {\n  const [on, setOn] = useState(true);\n  return (\n    <ToggleSwitch\n      label="Enable Dark Mode"\n      checked={on}\n      onChange={setOn}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { ToggleSwitch } from '@sola/ui';\n  let darkMode = $state(true);\n</script>\n\n<ToggleSwitch\n  label="Enable Dark Mode"\n  bind:checked={darkMode}\n/>`,
+      html: `<sola-toggle-switch\n  label="Enable Dark Mode"\n  checked\n></sola-toggle-switch>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 18. Range Slider (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'range-slider',
+    name: 'Dual-Thumb Range Slider',
+    category: 'Controllers & Sliders',
+    description: 'Precision range input with dual thumbs for min/max selection, live value labels, and configurable step increments.',
+    tagline: 'Price ranges, date spans, and bounded numeric filters',
+    badge: 'New',
+    componentName: 'RangeSlider',
+    defaultConfig: {
+      title: 'Price Range Filter',
+      min: 0,
+      max: 1000,
+      valueLow: 150,
+      valueHigh: 750,
+      step: 10,
+      prefix: '$',
+      color: 'emerald'
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Range', description: 'Slider label' },
+      { name: 'min', type: 'number', defaultValue: 0, description: 'Minimum bound' },
+      { name: 'max', type: 'number', defaultValue: 1000, description: 'Maximum bound' },
+      { name: 'valueLow', type: 'number', defaultValue: 150, description: 'Lower thumb value' },
+      { name: 'valueHigh', type: 'number', defaultValue: 750, description: 'Upper thumb value' },
+      { name: 'step', type: 'number', defaultValue: 10, description: 'Step increment' },
+      { name: 'prefix', type: 'string', defaultValue: '$', description: 'Value prefix' }
+    ],
+    codeSnippets: {
+      sola: `<RangeSlider\n  title="Price Range"\n  min={0} max={1000}\n  valueLow={150} valueHigh={750}\n  step={10} prefix="$"\n/>`,
+      react: `import { RangeSlider } from '@sola/ui';\n\nexport function PriceFilter() {\n  return (\n    <RangeSlider\n      title="Price Range"\n      min={0} max={1000}\n      valueLow={150} valueHigh={750}\n      onChange={([lo, hi]) => console.log(lo, hi)}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { RangeSlider } from '@sola/ui';\n  let lo = $state(150);\n  let hi = $state(750);\n</script>\n\n<RangeSlider\n  title="Price Range"\n  min={0} max={1000}\n  bind:valueLow={lo}\n  bind:valueHigh={hi}\n/>`,
+      html: `<sola-range-slider\n  title="Price Range"\n  min="0" max="1000"\n  value-low="150" value-high="750"\n></sola-range-slider>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 19. Timeline Log (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'timeline-log',
+    name: 'Vertical Timeline',
+    category: 'Lists & Feeds',
+    description: 'Chronological vertical timeline with event nodes, timestamps, descriptions, and status-colored connectors.',
+    tagline: 'Activity history, changelog, and chronological milestones',
+    badge: 'New',
+    componentName: 'TimelineLog',
+    defaultConfig: {
+      title: 'Activity History',
+      entries: [
+        { time: '2 min ago', label: 'Deployment completed', description: 'v2.4.1 deployed to production', status: 'success' },
+        { time: '18 min ago', label: 'Tests passed', description: 'All 342 test suites green', status: 'success' },
+        { time: '45 min ago', label: 'Build started', description: 'Triggered by merge to main', status: 'info' },
+        { time: '1 hr ago', label: 'PR approved', description: 'Reviewed by 2 maintainers', status: 'info' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Timeline', description: 'Timeline header' },
+      { name: 'entries', type: 'Array<Entry>', defaultValue: [], description: 'Array of timeline entries with time, label, description, and status' }
+    ],
+    codeSnippets: {
+      sola: `<TimelineLog\n  title="Activity History"\n  entries={[\n    { time: "2 min ago", label: "Deployed", status: "success" },\n    { time: "18 min ago", label: "Tests passed", status: "success" }\n  ]}\n/>`,
+      react: `import { TimelineLog } from '@sola/ui';\n\nexport function ActivityFeed() {\n  return (\n    <TimelineLog\n      title="Activity History"\n      entries={[\n        { time: "2 min ago", label: "Deployed", status: "success" }\n      ]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { TimelineLog } from '@sola/ui';\n</script>\n\n<TimelineLog config={{\n  title: "Activity History",\n  entries: [{ time: "2 min ago", label: "Deployed", status: "success" }]\n}} />`,
+      html: `<sola-timeline-log title="Activity History"></sola-timeline-log>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 20. Key-Value Grid (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'key-value-grid',
+    name: 'Key-Value Property Grid',
+    category: 'Lists & Feeds',
+    description: 'Clean two-column property grid for displaying key-value metadata pairs with optional copy buttons and type badges.',
+    tagline: 'Metadata viewers, config panels, and property inspectors',
+    badge: 'New',
+    componentName: 'KeyValueGrid',
+    defaultConfig: {
+      title: 'Instance Metadata',
+      pairs: [
+        { key: 'Instance ID', value: 'i-0a1b2c3d4e5f67890' },
+        { key: 'Region', value: 'us-east-1' },
+        { key: 'Type', value: 'r6g.2xlarge' },
+        { key: 'State', value: 'Running', badge: 'success' },
+        { key: 'Launch Time', value: '2026-08-29T08:12:00Z' },
+        { key: 'Private IP', value: '10.0.4.217' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Properties', description: 'Grid heading' },
+      { name: 'pairs', type: 'Array<Pair>', defaultValue: [], description: 'Array of key-value pairs with optional badge' }
+    ],
+    codeSnippets: {
+      sola: `<KeyValueGrid\n  title="Instance Metadata"\n  pairs={[\n    { key: "Instance ID", value: "i-0a1b2c3d4e5f67890" },\n    { key: "State", value: "Running", badge: "success" }\n  ]}\n/>`,
+      react: `import { KeyValueGrid } from '@sola/ui';\n\nexport function InstanceDetails() {\n  return (\n    <KeyValueGrid\n      title="Instance Metadata"\n      pairs={[\n        { key: "Instance ID", value: "i-0a1b2c3d" },\n        { key: "State", value: "Running", badge: "success" }\n      ]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { KeyValueGrid } from '@sola/ui';\n</script>\n\n<KeyValueGrid config={{\n  title: "Instance Metadata",\n  pairs: [\n    { key: "Instance ID", value: "i-0a1b2c3d" },\n    { key: "State", value: "Running", badge: "success" }\n  ]\n}} />`,
+      html: `<sola-key-value-grid title="Instance Metadata"></sola-key-value-grid>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 21. Alert Banner (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'alert-banner',
+    name: 'Dismissible Alert Banner',
+    category: 'Status & HUD',
+    description: 'Full-width alert banner with severity variants (info, success, warning, error), icon, message, action button, and dismiss control.',
+    tagline: 'System notices, maintenance banners, and inline alerts',
+    badge: 'New',
+    componentName: 'AlertBanner',
+    defaultConfig: {
+      title: 'Scheduled Maintenance',
+      message: 'A maintenance window is planned for Sunday 02:00–04:00 UTC. Services may be briefly unavailable.',
+      severity: 'warning',
+      actionLabel: 'View Details',
+      dismissible: true
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Notice', description: 'Alert headline' },
+      { name: 'message', type: 'string', defaultValue: 'Something happened.', description: 'Alert body text' },
+      { name: 'severity', type: 'string', defaultValue: 'info', description: 'Alert severity level', options: ['info', 'success', 'warning', 'error'] },
+      { name: 'actionLabel', type: 'string', defaultValue: '', description: 'Optional action button text' },
+      { name: 'dismissible', type: 'boolean', defaultValue: true, description: 'Whether the banner can be dismissed' }
+    ],
+    codeSnippets: {
+      sola: `<AlertBanner\n  title="Scheduled Maintenance"\n  message="Services may be briefly unavailable."\n  severity="warning"\n  dismissible={true}\n/>`,
+      react: `import { AlertBanner } from '@sola/ui';\n\nexport function MaintenanceNotice() {\n  return (\n    <AlertBanner\n      title="Scheduled Maintenance"\n      message="Services may be briefly unavailable."\n      severity="warning"\n      dismissible\n    />\n  );\n}`,
+      svelte: `<script>\n  import { AlertBanner } from '@sola/ui';\n</script>\n\n<AlertBanner\n  title="Scheduled Maintenance"\n  message="Services may be briefly unavailable."\n  severity="warning"\n  dismissible={true}\n/>`,
+      html: `<sola-alert-banner\n  title="Scheduled Maintenance"\n  message="Services may be briefly unavailable."\n  severity="warning"\n  dismissible\n></sola-alert-banner>`
+    }
+  },
+
+  // ───────────────────────────────────────────
+  // 22. Funnel Chart (NEW)
+  // ───────────────────────────────────────────
+  {
+    id: 'funnel-chart',
+    name: 'Conversion Funnel',
+    category: 'Flows & Cascades',
+    description: 'Tapered funnel visualization showing progressive stage-to-stage conversion rates, drop-off percentages, and absolute counts.',
+    tagline: 'Sales funnels, signup flows, and conversion rate analysis',
+    badge: 'New',
+    componentName: 'FunnelChart',
+    defaultConfig: {
+      title: 'Signup Conversion Funnel',
+      stages: [
+        { label: 'Page Views', value: 48200, color: 'sky' },
+        { label: 'Sign Up Started', value: 12400, color: 'emerald' },
+        { label: 'Email Verified', value: 8100, color: 'amber' },
+        { label: 'Onboarding Done', value: 4800, color: 'violet' },
+        { label: 'First Purchase', value: 2100, color: 'rose' }
+      ]
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'Funnel', description: 'Chart title' },
+      { name: 'stages', type: 'Array<Stage>', defaultValue: [], description: 'Funnel stages with label, value, and optional color' }
+    ],
+    codeSnippets: {
+      sola: `<FunnelChart\n  title="Signup Funnel"\n  stages={[\n    { label: "Page Views", value: 48200 },\n    { label: "Sign Up", value: 12400 },\n    { label: "First Purchase", value: 2100 }\n  ]}\n/>`,
+      react: `import { FunnelChart } from '@sola/ui';\n\nexport function SignupFunnel() {\n  return (\n    <FunnelChart\n      title="Signup Funnel"\n      stages={[\n        { label: "Page Views", value: 48200 },\n        { label: "Sign Up", value: 12400 },\n        { label: "Purchase", value: 2100 }\n      ]}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { FunnelChart } from '@sola/ui';\n</script>\n\n<FunnelChart config={{\n  title: "Signup Funnel",\n  stages: [\n    { label: "Page Views", value: 48200 },\n    { label: "Sign Up", value: 12400 }\n  ]\n}} />`,
+      html: `<sola-funnel-chart title="Signup Funnel"></sola-funnel-chart>`
+    }
   }
 ];
