@@ -314,37 +314,8 @@ export default function SolaCustomCanvas() {
         </div>
       </div>
 
-      <!-- Center: Sola Arc Open-Ended Prompt Bar -->
-      <div class="flex-1 max-w-lg min-w-[280px]">
-        <form
-          onsubmit={(e) => {
-            e.preventDefault();
-            runArcPrompt();
-          }}
-          class="relative flex items-center">
-          <div class="absolute left-3 text-emerald-600">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 0 1 10 10M12 12m-3 0a3 3 0 1 0 6 0" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            bind:value={arcPromptInput}
-            placeholder="Describe any component or layout to generate with Sola Arc..."
-            class="w-full pl-9 pr-28 py-2 bg-slate-50 hover:bg-slate-100/80 focus:bg-white text-xs text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-all font-sans" />
-          <button
-            type="submit"
-            disabled={isGeneratingArc || !arcPromptInput.trim()}
-            class="absolute right-1 px-3 py-1 bg-slate-950 hover:bg-slate-800 disabled:opacity-40 text-white rounded-lg text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
-            {#if isGeneratingArc}
-              <div class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              <span>Generating...</span>
-            {:else}
-              <span>Build with Arc</span>
-            {/if}
-          </button>
-        </form>
-      </div>
+      <!-- Center Spacer -->
+      <div class="flex-1"></div>
 
       <!-- Right: Export Action -->
       <div class="flex items-center gap-2">
@@ -746,6 +717,24 @@ export default function SolaCustomCanvas() {
             </div>
           </div>
 
+          <!-- JSON Config Editor -->
+          {#if activeCard.config}
+            <div class="pt-3 border-t border-slate-100">
+              <label class="block text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-2">Component Data (JSON)</label>
+              <textarea
+                value={JSON.stringify(activeCard.config, null, 2)}
+                onchange={(e) => {
+                  try {
+                    activeCard.config = JSON.parse(e.currentTarget.value);
+                  } catch (err) {
+                    // Ignore invalid JSON parsing while typing
+                  }
+                }}
+                class="w-full h-32 p-3 font-mono text-[10px] bg-slate-900 text-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none"
+              ></textarea>
+            </div>
+          {/if}
+
           <!-- Actions -->
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <button
@@ -833,4 +822,38 @@ export default function SolaCustomCanvas() {
       </div>
     </div>
   {/if}
+
+  <!-- Floating Arc Copilot -->
+  <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-2xl px-4 pointer-events-none">
+    <div class="pointer-events-auto bg-white/70 backdrop-blur-2xl border border-slate-200/50 p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center gap-2 ring-1 ring-slate-900/5">
+      <form
+        onsubmit={(e) => {
+          e.preventDefault();
+          runArcPrompt();
+        }}
+        class="relative flex items-center w-full">
+        <div class="absolute left-3 text-emerald-600">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a2.25 2.25 0 014.5 0v3m-3-4.5h-2.25a2.25 2.25 0 01-2.25-2.25V6.75m0 8.25v-1.5a2.25 2.25 0 00-2.25-2.25H6.75m0 8.25v-1.5a2.25 2.25 0 012.25-2.25h1.5m-1.5-8.25h1.5a2.25 2.25 0 002.25-2.25V6.75m0-3v3m0 0h3m-3 0h-3m12 0h-3m3 0v3m0-3v-3" />
+          </svg>
+        </div>
+        <input
+          type="text"
+          bind:value={arcPromptInput}
+          placeholder="Ask Sola Arc to build a layout or component..."
+          class="w-full pl-11 pr-32 py-3 bg-transparent text-sm text-slate-900 placeholder-slate-400 outline-none font-sans" />
+        <button
+          type="submit"
+          disabled={isGeneratingArc || !arcPromptInput.trim()}
+          class="absolute right-1 px-4 py-2 bg-slate-950 hover:bg-slate-800 disabled:opacity-40 text-white rounded-xl text-xs font-semibold transition-all shadow-md flex items-center gap-2 cursor-pointer">
+          {#if isGeneratingArc}
+            <div class="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            <span>Building Component AST...</span>
+          {:else}
+            <span>Build with Arc</span>
+          {/if}
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
