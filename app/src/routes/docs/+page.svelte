@@ -29,34 +29,35 @@
     {
       name: 'Getting Started',
       items: [
-        { id: 'quickstart', title: 'Quickstart & Installation', badge: 'Popular' },
-        { id: 'syntax', title: 'The .sola Component Format', badge: 'Core' }
+        { id: 'quickstart', title: 'Installation & Setup', badge: 'v0.9' },
+        { id: 'syntax', title: 'The .sola Format' }
       ]
     },
     {
-      name: 'Reactivity & Primitives',
+      name: 'Core Concepts',
       items: [
-        { id: 'api-reactivity', title: 'Core Reactivity API' },
-        { id: 'api-macros', title: 'Compiler Macro Primitives ($intent, $data)' },
-        { id: 'engine', title: 'Compiler & Zero-VDOM Engine' }
+        { id: 'api-reactivity', title: 'Reactivity & Signals' },
+        { id: 'api-macros', title: 'Compiler Macros' },
+        { id: 'engine', title: 'Zero-VDOM Engine' }
       ]
     },
     {
-      name: 'Integration & Embedding',
+      name: 'Deployment & Adapters',
       items: [
-        { id: 'host-embedding', title: 'React & Enterprise Embedding' },
-        { id: 'relay-saas', title: 'Sola Relay SaaS Deployment' },
-        { id: 'llm-spec', title: 'LLM & AI Agent Prompting Spec' }
+        { id: 'host-embedding', title: 'React & Portal Embeds' },
+        { id: 'relay-saas', title: 'Sola Relay SaaS' },
+        { id: 'llm-spec', title: 'AI Prompting Spec' }
       ]
     }
   ];
 
-  const currentItem = $derived(
-    groups.flatMap(g => g.items).find(i => i.id === activeSection) || groups[0].items[0]
-  );
-  const currentGroup = $derived(
-    groups.find(g => g.items.some(i => i.id === activeSection)) || groups[0]
-  );
+  // Flat list for Next / Prev navigation
+  const allItems = $derived(groups.flatMap(g => g.items));
+  const currentIndex = $derived(allItems.findIndex(i => i.id === activeSection));
+  const currentItem = $derived(allItems[currentIndex] || allItems[0]);
+  const currentGroup = $derived(groups.find(g => g.items.some(i => i.id === activeSection)) || groups[0]);
+  const prevItem = $derived(currentIndex > 0 ? allItems[currentIndex - 1] : null);
+  const nextItem = $derived(currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null);
 
   async function askSolaAi() {
     if (!askQuery.trim() || askLoading) return;
@@ -68,7 +69,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          intent: `You are the Sola Framework Technical Documentation Assistant. Answer concisely with working code examples: ${askQuery}` 
+          intent: `You are the Sola Framework Technical Assistant. Answer concisely with working code examples: ${askQuery}` 
         })
       });
 
@@ -281,103 +282,41 @@ export function SolaIncidentCard({ incidentId }) {
 </script>
 
 <svelte:head>
-  <title>Sola Documentation — Architecture, Reactivity & APIs</title>
+  <title>{currentItem.title} - Sola Documentation</title>
 </svelte:head>
 
-<div class="flex flex-col w-full min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
+<div class="flex flex-col w-full min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 transition-colors duration-200 font-sans">
   <Navbar />
 
-  <!-- Top Hero Header (Tailscale style) -->
-  <header class="border-b border-slate-900/[0.03] dark:border-white/[0.04] bg-white/60 dark:bg-[#090d19]/60 backdrop-blur-xl py-8 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-      
-      <div>
-        <div class="flex items-center gap-2 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-400 mb-2">
-          <span>Documentation</span>
-          <span class="text-slate-300 dark:text-slate-700">/</span>
-          <span class="text-slate-600 dark:text-slate-400">{currentGroup.name}</span>
-          <span class="text-slate-300 dark:text-slate-700">/</span>
-          <span class="text-slate-900 dark:text-slate-200 font-bold">{currentItem.title}</span>
-        </div>
-        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900 dark:text-white font-sans">
-          Sola Documentation
-        </h1>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">
-          Zero-VDOM reactivity, compiler macros, ambient signals, and embedding architecture for modern apps.
-        </p>
-      </div>
-
-      <!-- Quick Ask Arc Input -->
-      <div class="w-full md:w-80 shrink-0">
-        <form 
-          onsubmit={(e) => { e.preventDefault(); askSolaAi(); }}
-          class="relative flex items-center bg-slate-100 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl p-1 shadow-2xs focus-within:ring-2 focus-within:ring-emerald-500 transition-all">
-          <input 
-            type="text"
-            bind:value={askQuery}
-            placeholder="Ask docs AI (e.g. '$data syntax')..."
-            class="w-full pl-3 pr-20 py-2 bg-transparent text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none font-sans"
-          />
-          <button 
-            type="submit"
-            disabled={askLoading || !askQuery.trim()}
-            class="absolute right-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:disabled:opacity-40 dark:text-slate-950 rounded-xl text-[11px] font-bold transition-all cursor-pointer">
-            {#if askLoading}
-              <span>...</span>
-            {:else}
-              <span>Ask</span>
-            {/if}
-          </button>
-        </form>
-      </div>
-
-    </div>
-
-    <!-- AI Response Card (if generated) -->
-    {#if aiAnswer}
-      <div class="max-w-7xl mx-auto mt-4 p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-xs font-mono text-slate-900 dark:text-emerald-300 leading-relaxed whitespace-pre-wrap relative shadow-xs">
-        <button 
-          onclick={() => (aiAnswer = '')}
-          class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 dark:hover:text-white text-sm font-bold">
-          &times;
-        </button>
-        <div class="flex items-center gap-2 mb-2 text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider text-[10px]">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
-          <span>Sola Arc Response</span>
-        </div>
-        {aiAnswer}
-      </div>
-    {/if}
-  </header>
-
-  <!-- Mobile Quick Topic Bar (Tailscale-style compact selector) -->
-  <div class="lg:hidden sticky top-16 z-30 bg-white/95 dark:bg-[#090d19]/95 backdrop-blur-xl border-b border-slate-900/[0.03] dark:border-white/[0.04] px-4 py-2.5 flex items-center justify-between shadow-2xs">
-    <div class="flex items-center gap-2 truncate">
-      <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Topic:</span>
-      <span class="text-xs font-bold text-slate-900 dark:text-white truncate">{currentItem.title}</span>
+  <!-- Mobile Sticky Header (Tailwind Style) -->
+  <div class="lg:hidden sticky top-16 z-30 bg-white/90 dark:bg-[#090d19]/90 backdrop-blur-xl border-b border-slate-900/[0.03] dark:border-white/[0.04] px-4 py-3 flex items-center justify-between shadow-2xs">
+    <div class="flex items-center gap-2 text-xs font-mono">
+      <span class="text-slate-400">{currentGroup.name}</span>
+      <span class="text-slate-300 dark:text-slate-700">/</span>
+      <span class="font-bold text-slate-900 dark:text-white truncate max-w-[180px]">{currentItem.title}</span>
     </div>
     <button 
       onclick={() => (isMobileNavOpen = !isMobileNavOpen)}
-      class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 text-xs font-bold shrink-0 flex items-center gap-1.5 cursor-pointer">
-      <span>Index</span>
-      <svg class="w-3.5 h-3.5 transform transition-transform {isMobileNavOpen ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 shadow-2xs cursor-pointer">
+      <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>Menu</span>
     </button>
   </div>
 
-  <!-- Mobile Navigation Dropdown Modal -->
+  <!-- Mobile Navigation Slide Drawer -->
   {#if isMobileNavOpen}
-    <div class="lg:hidden bg-white/95 dark:bg-[#090d19]/95 border-b border-slate-900/[0.04] dark:border-white/[0.06] p-4 space-y-4 shadow-xl animate-in">
+    <div class="lg:hidden bg-white/95 dark:bg-[#090d19]/95 border-b border-slate-900/[0.04] dark:border-white/[0.06] p-5 space-y-6 shadow-2xl">
       {#each groups as grp}
         <div>
-          <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400">{grp.name}</span>
-          <div class="mt-1 space-y-1">
+          <h5 class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-2">{grp.name}</h5>
+          <div class="space-y-1">
             {#each grp.items as item}
               <button 
                 onclick={() => { activeSection = item.id; isMobileNavOpen = false; }}
-                class="w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between {activeSection === item.id ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold border border-emerald-500/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+                class="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between {activeSection === item.id ? 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 font-bold border border-emerald-500/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
                 <span>{item.title}</span>
                 {#if item.badge}
-                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">{item.badge}</span>
+                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold">{item.badge}</span>
                 {/if}
               </button>
             {/each}
@@ -387,515 +326,500 @@ export function SolaIncidentCard({ incidentId }) {
     </div>
   {/if}
 
-  <!-- Main Layout Grid -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col lg:flex-row gap-8 items-start w-full">
+  <!-- Main 3-Column Docs Layout Container (Tailwind CSS style) -->
+  <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col lg:flex-row gap-10 w-full items-start">
     
-    <!-- Desktop Sidebar Navigation (Sticky Left) -->
-    <aside class="hidden lg:block w-64 shrink-0 sticky top-24 space-y-6">
+    <!-- 1. Left Sidebar Navigation (Tailwind Rail style) -->
+    <aside class="hidden lg:block w-64 shrink-0 sticky top-24 space-y-8 pr-4">
+      
+      <!-- Quick Search Bar -->
+      <div class="relative">
+        <input 
+          type="text"
+          bind:value={askQuery}
+          onkeydown={(e) => { if (e.key === 'Enter') { e.preventDefault(); askSolaAi(); } }}
+          placeholder="Quick search... ⌘K"
+          class="w-full pl-8 pr-4 py-2 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-emerald-500 dark:focus:border-emerald-400 shadow-2xs transition-all"
+        />
+        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+
+      <!-- Navigation Hierarchy -->
       {#each groups as grp}
-        <div class="space-y-1.5">
-          <h3 class="text-[11px] font-mono font-bold uppercase tracking-widest text-slate-400 px-3">
+        <div class="space-y-2">
+          <h5 class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200 px-3">
             {grp.name}
-          </h3>
-          <nav class="space-y-0.5">
+          </h5>
+          <ul class="border-l border-slate-200 dark:border-white/10 space-y-1">
             {#each grp.items as item}
-              <button 
-                onclick={() => activeSection = item.id}
-                class="w-full text-left px-3 py-2 rounded-xl text-xs transition-all duration-150 cursor-pointer flex items-center justify-between {activeSection === item.id ? 'bg-emerald-500/10 text-emerald-950 dark:text-emerald-400 font-bold shadow-2xs border border-emerald-500/25' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white border border-transparent'}">
-                <span class="truncate">{item.title}</span>
-                {#if item.badge}
-                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 font-bold">{item.badge}</span>
-                {/if}
-              </button>
+              <li>
+                <button 
+                  onclick={() => activeSection = item.id}
+                  class="w-full text-left pl-4 pr-3 py-1.5 text-xs transition-all duration-150 cursor-pointer flex items-center justify-between border-l -ml-px {activeSection === item.id ? 'border-emerald-500 font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-r-lg' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400'}">
+                  <span class="truncate">{item.title}</span>
+                  {#if item.badge}
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 font-bold">{item.badge}</span>
+                  {/if}
+                </button>
+              </li>
             {/each}
-          </nav>
+          </ul>
         </div>
       {/each}
+
+      <!-- Documentation Meta Box -->
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-xs space-y-2">
+        <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>Sola v0.9 Engine</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">
+          Single-file zero-VDOM reactivity for the ambient web.
+        </p>
+      </div>
     </aside>
 
-    <!-- Main Content Reader (Tailscale Article Card) -->
-    <main class="flex-1 w-full bg-white dark:bg-[#0f172a]/70 backdrop-blur-xl rounded-3xl border border-slate-200/90 dark:border-white/10 p-6 sm:p-10 shadow-xs">
+    <!-- 2. Center Article Reader (Tailwind Prose & Code Blocks) -->
+    <main class="flex-1 w-full min-w-0 max-w-4xl space-y-12">
       
-      <!-- 1. QUICKSTART -->
+      <!-- AI Answer Callout (if active) -->
+      {#if aiAnswer}
+        <div class="p-6 rounded-3xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-xs font-mono text-slate-900 dark:text-emerald-300 leading-relaxed whitespace-pre-wrap relative shadow-xs">
+          <button 
+            onclick={() => (aiAnswer = '')}
+            class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white text-base font-bold cursor-pointer">
+            &times;
+          </button>
+          <div class="flex items-center gap-2 mb-3 text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+            <span>Sola Arc Intelligence Response</span>
+          </div>
+          {aiAnswer}
+        </div>
+      {/if}
+
+      <!-- ================= 1. QUICKSTART ================= -->
       {#if activeSection === 'quickstart'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Getting Started</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Quickstart & Installation
+          <!-- Article Header -->
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Getting Started</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Installation & Setup
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Scaffold a complete Sola application or add the zero-VDOM compiler to an existing Vite repository in under 60 seconds.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Get started with Sola by creating a new standalone project or integrating the compiler into your existing Vite setup.
+            </p>
+          </header>
+
+          <!-- Tailwind Style Callout Note -->
+          <div class="border-l-4 border-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10 p-4 rounded-r-2xl space-y-1">
+            <h4 class="text-xs font-bold text-emerald-950 dark:text-emerald-400 font-mono">Zero-VDOM Runtime Note</h4>
+            <p class="text-xs text-emerald-900 dark:text-emerald-300 leading-relaxed">
+              Sola compiles directly to standard ES modules without virtual DOM reconciliation. No runtime react-dom or large framework wrappers required.
             </p>
           </div>
 
-          <!-- Package Manager Tabs -->
-          <div class="space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">1. Create a New Project</h3>
-              <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-lg border border-slate-200/60 dark:border-white/10 text-[11px] font-mono">
-                {#each (['npm', 'pnpm', 'yarn', 'bun'] as const) as pm}
-                  <button 
-                    onclick={() => packageManager = pm}
-                    class="px-2.5 py-0.5 rounded-md transition-all cursor-pointer font-bold {packageManager === pm ? 'bg-white dark:bg-emerald-500 text-emerald-700 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-                    {pm}
-                  </button>
-                {/each}
-              </div>
-            </div>
+          <!-- Step 1: Scaffold -->
+          <section class="space-y-4 pt-2">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2.5">
+              <span>Creating a new project</span>
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+              The fastest way to get started is with the official CLI initializer, which sets up Vite, UnoCSS, and Sola compiler hooks automatically:
+            </p>
 
-            <!-- Scaffold Box -->
-            <div class="relative group">
-              <div class="bg-slate-950 text-emerald-400 p-4 rounded-2xl font-mono text-xs shadow-inner border border-slate-800 flex items-center justify-between overflow-x-auto">
+            <!-- Code Window (Tailwind Style) -->
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
+              <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                  <span class="text-[11px] font-mono text-slate-400 ml-2">Terminal</span>
+                </div>
+                <!-- Package Manager Tabs -->
+                <div class="flex items-center bg-slate-800 p-0.5 rounded-lg text-[10px] font-mono">
+                  {#each (['npm', 'pnpm', 'yarn', 'bun'] as const) as pm}
+                    <button 
+                      onclick={() => packageManager = pm}
+                      class="px-2 py-0.5 rounded transition-all cursor-pointer {packageManager === pm ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'}">
+                      {pm}
+                    </button>
+                  {/each}
+                </div>
+              </div>
+              <div class="p-5 flex items-center justify-between font-mono text-xs text-emerald-400 overflow-x-auto">
                 <code>$ {scaffoldCmds[packageManager]}</code>
+                <button 
+                  onclick={() => handleCopy(scaffoldCmds[packageManager], 'scaffold')}
+                  class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0 ml-4">
+                  {#if copiedId === 'scaffold'}
+                    <span class="text-[10px] text-emerald-400 font-bold px-1">Copied!</span>
+                  {:else}
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
               </div>
-              <button 
-                onclick={() => handleCopy(scaffoldCmds[packageManager], 'scaffold')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'scaffold'}
-                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  <span>Copy</span>
-                {/if}
-              </button>
             </div>
-          </div>
+          </section>
 
-          <!-- Existing App Install -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">2. Add to Existing Vite App</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400">Install the core runtime and Vite compiler plugin:</p>
-            <div class="relative group">
-              <div class="bg-slate-950 text-emerald-400 p-4 rounded-2xl font-mono text-xs shadow-inner border border-slate-800 flex items-center justify-between overflow-x-auto">
+          <!-- Step 2: Existing Vite Project -->
+          <section class="space-y-4 pt-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Adding to an existing Vite app</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+              If you already have a Vite application, install the Sola core runtime and Vite compiler plugin:
+            </p>
+
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
+              <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+                <span class="text-[11px] font-mono text-slate-400">Terminal</span>
+                <span class="text-[10px] font-mono text-slate-500">{packageManager}</span>
+              </div>
+              <div class="p-5 flex items-center justify-between font-mono text-xs text-emerald-400 overflow-x-auto">
                 <code>$ {installCmds[packageManager]}</code>
+                <button 
+                  onclick={() => handleCopy(installCmds[packageManager], 'install')}
+                  class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0 ml-4">
+                  {#if copiedId === 'install'}
+                    <span class="text-[10px] text-emerald-400 font-bold px-1">Copied!</span>
+                  {:else}
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
               </div>
-              <button 
-                onclick={() => handleCopy(installCmds[packageManager], 'install')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'install'}
-                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  <span>Copy</span>
-                {/if}
-              </button>
             </div>
-          </div>
+          </section>
 
-          <!-- Vite Plugin Config -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">3. Configure Vite Plugin</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400">Register the plugin in your <code>vite.config.ts</code>:</p>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800 leading-relaxed"><code>{viteConfigCode}</code></pre>
-              <button 
-                onclick={() => handleCopy(viteConfigCode, 'vite-config')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'vite-config'}
-                  <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  <span>Copy</span>
-                {/if}
-              </button>
+          <!-- Step 3: Vite Plugin Config -->
+          <section class="space-y-4 pt-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Configuring Vite</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+              Add the Sola plugin to your <code>vite.config.ts</code>:
+            </p>
+
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
+              <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+                <span class="text-[11px] font-mono text-slate-400">vite.config.ts</span>
+                <span class="text-[10px] font-mono text-slate-500">TypeScript</span>
+              </div>
+              <div class="p-5 relative font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+                <pre><code>{viteConfigCode}</code></pre>
+                <button 
+                  onclick={() => handleCopy(viteConfigCode, 'vite-cfg')}
+                  class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer">
+                  {#if copiedId === 'vite-cfg'}
+                    <span class="text-[10px] text-emerald-400 font-bold px-1">Copied!</span>
+                  {:else}
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  {/if}
+                </button>
+              </div>
             </div>
-          </div>
+          </section>
         </article>
 
-      <!-- 2. SYNTAX -->
+      <!-- ================= 2. SYNTAX ================= -->
       {:else if activeSection === 'syntax'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Component Architecture</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              The .sola Component Format
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Component Architecture</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              The .sola Format
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              A single-file <code>.sola</code> component encapsulates state logic, declarative markup, and scoped styles into a fine-grained native DOM module.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Anatomy of single-file components compiling into reactive native DOM nodes.
             </p>
-          </div>
+          </header>
 
-          <!-- 3-Part Architecture Breakdown Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20">
-              <span class="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase">Part 1</span>
-              <h4 class="font-mono font-bold text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt;</h4>
-              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>), macros (<code>$intent</code>), and handlers.</p>
+            <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
+              <span class="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase">Part 1</span>
+              <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt;</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>) and handlers.</p>
             </div>
-
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+            <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
               <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
-              <h4 class="font-mono font-bold text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
-              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Declarative markup with fine-grained reactive expression bindings <code>&#123;count&#125;</code>.</p>
+              <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Standard declarative markup with <code>&#123;expression&#125;</code> bindings.</p>
             </div>
-
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10">
+            <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
               <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
-              <h4 class="font-mono font-bold text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt;</h4>
-              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Styles are automatically hashed per-selector at compile time with zero global bleed.</p>
+              <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt;</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Auto-scoped CSS hashed at compile time with 0 global collisions.</p>
             </div>
           </div>
 
-          <!-- Code Snippet -->
-          <div class="relative group">
-            <pre class="bg-slate-950 text-emerald-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{syntaxExample}</code></pre>
-            <button 
-              onclick={() => handleCopy(syntaxExample, 'syntax')}
-              class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-              {#if copiedId === 'syntax'}
-                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span class="text-emerald-400">Copied</span>
-              {:else}
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <span>Copy</span>
-              {/if}
-            </button>
+          <!-- Code Window -->
+          <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
+            <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] font-mono text-slate-400">MetricCard.sola</span>
+              <span class="text-[10px] font-mono text-slate-500">Single-File Component</span>
+            </div>
+            <div class="p-5 relative font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{syntaxExample}</code></pre>
+              <button 
+                onclick={() => handleCopy(syntaxExample, 'syntax')}
+                class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer">
+                {#if copiedId === 'syntax'}
+                  <span class="text-[10px] text-emerald-400 font-bold px-1">Copied!</span>
+                {:else}
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {/if}
+              </button>
+            </div>
           </div>
 
-          <!-- Live Editable Component Sandbox -->
-          <div class="bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-white/5 pb-3">
+          <!-- Interactive Live Sandbox -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">Live Synchronized Sandbox</h3>
               </div>
-              <span class="text-[10px] font-mono bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold">Native DOM</span>
+              <span class="text-[10px] font-mono bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">Native DOM</span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               <div class="space-y-3">
                 <div>
-                  <label class="block text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Title Prop</label>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Card Title Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxTitle}
-                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                    class="w-full bg-slate-50 dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
                   />
                 </div>
-
                 <div>
-                  <label class="block text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Value Prop</label>
+                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Card Value Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxValue}
-                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                    class="w-full bg-slate-50 dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
-
-              <!-- Live Mounted Rendering -->
-              <div class="flex flex-col items-center justify-center p-4 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-[#090d19] min-h-[140px]">
-                <DataCard config={{ title: sandboxTitle, value: sandboxValue, trend: "+12.4% live signal", icon: "activity" }} />
+              <div class="flex items-center justify-center p-4 border border-slate-100 dark:border-white/10 rounded-2xl bg-slate-50 dark:bg-[#090d19]">
+                <DataCard config={{ title: sandboxTitle, value: sandboxValue, trend: "+14.8% vs baseline", icon: "activity" }} />
               </div>
             </div>
           </div>
         </article>
 
-      <!-- 3. REACTIVITY -->
+      <!-- ================= 3. REACTIVITY ================= -->
       {:else if activeSection === 'api-reactivity'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Developer API Reference</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Core Reactivity API
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Core Concepts</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Reactivity & Signals
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Fine-grained signals that bypass virtual DOM tree reconciliation.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Fine-grained state tracking primitives designed for zero overhead.
             </p>
-          </div>
+          </header>
 
-          <!-- createSignal -->
-          <div class="space-y-3">
-            <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono">createSignal(initialValue)</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Generates a reactive local state tuple. Calling the getter auto-subscribes running effects; calling the setter updates only the bound DOM nodes.
+          <section class="space-y-3">
+            <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">createSignal(initialValue)</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Creates a local reactive state tuple. Invoking the getter registers subscriptions; calling the setter notifies dependencies.
             </p>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{signalExample}</code></pre>
-              <button 
-                onclick={() => handleCopy(signalExample, 'api-sig')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'api-sig'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{signalExample}</code></pre>
             </div>
-          </div>
+          </section>
 
-          <!-- createDerived -->
-          <div class="space-y-3">
-            <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono">createDerived(fn)</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Establishes memoized derived values that automatically track dependency changes and recalculate with 0 ms overhead.
+          <section class="space-y-3">
+            <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">createDerived(fn)</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Creates a memoized computation that automatically re-evaluates only when its dependencies change.
             </p>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{derivedExample}</code></pre>
-              <button 
-                onclick={() => handleCopy(derivedExample, 'api-der')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'api-der'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{derivedExample}</code></pre>
             </div>
-          </div>
+          </section>
 
-          <!-- createEffect -->
-          <div class="space-y-3">
-            <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono">createEffect(callback)</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Executes side effects and automatically registers reactive subscriptions on getters accessed inside the callback.
+          <section class="space-y-3">
+            <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">createEffect(callback)</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Executes side effects and automatically reruns whenever accessed signals change.
             </p>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{effectExample}</code></pre>
-              <button 
-                onclick={() => handleCopy(effectExample, 'api-eff')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'api-eff'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{effectExample}</code></pre>
             </div>
-          </div>
+          </section>
         </article>
 
-      <!-- 4. MACROS -->
+      <!-- ================= 4. MACROS ================= -->
       {:else if activeSection === 'api-macros'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Compiler Macros</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Compiler Macro Primitives
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Core Concepts</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Compiler Macros
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Compile-time macros that resolve natural language intent and bind remote data streams.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Compile-time macros for ambient generative resolution and remote data signals.
             </p>
-          </div>
+          </header>
 
-          <!-- $intent -->
-          <div class="space-y-3">
-            <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono">$intent(prompt, options)</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Declared in component script blocks to resolve plain-text prompts into dynamically bound UI trees via Gemini AST translation.
+          <section class="space-y-3">
+            <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">$intent(prompt, options)</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Translates natural language descriptions into live compiled UI trees at compile time.
             </p>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{intentMacroExample}</code></pre>
-              <button 
-                onclick={() => handleCopy(intentMacroExample, 'macro-int')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'macro-int'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{intentMacroExample}</code></pre>
             </div>
-          </div>
+          </section>
 
-          <!-- $data -->
-          <div class="space-y-3">
-            <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono">$data(sourceUri, options)</h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Binds component properties directly to remote datasources (PostgreSQL, Google Sheets, REST SSE) without bespoke backend code.
+          <section class="space-y-3">
+            <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">$data(sourceUri, options)</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Binds component fields directly to WebSocket or HTTP/2 SSE signals from Google Sheets or PostgreSQL.
             </p>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed border border-slate-800"><code>{dataMacroExample}</code></pre>
-              <button 
-                onclick={() => handleCopy(dataMacroExample, 'macro-dat')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'macro-dat'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{dataMacroExample}</code></pre>
             </div>
-          </div>
+          </section>
         </article>
 
-      <!-- 5. ENGINE -->
+      <!-- ================= 5. ENGINE ================= -->
       {:else if activeSection === 'engine'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Architecture</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Compiler & Zero-VDOM Engine
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Architecture</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Zero-VDOM Engine
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Sola compiles template nodes into <strong>direct native DOM updates</strong> instead of running Virtual DOM diffing routines.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              How Sola compiles components into direct DOM operations.
             </p>
-          </div>
+          </header>
 
-          <div class="relative group">
-            <pre class="bg-slate-950 text-emerald-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{engineExample}</code></pre>
-            <button 
-              onclick={() => handleCopy(engineExample, 'syntax-eng')}
-              class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-              {#if copiedId === 'syntax-eng'}
-                <span class="text-emerald-400">Copied</span>
-              {:else}
-                <span>Copy</span>
-              {/if}
-            </button>
+          <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+            <pre><code>{engineExample}</code></pre>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-slate-50 dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.2 kB Core Bundle</h4>
-              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Zero third-party dependencies. Instant time-to-interactive on low-power mobile devices.</p>
+            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.2 kB Bundle</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Zero third-party dependencies. Instant time-to-interactive.</p>
             </div>
-            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-slate-50 dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">Sub-Millisecond Updates</h4>
-              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Only the precise text node or attribute that changed is modified in the DOM tree.</p>
+            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">Sub-Millisecond Speed</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Only modified DOM nodes are updated on state shifts.</p>
             </div>
           </div>
         </article>
 
-      <!-- 6. HOST EMBEDDING -->
+      <!-- ================= 6. HOST EMBEDDING ================= -->
       {:else if activeSection === 'host-embedding'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Embedding Guide</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              React & Enterprise Embedding
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Deployment & Adapters</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              React & Portal Embeds
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Because Sola compiles into pure, fine-grained DOM JavaScript (<code>~3.2 kB</code>), you can drop compiled Sola components directly into React applications or Enterprise Platform widgets with zero bundle penalty.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Embedding Sola zero-VDOM components into React applications and enterprise portals.
             </p>
-          </div>
+          </header>
 
-          <div class="space-y-3">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">1. React 19 / Next.js Hook Wrapper</h3>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{reactEmbedCode}</code></pre>
-              <button 
-                onclick={() => handleCopy(reactEmbedCode, 'react-emb')}
-                class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'react-emb'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">React 19 Hook Wrapper</h3>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{reactEmbedCode}</code></pre>
             </div>
-          </div>
+          </section>
 
-          <div class="space-y-3">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">2. Enterprise Service Portal Widget Controller</h3>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{serviceNowEmbedCode}</code></pre>
-              <button 
-                onclick={() => handleCopy(serviceNowEmbedCode, 'sn-emb')}
-                class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'sn-emb'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Enterprise Service Portal Controller</h3>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{serviceNowEmbedCode}</code></pre>
             </div>
-          </div>
+          </section>
         </article>
 
-      <!-- 7. RELAY SAAS -->
+      <!-- ================= 7. RELAY SAAS ================= -->
       {:else if activeSection === 'relay-saas'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>Production Deployment</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Sola Relay SaaS Deployment
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Deployment & Adapters</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Sola Relay SaaS
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Deploy Sola Relay close to your target databases and expose it via reverse proxy with SSL termination.
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Deploying Sola Relay close to private database clusters.
             </p>
-          </div>
+          </header>
 
-          <div class="space-y-3">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">1. Docker Container</h3>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{dockerfileCode}</code></pre>
-              <button 
-                onclick={() => handleCopy(dockerfileCode, 'adm-dock')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'adm-dock'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">1. Dockerfile</h3>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{dockerfileCode}</code></pre>
             </div>
-          </div>
+          </section>
 
-          <div class="space-y-3">
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white font-mono">2. Reverse Proxy Routing (Nginx)</h3>
-            <div class="relative group">
-              <pre class="bg-slate-950 text-emerald-300 p-4 rounded-2xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{nginxCode}</code></pre>
-              <button 
-                onclick={() => handleCopy(nginxCode, 'adm-ngx')}
-                class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-                {#if copiedId === 'adm-ngx'}
-                  <span class="text-emerald-400">Copied</span>
-                {:else}
-                  <span>Copy</span>
-                {/if}
-              </button>
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">2. Nginx Reverse Proxy</h3>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{nginxCode}</code></pre>
             </div>
-          </div>
+          </section>
         </article>
 
-      <!-- 8. LLM SPEC -->
+      <!-- ================= 8. LLM SPEC ================= -->
       {:else if activeSection === 'llm-spec'}
         <article class="space-y-8">
-          <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
-              <span>AI Specification</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              LLM & AI Agent Prompting Spec
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Deployment & Adapters</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              AI Prompting Spec
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-              Provide this system prompt context block to <strong>Claude 3.7</strong>, <strong>ChatGPT (GPT-4o)</strong>, or <strong>Gemini 3.0</strong> so any LLM writes valid Sola components without hallucinating:
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              System prompt context for Claude 3.7, GPT-4o, and Gemini models.
             </p>
-          </div>
+          </header>
 
-          <div class="relative group">
-            <pre class="bg-slate-950 text-emerald-300 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{llmSystemPrompt}</code></pre>
-            <button 
-              onclick={() => handleCopy(llmSystemPrompt, 'llm-ctx')}
-              class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
-              {#if copiedId === 'llm-ctx'}
-                <span class="text-emerald-400">Copied</span>
-              {:else}
-                <span>Copy</span>
-              {/if}
-            </button>
+          <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+            <pre><code>{llmSystemPrompt}</code></pre>
           </div>
         </article>
       {/if}
+
+      <!-- Next / Previous Page Navigation Footer (Tailwind Style) -->
+      <nav class="pt-8 border-t border-slate-900/[0.04] dark:border-white/[0.05] grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {#if prevItem}
+          <button 
+            onclick={() => activeSection = prevItem.id}
+            class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-emerald-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-left transition-all group cursor-pointer shadow-2xs">
+            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+              <span>Previous</span>
+            </div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              {prevItem.title}
+            </div>
+          </button>
+        {:else}
+          <div></div>
+        {/if}
+
+        {#if nextItem}
+          <button 
+            onclick={() => activeSection = nextItem.id}
+            class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-emerald-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-right transition-all group cursor-pointer shadow-2xs ml-auto w-full sm:w-auto sm:min-w-[200px]">
+            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
+              <span>Next</span>
+              <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              {nextItem.title}
+            </div>
+          </button>
+        {/if}
+      </nav>
 
     </main>
 
