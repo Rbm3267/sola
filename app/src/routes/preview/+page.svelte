@@ -56,14 +56,14 @@
   };
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 flex flex-col font-sans overflow-x-hidden w-full max-w-full">
+<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-[#090d19] dark:via-[#0f172a] dark:to-[#090d19] text-slate-900 dark:text-slate-100 dark:text-slate-100 flex flex-col font-sans overflow-x-hidden w-full max-w-full">
   
   <Navbar />
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col gap-6 overflow-x-hidden">
     
     <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200/80 pb-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200/80 pb-6 dark:border-white/5">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-bold mb-2">
           <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
@@ -72,28 +72,28 @@
         <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-[-0.03em]">
           View on My UI
         </h1>
-        <p class="text-slate-600 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
+        <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
           Simulate how Sola's zero-VDOM components, ambient signals, and Dynamic Island HUD seamlessly mount inside your existing application.
         </p>
       </div>
 
       <!-- Mode Selector -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 shadow-xs self-start md:self-auto select-none overflow-x-auto no-scrollbar max-w-full">
+      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 shadow-xs self-start md:self-auto select-none overflow-x-auto no-scrollbar max-w-full dark:border-white/5">
         <button 
           onclick={() => activeMode = 'preset'}
-          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'preset' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'preset' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
           Enterprise Host Presets
         </button>
         <button 
           onclick={() => activeMode = 'screenshot'}
-          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'screenshot' ? 'bg-white text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 hover:text-slate-900'}">
+          class="px-3 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap {activeMode === 'screenshot' ? 'bg-white dark:bg-[#0f172a] text-slate-950 shadow-xs border border-slate-200/90 font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
           Upload Screenshot / Figma
         </button>
       </div>
     </div>
 
     <!-- Controls Sub-Bar (Stacked & Labeled Rows) -->
-    <div class="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-sm flex flex-col gap-4 max-w-full overflow-hidden">
+    <div class="bg-white dark:bg-[#0f172a] border border-slate-200/90 rounded-3xl p-5 shadow-sm flex flex-col gap-4 max-w-full overflow-hidden dark:border-white/5">
       
       <!-- Row 1: Target App Environment -->
       <div class="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -104,7 +104,7 @@
             {#each (['workspace', 'fintech', 'commerce', 'aifrontdoor', 'enterprise', 'telemetry', 'developer'] as TemplatePreset[]) as t}
               <button 
                 onclick={() => selectedPreset = t}
-                class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200/60 hover:bg-slate-100'}">
+                class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 {selectedPreset === t ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 border border-slate-200/60 hover:bg-slate-100'}">
                 <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background-color: {presets[t].brand}"></span>
                 <span>{presets[t].name}</span>
               </button>
@@ -125,27 +125,27 @@
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-full select-none">
           <button 
             onclick={() => activeComponent = 'incident'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'incident' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
             P1 Incident Matrix
           </button>
           <button 
             onclick={() => activeComponent = 'cluster'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'cluster' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
             Node Cluster Mesh
           </button>
           <button 
             onclick={() => activeComponent = 'waterfall'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'waterfall' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
             Revenue Waterfall
           </button>
           <button 
             onclick={() => activeComponent = 'datacard'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'datacard' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
             KPI DataCard
           </button>
           <button 
             onclick={() => activeComponent = 'dial'}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 {activeComponent === 'dial' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}">
             Tactile Touch Dial
           </button>
         </div>
@@ -303,33 +303,33 @@
                 <!-- Stripe Top Bar -->
                 <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
                   <div class="flex items-center gap-3">
-                    <span class="font-bold text-sm tracking-tight text-slate-900">Stripe Dashboard</span>
+                    <span class="font-bold text-sm tracking-tight text-slate-900 dark:text-slate-100">Stripe Dashboard</span>
                     <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-500/20">LIVE MODE</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-xs font-mono text-slate-500">Balance: <strong class="text-slate-900">$184,920.00</strong></span>
+                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Balance: <strong class="text-slate-900 dark:text-slate-100">$184,920.00</strong></span>
                   </div>
                 </div>
 
                 <!-- Stripe Content Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                   <div class="lg:col-span-4 flex flex-col gap-3">
-                    <div class="p-4 rounded-xl border bg-white border-slate-200 flex flex-col gap-1 shadow-xs">
-                      <span class="text-xs font-medium text-slate-500">Gross Volume (30D)</span>
-                      <span class="text-2xl font-bold text-slate-900">$1,420,800</span>
+                    <div class="p-4 rounded-xl border bg-white dark:bg-[#0f172a] dark:bg-[#0f172a] border-slate-200 dark:border-white/5 flex flex-col gap-1 shadow-xs">
+                      <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Gross Volume (30D)</span>
+                      <span class="text-2xl font-bold text-slate-900 dark:text-slate-100">$1,420,800</span>
                       <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">+18.4% vs last month</span>
                     </div>
-                    <div class="p-4 rounded-xl border bg-white border-slate-200 flex flex-col gap-1 shadow-xs">
-                      <span class="text-xs font-medium text-slate-500">Successful Payments</span>
-                      <span class="text-2xl font-bold text-slate-900">42,910</span>
-                      <span class="text-xs text-slate-500">99.4% approval rate</span>
+                    <div class="p-4 rounded-xl border bg-white dark:bg-[#0f172a] dark:bg-[#0f172a] border-slate-200 dark:border-white/5 flex flex-col gap-1 shadow-xs">
+                      <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Successful Payments</span>
+                      <span class="text-2xl font-bold text-slate-900 dark:text-slate-100">42,910</span>
+                      <span class="text-xs text-slate-500 dark:text-slate-400">99.4% approval rate</span>
                     </div>
                   </div>
 
                   <!-- Injected Sola Component Surface -->
                   <div class="lg:col-span-8 relative group w-full max-w-full">
                     <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-indigo-600 text-white font-mono text-[10px] font-bold shadow-md flex items-center gap-1.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping dark:bg-[#0f172a]"></span>
                       <span>Injected Sola FinTech Card</span>
                     </div>
 
@@ -361,14 +361,14 @@
               <!-- Authentic Shopify Admin & E-Commerce Storefront Analytics Layout -->
               <div class="flex flex-col gap-4">
                 <!-- Shopify Top Navigation Bar -->
-                <div class="flex items-center justify-between border-b pb-3 border-slate-200">
+                <div class="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-white/5">
                   <div class="flex items-center gap-3">
                     <div class="w-6 h-6 rounded bg-[#95bf47] text-white font-bold text-xs flex items-center justify-center font-mono">S</div>
-                    <span class="font-bold text-sm text-slate-900 tracking-tight">Shopify Store Admin</span>
+                    <span class="font-bold text-sm text-slate-900 dark:text-slate-100 tracking-tight">Shopify Store Admin</span>
                     <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20 font-bold">Store: sola-apparel.myshopify.com</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-xs font-mono text-slate-500">Live Traffic:</span>
+                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Live Traffic:</span>
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                     <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">842 online shoppers</span>
                   </div>
@@ -378,16 +378,16 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                   <!-- Shopify Sales Metrics Column -->
                   <div class="lg:col-span-4 flex flex-col gap-3">
-                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col gap-2">
-                      <span class="text-xs font-mono text-slate-500 uppercase font-bold">Today's Sales</span>
-                      <div class="text-2xl font-black text-slate-900 font-mono">$48,290.00</div>
+                    <div class="p-4 rounded-2xl bg-white dark:bg-[#0f172a] border border-slate-200 shadow-xs flex flex-col gap-2 dark:border-white/5">
+                      <span class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase font-bold">Today's Sales</span>
+                      <div class="text-2xl font-black text-slate-900 dark:text-slate-100 font-mono">$48,290.00</div>
                       <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold">↑ 18.4% vs yesterday</span>
                     </div>
 
-                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col gap-2">
-                      <span class="text-xs font-mono text-slate-500 uppercase font-bold">Checkout Conversion</span>
-                      <div class="text-xl font-black text-slate-900 font-mono">3.84%</div>
-                      <span class="text-xs font-mono text-slate-500">2,410 Sessions Completed</span>
+                    <div class="p-4 rounded-2xl bg-white dark:bg-[#0f172a] border border-slate-200 shadow-xs flex flex-col gap-2 dark:border-white/5">
+                      <span class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase font-bold">Checkout Conversion</span>
+                      <div class="text-xl font-black text-slate-900 dark:text-slate-100 font-mono">3.84%</div>
+                      <span class="text-xs font-mono text-slate-500 dark:text-slate-400">2,410 Sessions Completed</span>
                     </div>
                   </div>
 
@@ -593,12 +593,12 @@
             {:else}
               <!-- Authentic Vercel Console Layout -->
               <div class="flex flex-col gap-4">
-                <div class="flex items-center justify-between border-b pb-3 border-slate-200">
-                  <div class="flex items-center gap-2 font-mono text-xs text-slate-900">
+                <div class="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-white/5">
+                  <div class="flex items-center gap-2 font-mono text-xs text-slate-900 dark:text-slate-100">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 76 65"><path d="M37.5274 0L75.0548 65H0L37.5274 0Z"/></svg>
                     <span class="font-bold">Vercel Console</span>
                     <span class="text-slate-400">/</span>
-                    <span class="text-slate-600">sola-air</span>
+                    <span class="text-slate-600 dark:text-slate-400">sola-air</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold">● Ready</span>
@@ -607,16 +607,16 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                   <div class="lg:col-span-4 flex flex-col gap-3 font-mono text-xs">
-                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 flex flex-col gap-1 dark:border-white/5">
                       <span class="text-[10px] text-slate-400 uppercase">Git Branch</span>
-                      <span class="font-bold text-slate-900">main (ca94995)</span>
-                      <span class="text-[10px] text-slate-500">Built in 16s via Edge</span>
+                      <span class="font-bold text-slate-900 dark:text-slate-100">main (ca94995)</span>
+                      <span class="text-[10px] text-slate-500 dark:text-slate-400">Built in 16s via Edge</span>
                     </div>
                   </div>
 
                   <div class="lg:col-span-8 relative group w-full max-w-full">
                     <div class="absolute -top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-slate-950 text-white font-mono text-[10px] font-bold shadow-md flex items-center gap-1.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping dark:bg-[#0f172a]"></span>
                       <span>Injected Sola Edge Console Widget</span>
                     </div>
 
@@ -651,9 +651,9 @@
               </div>
             {:else}
               <label class="w-full p-10 sm:p-16 border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-3xl text-center flex flex-col items-center gap-3 cursor-pointer transition-all">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                 <div class="text-xs sm:text-sm font-mono text-slate-300 font-bold">Drop your Figma frame or App screenshot here</div>
-                <p class="text-[10px] sm:text-xs font-mono text-slate-500">Supports PNG, JPG, WebP. Sola anchors live components over your mockup.</p>
+                <p class="text-[10px] sm:text-xs font-mono text-slate-500 dark:text-slate-400">Supports PNG, JPG, WebP. Sola anchors live components over your mockup.</p>
                 <input type="file" accept="image/*" onchange={handleFileUpload} class="hidden" />
               </label>
             {/if}
@@ -664,14 +664,14 @@
       </div>
 
     <!-- 1-Click Embed Snippet Tray -->
-    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs flex flex-col gap-3 sm:gap-4 max-w-full overflow-hidden">
+    <div class="bg-white dark:bg-[#0f172a] border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs flex flex-col gap-3 sm:gap-4 max-w-full overflow-hidden dark:border-white/5">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3 gap-2">
         <span class="text-[10px] sm:text-xs font-mono font-bold text-slate-400 uppercase truncate">Embed in your host app:</span>
         <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl shrink-0">
           {#each (['react', 'vue', 'swift', 'html', 'sola'] as const) as fw}
             <button 
               onclick={() => activeFramework = fw}
-              class="px-2.5 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs font-mono font-bold capitalize transition-all cursor-pointer {activeFramework === fw ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'}">
+              class="px-2.5 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs font-mono font-bold capitalize transition-all cursor-pointer {activeFramework === fw ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100'}">
               {fw === 'swift' ? 'SwiftUI (iOS)' : fw}
             </button>
           {/each}

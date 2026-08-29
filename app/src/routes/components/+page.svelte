@@ -86,7 +86,7 @@
   );
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 flex flex-col font-sans">
+<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-[#090d19] dark:via-[#0f172a] dark:to-[#090d19] text-slate-900 dark:text-slate-100 flex flex-col font-sans">
   
   <Navbar />
 
@@ -105,7 +105,7 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col gap-8">
     
     <!-- Hero Title & Search Header -->
-    <div class="flex flex-col gap-6 border-b border-slate-200/80 pb-8">
+    <div class="flex flex-col gap-6 border-b border-slate-200/80 pb-8 dark:border-white/5">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-bold mb-3">
@@ -129,7 +129,7 @@
             type="text" 
             bind:value={searchQuery}
             placeholder="Search platforms, protocols, components..."
-            class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-slate-200/90 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-xs"
+            class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-slate-200/90 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-xs dark:bg-[#0f172a] dark:text-slate-100 dark:border-white/5"
           />
           {#if searchQuery}
             <button 
@@ -158,7 +158,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- Integrations Sidebar Drawer -->
-      <aside class="lg:col-span-5 bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col gap-3">
+      <aside class="lg:col-span-5 bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col gap-3 dark:bg-[#0f172a] dark:border-white/5">
         <div class="flex items-center justify-between px-2">
           <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
             Integrations & Surfaces ({filteredIntegrations.length})
@@ -195,13 +195,13 @@
       <section class="lg:col-span-7 flex flex-col gap-6">
         
         <!-- Component Header & View Switcher Bar -->
-        <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 dark:bg-[#0f172a] dark:border-white/5">
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2.5 mb-1">
               <span class="text-xs font-mono font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 px-2.5 py-0.5 rounded-full">{selectedIntegration.badge}</span>
               <span class="text-xs font-mono text-slate-500">• {selectedIntegration.primaryComponent}</span>
             </div>
-            <h2 class="text-lg sm:text-xl font-black text-slate-900 font-mono truncate">
+            <h2 class="text-lg sm:text-xl font-black text-slate-900 font-mono truncate dark:text-slate-100">
               {selectedIntegration.name}
             </h2>
             <p class="text-xs text-slate-600 mt-1">
@@ -210,7 +210,7 @@
           </div>
 
           <!-- View Mode Switcher -->
-          <div class="flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto shrink-0 select-none">
+          <div class="flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 self-start sm:self-auto shrink-0 select-none dark:border-white/5">
             <button 
               onclick={() => viewMode = 'preview'}
               class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {viewMode === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
@@ -231,7 +231,7 @@
         </div>
 
         <!-- Stage Area Canvas -->
-        <div class="bg-white border border-slate-200/90 rounded-3xl p-4 sm:p-8 shadow-sm min-h-[460px] flex items-center justify-center relative overflow-hidden">
+        <div class="bg-white border border-slate-200/90 rounded-3xl p-4 sm:p-8 shadow-sm min-h-[460px] flex items-center justify-center relative overflow-hidden dark:bg-[#0f172a] dark:border-white/5">
           
           <!-- Subtle Grid Texture -->
           <div class="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px] opacity-35 pointer-events-none"></div>

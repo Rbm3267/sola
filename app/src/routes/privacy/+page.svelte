@@ -7,12 +7,12 @@
   <meta name="description" content="Official Privacy Policy for Sola and the Sola Chrome Extension (View in My UI)." />
 </svelte:head>
 
-<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 dark:bg-emerald-500/20 selection:text-emerald-900">
+<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 dark:bg-emerald-500/20 selection:text-emerald-900 dark:text-slate-100">
   <Navbar />
 
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
     <!-- Header -->
-    <div class="border-b border-slate-200/80 pb-8 mb-10">
+    <div class="border-b border-slate-200/80 pb-8 mb-10 dark:border-white/5">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20/80 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold mb-3">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
         <span>Official Privacy Policy</span>
@@ -60,7 +60,7 @@
       <section class="space-y-3">
         <h2 class="text-xl font-bold text-slate-950 tracking-tight">2. Local Device Storage</h2>
         <p>
-          The extension utilizes the Chrome <code class="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-xs text-slate-800">storage.local</code> API exclusively to save your customized preferences locally on your device. This includes:
+          The extension utilizes the Chrome <code class="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-xs text-slate-800 dark:text-slate-200">storage.local</code> API exclusively to save your customized preferences locally on your device. This includes:
         </p>
         <ul class="list-disc list-inside pl-2 space-y-1 text-slate-600 text-sm">
           <li>User interface layout configurations (e.g., active canvas cards, column width preferences).</li>
@@ -76,14 +76,14 @@
       <section class="space-y-4">
         <h2 class="text-xl font-bold text-slate-950 tracking-tight">3. Chrome Extension Permissions & Justifications</h2>
         <p>
-          The Sola Chrome Extension declares minimal permissions in its <code class="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-xs text-slate-800">manifest.json</code> strictly necessary for core sandbox functionality:
+          The Sola Chrome Extension declares minimal permissions in its <code class="px-1.5 py-0.5 rounded bg-slate-100 font-mono text-xs text-slate-800 dark:text-slate-200">manifest.json</code> strictly necessary for core sandbox functionality:
         </p>
 
-        <div class="divide-y divide-slate-200 border border-slate-200/90 rounded-2xl overflow-hidden bg-white">
+        <div class="divide-y divide-slate-200 border border-slate-200/90 rounded-2xl overflow-hidden bg-white dark:bg-[#0f172a] dark:border-white/5">
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
               <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">activeTab</span>
-              <span class="text-xs font-semibold text-slate-900">Current Tab Access</span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Current Tab Access</span>
             </div>
             <p class="text-xs text-slate-600">
               <strong>Purpose:</strong> Allows the extension to mount the Sola component preview overlay on the current active tab when you explicitly trigger the action.
@@ -93,7 +93,7 @@
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
               <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">storage</span>
-              <span class="text-xs font-semibold text-slate-900">Local Configuration Storage</span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Local Configuration Storage</span>
             </div>
             <p class="text-xs text-slate-600">
               <strong>Purpose:</strong> Saves your customized studio component layouts and theme choices on your local machine using <code class="font-mono">chrome.storage.local</code>.
@@ -103,7 +103,7 @@
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
               <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">sidePanel</span>
-              <span class="text-xs font-semibold text-slate-900">Chrome Side Panel Integration</span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Chrome Side Panel Integration</span>
             </div>
             <p class="text-xs text-slate-600">
               <strong>Purpose:</strong> Provides a dedicated side panel where you can browse your Sola component library and drag widgets directly onto your sandbox.
@@ -113,7 +113,7 @@
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
               <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">host_permissions (&lt;all_urls&gt;)</span>
-              <span class="text-xs font-semibold text-slate-900">Universal Host Sandbox Preview</span>
+              <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Universal Host Sandbox Preview</span>
             </div>
             <p class="text-xs text-slate-600">
               <strong>Purpose:</strong> Enables developers to preview UI components on any development environment (e.g. <code class="font-mono">localhost:3000</code>, <code class="font-mono">localhost:5173</code>) and web applications inside an isolated, closed Shadow DOM boundary.
@@ -150,12 +150,12 @@
       </section>
 
       <!-- 6. Changes & Contact -->
-      <section class="space-y-3 border-t border-slate-200/80 pt-6">
+      <section class="space-y-3 border-t border-slate-200/80 pt-6 dark:border-white/5">
         <h2 class="text-xl font-bold text-slate-950 tracking-tight">6. Contact & Inquiries</h2>
         <p>
           If you have any questions, inquiries, or privacy requests regarding this Privacy Policy or our software, please contact:
         </p>
-        <div class="p-4 rounded-2xl bg-white border border-slate-200/90 font-mono text-xs space-y-1 text-slate-800">
+        <div class="p-4 rounded-2xl bg-white border border-slate-200/90 font-mono text-xs space-y-1 text-slate-800 dark:bg-[#0f172a] dark:text-slate-200 dark:border-white/5">
           <div><strong>Product:</strong> Sola (Ambient Intent Runtime)</div>
           <div><strong>Website:</strong> <a href="https://www.sola-air.dev" class="text-emerald-700 dark:text-emerald-400 underline">https://www.sola-air.dev</a></div>
           <div><strong>Developer Contact:</strong> support@sola-air.dev</div>

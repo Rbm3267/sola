@@ -385,7 +385,7 @@
 {/if}
 
 <!-- Main Luxury Surface Container -->
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 dark:text-white font-sans selection:bg-amber-500/20 selection:text-amber-900">
+<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-[#090d19] dark:via-[#0f172a] dark:to-[#090d19] text-slate-900 dark:text-slate-100 dark:text-white font-sans selection:bg-amber-500/20 selection:text-amber-900">
   <Navbar />
 
   <!-- Hero & Extension Status Banner -->
