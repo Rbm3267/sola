@@ -56,22 +56,22 @@
 <div class="w-full flex flex-col gap-6">
   
   <!-- Signal Bus Status Banner -->
-  <div class="bg-white/90 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+  <div class="bg-white/90 dark:bg-white/[0.02] backdrop-blur-xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
     <div class="flex items-center gap-3.5">
-      <div class="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-900 shrink-0 shadow-2xs">
+      <div class="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 flex items-center justify-center text-amber-900 shrink-0 shadow-2xs">
         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <h3 class="text-base sm:text-lg font-black text-slate-950 font-sans tracking-tight">
+          <h3 class="text-base sm:text-lg font-black text-slate-950 dark:text-slate-50 font-sans tracking-tight">
             Ambient Signal Telemetry Mesh
           </h3>
-          <span class="text-[10px] font-mono font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <span class="text-[10px] font-mono font-bold uppercase bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>4 Linked Widgets</span>
           </span>
         </div>
-        <p class="text-xs text-slate-600 font-mono mt-0.5">
+        <p class="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5">
           Zero-VDOM bus: modifying one widget triggers instant microtask signal mutations across all subscribers (sub-0.2ms).
         </p>
       </div>
@@ -82,17 +82,17 @@
       <span class="text-xs font-mono font-bold text-slate-400 uppercase mr-1">Throttle:</span>
       <button 
         onclick={() => handleNodeChange(16)}
-        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 16 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 16 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
         Low (16)
       </button>
       <button 
         onclick={() => handleNodeChange(36)}
-        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 36 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 36 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
         Optimal (36)
       </button>
       <button 
         onclick={() => handleNodeChange(84)}
-        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 84 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 84 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
         High Scale (84)
       </button>
     </div>
@@ -109,11 +109,11 @@
           <span>Source Signal Publisher</span>
         </div>
         
-        <div class="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xs flex flex-col items-center gap-4">
+        <div class="bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 shadow-xs flex flex-col items-center gap-4">
           <div class="text-center">
             <span class="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
-            <div class="text-2xl font-black text-slate-950 font-mono mt-0.5">{nodeCount} Nodes Active</div>
-            <p class="text-xs text-slate-500 mt-0.5">Use slider to adjust cluster replica quota</p>
+            <div class="text-2xl font-black text-slate-950 dark:text-slate-50 font-mono mt-0.5">{nodeCount} Nodes Active</div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Use slider to adjust cluster replica quota</p>
           </div>
 
           <!-- Interactive Slider -->
@@ -125,18 +125,18 @@
               step="2"
               value={nodeCount}
               oninput={(e) => handleNodeChange(Number((e.target as HTMLInputElement).value))}
-              class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-amber-500"
+              class="w-full h-2 bg-slate-100 dark:bg-white/[0.08] rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
             <div class="flex justify-between text-[10px] font-mono text-slate-400">
               <span>8 Min</span>
-              <span class="font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">{nodeCount} Workers</span>
+              <span class="font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-500/20">{nodeCount} Workers</span>
               <span>128 Max</span>
             </div>
           </div>
 
-          <div class="w-full pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-600">
+          <div class="w-full pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-400">
             <span>Cluster Sharding:</span>
-            <span class="font-bold text-slate-900">{Math.ceil(nodeCount / 4)} AZ Partitions</span>
+            <span class="font-bold text-slate-900 dark:text-white">{Math.ceil(nodeCount / 4)} AZ Partitions</span>
           </div>
         </div>
       </div>
@@ -181,7 +181,7 @@
             <span>Live Signal Bus Stream</span>
           </div>
 
-          <div class="bg-slate-950 border border-slate-800 rounded-3xl p-5 shadow-xl h-full flex flex-col justify-between">
+          <div class="bg-slate-950 dark:bg-white border border-slate-800 rounded-3xl p-5 shadow-xl h-full flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
                 <span class="text-xs font-mono font-bold text-slate-300">telemetry://signal-bus</span>
@@ -199,7 +199,7 @@
               </div>
             </div>
 
-            <div class="text-[10px] font-mono text-slate-500 border-t border-slate-800/80 pt-2 flex justify-between mt-3">
+            <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400 border-t border-slate-800/80 pt-2 flex justify-between mt-3">
               <span>Bus Throughput: 4,200 msg/s</span>
               <span class="text-emerald-400 font-bold">100% Synced</span>
             </div>

@@ -286,7 +286,7 @@
   }
 </script>
 
-<div class="min-h-screen bg-[#fafafa] text-slate-950 font-sans selection:bg-slate-200 selection:text-slate-900 pb-24">
+<div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-950 dark:text-white font-sans selection:bg-slate-200 selection:text-slate-900 dark:text-white pb-24">
   <Navbar />
   
   <!-- Precision Monochromatic Grid Texture -->
@@ -296,19 +296,19 @@
     
     <!-- Title Area -->
     <div class="text-center max-w-2xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-xs font-mono font-bold mb-3">
         <span>Sola Ambient Studio • Live Production Canvas</span>
       </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-slate-950 tracking-[-0.035em] mb-2">
+      <h1 class="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-[-0.035em] mb-2">
         Ambient Intent Playground
       </h1>
-      <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
+      <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed font-normal">
         Speak or type any intent. Generated cards live in a <strong>fully configurable production grid</strong> with real-time resizing, reordering, and live parameter editing.
       </p>
     </div>
 
     <!-- Luxury Command & Voice Input Bar -->
-    <div class="max-w-2xl mx-auto w-full bg-white/95 backdrop-blur-3xl border {isListening ? 'border-rose-400 shadow-[0_0_30px_rgba(244,63,94,0.25)]' : 'border-slate-200 shadow-[0_12px_40px_rgba(15,23,42,0.06)]'} rounded-2xl p-2 transition-all duration-300 relative">
+    <div class="max-w-2xl mx-auto w-full bg-white dark:bg-white/[0.02] backdrop-blur-3xl border {isListening ? 'border-rose-400 shadow-[0_0_30px_rgba(244,63,94,0.25)]' : 'border-slate-200 dark:border-white/[0.04] shadow-[0_12px_40px_rgba(15,23,42,0.06)]'} rounded-2xl p-2 transition-all duration-300 relative">
       <form class="flex items-center gap-2 sm:gap-3 w-full relative z-10" onsubmit={(e) => { e.preventDefault(); submitIntent(); }}>
         
         <!-- Left Status / Command Prompt -->
@@ -332,7 +332,7 @@
           bind:value={intentQuery}
           placeholder={isListening ? "Listening... speak now" : "Speak or type intent (e.g. 'Add CPU gauge at 84%')"} 
           style="outline: none !important; box-shadow: none !important; border: none !important;"
-          class="flex-1 bg-transparent py-4 px-2 text-slate-900 text-sm sm:text-base font-medium placeholder-slate-400 border-0 outline-none focus:outline-none focus:ring-0 appearance-none"
+          class="flex-1 bg-transparent py-4 px-2 text-slate-900 dark:text-white text-sm sm:text-base font-medium placeholder-slate-400 border-0 outline-none focus:outline-none focus:ring-0 appearance-none"
         />
         
         <!-- Voice Input Microphone Button -->
@@ -340,7 +340,7 @@
           type="button"
           onclick={toggleSpeech}
           aria-label="Voice intent recognition"
-          class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl transition-all flex items-center justify-center cursor-pointer {isListening ? 'bg-rose-500 text-white shadow-md animate-pulse' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}"
+          class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl transition-all flex items-center justify-center cursor-pointer {isListening ? 'bg-rose-500 text-white shadow-md animate-pulse' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}"
           title={isListening ? "Stop listening" : "Speak intent via microphone"}
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -357,7 +357,7 @@
           disabled={isLoading || !intentQuery.trim()}
           aria-label="Submit intent"
           style={!isLoading && intentQuery.trim() ? "background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;" : ""}
-          class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl font-bold transition-all active:scale-[0.97] disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
+          class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl font-bold transition-all active:scale-[0.97] disabled:bg-slate-100 dark:bg-white/[0.08] disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </button>
@@ -370,7 +370,7 @@
       {#each sampleIntents as sample}
         <button 
           onclick={() => pickSample(sample)}
-          class="text-xs bg-white/95 border border-slate-200/90 text-slate-700 px-3.5 py-2 rounded-2xl hover:border-amber-400 hover:text-amber-900 hover:bg-amber-50/50 transition-all cursor-pointer shadow-xs">
+          class="text-xs bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] text-slate-700 dark:text-slate-300 px-3.5 py-2 rounded-2xl hover:border-amber-400 hover:text-amber-900 dark:hover:text-amber-300 hover:bg-amber-50 dark:bg-amber-500/10/50 transition-all cursor-pointer shadow-xs">
           {sample}
         </button>
       {/each}
@@ -378,27 +378,27 @@
 
     <!-- Production Dashboard Studio Controls Bar -->
     <!-- Production Dashboard Studio Controls Bar -->
-    <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-4 shadow-sm flex flex-col gap-4 mt-4">
+    <div class="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] rounded-3xl p-4 shadow-sm flex flex-col gap-4 mt-4">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <!-- Studio View Mode Switcher -->
-        <div class="flex items-center gap-1 bg-slate-100/70 p-1 rounded-full border border-slate-200/50 select-none overflow-x-auto no-scrollbar">
+        <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/[0.08] p-1 rounded-full border border-slate-200 dark:border-white/[0.04] select-none overflow-x-auto no-scrollbar">
           <button 
             onclick={() => viewMode = 'behavior'}
-            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'behavior' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80' : 'text-slate-500 hover:text-slate-800'}">
-            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'behavior' ? 'bg-white dark:bg-white/[0.02] text-slate-950 dark:text-white shadow-sm border border-slate-200 dark:border-white/[0.04]' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             <span>Behavioral Intent (Adaptive)</span>
           </button>
           <button 
             onclick={() => viewMode = 'mesh'}
-            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'mesh' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80' : 'text-slate-500 hover:text-slate-800'}">
-            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'mesh' ? 'bg-white dark:bg-white/[0.02] text-slate-950 dark:text-white shadow-sm border border-slate-200 dark:border-white/[0.04]' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             <span>Signal Mesh (Connected)</span>
           </button>
           <button 
             onclick={() => viewMode = 'custom'}
-            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'custom' ? 'bg-white text-slate-950 shadow-sm border border-slate-200/80' : 'text-slate-500 hover:text-slate-800'}">
-            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'custom' ? 'bg-white dark:bg-white/[0.02] text-slate-950 dark:text-white shadow-sm border border-slate-200 dark:border-white/[0.04]' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Custom Studio Grid ({widgets.length})</span>
           </button>
         </div>
@@ -424,24 +424,24 @@
 
       <!-- Presets bar in sub-row with clean border -->
       {#if viewMode === 'custom'}
-        <div class="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
+        <div class="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100 dark:border-white/[0.04]">
           <span class="text-xs font-mono font-medium text-slate-400 uppercase mr-1">Presets:</span>
           <button 
             onclick={() => loadPreset('servicenow')}
-            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/[0.08] transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
             <span>Enterprise Operations Platform</span>
           </button>
           <button 
             onclick={() => loadPreset('finance')}
-            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/[0.08] transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
             <span>Finance</span>
           </button>
           <button 
             onclick={() => loadPreset('cloud')}
-            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/[0.08] transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             <span>SaaS Cloud</span>
           </button>
         </div>
@@ -459,13 +459,13 @@
       {#if isLoading}
         <div 
           transition:fly={{ y: 20, duration: 300 }}
-          class="bg-white/95 backdrop-blur-2xl rounded-3xl p-8 border border-amber-200/90 shadow-sm flex flex-col items-center justify-center relative overflow-hidden"
+          class="bg-white dark:bg-white/[0.02] backdrop-blur-2xl rounded-3xl p-8 border border-amber-200 dark:border-amber-500/20/90 shadow-sm flex flex-col items-center justify-center relative overflow-hidden"
         >
           <div class="flex items-center gap-3">
             <div class="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-sm font-mono font-bold text-slate-800 uppercase tracking-wider">Building Reactive DOM Tree...</span>
+            <span class="text-sm font-mono font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Building Reactive DOM Tree...</span>
           </div>
-          <span class="text-xs font-mono text-slate-500 mt-2">Zero-VDOM AST compilation via Gemini 3.6 Flash</span>
+          <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">Zero-VDOM AST compilation via Gemini 3.6 Flash</span>
         </div>
       {/if}
 
@@ -497,7 +497,7 @@
               →
             </button>
 
-            <span class="text-slate-600">|</span>
+            <span class="text-slate-600 dark:text-slate-400">|</span>
 
             <!-- Column Span Toggle -->
             <button 
@@ -507,7 +507,7 @@
               {widget.colSpan}x
             </button>
 
-            <span class="text-slate-600">|</span>
+            <span class="text-slate-600 dark:text-slate-400">|</span>
 
             <!-- Quick Edit Config -->
             <button 
@@ -538,12 +538,12 @@
 
     <!-- Empty State -->
     {#if widgets.length === 0}
-      <div class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-16 text-center max-w-lg mx-auto shadow-sm">
-        <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto mb-4">
+      <div class="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] rounded-3xl p-16 text-center max-w-lg mx-auto shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
         </div>
-        <h3 class="text-base font-black text-slate-900 font-mono mb-1">Canvas is Clean</h3>
-        <p class="text-xs text-slate-500 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
+        <h3 class="text-base font-black text-slate-900 dark:text-white font-mono mb-1">Canvas is Clean</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
         <button 
           onclick={() => loadPreset('finance')}
           style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
@@ -573,54 +573,54 @@
       onclick={(e) => e.stopPropagation()}
       onkeydown={(e) => e.stopPropagation()}
       role="document"
-      class="bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-        <h3 class="font-black text-slate-900 font-mono text-base flex items-center gap-2">
+      class="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
+      <div class="flex justify-between items-center border-b border-slate-100 dark:border-white/[0.04] pb-3">
+        <h3 class="font-black text-slate-900 dark:text-white font-mono text-base flex items-center gap-2">
           <span>Configure {editingWidget.component}</span>
         </h3>
-        <button onclick={() => editingWidget = null} aria-label="Close configuration dialog" class="text-slate-400 hover:text-slate-700 cursor-pointer p-1">
+        <button onclick={() => editingWidget = null} aria-label="Close configuration dialog" class="text-slate-400 hover:text-slate-700 dark:text-slate-300 cursor-pointer p-1">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
       <div class="flex flex-col gap-3">
         <div>
-          <label for="widget-title-input" class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Title</label>
+          <label for="widget-title-input" class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Title</label>
           <input 
             id="widget-title-input"
             type="text" 
             bind:value={editingWidget.config.title}
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none font-medium"
+            class="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none font-medium"
           />
         </div>
 
         {#if editingWidget.config.value !== undefined}
           <div>
-            <label for="widget-val-input" class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Primary Value</label>
+            <label for="widget-val-input" class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Primary Value</label>
             <input 
               id="widget-val-input"
               type="text" 
               bind:value={editingWidget.config.value}
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none font-medium"
+              class="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none font-medium"
             />
           </div>
         {/if}
 
         {#if editingWidget.config.trend !== undefined}
           <div>
-            <label for="widget-trend-input" class="block text-xs font-mono font-bold text-slate-500 uppercase mb-1">Trend Badge</label>
+            <label for="widget-trend-input" class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Trend Badge</label>
             <input 
               id="widget-trend-input"
               type="text" 
               bind:value={editingWidget.config.trend}
-              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none font-medium"
+              class="w-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none font-medium"
             />
           </div>
         {/if}
 
         {#if editingWidget.config.percentage !== undefined}
           <div>
-            <div class="flex justify-between text-xs font-mono font-bold text-slate-500 uppercase mb-1">
+            <div class="flex justify-between text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">
               <span>Gauge Progress</span>
               <span>{editingWidget.config.percentage}%</span>
             </div>
@@ -635,7 +635,7 @@
         {/if}
       </div>
 
-      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-white/[0.04]">
         <button 
           onclick={() => editingWidget = null}
           style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"

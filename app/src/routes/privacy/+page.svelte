@@ -7,13 +7,13 @@
   <meta name="description" content="Official Privacy Policy for Sola and the Sola Chrome Extension (View in My UI)." />
 </svelte:head>
 
-<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 dark:bg-emerald-500/20 selection:text-emerald-900">
   <Navbar />
 
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
     <!-- Header -->
     <div class="border-b border-slate-200/80 pb-8 mb-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20/80 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold mb-3">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
         <span>Official Privacy Policy</span>
       </div>
@@ -29,7 +29,7 @@
     <div class="space-y-10 text-slate-700 text-sm sm:text-base leading-relaxed">
       
       <!-- Summary Box -->
-      <div class="p-6 rounded-3xl bg-emerald-50/50 border border-emerald-200/80 space-y-2">
+      <div class="p-6 rounded-3xl bg-emerald-50 dark:bg-emerald-500/10/50 border border-emerald-200 dark:border-emerald-500/20/80 space-y-2">
         <h2 class="font-bold text-slate-950 text-base">Key Privacy Highlights</h2>
         <ul class="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-slate-700">
           <li><strong>Zero Data Collection:</strong> Sola does not collect, record, log, or transmit your personal data, passwords, browsing history, or website content.</li>
@@ -82,7 +82,7 @@
         <div class="divide-y divide-slate-200 border border-slate-200/90 rounded-2xl overflow-hidden bg-white">
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">activeTab</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">activeTab</span>
               <span class="text-xs font-semibold text-slate-900">Current Tab Access</span>
             </div>
             <p class="text-xs text-slate-600">
@@ -92,7 +92,7 @@
 
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">storage</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">storage</span>
               <span class="text-xs font-semibold text-slate-900">Local Configuration Storage</span>
             </div>
             <p class="text-xs text-slate-600">
@@ -102,7 +102,7 @@
 
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">sidePanel</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">sidePanel</span>
               <span class="text-xs font-semibold text-slate-900">Chrome Side Panel Integration</span>
             </div>
             <p class="text-xs text-slate-600">
@@ -112,7 +112,7 @@
 
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">host_permissions (&lt;all_urls&gt;)</span>
+              <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded">host_permissions (&lt;all_urls&gt;)</span>
               <span class="text-xs font-semibold text-slate-900">Universal Host Sandbox Preview</span>
             </div>
             <p class="text-xs text-slate-600">
@@ -126,7 +126,7 @@
       <section class="space-y-3">
         <h2 class="text-xl font-bold text-slate-950 tracking-tight">4. Google Chrome Web Store Limited Use Compliance</h2>
         <p>
-          Sola's use and transfer of information received from Google APIs to any other app adheres to the <a href="https://developer.chrome.com/docs/webstore/program-policies/" target="_blank" rel="noreferrer" class="text-emerald-700 underline font-semibold">Chrome Web Store User Data Policy</a>, including the Limited Use requirements.
+          Sola's use and transfer of information received from Google APIs to any other app adheres to the <a href="https://developer.chrome.com/docs/webstore/program-policies/" target="_blank" rel="noreferrer" class="text-emerald-700 dark:text-emerald-400 underline font-semibold">Chrome Web Store User Data Policy</a>, including the Limited Use requirements.
         </p>
         <p>Specifically, we declare that:</p>
         <ul class="list-disc list-inside pl-2 space-y-1 text-slate-600 text-sm">
@@ -157,7 +157,7 @@
         </p>
         <div class="p-4 rounded-2xl bg-white border border-slate-200/90 font-mono text-xs space-y-1 text-slate-800">
           <div><strong>Product:</strong> Sola (Ambient Intent Runtime)</div>
-          <div><strong>Website:</strong> <a href="https://www.sola-air.dev" class="text-emerald-700 underline">https://www.sola-air.dev</a></div>
+          <div><strong>Website:</strong> <a href="https://www.sola-air.dev" class="text-emerald-700 dark:text-emerald-400 underline">https://www.sola-air.dev</a></div>
           <div><strong>Developer Contact:</strong> support@sola-air.dev</div>
         </div>
       </section>

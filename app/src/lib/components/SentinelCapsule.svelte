@@ -18,7 +18,7 @@
   let isExpanded = $state(false);
 </script>
 
-<div class="rounded-2xl bg-slate-950/90 border {isCircuitBreakerActive ? 'border-amber-500/40 shadow-[0_0_25px_rgba(245,158,11,0.15)]' : 'border-slate-800 shadow-lg'} p-3 sm:p-4 text-white font-sans backdrop-blur-xl transition-all">
+<div class="rounded-2xl bg-slate-950 dark:bg-white/90 border {isCircuitBreakerActive ? 'border-amber-500/40 shadow-[0_0_25px_rgba(245,158,11,0.15)]' : 'border-slate-800 shadow-lg'} p-3 sm:p-4 text-white font-sans backdrop-blur-xl transition-all">
   <div class="flex items-center justify-between gap-3">
     
     <!-- Left: Status & Flow Index -->
@@ -76,15 +76,15 @@
     <div transition:slide={{ duration: 180 }} class="mt-3.5 pt-3 border-t border-slate-800/80 flex flex-col gap-2.5">
       <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono">
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div class="text-[10px] text-slate-500 uppercase">Paint Overhead</div>
+          <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Paint Overhead</div>
           <div class="font-bold text-emerald-400 mt-0.5">&lt; 0.02ms</div>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div class="text-[10px] text-slate-500 uppercase">Rage Clicks</div>
+          <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Rage Clicks</div>
           <div class="font-bold {frictionCount > 0 ? 'text-amber-400' : 'text-slate-300'} mt-0.5">{frictionCount} Detected</div>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div class="text-[10px] text-slate-500 uppercase">Self-Heal Mode</div>
+          <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Self-Heal Mode</div>
           <div class="font-bold text-sky-400 mt-0.5">Cache &amp; Queue</div>
         </div>
       </div>

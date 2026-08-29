@@ -53,7 +53,7 @@
         cy="50" 
         r="28" 
         stroke="currentColor" 
-        class="text-amber-600/40 origin-center animate-spin-reverse"
+        class="text-amber-600 dark:text-amber-400/40 origin-center animate-spin-reverse"
         stroke-width="1" 
         stroke-dasharray="8 6"
       />
@@ -100,13 +100,13 @@
   <!-- Telemetry HUD Badge -->
   {#if showTelemetry}
     <div class="mt-4 flex flex-col items-center gap-1.5 text-center">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-amber-200/80 shadow-xs">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.02] backdrop-blur-md border border-amber-200 dark:border-amber-500/20/80 shadow-xs">
         <span class="w-2 h-2 rounded-full bg-amber-500 {isGenerating ? 'animate-ping' : ''}"></span>
-        <span class="text-xs font-mono font-bold text-slate-800 uppercase tracking-wider">
+        <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
           {isGenerating ? 'Building Reactive DOM Tree...' : isListening ? 'Listening on Intent Stream...' : 'Ambient Intent Engine Active'}
         </span>
       </div>
-      <span class="text-[11px] font-mono text-slate-500">
+      <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">
         3.2 kB Core • Zero-VDOM Native Signals
       </span>
     </div>

@@ -11,7 +11,7 @@
   const isPositive = $derived(config.trend && !config.trend.startsWith('-'));
 </script>
 
-<div class="group relative bg-white/90 backdrop-blur-xl border border-slate-200/80 rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-6px_rgba(14,165,233,0.12)] hover:border-sky-300/80 transition-all duration-200 overflow-hidden">
+<div class="group relative bg-white/90 dark:bg-white/[0.02] backdrop-blur-xl border border-slate-200/80 dark:border-white/[0.04] rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-6px_rgba(14,165,233,0.12)] hover:border-sky-300 dark:border-sky-500/30/80 transition-all duration-200 overflow-hidden">
   
   <!-- Subtle ambient corner glow -->
   <div class="absolute -right-8 -top-8 w-24 h-24 bg-gradient-to-br from-sky-400/10 to-violet-400/10 rounded-full blur-xl group-hover:scale-125 transition-transform duration-300 pointer-events-none"></div>
@@ -20,10 +20,10 @@
   <div class="flex justify-between items-center mb-3.5 relative z-10">
     <div class="flex items-center gap-2">
       <span class="w-1.5 h-1.5 rounded-full {isPositive ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
-      <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">{config.title}</span>
+      <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">{config.title}</span>
     </div>
     
-    <div class="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-500 group-hover:text-sky-600 group-hover:bg-sky-50 group-hover:border-sky-200 transition-colors">
+    <div class="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.04] flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:text-sky-600 dark:text-sky-400 group-hover:bg-sky-50 dark:bg-sky-500/10 group-hover:border-sky-200 dark:border-sky-500/20 transition-colors">
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         {#if config.icon === 'activity' || config.icon === 'trending-up'}
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
@@ -40,7 +40,7 @@
 
   <!-- Metric Value & Sparkline Area -->
   <div class="flex items-baseline justify-between mb-2 relative z-10">
-    <div class="text-3xl font-black text-slate-900 tracking-tight font-sans">
+    <div class="text-3xl font-black text-slate-900 dark:text-white tracking-tight font-sans">
       {config.value}
     </div>
 
@@ -62,8 +62,8 @@
 
   <!-- Trend Footer Pill -->
   {#if config.trend}
-    <div class="flex items-center gap-2 pt-1 border-t border-slate-100 relative z-10">
-      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold font-mono {isPositive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'}">
+    <div class="flex items-center gap-2 pt-1 border-t border-slate-100 dark:border-white/[0.04] relative z-10">
+      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold font-mono {isPositive ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20/60' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20/60'}">
         {#if isPositive}
           <svg class="w-3 h-3 stroke-current" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
         {:else}

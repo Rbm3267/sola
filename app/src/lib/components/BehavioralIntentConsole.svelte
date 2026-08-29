@@ -76,7 +76,7 @@
 <div class="w-full flex flex-col gap-6">
   
   <!-- Top Behavioral Vector Telemetry HUD -->
-  <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-sm text-slate-900 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
+  <div class="bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 sm:p-6 shadow-sm text-slate-900 dark:text-white flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
     
     <!-- Ambient Persona Subtle Glow -->
     <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl opacity-15 pointer-events-none {metrics.persona === 'sre_commander' ? 'bg-rose-500' : metrics.persona === 'finops_auditor' ? 'bg-violet-500' : 'bg-emerald-500'}"></div>
@@ -88,11 +88,11 @@
       <div>
         <div class="flex items-center gap-2">
           <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Dual-Driver Persona:</span>
-          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 text-rose-700 border-rose-200' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 text-violet-700 border-violet-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}">
+          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-500/20' : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'}">
             {metrics.persona === 'sre_commander' ? 'SRE Incident Commander' : metrics.persona === 'finops_auditor' ? 'FinOps Cloud Auditor' : 'Visual Explorer'}
           </span>
         </div>
-        <h3 class="text-lg font-black font-sans mt-0.5 text-slate-950">
+        <h3 class="text-lg font-black font-sans mt-0.5 text-slate-950 dark:text-slate-50">
           Dual-Driver ActionContract Protocol (Data + Behavior)
         </h3>
       </div>
@@ -100,39 +100,39 @@
 
     <!-- Live Telemetry Readout Chips -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto relative z-10 font-mono text-xs">
-      <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-0.5">
+      <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
         <span class="text-[10px] text-slate-400 font-bold uppercase">Typing Cadence</span>
-        <span class="text-amber-600 font-black">{metrics.typingVelocityCps} chars/sec</span>
+        <span class="text-amber-600 dark:text-amber-400 font-black">{metrics.typingVelocityCps} chars/sec</span>
       </div>
-      <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-0.5">
+      <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
         <span class="text-[10px] text-slate-400 font-bold uppercase">Hover Dwell</span>
-        <span class="text-sky-600 font-black">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
+        <span class="text-sky-600 dark:text-sky-400 font-black">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
       </div>
-      <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-0.5 col-span-2 sm:col-span-1">
+      <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5 col-span-2 sm:col-span-1">
         <span class="text-[10px] text-slate-400 font-bold uppercase">Rage Click Vector</span>
-        <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 font-black animate-pulse' : 'text-slate-700 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
+        <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 dark:text-rose-400 font-black animate-pulse' : 'text-slate-700 dark:text-slate-300 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
       </div>
     </div>
 
   </div>
 
   <!-- Interactive Test Playground Bar -->
-  <div class="bg-white border border-slate-200/90 rounded-3xl p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
-    <div class="flex-1 w-full flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 focus-within:border-amber-400 focus-within:bg-white transition-all">
+  <div class="bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex-1 w-full flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] rounded-2xl px-4 py-2.5 focus-within:border-amber-400 focus-within:bg-white dark:bg-white/[0.02] transition-all">
       <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       <input 
         type="text"
         bind:value={testInput}
         oninput={handleTyping}
         placeholder="Type fast here: 'kubectl drain node-iad1 --ignore-daemonsets' to trigger SRE Mode..."
-        class="w-full bg-transparent text-xs sm:text-sm font-mono text-slate-900 outline-none placeholder:text-slate-400"
+        class="w-full bg-transparent text-xs sm:text-sm font-mono text-slate-900 dark:text-white outline-none placeholder:text-slate-400"
       />
     </div>
     
     <div class="flex items-center gap-2 shrink-0">
       <button 
         onclick={resetState}
-        class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
+        class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-all cursor-pointer">
         Reset Vectors
       </button>
     </div>

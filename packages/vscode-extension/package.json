@@ -1,0 +1,36 @@
+{
+  "name": "sola-vscode",
+  "displayName": "Sola",
+  "description": "Language support and file icons for the Sola Intent Framework",
+  "version": "0.1.0",
+  "publisher": "SolaTeam",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "extensionDependencies": [
+    "svelte.svelte-vscode"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "sola",
+        "aliases": ["Sola", "sola"],
+        "extensions": [".sola"],
+        "icon": {
+          "light": "./icons/sola-icon.png",
+          "dark": "./icons/sola-icon.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sola",
+        "scopeName": "source.sola",
+        "path": "./syntaxes/sola.tmLanguage.json"
+      }
+    ]
+  }
+}

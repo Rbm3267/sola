@@ -122,19 +122,19 @@
   }
 </script>
 
-<div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col gap-6">
+<div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col gap-6">
   
   <!-- Generator Control Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-white/[0.04]">
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span class="text-xs font-mono font-bold text-slate-400 uppercase">On-Demand Technical Report Generator</span>
       </div>
-      <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+      <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
         {config?.title || 'System Architecture & Incident Report Engine'}
       </h3>
-      <p class="text-xs text-slate-500 font-mono mt-0.5">
+      <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
         Generate standalone HTML/Markdown executive summaries, RCA postmortems, and compliance briefs on demand.
       </p>
     </div>
@@ -155,13 +155,13 @@
   </div>
 
   <!-- Parameter Config Ribbon -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 text-xs font-mono">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/80 dark:bg-white/[0.04] p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.04] text-xs font-mono">
     <div class="flex flex-col gap-1.5">
-      <label for="report-template-select" class="text-slate-500 font-bold uppercase text-[10px]">Report Template:</label>
+      <label for="report-template-select" class="text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px]">Report Template:</label>
       <select 
         id="report-template-select"
         bind:value={reportType}
-        class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+        class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
         <option value="sre_postmortem">SRE Postmortem (Database Connection Pool Saturation)</option>
         <option value="finops_audit">Cloud FinOps Audit (Monthly Compute & SaaS Allocation)</option>
         <option value="security_audit">Zero-Trust & Data Enclave Compliance Architecture Brief</option>
@@ -169,11 +169,11 @@
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label for="target-env-select" class="text-slate-500 font-bold uppercase text-[10px]">Target Infrastructure / Environment:</label>
+      <label for="target-env-select" class="text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px]">Target Infrastructure / Environment:</label>
       <select 
         id="target-env-select"
         bind:value={environment}
-        class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+        class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
         <option value="production_us_east">Production Cluster (us-east-1 / High-Availability)</option>
         <option value="staging_eu_central">Staging Verification (eu-central-1)</option>
         <option value="edge_cloudflare">Global Edge Workers (Edge CDN)</option>
@@ -183,7 +183,7 @@
 
   <!-- Progress Bar when generating -->
   {#if isGenerating}
-    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+    <div class="w-full bg-slate-100 dark:bg-white/[0.08] rounded-full h-2 overflow-hidden">
       <div class="bg-emerald-500 h-2 transition-all duration-200" style="width: {progress}%"></div>
     </div>
   {/if}
@@ -194,9 +194,9 @@
       <ReportDocViewer config={generatedReport} />
     </div>
   {:else if !isGenerating}
-    <div class="p-8 border-2 border-dashed border-slate-200 rounded-2xl text-center flex flex-col items-center gap-2">
+    <div class="p-8 border-2 border-dashed border-slate-200 dark:border-white/[0.04] rounded-2xl text-center flex flex-col items-center gap-2">
       <svg class="w-8 h-8 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <p class="text-xs font-mono text-slate-500 font-bold">Select a template above and click "Generate Technical Report"</p>
+      <p class="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">Select a template above and click "Generate Technical Report"</p>
       <p class="text-[10px] font-mono text-slate-400">Produces rich, self-contained HTML/Markdown documents with export buttons.</p>
     </div>
   {/if}

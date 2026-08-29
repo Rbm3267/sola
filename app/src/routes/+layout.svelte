@@ -2,13 +2,13 @@
 	import 'virtual:uno.css';
 	import '../app.css';
 	import { onMount } from 'svelte';
-	import { themeState, updateTheme } from '$lib/theme.svelte';
+	import { theme } from '$lib/stores/theme.svelte';
 	import MobileHudCapsule from '$lib/components/MobileHudCapsule.svelte';
 
 	let { children } = $props();
 
 	onMount(() => {
-		updateTheme(themeState.primary);
+		theme.init();
 	});
 </script>
 

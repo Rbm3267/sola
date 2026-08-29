@@ -108,7 +108,7 @@
     <div class="flex flex-col gap-6 border-b border-slate-200/80 pb-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-mono font-bold mb-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-bold mb-3">
             <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
             <span>Enterprise Integration & Component Matrix</span>
           </div>
@@ -163,7 +163,7 @@
           <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
             Integrations & Surfaces ({filteredIntegrations.length})
           </span>
-          <span class="text-[10px] font-mono bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
+          <span class="text-[10px] font-mono bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">
             Live Protocol Bindings
           </span>
         </div>
@@ -178,8 +178,8 @@
                 <div class="flex items-center gap-2">
                   <span class="text-xs sm:text-sm font-bold {selectedIntegration.id === item.id ? 'text-amber-950 font-black' : 'text-slate-800'} font-mono truncate">{item.name}</span>
                 </div>
-                <div class="text-[11px] {selectedIntegration.id === item.id ? 'text-amber-800/80' : 'text-slate-500'} line-clamp-1 mt-0.5">{item.description}</div>
-                <div class="text-[10px] font-mono text-amber-700/80 truncate mt-1">
+                <div class="text-[11px] {selectedIntegration.id === item.id ? 'text-amber-800 dark:text-amber-300/80' : 'text-slate-500'} line-clamp-1 mt-0.5">{item.description}</div>
+                <div class="text-[10px] font-mono text-amber-700 dark:text-amber-400/80 truncate mt-1">
                   <code>{item.protocolUri}</code>
                 </div>
               </div>
@@ -198,7 +198,7 @@
         <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2.5 mb-1">
-              <span class="text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-full">{selectedIntegration.badge}</span>
+              <span class="text-xs font-mono font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 px-2.5 py-0.5 rounded-full">{selectedIntegration.badge}</span>
               <span class="text-xs font-mono text-slate-500">• {selectedIntegration.primaryComponent}</span>
             </div>
             <h2 class="text-lg sm:text-xl font-black text-slate-900 font-mono truncate">

@@ -56,37 +56,37 @@
       case 'warning': return 'border-amber-500/40 hover:border-amber-500';
       case 'critical': return 'border-rose-500/50 hover:border-rose-500';
       case 'draining': return 'border-indigo-500/30 hover:border-indigo-500';
-      case 'idle': return 'border-slate-200';
+      case 'idle': return 'border-slate-200 dark:border-white/[0.04]';
     }
   }
 </script>
 
-<div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all">
+<div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all">
   
   <!-- Header -->
   <div class="flex items-start justify-between gap-4 mb-6">
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <h3 class="text-base font-black text-slate-950 tracking-tight font-mono">{config.title || 'Cluster Topology Matrix'}</h3>
+        <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">{config.title || 'Cluster Topology Matrix'}</h3>
       </div>
-      <p class="text-xs text-slate-500">{config.subtitle || `${nodes.length} Nodes Distributed Across 6 Global Regions`}</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400">{config.subtitle || `${nodes.length} Nodes Distributed Across 6 Global Regions`}</p>
     </div>
 
     <!-- Aggregate Status Pills -->
     <div class="flex items-center gap-1.5 flex-wrap justify-end">
-      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[11px] font-mono font-bold">
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20/80 text-emerald-800 dark:text-emerald-300 text-[11px] font-mono font-bold">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
         {nominalCount} Nominal
       </span>
       {#if warningCount > 0}
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-[11px] font-mono font-bold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-[11px] font-mono font-bold">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
           {warningCount} Degraded
         </span>
       {/if}
       {#if criticalCount > 0}
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200/80 text-rose-900 text-[11px] font-mono font-bold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20/80 text-rose-900 text-[11px] font-mono font-bold">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
           {criticalCount} Critical
         </span>
@@ -101,18 +101,18 @@
         type="button"
         onmouseenter={() => hoveredNode = node}
         onmouseleave={() => hoveredNode = null}
-        class="relative flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50/90 border transition-all cursor-pointer group hover:bg-slate-100/90 hover:scale-[1.03] {getBorderColor(node.status)}">
+        class="relative flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border transition-all cursor-pointer group hover:bg-slate-100/90 dark:bg-white/[0.08] hover:scale-[1.03] {getBorderColor(node.status)}">
         
         <!-- Status Node Pip -->
         <div class="relative flex items-center justify-center mb-2">
           <span class="w-3.5 h-3.5 rounded-lg shadow-sm {getStatusColor(node.status)}"></span>
         </div>
 
-        <span class="text-[11px] font-mono font-bold text-slate-800 truncate max-w-full text-center">
+        <span class="text-[11px] font-mono font-bold text-slate-800 dark:text-slate-200 truncate max-w-full text-center">
           {node.id}
         </span>
         
-        <span class="text-[10px] font-mono text-slate-600 truncate max-w-full">
+        <span class="text-[10px] font-mono text-slate-600 dark:text-slate-400 truncate max-w-full">
           {node.load !== undefined ? `${node.load}% load` : (node.latency || node.status)}
         </span>
       </button>
@@ -145,7 +145,7 @@
       </div>
     </div>
   {:else}
-    <div class="flex items-center justify-between text-[11px] font-mono text-slate-600 pt-2 border-t border-slate-100">
+    <div class="flex items-center justify-between text-[11px] font-mono text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-white/[0.04]">
       <span>Zero-VDOM Cluster Canvas</span>
       <span>Hover a node for live APM telemetry</span>
     </div>

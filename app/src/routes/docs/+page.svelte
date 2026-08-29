@@ -384,32 +384,32 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
     '}';;
 </script>
 
-<div class="min-h-screen bg-[#fafafa] text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900 pb-20">
+<div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-white font-sans selection:bg-amber-100 dark:bg-amber-500/20 selection:text-amber-900 pb-20">
   <Navbar />
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     
     <!-- AI Documentation Assistant Bar -->
-    <div class="mb-12 bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs relative overflow-hidden">
+    <div class="mb-12 bg-white dark:bg-white/[0.02] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-white/[0.04] shadow-xs relative overflow-hidden">
       <div class="relative z-10 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200/60 text-slate-800 text-xs font-mono font-medium mb-3">
-          <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-xs font-mono font-medium mb-3">
+          <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           <span>Sola API & Runtime Specification</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-[-0.03em] mb-2 font-sans">
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-[-0.03em] mb-2 font-sans">
           Documentation that explains itself.
         </h2>
-        <p class="text-slate-500 text-xs sm:text-sm mb-6 leading-relaxed">
+        <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed">
           Ask any architectural or syntax question. Sola will generate live working examples on the fly.
         </p>
 
-        <form class="flex items-center gap-3 bg-slate-50 border border-slate-200/90 p-1.5 rounded-2xl" onsubmit={(e) => { e.preventDefault(); askSolaAi(); }}>
+        <form class="flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] p-1.5 rounded-2xl" onsubmit={(e) => { e.preventDefault(); askSolaAi(); }}>
           <input 
             id="ai-ask-input"
             type="text" 
             bind:value={askQuery}
             placeholder="e.g. 'How do I bind Google Sheets with $data?' or 'Explain zero-VDOM reactivity'"
-            class="flex-1 bg-transparent px-4 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+            class="flex-1 bg-transparent px-4 py-2 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none"
           />
           <button 
             type="submit" 
@@ -427,7 +427,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
         </form>
 
         {#if aiAnswer}
-          <div class="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono text-slate-800 whitespace-pre-wrap leading-relaxed shadow-xs">
+          <div class="mt-6 p-6 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] rounded-2xl text-xs font-mono text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed shadow-xs">
             {aiAnswer}
           </div>
         {/if}
@@ -438,7 +438,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- Table of Contents Sidebar -->
-      <aside class="lg:col-span-4 sticky top-24 bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-5 shadow-sm">
+      <aside class="lg:col-span-4 sticky top-24 bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] rounded-3xl p-5 shadow-sm">
         <div class="text-xs font-mono font-medium text-slate-400 px-3 py-2">
           <span>DOCUMENTATION INDEX</span>
         </div>
@@ -449,7 +449,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               {#each grp.items as item}
                 <button 
                   onclick={() => activeSection = item.id}
-                  class="w-full text-left px-3 py-2 rounded-xl text-xs transition-all duration-150 cursor-pointer flex items-center justify-between {activeSection === item.id ? 'bg-amber-500/10 text-amber-950 font-semibold shadow-2xs border border-amber-500/10' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'}">
+                  class="w-full text-left px-3 py-2 rounded-xl text-xs transition-all duration-150 cursor-pointer flex items-center justify-between {activeSection === item.id ? 'bg-amber-500/10 text-amber-950 font-semibold shadow-2xs border border-amber-500/10' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:bg-white/[0.04] hover:text-slate-900 dark:text-white border border-transparent'}">
                   <span>{item.title}</span>
                   {#if activeSection === item.id}
                     <span class="w-1 h-3.5 rounded-full bg-amber-500"></span>
@@ -462,15 +462,15 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
       </aside>
 
       <!-- Main Content Reader -->
-      <main class="lg:col-span-8 bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-3xl p-8 sm:p-10 shadow-sm flex flex-col gap-8">
+      <main class="lg:col-span-8 bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] rounded-3xl p-8 sm:p-10 shadow-sm flex flex-col gap-8">
         
         {#if activeSection === 'quickstart'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Setup Guide</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Quickstart & Installation</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">Quickstart & Installation</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
               Get up and running with Sola in under 60 seconds using the automated CLI initializer or manual Vite integration.
             </p>
 
@@ -479,8 +479,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               <div class="flex gap-4 items-start">
                 <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">1</div>
                 <div class="flex-1">
-                  <h3 class="font-bold text-slate-950 text-sm font-mono mb-1">Scaffold New Application</h3>
-                  <p class="text-xs text-slate-600 mb-3">Create a pre-configured project with Vite, Sola compiler plugins, and Tailwind support:</p>
+                  <h3 class="font-bold text-slate-950 dark:text-white text-sm font-mono mb-1">Scaffold New Application</h3>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Create a pre-configured project with Vite, Sola compiler plugins, and Tailwind support:</p>
                   <div class="relative group">
                     <div class="bg-slate-950 text-amber-400 p-4 rounded-xl font-mono text-xs shadow-inner flex items-center justify-between border border-slate-800">
                       <code>$ {scaffoldCmd}</code>
@@ -502,8 +502,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               <div class="flex gap-4 items-start">
                 <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">2</div>
                 <div class="flex-1">
-                  <h3 class="font-bold text-slate-950 text-sm font-mono mb-1">Install Monorepo Packages (Existing App)</h3>
-                  <p class="text-xs text-slate-600 mb-3">Add Sola runtime and compiler directly to any existing Vite frontend repository:</p>
+                  <h3 class="font-bold text-slate-950 dark:text-white text-sm font-mono mb-1">Install Monorepo Packages (Existing App)</h3>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Add Sola runtime and compiler directly to any existing Vite frontend repository:</p>
                   <div class="relative group">
                     <div class="bg-slate-950 text-amber-400 p-4 rounded-xl font-mono text-xs shadow-inner flex items-center justify-between border border-slate-800">
                       <code>$ {installCmd}</code>
@@ -525,8 +525,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               <div class="flex gap-4 items-start">
                 <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">3</div>
                 <div class="flex-1">
-                  <h3 class="font-bold text-slate-950 text-sm font-mono mb-1">Register Vite Plugin</h3>
-                  <p class="text-xs text-slate-600 mb-3">Add the AST compiler hook into <code>vite.config.js</code> to handle <code>.sola</code> file resolution:</p>
+                  <h3 class="font-bold text-slate-950 dark:text-white text-sm font-mono mb-1">Register Vite Plugin</h3>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Add the AST compiler hook into <code>vite.config.js</code> to handle <code>.sola</code> file resolution:</p>
                   <div class="relative group">
                     <pre class="bg-slate-950 text-amber-200 p-4 rounded-xl font-mono text-xs overflow-x-auto shadow-inner border border-slate-800"><code>{viteConfigCode}</code></pre>
                     <button 
@@ -546,32 +546,32 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
         {:else if activeSection === 'syntax'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Anatomy of .sola</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">The .sola Component Format</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">The .sola Component Format</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
               A single-file <code>.sola</code> component encapsulates logic, HTML template structure, and scoped CSS into a zero-VDOM native ES module.
             </p>
 
             <!-- 3-Part Architecture Breakdown Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div class="p-4 border border-slate-200 rounded-2xl bg-amber-500/5 border-amber-500/20">
+              <div class="p-4 border border-slate-200 dark:border-white/[0.04] rounded-2xl bg-amber-500/5 border-amber-500/20">
                 <span class="text-[10px] font-mono font-bold text-amber-900 uppercase">Part 1</span>
-                <h4 class="font-mono font-bold text-slate-900 text-xs mt-1 mb-1">&lt;script&gt; Block</h4>
-                <p class="text-[11px] text-slate-600 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>), AI macros (<code>$intent</code>), and event handlers.</p>
+                <h4 class="font-mono font-bold text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt; Block</h4>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>), AI macros (<code>$intent</code>), and event handlers.</p>
               </div>
 
-              <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50">
-                <span class="text-[10px] font-mono font-bold text-slate-500 uppercase">Part 2</span>
-                <h4 class="font-mono font-bold text-slate-900 text-xs mt-1 mb-1">HTML Template</h4>
-                <p class="text-[11px] text-slate-600 leading-normal">Declarative markup with fine-grained expression bindings <code>&#123;count&#125;</code> and logic blocks <code>&#123;#if&#125;</code>.</p>
+              <div class="p-4 border border-slate-200 dark:border-white/[0.04] rounded-2xl bg-slate-50 dark:bg-white/[0.04]">
+                <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
+                <h4 class="font-mono font-bold text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Declarative markup with fine-grained expression bindings <code>&#123;count&#125;</code> and logic blocks <code>&#123;#if&#125;</code>.</p>
               </div>
 
-              <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50">
-                <span class="text-[10px] font-mono font-bold text-slate-500 uppercase">Part 3</span>
-                <h4 class="font-mono font-bold text-slate-900 text-xs mt-1 mb-1">&lt;style&gt; Scoped CSS</h4>
-                <p class="text-[11px] text-slate-600 leading-normal">Component styles are automatically hashed per-selector at compile time (zero global bleed).</p>
+              <div class="p-4 border border-slate-200 dark:border-white/[0.04] rounded-2xl bg-slate-50 dark:bg-white/[0.04]">
+                <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
+                <h4 class="font-mono font-bold text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt; Scoped CSS</h4>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Component styles are automatically hashed per-selector at compile time (zero global bleed).</p>
               </div>
             </div>
 
@@ -594,24 +594,24 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
             </div>
 
             <!-- Live Editable Component Sandbox -->
-            <div class="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-sm flex flex-col gap-6">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-3xl p-6 shadow-sm flex flex-col gap-6">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.04] pb-4">
                 <div class="flex items-center gap-2">
                   <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
-                  <h3 class="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider">Live Sandbox Preview</h3>
+                  <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">Live Sandbox Preview</h3>
                 </div>
-                <span class="text-[10px] font-mono bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full font-medium">Synchronized DOM</span>
+                <span class="text-[10px] font-mono bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/[0.04] px-2.5 py-0.5 rounded-full font-medium">Synchronized DOM</span>
               </div>
 
               <!-- Live Playground Sandbox Controls -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                <div class="flex flex-col gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                <div class="flex flex-col gap-3 bg-slate-50 dark:bg-white/[0.04] p-4 rounded-2xl border border-slate-200 dark:border-white/[0.04]">
                   <label for="sandbox-metric-title" class="block text-[10px] font-mono font-bold text-slate-400 uppercase">Live Card Title</label>
                   <input 
                     id="sandbox-metric-title"
                     type="text" 
                     bind:value={sandboxTitle}
-                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-medium focus:outline-none focus:border-amber-400"
+                    class="w-full bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-xs text-slate-950 dark:text-white font-medium focus:outline-none focus:border-amber-400"
                   />
 
                   <label for="sandbox-metric-val" class="block text-[10px] font-mono font-bold text-slate-400 uppercase mt-2">Live Value</label>
@@ -619,12 +619,12 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
                     id="sandbox-metric-val"
                     type="text" 
                     bind:value={sandboxValue}
-                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-950 font-medium focus:outline-none focus:border-amber-400"
+                    class="w-full bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-xs text-slate-950 dark:text-white font-medium focus:outline-none focus:border-amber-400"
                   />
                 </div>
 
                 <!-- Actual Live Mounted Rendering -->
-                <div class="flex flex-col items-center justify-center p-4 border border-slate-200/80 rounded-2xl bg-slate-50/50 min-h-[140px]">
+                <div class="flex flex-col items-center justify-center p-4 border border-slate-200 dark:border-white/[0.04] rounded-2xl bg-slate-50 dark:bg-white/[0.04] min-h-[140px]">
                   <DataCard config={{ title: sandboxTitle, value: sandboxValue, trend: "+12.4% vs baseline", icon: "activity" }} />
                 </div>
               </div>
@@ -634,15 +634,15 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
         {:else if activeSection === 'api-reactivity'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Developer Reference</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Core Reactivity API</h1>
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">Core Reactivity API</h1>
             
             <!-- createSignal -->
-            <div class="border-b border-slate-100 pb-6 mb-6">
-              <h2 class="text-lg font-bold text-slate-900 font-mono">createSignal(initialValue)</h2>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+            <div class="border-b border-slate-100 dark:border-white/[0.04] pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white font-mono">createSignal(initialValue)</h2>
+              <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
                 Generates a reactive local state tuple. Reading invoking the getter subscribes current running effects. Calling setter triggers reactive execution.
               </p>
               <div class="relative group mt-3">
@@ -660,9 +660,9 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
             </div>
 
             <!-- createDerived -->
-            <div class="border-b border-slate-100 pb-6 mb-6">
-              <h2 class="text-lg font-bold text-slate-900 font-mono">createDerived(fn)</h2>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+            <div class="border-b border-slate-100 dark:border-white/[0.04] pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white font-mono">createDerived(fn)</h2>
+              <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
                 Establishes derived values that automatically track dependency changes. Computed value caches and recalculates only when dependencies mutate.
               </p>
               <div class="relative group mt-3">
@@ -680,9 +680,9 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
             </div>
 
             <!-- createEffect -->
-            <div class="border-b border-slate-100 pb-6 mb-6">
-              <h2 class="text-lg font-bold text-slate-900 font-mono">createEffect(callback)</h2>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+            <div class="border-b border-slate-100 dark:border-white/[0.04] pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white font-mono">createEffect(callback)</h2>
+              <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
                 Defines runtime side effects. Fires immediately on initialization and registers subscriptions on getters accessed inside callback.
               </p>
               <div class="relative group mt-3">
@@ -701,8 +701,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
             <!-- mount -->
             <div>
-              <h2 class="text-lg font-bold text-slate-900 font-mono">Component Mount Instantiation</h2>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white font-mono">Component Mount Instantiation</h2>
+              <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
                 Compiled Sola components export a default function executing mount. Arguments require target container node and properties schema map. Returns an unmount handler function.
               </p>
               <div class="relative group mt-3">
@@ -723,15 +723,15 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
         {:else if activeSection === 'api-macros'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Compiler Macros</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Sola Compiler Macros</h1>
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">Sola Compiler Macros</h1>
 
             <!-- $intent -->
-            <div class="border-b border-slate-100 pb-6 mb-6">
-              <h2 class="text-lg font-bold text-slate-900 font-mono">$intent(prompt, options)</h2>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+            <div class="border-b border-slate-100 dark:border-white/[0.04] pb-6 mb-6">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white font-mono">$intent(prompt, options)</h2>
+              <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
                 Declared in script sections to resolve plain-text prompts into dynamically bound UI. Transpiles to core execution handler that polls Gemini AST models.
               </p>
               <div class="relative group mt-3">
@@ -750,8 +750,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
             <!-- $data -->
             <div>
-              <h2 class="text-lg font-bold text-slate-900 font-mono">$data(sourceUri, options)</h2>
-              <p class="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white font-mono">$data(sourceUri, options)</h2>
+              <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
                 Binds properties to remote live datasources. Transpiles to WebSocket signals polling target proxy configurations inside Sola Relay.
               </p>
               <div class="relative group mt-3">
@@ -771,16 +771,16 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
         {:else if activeSection === 'relay-saas'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>SaaS Production Guide</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Sola Relay SaaS Deployment</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">Sola Relay SaaS Deployment</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
               To utilize Sola inside a production multi-tenant SaaS application, deploy Sola Relay close to your target databases and expose it via a secure reverse proxy with SSL termination.
             </p>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Docker Deployment (Containerization)</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm font-mono mt-6 mb-2">1. Docker Deployment (Containerization)</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
               Orchestrate the Sola Relay server using a lightweight Node.js Docker container:
             </p>
             <div class="relative group mb-6">
@@ -796,8 +796,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               </button>
             </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. Reverse Proxy SSL Routing (Nginx)</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm font-mono mt-6 mb-2">2. Reverse Proxy SSL Routing (Nginx)</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
               Map public requests securely to Sola Relay via an Nginx block with WebSockets upgrades support:
             </p>
             <div class="relative group mb-6">
@@ -813,8 +813,8 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               </button>
             </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">3. Datasources Configuration</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm font-mono mt-6 mb-2">3. Datasources Configuration</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
               Use environment variables inside <code>relay.json</code> to load database passwords securely at runtime:
             </p>
             <div class="relative group mb-6">
@@ -833,11 +833,11 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
         {:else if activeSection === 'engine'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Architecture & Runtime</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Compiler & Zero-VDOM Engine</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">Compiler & Zero-VDOM Engine</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
               Sola compiles template nodes into <strong>direct native DOM updates</strong> instead of running Virtual DOM diffing routines:
             </p>
             <div class="relative group mb-6">
@@ -853,28 +853,28 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               </button>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
-                <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">3.2 kB Core Bundle</h4>
-                <p class="text-[11px] text-slate-500 leading-normal">Zero third-party dependencies. Instant time-to-interactive on low-power devices.</p>
+              <div class="p-5 border border-slate-200 dark:border-white/[0.04] rounded-2xl bg-slate-50 dark:bg-white/[0.04]">
+                <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.2 kB Core Bundle</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">Zero third-party dependencies. Instant time-to-interactive on low-power devices.</p>
               </div>
-              <div class="p-5 border border-slate-200/90 rounded-2xl bg-slate-50/80">
-                <h4 class="font-bold text-slate-900 text-xs mb-1 font-mono">Fine-Grained Signals</h4>
-                <p class="text-[11px] text-slate-500 leading-normal">Only the precise text node or attribute that changed is modified in the DOM.</p>
+              <div class="p-5 border border-slate-200 dark:border-white/[0.04] rounded-2xl bg-slate-50 dark:bg-white/[0.04]">
+                <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">Fine-Grained Signals</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">Only the precise text node or attribute that changed is modified in the DOM.</p>
               </div>
             </div>
           </div>
 
         {:else if activeSection === 'llm-spec'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>AI Integration</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">LLM & AI Agent Prompting Spec</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6 font-sans">
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">LLM & AI Agent Prompting Spec</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-sans">
               Provide this exact system prompt context block to <strong>Claude 3.5/3.7</strong>, <strong>ChatGPT (GPT-4o)</strong>, or <strong>Gemini 2.5/3.0</strong> so any LLM can write valid Sola components, signals, and macro bindings without hallucinating:
             </p>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">Copyable LLM Context Block</h3>
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm font-mono mt-6 mb-2">Copyable LLM Context Block</h3>
             <div class="relative group mb-8">
               <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{llmSystemPrompt}</code></pre>
               <button 
@@ -891,15 +891,15 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
 
         {:else if activeSection === 'host-embedding'}
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-[10px] font-mono font-bold mb-3 uppercase tracking-wider">
               <span>Embedding Guide</span>
             </div>
-            <h1 class="text-3xl font-black text-slate-950 tracking-[-0.03em] mb-4">Enterprise Platform & React Embedding</h1>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6 font-sans">
+            <h1 class="text-3xl font-black text-slate-950 dark:text-white tracking-[-0.03em] mb-4">Enterprise Platform & React Embedding</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-sans">
               Because Sola compiles into pure, fine-grained DOM JavaScript (<code>~3.2 kB</code>), you can drop compiled Sola components directly into Enterprise Platform widgets or React applications without running a backend server or Docker container.
             </p>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">1. Enterprise Platform Service Portal Widget Embedding</h3>
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm font-mono mt-6 mb-2">1. Enterprise Platform Service Portal Widget Embedding</h3>
             <div class="relative group mb-8">
               <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{serviceNowEmbedCode}</code></pre>
               <button 
@@ -913,7 +913,7 @@ CMD ["node", "./src/cli.js", "--config", "./relay.json", "--port", "4040"]`;
               </button>
             </div>
 
-            <h3 class="font-bold text-slate-900 text-sm font-mono mt-6 mb-2">2. React Application Embedding (useEffect Hook)</h3>
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm font-mono mt-6 mb-2">2. React Application Embedding (useEffect Hook)</h3>
             <div class="relative group mb-8">
               <pre class="bg-slate-900 text-amber-200 p-6 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{reactEmbedCode}</code></pre>
               <button 

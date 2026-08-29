@@ -78,6 +78,10 @@ Available Primitives:
    config: { incidentId: string, title: string, severity: 'P1 - Critical' | 'P2 - High' | 'P3 - Moderate', slaRemainingMin: number, blastRadius: string, playbooks: Array<{ id: string, title: string, action: string, automated?: boolean }> }
 10. 'SchemaInspector': Database table schema explorer with types, row counts, and foreign key relations.
    config: { table: string, rowCount?: string, sizeBytes?: string, columns: Array<{ name: string, type: string, isPrimary?: boolean, isNullable?: boolean, foreignKey?: string }> }
+11. 'KineticNodeGraph': Highly dynamic physics-based node cluster simulation graph.
+   config: { nodes: Array<{ id: string, group: number, radius: number, color: string }>, links: Array<{ source: string, target: string, value: number }> }
+12. 'HapticRadialDial': Interactive rotary dial input.
+   config: { value: number, min: number, max: number }
 
 Output format: Return ONLY a JSON Array of component objects with an optional colSpan (1, 2, or 3).`;
 

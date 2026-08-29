@@ -38,35 +38,35 @@
   }
 </script>
 
-<section class="w-full py-16 border-t border-slate-200/80 relative">
+<section class="w-full py-16 border-t border-slate-200/80 dark:border-white/[0.04] relative">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     
     <!-- Section Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-xs font-mono font-bold mb-3">
           <span>$data • Zero-Backend Data Surfacing</span>
         </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-[-0.03em]">
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-[-0.03em]">
           Connect any data source. In 1 line of code.
         </h2>
-        <p class="text-slate-600 text-base max-w-xl mt-2 leading-relaxed">
+        <p class="text-slate-600 dark:text-slate-400 text-base max-w-xl mt-2 leading-relaxed">
           Whether you're building a <strong>financial operations dashboard from Google Sheets</strong> or an <strong>infrastructure telemetry monitor from PostgreSQL</strong>, Sola turns raw data into reactive luxury UI.
         </p>
       </div>
 
       <!-- Segmented Mode Switcher -->
-      <div class="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/90 self-start md:self-auto shadow-xs">
+      <div class="flex items-center gap-1.5 bg-slate-100/90 dark:bg-white/[0.08] p-1.5 rounded-2xl border border-slate-200/90 dark:border-white/[0.04] self-start md:self-auto shadow-xs">
         <button 
           onclick={() => activeMode = 'sheets'}
-          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'sheets' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
-          <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'sheets' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white'}">
+          <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
           <span>Google Sheets Relay</span>
         </button>
         <button 
           onclick={() => activeMode = 'postgres'}
-          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'postgres' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'}">
-          <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+          class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 {activeMode === 'postgres' ? 'bg-amber-500/10 text-amber-950 border border-amber-500/25 shadow-xs font-black' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white'}">
+          <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
           <span>PostgreSQL Cluster</span>
         </button>
       </div>
@@ -121,7 +121,7 @@
       </div>
 
       <!-- Live Rendered UI Column -->
-      <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between relative overflow-hidden">
+      <div class="lg:col-span-7 bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between relative overflow-hidden">
         
         <div>
           <div class="flex items-center justify-between mb-6">
@@ -134,12 +134,12 @@
               <button 
                 onclick={simulateNewEntry}
                 disabled={isSimulatingUpdate}
-                class="text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-3.5 py-2 rounded-xl hover:bg-amber-100 transition-all cursor-pointer flex items-center gap-1.5">
+                class="text-xs font-mono font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 px-3.5 py-2 rounded-xl hover:bg-amber-100 dark:bg-amber-500/20 transition-all cursor-pointer flex items-center gap-1.5">
                 {#if isSimulatingUpdate}
                   <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
                   <span>Syncing...</span>
                 {:else}
-                  <svg class="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   <span>Simulate Sheet Row Insert</span>
                 {/if}
               </button>
@@ -196,9 +196,9 @@
           </div>
         </div>
 
-        <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-400">
+        <div class="mt-8 pt-4 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-400">
           <span>Zero VDOM • Direct DOM Mutator</span>
-          <span class="text-slate-600 font-bold">Latency: 0.2ms</span>
+          <span class="text-slate-600 dark:text-slate-400 font-bold">Latency: 0.2ms</span>
         </div>
 
       </div>

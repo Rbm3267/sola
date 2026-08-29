@@ -37,15 +37,15 @@
   }
 </script>
 
-<div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
   
   <!-- Header -->
   <div class="w-full flex items-center justify-between mb-4">
     <div class="flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-      <h3 class="text-xs font-mono font-black text-slate-900 uppercase tracking-wider">{config.title || 'Rotary Touch Controller'}</h3>
+      <h3 class="text-xs font-mono font-black text-slate-900 dark:text-white uppercase tracking-wider">{config.title || 'Rotary Touch Controller'}</h3>
     </div>
-    <span class="text-[10px] font-mono bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
+    <span class="text-[10px] font-mono bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 px-2 py-0.5 rounded-full font-bold">
       1-Thumb Rotary
     </span>
   </div>
@@ -92,12 +92,12 @@
 
     <!-- Center Display -->
     <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-      <span class="text-3xl font-black text-slate-950 font-mono tracking-tight">{dialValue}{config.unit || '%'}</span>
-      <span class="text-[10px] font-mono text-slate-500 mt-0.5">Drag to adjust</span>
+      <span class="text-3xl font-black text-slate-950 dark:text-slate-50 font-mono tracking-tight">{dialValue}{config.unit || '%'}</span>
+      <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">Drag to adjust</span>
     </div>
 
   </div>
 
-  <p class="text-xs text-slate-500 mt-2 font-mono">{config.subtext || 'Precision rotary adjustment with 0.2ms microtask reactivity'}</p>
+  <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono">{config.subtext || 'Precision rotary adjustment with 0.2ms microtask reactivity'}</p>
 
 </div>

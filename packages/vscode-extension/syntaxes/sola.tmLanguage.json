@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Sola",
+  "scopeName": "source.sola",
+  "patterns": [
+    {
+      "include": "source.svelte"
+    }
+  ]
+}

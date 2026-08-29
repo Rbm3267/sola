@@ -168,22 +168,22 @@
 <div class="flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8 pb-12 relative w-full max-w-full overflow-x-hidden">
 
   <!-- Floating Announcement Pill -->
-  <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] mb-8 hover:border-amber-300 hover:shadow-[0_4px_12px_rgba(245,158,11,0.1)] transition-all duration-200 group cursor-pointer text-decoration-none">
+  <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.04)] mb-8 hover:border-amber-300 dark:border-amber-500/30 hover:shadow-[0_4px_12px_rgba(245,158,11,0.1)] transition-all duration-200 group cursor-pointer text-decoration-none">
     <span class="flex h-2 w-2 relative">
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
     </span>
-    <span class="text-xs font-mono font-bold text-slate-800 tracking-tight">Sola v0.9 • Zero-VDOM Intent Runtime</span>
-    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-600 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 tracking-tight">Sola v0.9 • Zero-VDOM Intent Runtime</span>
+    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-600 dark:text-amber-400 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   </a>
 
   <!-- Main Headline -->
-  <h1 class="text-3xl sm:text-5xl md:text-7xl font-black text-slate-900 tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
+  <h1 class="text-3xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
     UI that builds from <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">intent</span>.
   </h1>
 
   <!-- Subheadline -->
-  <p class="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal px-2">
+  <p class="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal px-2">
     The zero-VDOM ambient runtime for the agentic web. Single-file declarative components that compile natural language into fine-grained native DOM signals with 0 kB framework bloat.
   </p>
 
@@ -191,7 +191,7 @@
   <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 w-full sm:w-auto justify-center px-4">
     <a 
       href="/studio" 
-      class="px-6 py-2.5 rounded-full font-bold transition-all duration-200 bg-slate-950 hover:bg-slate-800 text-white shadow-md hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">
+      class="px-6 py-2.5 rounded-full font-bold transition-all duration-200 bg-slate-950 dark:bg-white hover:bg-slate-800 text-white shadow-md hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">
       <span>Launch Studio</span>
       <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
@@ -205,7 +205,7 @@
     </a>
     
     <!-- Interactive CLI Copy Box -->
-    <div class="px-5 py-2.5 rounded-full border border-slate-200/90 bg-white/90 backdrop-blur-md text-slate-800 font-mono text-xs flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
+    <div class="px-5 py-2.5 rounded-full border border-slate-200/90 dark:border-white/[0.04] bg-white/90 dark:bg-white/[0.02] backdrop-blur-md text-slate-800 dark:text-slate-200 font-mono text-xs flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
       <div class="flex items-center gap-2 select-all">
         <span class="text-amber-500 font-semibold select-none">$</span>
         <span>npm create sola@latest</span>
@@ -213,10 +213,10 @@
       <button 
         onclick={copyCliCommand}
         aria-label="Copy CLI command" 
-        class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1 rounded-full transition-all cursor-pointer flex items-center gap-1 text-[10px] font-sans font-medium">
+        class="text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/[0.08] p-1 rounded-full transition-all cursor-pointer flex items-center gap-1 text-[10px] font-sans font-medium">
         {#if copied}
-          <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-emerald-600 font-mono">Copied!</span>
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="text-emerald-600 dark:text-emerald-400 font-mono">Copied!</span>
         {:else}
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         {/if}
@@ -225,7 +225,7 @@
   </div>
 
   <!-- Micro Specs Line -->
-  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-500 mb-10 sm:mb-12 px-2">
+  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mb-10 sm:mb-12 px-2">
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 3.2 kB Core</span>
     <span>•</span>
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 0 Dependencies</span>
@@ -241,7 +241,7 @@
       {#each scenarios as sc, i}
         <button 
           onclick={() => selectScenario(i)}
-          class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs' : 'bg-white/80 text-slate-500 border border-slate-200/80 hover:bg-white hover:text-slate-800'}">
+          class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs' : 'bg-white/80 dark:bg-white/[0.02] text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-white/[0.04] hover:bg-white dark:bg-white/[0.02] hover:text-slate-800 dark:text-slate-200'}">
           <span class="w-1.5 h-1.5 rounded-full {activeIndex === i ? 'bg-amber-500' : 'bg-slate-300'}"></span>
           <span>{sc.tabLabel}</span>
         </button>
@@ -249,15 +249,15 @@
     </div>
 
     <!-- Main Canvas Card -->
-    <div class="relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden w-full max-w-full">
+    <div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden w-full max-w-full">
       
       <!-- Window Chrome Bar -->
-      <div class="h-10 sm:h-12 flex items-center px-4 sm:px-5 gap-2 border-b border-slate-100 bg-slate-50/70">
+      <div class="h-10 sm:h-12 flex items-center px-4 sm:px-5 gap-2 border-b border-slate-100 dark:border-white/[0.04] bg-slate-50/70 dark:bg-white/[0.04]">
         <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-300/80"></div>
         <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-300/80"></div>
         <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-300/80"></div>
         <div class="flex-1 flex justify-center">
-          <div class="text-[10px] sm:text-[11px] font-mono text-slate-400 tracking-wider font-medium bg-slate-100/80 px-3 sm:px-4 py-0.5 sm:py-1 rounded-full border border-slate-200/60">sola-playground</div>
+          <div class="text-[10px] sm:text-[11px] font-mono text-slate-400 tracking-wider font-medium bg-slate-100/80 dark:bg-white/[0.08] px-3 sm:px-4 py-0.5 sm:py-1 rounded-full border border-slate-200/60 dark:border-white/[0.04]">sola-playground</div>
         </div>
       </div>
 
@@ -265,7 +265,7 @@
       <div class="p-4 sm:p-6 md:p-10">
         
         <!-- Prompt Input Bar -->
-        <div class="flex items-center gap-2.5 sm:gap-3 bg-slate-50/90 border border-slate-200/80 rounded-2xl px-3.5 sm:px-5 py-3 sm:py-4 mb-6 sm:mb-8 transition-all duration-300 {isTyping ? 'border-amber-300 shadow-[0_0_0_3px_rgba(245,158,11,0.1)]' : ''}">
+        <div class="flex items-center gap-2.5 sm:gap-3 bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] rounded-2xl px-3.5 sm:px-5 py-3 sm:py-4 mb-6 sm:mb-8 transition-all duration-300 {isTyping ? 'border-amber-300 dark:border-amber-500/30 shadow-[0_0_0_3px_rgba(245,158,11,0.1)]' : ''}">
           <div class="shrink-0">
             {#if isResolving}
               <div class="w-4 h-4 sm:w-5 sm:h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
@@ -273,14 +273,14 @@
               <svg class="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             {/if}
           </div>
-          <div class="flex-1 text-left text-xs sm:text-[15px] font-medium text-slate-800 min-h-[20px] sm:min-h-[24px] truncate">
+          <div class="flex-1 text-left text-xs sm:text-[15px] font-medium text-slate-800 dark:text-slate-200 min-h-[20px] sm:min-h-[24px] truncate">
             {typedPrompt}
             {#if isTyping}
               <span class="inline-block w-[2px] h-4 sm:h-5 bg-amber-500 ml-0.5 align-middle animate-pulse rounded-full"></span>
             {/if}
           </div>
           {#if isResolving}
-            <div class="text-[10px] sm:text-xs font-mono font-bold text-amber-900 bg-amber-50 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-amber-200 shrink-0">
+            <div class="text-[10px] sm:text-xs font-mono font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-amber-200 dark:border-amber-500/20 shrink-0">
               Compiling...
             </div>
           {/if}
@@ -290,7 +290,7 @@
         <div class="min-h-[200px] sm:min-h-[220px] relative flex items-center justify-center">
           {#if isTyping}
             <!-- Clean Typing State -->
-            <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] p-6 sm:p-8 border border-dashed border-slate-200 rounded-3xl bg-slate-50/40 text-center">
+            <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] p-6 sm:p-8 border border-dashed border-slate-200 dark:border-white/[0.04] rounded-3xl bg-slate-50/40 dark:bg-white/[0.04] text-center">
               <div class="flex items-center gap-2 text-slate-400 text-xs font-mono">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                 <span>Listening to intent stream...</span>
@@ -299,7 +299,7 @@
           {:else if isResolving}
             <!-- Compiling State -->
             <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] gap-3">
-              <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono font-bold shadow-xs">
+              <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-900 text-xs font-mono font-bold shadow-xs">
                 <div class="w-3.5 h-3.5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
                 <span>Building zero-VDOM components...</span>
               </div>

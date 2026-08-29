@@ -4,7 +4,7 @@
   // --- 1. Universal Canvas Card Data Model ---
   interface StudioCard {
     id: string;
-    type: 'stat' | 'progress' | 'waterfall' | 'slider' | 'form' | 'feed' | 'status';
+    type: 'stat' | 'progress' | 'waterfall' | 'slider' | 'form' | 'feed' | 'status' | 'node_graph' | 'radial_dial';
     title: string;
     subtitle?: string;
     cols: 1 | 2 | 3;
@@ -152,6 +152,10 @@
       newCard = { id: newId, type: 'form', title: 'Interactive Form', subtitle: 'Dynamic input schema', cols: 2, value: 'Form', accentColor: 'slate' };
     } else if (type === 'feed') {
       newCard = { id: newId, type: 'feed', title: 'Activity Stream', subtitle: 'Real-time event feed', cols: 1, value: 'Active', accentColor: 'slate' };
+    } else if (type === 'node_graph') {
+      newCard = { id: newId, type: 'node_graph', title: 'Kinetic Node Graph', subtitle: 'Auto-clustering data nodes', cols: 2, value: 'Graph', accentColor: 'emerald' };
+    } else if (type === 'radial_dial') {
+      newCard = { id: newId, type: 'radial_dial', title: 'Haptic Radial Dial', subtitle: 'Magnetic rotation control', cols: 1, value: 50, accentColor: 'emerald' };
     } else {
       newCard = { id: newId, type: 'status', title: 'Status & State Card', subtitle: 'Operational condition banner', cols: 1, value: 'Optimal', accentColor: 'emerald' };
     }
@@ -266,7 +270,7 @@ export default function SolaCustomCanvas() {
 </svelte:head>
 
 <!-- Outer Container: Pure Light Ivory Theme -->
-<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+<div class="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-emerald-100 dark:bg-emerald-500/20 selection:text-emerald-900">
   <Navbar />
 
   <!-- 1. Top Navigation Bar -->
@@ -276,7 +280,7 @@ export default function SolaCustomCanvas() {
       <!-- Studio Canvas Branding & Layout Presets -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
         <div class="flex items-center gap-2 shrink-0">
-          <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-sm shadow-xs shrink-0">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm shadow-xs shrink-0">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </div>
           <div class="flex items-center gap-2 flex-wrap">
@@ -306,7 +310,7 @@ export default function SolaCustomCanvas() {
           </button>
           <button
             onclick={clearCanvas}
-            class="px-2.5 py-1 rounded-lg text-rose-700 hover:bg-rose-50 transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'blank' ? 'bg-white text-rose-800 shadow-xs font-bold' : ''}">
+            class="px-2.5 py-1 rounded-lg text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:bg-rose-500/10 transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'blank' ? 'bg-white text-rose-800 dark:text-rose-300 shadow-xs font-bold' : ''}">
             Clear
           </button>
         </div>
@@ -337,29 +341,29 @@ export default function SolaCustomCanvas() {
         
         <button
           onclick={() => addComponent('stat')}
-          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
           <span>+ Metric Tile</span>
         </button>
 
         <button
           onclick={() => addComponent('progress')}
-          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           <span>+ Progress Ring</span>
         </button>
 
         <button
           onclick={() => addComponent('waterfall')}
-          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
           <span>+ Step Breakdown</span>
         </button>
 
         <button
           onclick={() => addComponent('slider')}
-          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/></svg>
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/></svg>
           <span>+ Control Slider</span>
         </button>
 
@@ -379,9 +383,24 @@ export default function SolaCustomCanvas() {
 
         <button
           onclick={() => addComponent('status')}
-          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-950 hover:border-emerald-300 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 hover:bg-emerald-50 dark:bg-emerald-500/10 hover:text-emerald-950 hover:border-emerald-300 dark:border-emerald-500/30 border border-slate-200/80 rounded-xl transition-all cursor-pointer shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span>+ Status Card</span>
+        </button>
+        
+        <!-- Premium Components -->
+        <button
+          onclick={() => addComponent('node_graph')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-100 hover:text-white border border-slate-700 rounded-xl transition-all cursor-pointer shadow-md">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span>+ Kinetic Graph</span>
+        </button>
+
+        <button
+          onclick={() => addComponent('radial_dial')}
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-100 hover:text-white border border-slate-700 rounded-xl transition-all cursor-pointer shadow-md">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>+ Haptic Dial</span>
         </button>
       </div>
 
@@ -428,7 +447,7 @@ export default function SolaCustomCanvas() {
               ondrop={(e) => onDrop(e, card.id)}
               ondragend={onDragEnd}
               onclick={() => (activeCardId = card.id)}
-              class="group relative bg-white rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md select-none {card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'} {draggedCardId === card.id ? 'opacity-40 scale-[0.98]' : ''} {dragOverCardId === card.id ? 'ring-2 ring-emerald-500 border-dashed border-emerald-400 bg-emerald-50/20' : ''}">
+              class="group relative bg-white rounded-3xl border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md select-none {card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} {activeCardId === card.id ? 'ring-2 ring-emerald-500 border-transparent shadow-emerald-100/50' : 'border-slate-200/90 hover:border-slate-300'} {draggedCardId === card.id ? 'opacity-40 scale-[0.98]' : ''} {dragOverCardId === card.id ? 'ring-2 ring-emerald-500 border-dashed border-emerald-400 bg-emerald-50 dark:bg-emerald-500/10/20' : ''}">
               
               <!-- Card Action & Drag Header -->
               <div class="px-5 pt-4 pb-3 flex items-center justify-between border-b border-slate-100">
@@ -455,19 +474,19 @@ export default function SolaCustomCanvas() {
                   <div class="flex items-center bg-slate-100 rounded-lg p-0.5">
                     <button
                       onclick={(e) => setCols(card, 1, e)}
-                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 1 ? 'bg-white font-bold text-emerald-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
+                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 1 ? 'bg-white font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
                       title="1 Column">
                       1x
                     </button>
                     <button
                       onclick={(e) => setCols(card, 2, e)}
-                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 2 ? 'bg-white font-bold text-emerald-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
+                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 2 ? 'bg-white font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
                       title="2 Columns">
                       2x
                     </button>
                     <button
                       onclick={(e) => setCols(card, 3, e)}
-                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 3 ? 'bg-white font-bold text-emerald-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
+                      class="px-1.5 py-0.5 rounded text-[10px] font-mono cursor-pointer {card.cols === 3 ? 'bg-white font-bold text-emerald-700 dark:text-emerald-400 shadow-xs' : 'text-slate-500 hover:text-slate-900'}"
                       title="Full Width">
                       3x
                     </button>
@@ -484,7 +503,7 @@ export default function SolaCustomCanvas() {
                   <!-- Delete -->
                   <button
                     onclick={(e) => removeCard(card.id, e)}
-                    class="p-1 hover:bg-rose-50 rounded-lg text-slate-500 hover:text-rose-600 cursor-pointer"
+                    class="p-1 hover:bg-rose-50 dark:bg-rose-500/10 rounded-lg text-slate-500 hover:text-rose-600 dark:text-rose-400 cursor-pointer"
                     title="Delete">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
@@ -502,7 +521,7 @@ export default function SolaCustomCanvas() {
                       onclick={(e) => e.stopPropagation()}
                       class="text-3xl font-extrabold tracking-tight text-slate-900 font-mono bg-transparent hover:bg-slate-50 focus:bg-white focus:outline-emerald-500 rounded px-1 -ml-1 w-48" />
                     {#if card.delta}
-                      <span class="flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 font-mono">
+                      <span class="flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-500/20/60 font-mono">
                         {card.delta}
                       </span>
                     {/if}
@@ -525,7 +544,7 @@ export default function SolaCustomCanvas() {
                           fill="none"
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                         <path
-                          class="text-emerald-600 transition-all duration-500 ease-out"
+                          class="text-emerald-600 dark:text-emerald-400 transition-all duration-500 ease-out"
                           stroke-dasharray="{val}, 100"
                           stroke-width="3.5"
                           stroke-linecap="round"
@@ -566,7 +585,7 @@ export default function SolaCustomCanvas() {
                         { name: 'Total', val: 90, d: '90' }
                       ] as bar}
                         <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
-                          <span class="text-[10px] font-bold font-mono {bar.val < 0 ? 'text-rose-600' : 'text-emerald-700'}">
+                          <span class="text-[10px] font-bold font-mono {bar.val < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400'}">
                             {bar.d}
                           </span>
                           <div
@@ -599,11 +618,11 @@ export default function SolaCustomCanvas() {
                 <!-- TYPE: STATUS & ALERT -->
                 {:else if card.type === 'status'}
                   <div class="flex flex-col gap-2 py-1">
-                    <div class="flex items-center gap-3 p-3 rounded-2xl bg-emerald-50 border border-emerald-200/80">
+                    <div class="flex items-center gap-3 p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20/80">
                       <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
                       <div>
                         <div class="text-xs font-bold text-emerald-950">{card.title}</div>
-                        <div class="text-[11px] text-emerald-700">{card.subtitle || 'Operating within nominal bounds'}</div>
+                        <div class="text-[11px] text-emerald-700 dark:text-emerald-400">{card.subtitle || 'Operating within nominal bounds'}</div>
                       </div>
                     </div>
                   </div>
@@ -629,14 +648,14 @@ export default function SolaCustomCanvas() {
                 {:else if card.type === 'feed'}
                   <div class="space-y-3 text-xs">
                     <div class="flex items-start gap-2.5">
-                      <div class="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[10px] flex items-center justify-center shrink-0">1</div>
+                      <div class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] flex items-center justify-center shrink-0">1</div>
                       <div>
                         <p class="text-slate-800 font-medium text-[11px]">Primary event registered</p>
                         <span class="text-[10px] text-slate-400">Just now</span>
                       </div>
                     </div>
                     <div class="flex items-start gap-2.5">
-                      <div class="w-5 h-5 rounded-full bg-sky-50 text-sky-700 font-bold text-[10px] flex items-center justify-center shrink-0">2</div>
+                      <div class="w-5 h-5 rounded-full bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-400 font-bold text-[10px] flex items-center justify-center shrink-0">2</div>
                       <div>
                         <p class="text-slate-800 font-medium text-[11px]">State update acknowledged</p>
                         <span class="text-[10px] text-slate-400">3 min ago</span>
@@ -742,7 +761,7 @@ export default function SolaCustomCanvas() {
             </button>
             <button
               onclick={() => removeCard(activeCard.id)}
-              class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-medium transition-all cursor-pointer">
+              class="px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 rounded-xl font-medium transition-all cursor-pointer">
               Delete
             </button>
           </div>
@@ -772,17 +791,17 @@ export default function SolaCustomCanvas() {
         <div class="px-6 pt-3 flex items-center gap-2 bg-slate-50 border-b border-slate-100">
           <button
             onclick={() => (exportTab = 'react')}
-            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'react' ? 'border-emerald-600 text-emerald-700 font-bold' : 'border-transparent text-slate-500 hover:text-slate-800'}">
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'react' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 hover:text-slate-800'}">
             React 19 (JSX)
           </button>
           <button
             onclick={() => (exportTab = 'svelte')}
-            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'svelte' ? 'border-emerald-600 text-emerald-700 font-bold' : 'border-transparent text-slate-500 hover:text-slate-800'}">
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'svelte' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 hover:text-slate-800'}">
             Svelte 5 (Runes)
           </button>
           <button
             onclick={() => (exportTab = 'webcomponent')}
-            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'webcomponent' ? 'border-emerald-600 text-emerald-700 font-bold' : 'border-transparent text-slate-500 hover:text-slate-800'}">
+            class="px-4 py-2 border-b-2 font-semibold text-xs transition-all cursor-pointer {exportTab === 'webcomponent' ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400 font-bold' : 'border-transparent text-slate-500 hover:text-slate-800'}">
             HTML / Web Component
           </button>
         </div>
@@ -796,7 +815,7 @@ export default function SolaCustomCanvas() {
         <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
           <span class="text-xs text-slate-500">
             {#if copyNotification}
-              <span class="text-emerald-600 font-semibold flex items-center gap-1">
+              <span class="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                 Copied to clipboard!
               </span>
@@ -830,7 +849,7 @@ export default function SolaCustomCanvas() {
           runArcPrompt();
         }}
         class="relative flex items-center w-full">
-        <div class="absolute left-3 text-emerald-600">
+        <div class="absolute left-3 text-emerald-600 dark:text-emerald-400">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a2.25 2.25 0 014.5 0v3m-3-4.5h-2.25a2.25 2.25 0 01-2.25-2.25V6.75m0 8.25v-1.5a2.25 2.25 0 00-2.25-2.25H6.75m0 8.25v-1.5a2.25 2.25 0 012.25-2.25h1.5m-1.5-8.25h1.5a2.25 2.25 0 002.25-2.25V6.75m0-3v3m0 0h3m-3 0h-3m12 0h-3m3 0v3m0-3v-3" />
           </svg>

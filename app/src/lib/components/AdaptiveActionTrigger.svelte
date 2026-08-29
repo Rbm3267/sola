@@ -196,7 +196,7 @@
     {#if affordance === 'calm'}
       <button 
         onclick={handleTrigger}
-        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border border-slate-200 hover:border-amber-300 transition-all text-xs font-mono font-medium cursor-pointer shadow-2xs">
+        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] hover:bg-amber-50 dark:bg-amber-500/10 text-slate-700 dark:text-slate-300 hover:text-amber-900 dark:hover:text-amber-300 border border-slate-200 dark:border-white/[0.04] hover:border-amber-300 dark:border-amber-500/30 transition-all text-xs font-mono font-medium cursor-pointer shadow-2xs">
         <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
         <span>{action.title}</span>
       </button>
@@ -205,17 +205,17 @@
     {:else if affordance === 'expanded_preview'}
       <div 
         transition:fly={{ y: 8, duration: 200 }}
-        class="p-4 rounded-2xl bg-white/95 backdrop-blur-2xl text-slate-900 border border-amber-200 shadow-xl flex flex-col gap-2.5 font-mono text-xs max-w-sm">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
-          <span class="text-[10px] uppercase font-bold text-amber-600 flex items-center gap-1">
+        class="p-4 rounded-2xl bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl text-slate-900 dark:text-white border border-amber-200 dark:border-amber-500/20 shadow-xl flex flex-col gap-2.5 font-mono text-xs max-w-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.04] pb-1.5">
+          <span class="text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
             <span>Surfaced via Hover Dwell</span>
           </span>
           <span class="text-[10px] text-slate-400">Urgency: {(urgency * 100).toFixed(0)}%</span>
         </div>
         <div>
-          <div class="font-bold text-slate-950 text-xs">{action.title}</div>
-          <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">{action.description}</p>
+          <div class="font-bold text-slate-950 dark:text-slate-50 text-xs">{action.title}</div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{action.description}</p>
         </div>
         <button 
           onclick={handleTrigger}
@@ -255,12 +255,12 @@
     {#if syncFailedMessage}
       <div 
         transition:fade={{ duration: 150 }}
-        class="absolute top-full right-0 mt-2 z-30 p-3 rounded-2xl bg-rose-50 text-rose-950 border border-rose-200 text-[11px] font-mono shadow-md flex flex-col gap-2 min-w-[200px]">
-        <div class="flex items-center gap-1.5 font-bold text-rose-800">
-          <svg class="w-3.5 h-3.5 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+        class="absolute top-full right-0 mt-2 z-30 p-3 rounded-2xl bg-rose-50 dark:bg-rose-500/10 text-rose-950 border border-rose-200 dark:border-rose-500/20 text-[11px] font-mono shadow-md flex flex-col gap-2 min-w-[200px]">
+        <div class="flex items-center gap-1.5 font-bold text-rose-800 dark:text-rose-300">
+          <svg class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
           <span>Sync failed</span>
         </div>
-        <p class="text-[10px] text-slate-500 leading-normal">{syncFailedMessage}</p>
+        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-normal">{syncFailedMessage}</p>
         <div class="flex items-center gap-2 mt-1">
           <button 
             onclick={commitIntent}
@@ -269,7 +269,7 @@
           </button>
           <button 
             onclick={() => { syncFailedMessage = null; pendingIntent = null; }}
-            class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
+            class="px-2.5 py-1 rounded bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-all cursor-pointer">
             Discard
           </button>
         </div>
@@ -295,7 +295,7 @@
     
     <button 
       onclick={handleUndo}
-      class="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold transition-all cursor-pointer active:scale-95">
+      class="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 dark:text-slate-50 font-bold transition-all cursor-pointer active:scale-95">
       Undo
     </button>
   </div>
@@ -307,41 +307,41 @@
   <div 
     onclick={() => isDrawerOpen = false} 
     transition:fade={{ duration: 150 }} 
-    class="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-40"
+    class="fixed inset-0 bg-slate-950 dark:bg-white/40 backdrop-blur-xs z-40"
   ></div>
 
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div 
     transition:fly={{ y: 300, duration: 300 }}
-    class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white border-t border-slate-200 rounded-t-3xl shadow-2xl z-50 p-6 font-mono text-xs flex flex-col gap-4"
+    class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/[0.04] rounded-t-3xl shadow-2xl z-50 p-6 font-mono text-xs flex flex-col gap-4"
   >
     <!-- Handle bar indicator -->
     <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-1"></div>
 
     <div class="flex items-start justify-between">
       <div>
-        <span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 font-bold text-[9px] uppercase tracking-wider">
+        <span class="px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300 font-bold text-[9px] uppercase tracking-wider">
           Tier 2 hard mutation
         </span>
-        <h3 class="text-sm font-bold text-slate-950 mt-1">{action.title}</h3>
+        <h3 class="text-sm font-bold text-slate-950 dark:text-slate-50 mt-1">{action.title}</h3>
       </div>
       <button 
         onclick={() => isDrawerOpen = false}
-        class="text-slate-400 hover:text-slate-600 text-sm">
+        class="text-slate-400 hover:text-slate-600 dark:text-slate-400 text-sm">
         
       </button>
     </div>
 
     <!-- Details -->
-    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col gap-2">
+    <div class="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.04] rounded-2xl p-4 flex flex-col gap-2">
       <div class="text-[10px] uppercase font-bold text-slate-400">Estimated blast radius impact</div>
-      <p class="text-[11px] text-slate-600 leading-relaxed font-sans font-medium">
+      <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed font-sans font-medium">
         {action.blastRadiusMessage || 'Direct system change requested. Please review payload before commit.'}
       </p>
     </div>
 
     <!-- Swipe-to-Confirm Slider Track -->
-    <div class="relative w-full h-12 bg-slate-100 border border-slate-200/80 rounded-2xl overflow-hidden flex items-center justify-center select-none">
+    <div class="relative w-full h-12 bg-slate-100 dark:bg-white/[0.08] border border-slate-200/80 dark:border-white/[0.04] rounded-2xl overflow-hidden flex items-center justify-center select-none">
       <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pointer-events-none">
         {swipeProgress > 20 ? '' : 'Swipe right to execute'}
       </span>
@@ -368,7 +368,7 @@
 
     <button 
       onclick={() => isDrawerOpen = false}
-      class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-all cursor-pointer">
+      class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:bg-white/[0.04] transition-all cursor-pointer">
       Cancel & Abort
     </button>
   </div>

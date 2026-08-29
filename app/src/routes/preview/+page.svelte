@@ -65,7 +65,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200/80 pb-6">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-mono font-bold mb-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-bold mb-2">
           <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
           <span>Live UI Simulator</span>
         </div>
@@ -304,7 +304,7 @@
                 <div class="flex items-center justify-between border-b pb-3" style="border-color: {presets[selectedPreset].border}">
                   <div class="flex items-center gap-3">
                     <span class="font-bold text-sm tracking-tight text-slate-900">Stripe Dashboard</span>
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-bold border border-indigo-200">LIVE MODE</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-500/20">LIVE MODE</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="text-xs font-mono text-slate-500">Balance: <strong class="text-slate-900">$184,920.00</strong></span>
@@ -317,7 +317,7 @@
                     <div class="p-4 rounded-xl border bg-white border-slate-200 flex flex-col gap-1 shadow-xs">
                       <span class="text-xs font-medium text-slate-500">Gross Volume (30D)</span>
                       <span class="text-2xl font-bold text-slate-900">$1,420,800</span>
-                      <span class="text-xs text-emerald-600 font-medium">+18.4% vs last month</span>
+                      <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">+18.4% vs last month</span>
                     </div>
                     <div class="p-4 rounded-xl border bg-white border-slate-200 flex flex-col gap-1 shadow-xs">
                       <span class="text-xs font-medium text-slate-500">Successful Payments</span>
@@ -365,12 +365,12 @@
                   <div class="flex items-center gap-3">
                     <div class="w-6 h-6 rounded bg-[#95bf47] text-white font-bold text-xs flex items-center justify-center font-mono">S</div>
                     <span class="font-bold text-sm text-slate-900 tracking-tight">Shopify Store Admin</span>
-                    <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold">Store: sola-apparel.myshopify.com</span>
+                    <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20 font-bold">Store: sola-apparel.myshopify.com</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="text-xs font-mono text-slate-500">Live Traffic:</span>
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="text-xs font-mono font-bold text-emerald-600">842 online shoppers</span>
+                    <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">842 online shoppers</span>
                   </div>
                 </div>
 
@@ -381,7 +381,7 @@
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col gap-2">
                       <span class="text-xs font-mono text-slate-500 uppercase font-bold">Today's Sales</span>
                       <div class="text-2xl font-black text-slate-900 font-mono">$48,290.00</div>
-                      <span class="text-xs font-mono text-emerald-600 font-bold">↑ 18.4% vs yesterday</span>
+                      <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold">↑ 18.4% vs yesterday</span>
                     </div>
 
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col gap-2">
@@ -601,7 +601,7 @@
                     <span class="text-slate-600">sola-air</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">● Ready</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold">● Ready</span>
                   </div>
                 </div>
 

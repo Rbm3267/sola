@@ -10,6 +10,8 @@
   import IncidentTriageMatrix from './IncidentTriageMatrix.svelte';
   import SchemaInspector from './SchemaInspector.svelte';
   import TactileDialCard from './TactileDialCard.svelte';
+  import KineticNodeGraph from './premium/KineticNodeGraph.svelte';
+  import HapticRadialDial from './premium/HapticRadialDial.svelte';
 
   const props = $props<{
     intentPayload?: any;
@@ -29,7 +31,9 @@
     FlowWaterfall,
     IncidentTriageMatrix,
     SchemaInspector,
-    TactileDialCard
+    TactileDialCard,
+    KineticNodeGraph,
+    HapticRadialDial
   };
 
   const items = $derived<Array<{ component: string; config: any; colSpan?: number }>>(
@@ -48,7 +52,7 @@
     {#if Comp}
       <Comp config={item.config || {}} onSubmit={handleFormSubmit} />
     {:else}
-      <div class="p-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-xs font-mono">
+      <div class="p-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-900 rounded-2xl text-xs font-mono">
         Unknown component primitive: {item.component}
       </div>
     {/if}
@@ -61,7 +65,7 @@
           {#if Comp}
             <Comp config={item.config || {}} onSubmit={handleFormSubmit} />
           {:else}
-            <div class="p-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-xs font-mono">
+            <div class="p-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-900 rounded-2xl text-xs font-mono">
               Unknown primitive: {item.component}
             </div>
           {/if}

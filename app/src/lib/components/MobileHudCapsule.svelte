@@ -67,13 +67,13 @@
     <div 
       transition:fade={{ duration: 180 }}
       onclick={closeAll}
-      class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-[-1] pointer-events-auto">
+      class="fixed inset-0 bg-slate-950  backdrop-blur-sm z-[-1] pointer-events-auto">
     </div>
   {/if}
 
   <!-- Tactical HUD Capsule Container -->
   <div 
-    class="w-full max-w-sm rounded-[28px] bg-slate-950/95 text-white border border-slate-800 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 pointer-events-auto overflow-hidden {isExpanded || selectedIntentKey ? 'p-4 max-h-[82vh] overflow-y-auto' : 'p-2.5 px-4'}">
+    class="w-full max-w-sm rounded-[28px] bg-slate-950  text-white border border-slate-800 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 pointer-events-auto overflow-hidden {isExpanded || selectedIntentKey ? 'p-4 max-h-[82vh] overflow-y-auto' : 'p-2.5 px-4'}">
     
     {#if !isExpanded && !selectedIntentKey}
       <!-- Collapsed Tactile Capsule Bar -->
@@ -144,7 +144,7 @@
               <DataCard config={{ title: "Active P1s", value: `${p1Incidents} Breaching`, trend: "Urgent", icon: "activity" }} />
               <GaugeCard config={{ title: "SLA Margin", value: 18, max: 60, unit: "m", icon: "clock" }} />
             </div>
-            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs">
+            <div class="p-3 rounded-xl bg-slate-950  border border-slate-800 flex items-center justify-between text-xs">
               <span class="text-slate-400 font-mono">INC-9402 • Checkout Spill</span>
               <span class="text-rose-400 font-mono font-bold">12m to SLA</span>
             </div>
@@ -193,7 +193,7 @@
           <a 
             href="/studio" 
             onclick={closeAll}
-            class="w-full py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs text-center transition-all">
+            class="w-full py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 dark:text-slate-50 font-mono font-bold text-xs text-center transition-all">
             Open in Studio Editor →
           </a>
         </div>

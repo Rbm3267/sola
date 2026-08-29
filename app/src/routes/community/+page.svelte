@@ -307,7 +307,7 @@
 
 <!-- Toast Notification -->
 {#if toastMessage}
-  <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15)] flex items-center gap-3 border transition-all duration-300 backdrop-blur-xl {toastMessage.type === 'success' ? 'bg-slate-900 text-white border-emerald-500/50' : toastMessage.type === 'amber' ? 'bg-amber-50 text-amber-950 border-amber-300' : 'bg-slate-900 text-white border-slate-700'}">
+  <div class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15)] flex items-center gap-3 border transition-all duration-300 backdrop-blur-xl {toastMessage.type === 'success' ? 'bg-slate-900 text-white border-emerald-500/50' : toastMessage.type === 'amber' ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-950 border-amber-300 dark:border-amber-500/30' : 'bg-slate-900 text-white border-slate-700'}">
     <div class="w-2 h-2 rounded-full {toastMessage.type === 'success' ? 'bg-emerald-400 animate-ping' : toastMessage.type === 'amber' ? 'bg-amber-500' : 'bg-sky-400'}"></div>
     <span class="text-xs font-mono font-bold tracking-tight">{toastMessage.text}</span>
   </div>
@@ -316,37 +316,37 @@
 <!-- Live Browser Overlay Host Picker Modal -->
 {#if activeModalTemplate}
   <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
-    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-2xl max-w-xl w-full p-6 sm:p-8 flex flex-col gap-6 relative overflow-hidden">
+    <div class="bg-white dark:bg-white/[0.02] rounded-3xl border border-slate-200 dark:border-white/[0.04] shadow-2xl max-w-xl w-full p-6 sm:p-8 flex flex-col gap-6 relative overflow-hidden">
       <!-- Ambient Glow -->
       <div class="absolute -top-12 -right-12 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.04] pb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
           <div>
-            <h3 class="text-base font-black text-slate-950 tracking-tight">Test Live Page Preview</h3>
-            <span class="text-xs font-mono text-slate-500">{activeModalTemplate.title}</span>
+            <h3 class="text-base font-black text-slate-950 dark:text-white tracking-tight">Test Live Page Preview</h3>
+            <span class="text-xs font-mono text-slate-500 dark:text-slate-400">{activeModalTemplate.title}</span>
           </div>
         </div>
-        <button onclick={() => activeModalTemplate = null} class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center cursor-pointer transition-colors">
+        <button onclick={() => activeModalTemplate = null} class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/[0.08] hover:bg-slate-200 text-slate-500 dark:text-slate-400 flex items-center justify-center cursor-pointer transition-colors">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
 
       <div class="flex flex-col gap-3">
-        <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Choose Test Environment:</span>
+        <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Choose Test Environment:</span>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <!-- Option A: Chrome Extension -->
           <button 
             onclick={() => { handleTestInExtension(activeModalTemplate); activeModalTemplate = null; }}
-            class="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-100/80 hover:border-slate-300 flex flex-col gap-2 text-left cursor-pointer transition-all">
+            class="p-4 rounded-2xl border border-slate-200 dark:border-white/[0.04] bg-slate-50 dark:bg-white/[0.04] hover:bg-slate-100 dark:bg-white/[0.08] hover:border-slate-300 flex flex-col gap-2 text-left cursor-pointer transition-all">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-mono font-bold text-slate-900">Active Chrome Tab</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Extension</span>
+              <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">Active Chrome Tab</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold">Extension</span>
             </div>
-            <p class="text-[11px] text-slate-600 leading-relaxed">
+            <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
               Injects directly into your current webpage via Shadow DOM with zero CSS bleed.
             </p>
           </button>
@@ -354,12 +354,12 @@
           <!-- Option B: Built-in Sandbox Simulator -->
           <a 
             href="/preview?component={activeModalTemplate.previewType}&preset={activeModalTemplate.targetPreset}"
-            class="p-4 rounded-2xl border border-amber-200/80 bg-amber-50/40 hover:bg-amber-50 hover:border-amber-300 flex flex-col gap-2 text-left cursor-pointer transition-all text-decoration-none">
+            class="p-4 rounded-2xl border border-amber-200 dark:border-amber-500/20/80 bg-amber-50 dark:bg-amber-500/10/40 hover:bg-amber-50 dark:bg-amber-500/10 hover:border-amber-300 dark:border-amber-500/30 flex flex-col gap-2 text-left cursor-pointer transition-all text-decoration-none">
             <div class="flex items-center justify-between">
               <span class="text-xs font-mono font-bold text-amber-950">Host Simulator</span>
               <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 font-bold">Web Sandbox</span>
             </div>
-            <p class="text-[11px] text-amber-800/80 leading-relaxed">
+            <p class="text-[11px] text-amber-800 dark:text-amber-300/80 leading-relaxed">
               Preview inside mock Workspace, Operations, Billing, or Telemetry dashboards.
             </p>
           </a>
@@ -367,10 +367,10 @@
       </div>
 
       <!-- Action Footer -->
-      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
-        <span class="text-[11px] font-mono text-slate-400">Target Preset: <strong class="text-slate-700">{activeModalTemplate.targetPreset}</strong></span>
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-white/[0.04]">
+        <span class="text-[11px] font-mono text-slate-400">Target Preset: <strong class="text-slate-700 dark:text-slate-300">{activeModalTemplate.targetPreset}</strong></span>
         <div class="flex items-center gap-2">
-          <button onclick={() => activeModalTemplate = null} class="px-4 py-2 rounded-xl text-xs font-mono text-slate-600 hover:text-slate-900 cursor-pointer">
+          <button onclick={() => activeModalTemplate = null} class="px-4 py-2 rounded-xl text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white cursor-pointer">
             Cancel
           </button>
           <button 
@@ -385,33 +385,33 @@
 {/if}
 
 <!-- Main Luxury Surface Container -->
-<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 font-sans selection:bg-amber-500/20 selection:text-amber-900">
+<div class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 dark:text-white font-sans selection:bg-amber-500/20 selection:text-amber-900">
   <Navbar />
 
   <!-- Hero & Extension Status Banner -->
-  <header class="relative border-b border-slate-200/80 bg-white/80 backdrop-blur-xl px-4 sm:px-6 lg:px-8 pt-12 pb-10 overflow-hidden">
+  <header class="relative border-b border-slate-200 dark:border-white/[0.04] bg-white dark:bg-white/[0.02] backdrop-blur-xl px-4 sm:px-6 lg:px-8 pt-12 pb-10 overflow-hidden">
     <!-- Ambient Radial Specular Lighting -->
     <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[340px] bg-gradient-to-b from-amber-200/20 via-sky-200/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto flex flex-col items-center text-center gap-5 relative z-10">
       
       <!-- Status Badge & Chrome Extension Indicator -->
-      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-100/90 border border-slate-200/90 shadow-xs">
+      <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] shadow-xs">
         <span class="flex h-2 w-2 relative">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full {isExtensionDetected ? 'bg-emerald-400' : 'bg-amber-400'} opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 {isExtensionDetected ? 'bg-emerald-500' : 'bg-amber-500'}"></span>
         </span>
-        <span class="text-xs font-mono font-bold text-slate-700">
+        <span class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
           Sola Community Registry • {isExtensionDetected ? 'Chrome Extension Connected' : 'Extension Ready for Live Browser Overlay Mounting'}
         </span>
       </div>
 
       <!-- Headline -->
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-[-0.03em] max-w-4xl">
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-[-0.03em] max-w-4xl">
         Discover, Test Live Browser Overlay, and Fork Sola Micro-Frontends
       </h1>
       
-      <p class="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed font-normal">
+      <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed font-normal">
         Community-crafted zero-VDOM components, real-time signal waterflows, and tactile dials. Mount in 1-click on your live application or fork directly into Studio.
       </p>
 
@@ -424,7 +424,7 @@
           type="text" 
           bind:value={searchQuery}
           placeholder="Search components, signals ($finance/mrr), authors..." 
-          class="w-full bg-white border border-slate-200/90 rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 font-mono shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] transition-all" />
+          class="w-full bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 font-mono shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] transition-all" />
       </div>
 
       <!-- Category Filter Pills -->
@@ -432,7 +432,7 @@
         {#each categories as cat}
           <button 
             onclick={() => selectedCategory = cat}
-            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap {selectedCategory === cat ? 'bg-slate-950 text-white font-bold shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 border border-slate-200/60'}">
+            class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap {selectedCategory === cat ? 'bg-slate-950 text-white font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 hover:bg-slate-200/80 border border-slate-200 dark:border-white/[0.04]'}">
             {cat}
           </button>
         {/each}
@@ -444,16 +444,16 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     
     <!-- Section Toolbar Header -->
-    <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-200/80">
-      <div class="flex items-center gap-2 text-xs font-mono text-slate-500">
-        <span>Showing <strong class="text-slate-900">{filteredTemplates.length}</strong> live components</span>
+    <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-200 dark:border-white/[0.04]">
+      <div class="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
+        <span>Showing <strong class="text-slate-900 dark:text-white">{filteredTemplates.length}</strong> live components</span>
       </div>
 
       <!-- Quick Action: Chrome Companion Helper -->
       <div class="flex items-center gap-2">
         <a 
           href="/preview" 
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-amber-900 bg-amber-50 border border-amber-200 hover:bg-amber-100 transition-all text-decoration-none">
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 hover:bg-amber-100 dark:bg-amber-500/20 transition-all text-decoration-none">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span>Open Full Live Host Simulator</span>
         </a>
@@ -463,7 +463,7 @@
     <!-- Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
       {#each filteredTemplates as tmpl (tmpl.id)}
-        <div class="group relative bg-white/95 backdrop-blur-2xl border border-slate-200/90 hover:border-amber-500/40 rounded-3xl p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between gap-5 overflow-hidden">
+        <div class="group relative bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] hover:border-amber-500/40 rounded-3xl p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between gap-5 overflow-hidden">
           
           <!-- Subtle Specular Corner Sheen -->
           <div class="absolute -right-12 -top-12 w-32 h-32 bg-amber-400/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none"></div>
@@ -472,7 +472,7 @@
           <div class="flex flex-col gap-3 relative z-10">
             <div class="flex items-center justify-between">
               <!-- Category Pill -->
-              <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-600 bg-slate-100 border border-slate-200/80 px-2.5 py-0.5 rounded-full">
+              <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] px-2.5 py-0.5 rounded-full">
                 {tmpl.category}
               </span>
 
@@ -480,7 +480,7 @@
               <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
                 <span class="flex items-center gap-1">
                   <svg class="w-3 h-3 text-amber-400 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <strong class="text-slate-700">{tmpl.stars}</strong>
+                  <strong class="text-slate-700 dark:text-slate-300">{tmpl.stars}</strong>
                 </span>
                 <span>·</span>
                 <span class="flex items-center gap-1">
@@ -492,17 +492,17 @@
 
             <!-- Title & Description -->
             <div>
-              <h3 class="text-base font-bold text-slate-950 group-hover:text-amber-600 transition-colors tracking-tight">
+              <h3 class="text-base font-bold text-slate-950 dark:text-white group-hover:text-amber-600 dark:text-amber-400 transition-colors tracking-tight">
                 {tmpl.title}
               </h3>
-              <p class="text-xs text-slate-500 leading-relaxed mt-1 line-clamp-2">
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-1 line-clamp-2">
                 {tmpl.desc}
               </p>
             </div>
           </div>
 
           <!-- LIVE MINI INTERACTIVE COMPONENT PREVIEW -->
-          <div class="relative rounded-2xl bg-slate-50/80 border border-slate-200/70 p-3 overflow-hidden shadow-inner min-h-[160px] flex items-center justify-center">
+          <div class="relative rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] p-3 overflow-hidden shadow-inner min-h-[160px] flex items-center justify-center">
             
             <div class="w-full scale-[0.92] sm:scale-100 origin-center transition-transform">
               {#if tmpl.previewType === 'waterfall'}
@@ -530,7 +530,7 @@
           </div>
 
           <!-- Signals & Author Row -->
-          <div class="flex flex-col gap-3 relative z-10 border-t border-slate-100 pt-3">
+          <div class="flex flex-col gap-3 relative z-10 border-t border-slate-100 dark:border-white/[0.04] pt-3">
             
             <!-- Author Handle & Verified Badge -->
             <div class="flex items-center justify-between text-xs">
@@ -538,7 +538,7 @@
                 <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white font-mono shadow-xs" style="background-color: {tmpl.author.avatarBg}">
                   {tmpl.author.name.charAt(0)}
                 </div>
-                <span class="font-mono text-slate-700 font-medium">{tmpl.author.handle}</span>
+                <span class="font-mono text-slate-700 dark:text-slate-300 font-medium">{tmpl.author.handle}</span>
                 {#if tmpl.author.verified}
                   <svg class="w-3.5 h-3.5 text-sky-500 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 {/if}
@@ -549,7 +549,7 @@
             <!-- Signal Badges -->
             <div class="flex flex-wrap gap-1">
               {#each tmpl.signals as sig}
-                <span class="text-[10px] font-mono text-slate-600 bg-white px-2 py-0.5 rounded-md border border-slate-200/90 shadow-xs">
+                <span class="text-[10px] font-mono text-slate-600 dark:text-slate-400 bg-white dark:bg-white/[0.02] px-2 py-0.5 rounded-md border border-slate-200 dark:border-white/[0.04] shadow-xs">
                   ${sig}
                 </span>
               {/each}
@@ -569,7 +569,7 @@
             <!-- Action 2: Test in My UI (Extension / Live Browser Overlay Modal) -->
             <button 
               onclick={() => openInSituModal(tmpl)}
-              class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
+              class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 dark:text-white font-mono font-bold text-xs transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               <span>Test in My UI</span>
             </button>
