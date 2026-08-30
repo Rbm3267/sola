@@ -1,5 +1,5 @@
 {
-  "name": "@sola/ui",
+  "name": "@sola-air-ui/ui",
   "version": "1.0.0",
   "type": "module",
   "main": "./src/index.js",
@@ -18,7 +18,7 @@
     "./intent-list": "./src/IntentList.sola"
   },
   "dependencies": {
-    "@sola/core": "*"
+    "@sola-air-ui/core": "*"
   },
   "publishConfig": {
     "access": "public",
