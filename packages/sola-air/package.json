@@ -8,7 +8,7 @@
     ".": "./src/index.js"
   },
   "bin": {
-    "sola-relay": "./node_modules/@sola/relay/src/cli.js"
+    "sola-relay": "./node_modules/@sola-air-ui/relay/src/cli.js"
   },
   "keywords": ["sola", "zero-vdom", "signals", "reactivity", "intent", "ui", "frontend", "compiler"],
   "license": "MIT",
@@ -18,11 +18,11 @@
     "url": "https://github.com/rbm3267/sola"
   },
   "dependencies": {
-    "@sola/core": "^1.0.0",
-    "@sola/compiler": "^1.0.0",
-    "@sola/vite-plugin-sola": "^0.0.1",
-    "@sola/relay": "^1.0.0",
-    "@sola/mcp": "^1.0.0"
+    "@sola-air-ui/core": "^1.0.0",
+    "@sola-air-ui/compiler": "^1.0.0",
+    "@sola-air-ui/vite-plugin-sola": "^0.0.1",
+    "@sola-air-ui/relay": "^1.0.0",
+    "@sola-air-ui/mcp": "^1.0.0"
   },
   "publishConfig": {
     "access": "public",

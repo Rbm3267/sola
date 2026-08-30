@@ -402,8 +402,8 @@ export function compile(source, options = {}) {
 
   // Assemble final output module
   let output = '';
-  output += `// Compiled by @sola/compiler v1.0.0\n`;
-  output += `import { createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } from '@sola/core';\n`;
+  output += `// Compiled by @sola-air-ui/compiler v1.0.0\n`;
+  output += `import { createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } from '@sola-air-ui/core';\n`;
 
   for (const imp of componentImports) {
     output += `import ${imp.localName} from '${imp.path}';\n`;
