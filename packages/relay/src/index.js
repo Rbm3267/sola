@@ -438,15 +438,20 @@ export class RelayServer {
 
           const safeLimit = Math.min(Math.max(1, parseInt(limit, 10) || 100), 1000);
           
-          // Execute validated/safe query
-          const safeQuery = query ? String(query) : `SELECT * FROM ${source} LIMIT ${safeLimit}`;
-          const result = await conn.connector.query(safeQuery);
+          // Execute parameterized/safe query
+          let result;
+          if (typeof query === 'object' && query !== null && typeof query.text === 'string') {
+            const params = Array.isArray(query.params) ? query.params : [];
+            result = await conn.connector.query(query.text, params);
+          } else {
+            result = await conn.connector.query(`SELECT * FROM ${source} LIMIT ${safeLimit}`);
+          }
 
           // Local audit log
           auditLog({
             action: 'QUERY',
             source,
-            query: query ? 'CUSTOM_QUERY' : 'DEFAULT_SELECT',
+            query: typeof query === 'object' ? 'PARAMETERIZED_QUERY' : 'DEFAULT_SELECT',
             rowCount: result?.rowCount || 0,
             userAgent: req.headers['user-agent']
           });

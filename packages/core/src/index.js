@@ -143,19 +143,23 @@ export function createDerived(fn) {
   return read;
 }
 
-// ─── Component Lifecycle Scope Context ───
+// ─── Component Lifecycle Scope Context Stack ───
+const contextStack = [];
 let activeContext = null;
 
 export function pushContext() {
   const ctx = { mounts: [], destroys: [] };
+  contextStack.push(ctx);
   activeContext = ctx;
   return ctx;
 }
 
 export function popContext(ctx) {
-  if (activeContext === ctx) {
-    activeContext = null;
+  const idx = contextStack.lastIndexOf(ctx);
+  if (idx !== -1) {
+    contextStack.splice(idx, 1);
   }
+  activeContext = contextStack.length > 0 ? contextStack[contextStack.length - 1] : null;
 }
 
 export function onMount(fn) {
