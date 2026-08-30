@@ -44,6 +44,9 @@
   import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { fade, fly } from 'svelte/transition';
 
+  import { onMount } from 'svelte';
+  import { page } from '$app/state';
+
   let activeCategory = $state<string>('All');
   let searchQuery = $state<string>('');
   let selectedComponent = $state<CatalogComponent>(COMPONENT_CATALOG[0]);
@@ -52,11 +55,26 @@
   // Interactive Live Playground State
   let liveProps = $state<Record<string, any>>({ ...COMPONENT_CATALOG[0].defaultConfig });
 
-  // Update liveProps whenever selected component changes
+  // Update liveProps whenever selected component changes and sync URL parameter
   function selectComponent(comp: CatalogComponent) {
     selectedComponent = comp;
     liveProps = { ...comp.defaultConfig };
+    if (typeof window !== 'undefined' && window.history) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('component', comp.id);
+      window.history.replaceState({}, '', url.toString());
+    }
   }
+
+  onMount(() => {
+    const compParam = page.url.searchParams.get('component') || page.url.searchParams.get('id');
+    if (compParam) {
+      const found = COMPONENT_CATALOG.find(c => c.id === compParam || c.name.toLowerCase() === compParam.toLowerCase());
+      if (found) {
+        selectComponent(found);
+      }
+    }
+  });
 
   // Copy Feedback State
   let copied = $state(false);
@@ -139,7 +157,7 @@
         {#each categories as category}
           <button 
             onclick={() => activeCategory = category}
-            class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-slate-950 dark:bg-emerald-500 text-white dark:text-slate-950 shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
+            class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
             {category}
           </button>
         {/each}
@@ -210,7 +228,7 @@
 
           <!-- Open in Studio Action Button -->
           <a 
-            href="/studio" 
+            href="/studio?add={selectedComponent.id}" 
             class="px-5 py-2.5 rounded-xl bg-slate-950 dark:bg-emerald-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-emerald-400 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer shrink-0">
             <span>Drop in Studio</span>
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -221,7 +239,7 @@
         <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
               <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
                 Live Interactive Stage
               </h3>

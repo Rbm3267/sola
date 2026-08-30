@@ -114,11 +114,51 @@
     }
   }
 
+  // Undo History Stack (Max 30 snapshots)
+  let undoStack = $state<StudioCard[][]>([]);
+
+  function pushHistory() {
+    undoStack = [...undoStack.slice(-30), JSON.parse(JSON.stringify(cards))];
+  }
+
+  function undo() {
+    if (undoStack.length > 0) {
+      const previous = undoStack[undoStack.length - 1];
+      undoStack = undoStack.slice(0, -1);
+      cards = previous;
+      activeCardId = null;
+    }
+  }
+
   onMount(() => {
     const presetParam = page.url.searchParams.get('preset') || page.url.searchParams.get('template');
     if (presetParam) {
       loadSample(presetParam);
     }
+    const addParam = page.url.searchParams.get('add') || page.url.searchParams.get('component');
+    if (addParam) {
+      const found = COMPONENT_CATALOG.find(c => c.id === addParam || c.componentName === addParam);
+      if (found) {
+        addCatalogComponent(found);
+      }
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+        if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          undo();
+        }
+      }
+      if (e.key === 'Escape') {
+        presetMenuOpen = false;
+        componentDrawerOpen = false;
+        exportModalOpen = false;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   });
 
   let confirmClearCanvas = $state(false);
@@ -133,6 +173,7 @@
       }, 3000);
       return;
     }
+    pushHistory();
     confirmClearCanvas = false;
     cards = [];
     activeCardId = null;
@@ -279,6 +320,7 @@
       config: item.defaultConfig
     };
 
+    pushHistory();
     cards = [...cards, newCard];
     activeCardId = newId;
     componentDrawerOpen = false;
@@ -286,12 +328,14 @@
 
   function removeCard(id: string, e?: Event) {
     if (e) e.stopPropagation();
+    pushHistory();
     cards = cards.filter((c) => c.id !== id);
     if (activeCardId === id) activeCardId = null;
   }
 
   function duplicateCard(card: StudioCard, e?: Event) {
     if (e) e.stopPropagation();
+    pushHistory();
     const copy: StudioCard = {
       ...JSON.parse(JSON.stringify(card)),
       id: 'c_' + Math.random().toString(36).substring(2, 8),
@@ -304,6 +348,7 @@
 
   function setCols(card: StudioCard, cols: 1 | 2 | 3, e?: Event) {
     if (e) e.stopPropagation();
+    pushHistory();
     card.cols = cols;
     cards = [...cards];
   }
