@@ -9,7 +9,7 @@ export interface ComponentPropSpec {
 export interface CatalogComponent {
   id: string;
   name: string;
-  category: 'Metrics & KPIs' | 'Gauges & Rings' | 'Controllers & Sliders' | 'Flows & Cascades' | 'Lists & Feeds' | 'Matrices & Graphs' | 'Forms & Inputs' | 'Status & HUD';
+  category: 'Metrics & KPIs' | 'Gauges & Rings' | 'Controllers & Sliders' | 'Flows & Cascades' | 'Lists & Feeds' | 'Matrices & Graphs' | 'Forms & Inputs' | 'Status & HUD' | 'Overlays & Dialogs' | 'Navigation' | 'Data Display' | 'Buttons & Actions';
   description: string;
   tagline: string;
   badge?: string;
@@ -908,6 +908,186 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
       react: `import { NotificationCenter } from '@sola/ui';\n\nexport function NavNotifications() {\n  const [items, setItems] = useState(notifications);\n  return (\n    <NotificationCenter\n      notifications={items}\n      onMarkAllRead={() => setItems(\n        items.map(n => ({ ...n, read: true }))\n      )}\n      onItemClick={(id) => router.push(\`/detail/\${id}\`)}\n    />\n  );\n}`,
       svelte: `<script>\n  import { NotificationCenter } from '@sola/ui';\n  let items = $state(notifications);\n</script>\n\n<NotificationCenter\n  notifications={items}\n  onMarkAllRead={() => {\n    items = items.map(n => ({ ...n, read: true }));\n  }}\n/>`,
       html: `<sola-notification-center\n  title="Notifications"\n></sola-notification-center>`
+    }
+  },
+
+  // ═══════════════════════════════════════════
+  // PHASE 1: FOUNDATIONAL PRIMITIVES
+  // ═══════════════════════════════════════════
+
+  // 28. Button
+  {
+    id: 'sola-button',
+    name: 'Button & Icon Button',
+    category: 'Buttons & Actions',
+    description: 'Universal button with 5 variants (primary, secondary, ghost, destructive, outline), 4 sizes, loading spinner, and spring-press tactile scale.',
+    tagline: 'Actions, submissions, and interactive controls',
+    badge: 'Foundation',
+    componentName: 'SolaButton',
+    defaultConfig: {
+      variant: 'primary',
+      size: 'default',
+      label: 'Save Changes',
+      loading: false,
+      disabled: false
+    },
+    props: [
+      { name: 'variant', type: 'string', defaultValue: 'primary', description: 'Visual style', options: ['primary', 'secondary', 'ghost', 'destructive', 'outline'] },
+      { name: 'size', type: 'string', defaultValue: 'default', description: 'Button size', options: ['sm', 'default', 'lg', 'icon'] },
+      { name: 'label', type: 'string', defaultValue: 'Button', description: 'Button label text' },
+      { name: 'loading', type: 'boolean', defaultValue: false, description: 'Show loading spinner' },
+      { name: 'disabled', type: 'boolean', defaultValue: false, description: 'Disable interaction' }
+    ],
+    codeSnippets: {
+      sola: `<SolaButton variant="primary" label="Save Changes" />\n<SolaButton variant="destructive" label="Delete" />\n<SolaButton variant="ghost" label="Cancel" />\n<SolaButton variant="primary" label="Saving..." loading={true} />`,
+      react: `import { Button } from '@sola/ui';\n\nexport function Actions() {\n  return (\n    <>\n      <Button variant="primary">Save Changes</Button>\n      <Button variant="destructive">Delete</Button>\n      <Button variant="ghost">Cancel</Button>\n      <Button loading>Saving...</Button>\n    </>\n  );\n}`,
+      svelte: `<script>\n  import { SolaButton } from '@sola/ui';\n</script>\n\n<SolaButton variant="primary" label="Save Changes" />\n<SolaButton variant="destructive" label="Delete" />\n<SolaButton variant="ghost" label="Cancel" />`,
+      html: `<sola-button variant="primary">Save Changes</sola-button>\n<sola-button variant="destructive">Delete</sola-button>`
+    }
+  },
+
+  // 29. Dialog
+  {
+    id: 'sola-dialog',
+    name: 'Modal Dialog',
+    category: 'Overlays & Dialogs',
+    description: 'Focus-trapped modal overlay with backdrop blur, spring-scale entrance animation, Escape key dismissal, and accessible ARIA roles.',
+    tagline: 'Confirmations, forms, and focused task workflows',
+    badge: 'Foundation',
+    componentName: 'SolaDialog',
+    defaultConfig: {
+      open: true,
+      title: 'Confirm Action',
+      description: 'Are you sure you want to proceed? This action cannot be undone.'
+    },
+    props: [
+      { name: 'open', type: 'boolean', defaultValue: false, description: 'Whether the dialog is visible' },
+      { name: 'title', type: 'string', defaultValue: 'Dialog', description: 'Dialog heading' },
+      { name: 'description', type: 'string', defaultValue: '', description: 'Optional description text below heading' }
+    ],
+    codeSnippets: {
+      sola: `<SolaDialog\n  open={showModal}\n  title="Confirm Action"\n  description="This action cannot be undone."\n  onclose={() => showModal = false}\n>\n  <SolaButton variant="destructive" label="Delete" />\n  <SolaButton variant="ghost" label="Cancel" />\n</SolaDialog>`,
+      react: `import { Dialog } from '@sola/ui';\n\nexport function ConfirmDelete() {\n  const [open, setOpen] = useState(false);\n  return (\n    <Dialog\n      open={open}\n      onClose={() => setOpen(false)}\n      title="Confirm Action"\n      description="This cannot be undone."\n    >\n      <Button variant="destructive">Delete</Button>\n      <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>\n    </Dialog>\n  );\n}`,
+      svelte: `<script>\n  import { SolaDialog, SolaButton } from '@sola/ui';\n  let open = $state(false);\n</script>\n\n<SolaButton label="Open" onclick={() => open = true} />\n<SolaDialog {open} title="Confirm" onclose={() => open = false}>\n  <SolaButton variant="destructive" label="Delete" />\n</SolaDialog>`,
+      html: `<sola-dialog open title="Confirm Action">\n  <p>This action cannot be undone.</p>\n</sola-dialog>`
+    }
+  },
+
+  // 30. Tabs
+  {
+    id: 'sola-tabs',
+    name: 'Tabs & Segmented Control',
+    category: 'Navigation',
+    description: 'Horizontal tab navigation with 3 variants (underline, pill, segmented control), optional badge counts, and accessible ARIA tab roles.',
+    tagline: 'View switching, section navigation, and content panels',
+    badge: 'Foundation',
+    componentName: 'SolaTabs',
+    defaultConfig: {
+      variant: 'underline',
+      tabs: [
+        { id: 'overview', label: 'Overview' },
+        { id: 'analytics', label: 'Analytics', badge: '12' },
+        { id: 'settings', label: 'Settings' }
+      ],
+      activeTab: 'overview'
+    },
+    props: [
+      { name: 'variant', type: 'string', defaultValue: 'underline', description: 'Tab visual style', options: ['underline', 'pill', 'segment'] },
+      { name: 'tabs', type: 'Array<Tab>', defaultValue: [], description: 'Array of tab objects with id, label, and optional badge' },
+      { name: 'activeTab', type: 'string', defaultValue: '', description: 'ID of the currently active tab' }
+    ],
+    codeSnippets: {
+      sola: `<SolaTabs\n  variant="segment"\n  tabs={[\n    { id: "overview", label: "Overview" },\n    { id: "analytics", label: "Analytics", badge: "12" },\n    { id: "settings", label: "Settings" }\n  ]}\n  activeTab="overview"\n  onchange={(id) => currentTab = id}\n/>`,
+      react: `import { Tabs } from '@sola/ui';\n\nexport function PageNav() {\n  const [tab, setTab] = useState("overview");\n  return (\n    <Tabs\n      variant="segment"\n      tabs={[\n        { id: "overview", label: "Overview" },\n        { id: "analytics", label: "Analytics", badge: "12" }\n      ]}\n      activeTab={tab}\n      onChange={setTab}\n    />\n  );\n}`,
+      svelte: `<script>\n  import { SolaTabs } from '@sola/ui';\n  let current = $state('overview');\n</script>\n\n<SolaTabs\n  variant="segment"\n  tabs={[{ id: "overview", label: "Overview" }, { id: "settings", label: "Settings" }]}\n  activeTab={current}\n  onchange={(id) => current = id}\n/>`,
+      html: `<sola-tabs variant="segment">\n  <sola-tab id="overview" label="Overview" active />\n  <sola-tab id="settings" label="Settings" />\n</sola-tabs>`
+    }
+  },
+
+  // 31. Tooltip
+  {
+    id: 'sola-tooltip',
+    name: 'Tooltip',
+    category: 'Overlays & Dialogs',
+    description: 'Hover/focus floating text label with configurable position, delay, arrow indicator, and smooth fade-in animation.',
+    tagline: 'Hover hints, icon labels, and contextual help',
+    badge: 'Foundation',
+    componentName: 'SolaTooltip',
+    defaultConfig: {
+      text: 'This is a tooltip',
+      position: 'top',
+      delay: 300
+    },
+    props: [
+      { name: 'text', type: 'string', defaultValue: 'Tooltip', description: 'Tooltip text content' },
+      { name: 'position', type: 'string', defaultValue: 'top', description: 'Anchor position', options: ['top', 'bottom', 'left', 'right'] },
+      { name: 'delay', type: 'number', defaultValue: 300, description: 'Show delay in milliseconds' }
+    ],
+    codeSnippets: {
+      sola: `<SolaTooltip text="Edit settings" position="top">\n  <SolaButton variant="icon" label="Settings">\n    <GearIcon />\n  </SolaButton>\n</SolaTooltip>`,
+      react: `import { Tooltip, Button } from '@sola/ui';\n\nexport function IconAction() {\n  return (\n    <Tooltip text="Edit settings" position="top">\n      <Button variant="icon">\n        <GearIcon />\n      </Button>\n    </Tooltip>\n  );\n}`,
+      svelte: `<script>\n  import { SolaTooltip, SolaButton } from '@sola/ui';\n</script>\n\n<SolaTooltip text="Edit settings" position="top">\n  <SolaButton variant="icon" label="Settings" />\n</SolaTooltip>`,
+      html: `<sola-tooltip text="Edit settings" position="top">\n  <button>Settings</button>\n</sola-tooltip>`
+    }
+  },
+
+  // 32. Avatar
+  {
+    id: 'sola-avatar',
+    name: 'Avatar & Status Indicator',
+    category: 'Data Display',
+    description: 'User/entity avatar with image source, auto-colored initials fallback, 5 sizes, online/offline/busy status dot, and circle/rounded shape.',
+    tagline: 'User identity, team members, and presence indicators',
+    badge: 'Foundation',
+    componentName: 'SolaAvatar',
+    defaultConfig: {
+      initials: 'JD',
+      alt: 'John Doe',
+      size: 'default',
+      status: 'online',
+      shape: 'circle'
+    },
+    props: [
+      { name: 'src', type: 'string', defaultValue: '', description: 'Image URL' },
+      { name: 'initials', type: 'string', defaultValue: 'JD', description: 'Fallback initials (max 2 chars)' },
+      { name: 'size', type: 'string', defaultValue: 'default', description: 'Avatar size', options: ['xs', 'sm', 'default', 'lg', 'xl'] },
+      { name: 'status', type: 'string', defaultValue: 'none', description: 'Status dot indicator', options: ['online', 'offline', 'busy', 'away', 'none'] },
+      { name: 'shape', type: 'string', defaultValue: 'circle', description: 'Avatar shape', options: ['circle', 'rounded'] }
+    ],
+    codeSnippets: {
+      sola: `<SolaAvatar\n  src="/avatars/jane.jpg"\n  alt="Jane Smith"\n  size="lg"\n  status="online"\n/>\n\n<!-- Initials fallback -->\n<SolaAvatar initials="JD" size="default" status="busy" />`,
+      react: `import { Avatar } from '@sola/ui';\n\nexport function UserProfile() {\n  return (\n    <Avatar\n      src="/avatars/jane.jpg"\n      alt="Jane Smith"\n      size="lg"\n      status="online"\n    />\n  );\n}`,
+      svelte: `<script>\n  import { SolaAvatar } from '@sola/ui';\n</script>\n\n<SolaAvatar\n  src="/avatars/jane.jpg"\n  alt="Jane Smith"\n  size="lg"\n  status="online"\n/>`,
+      html: `<sola-avatar\n  src="/avatars/jane.jpg"\n  alt="Jane Smith"\n  size="lg"\n  status="online"\n></sola-avatar>`
+    }
+  },
+
+  // 33. Skeleton Loader
+  {
+    id: 'sola-skeleton',
+    name: 'Skeleton Loader',
+    category: 'Data Display',
+    description: 'Shimmer loading placeholder with 4 variants (line, circle, card, text block), configurable dimensions, repeat count, and pulse animation.',
+    tagline: 'Loading states, async placeholders, and perceived performance',
+    badge: 'Foundation',
+    componentName: 'SolaSkeleton',
+    defaultConfig: {
+      variant: 'card',
+      count: 1,
+      animate: true
+    },
+    props: [
+      { name: 'variant', type: 'string', defaultValue: 'line', description: 'Skeleton shape', options: ['line', 'circle', 'card', 'text'] },
+      { name: 'width', type: 'string', defaultValue: 'full', description: 'Width fraction', options: ['full', '3/4', '1/2', '1/4'] },
+      { name: 'height', type: 'string', defaultValue: 'default', description: 'Height size', options: ['xs', 'sm', 'default', 'lg', 'xl'] },
+      { name: 'count', type: 'number', defaultValue: 1, description: 'Number of skeleton items to render' },
+      { name: 'animate', type: 'boolean', defaultValue: true, description: 'Enable pulse animation' }
+    ],
+    codeSnippets: {
+      sola: `<!-- Card skeleton -->\n<SolaSkeleton variant="card" />\n\n<!-- Text block skeleton -->\n<SolaSkeleton variant="text" count={3} />\n\n<!-- Circle + lines -->\n<div class="flex gap-3">\n  <SolaSkeleton variant="circle" />\n  <SolaSkeleton variant="line" width="3/4" count={2} />\n</div>`,
+      react: `import { Skeleton } from '@sola/ui';\n\nexport function LoadingCard() {\n  return (\n    <div>\n      <Skeleton variant="card" />\n      <Skeleton variant="text" count={3} />\n      <div className="flex gap-3">\n        <Skeleton variant="circle" />\n        <Skeleton variant="line" width="3/4" />\n      </div>\n    </div>\n  );\n}`,
+      svelte: `<script>\n  import { SolaSkeleton } from '@sola/ui';\n</script>\n\n<SolaSkeleton variant="card" />\n<SolaSkeleton variant="text" count={3} />`,
+      html: `<sola-skeleton variant="card"></sola-skeleton>\n<sola-skeleton variant="text" count="3"></sola-skeleton>`
     }
   }
 ];

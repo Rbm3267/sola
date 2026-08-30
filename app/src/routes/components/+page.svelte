@@ -12,6 +12,12 @@
   import DiffAudit from '$lib/components/DiffAudit.svelte';
   import SchemaInspector from '$lib/components/SchemaInspector.svelte';
   import SentinelCapsule from '$lib/components/SentinelCapsule.svelte';
+  import SolaButton from '$lib/components/SolaButton.svelte';
+  import SolaDialog from '$lib/components/SolaDialog.svelte';
+  import SolaTabs from '$lib/components/SolaTabs.svelte';
+  import SolaTooltip from '$lib/components/SolaTooltip.svelte';
+  import SolaAvatar from '$lib/components/SolaAvatar.svelte';
+  import SolaSkeleton from '$lib/components/SolaSkeleton.svelte';
   import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { fade, fly } from 'svelte/transition';
 
@@ -251,6 +257,61 @@
             {:else if selectedComponent.componentName === 'SentinelCapsule'}
               <div class="w-full max-w-lg">
                 <SentinelCapsule {...liveProps} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaButton'}
+              <div class="w-full flex flex-wrap items-center justify-center gap-3">
+                <SolaButton variant={liveProps.variant || 'primary'} size={liveProps.size || 'default'} label={liveProps.label || 'Button'} loading={liveProps.loading} disabled={liveProps.disabled} />
+                <SolaButton variant="secondary" size={liveProps.size || 'default'} label="Secondary" />
+                <SolaButton variant="ghost" size={liveProps.size || 'default'} label="Ghost" />
+                <SolaButton variant="destructive" size={liveProps.size || 'default'} label="Delete" />
+                <SolaButton variant="outline" size={liveProps.size || 'default'} label="Outline" />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaDialog'}
+              <div class="w-full flex flex-col items-center gap-4">
+                <SolaButton variant="primary" label="Open Dialog" onclick={() => liveProps.open = true} />
+                <SolaDialog open={liveProps.open} title={liveProps.title || 'Dialog'} description={liveProps.description || ''} onclose={() => liveProps.open = false} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaTabs'}
+              <div class="w-full space-y-6">
+                <div>
+                  <p class="text-[10px] font-mono text-slate-400 mb-2 uppercase tracking-wider">Underline</p>
+                  <SolaTabs variant="underline" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
+                </div>
+                <div>
+                  <p class="text-[10px] font-mono text-slate-400 mb-2 uppercase tracking-wider">Pill</p>
+                  <SolaTabs variant="pill" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
+                </div>
+                <div>
+                  <p class="text-[10px] font-mono text-slate-400 mb-2 uppercase tracking-wider">Segmented Control</p>
+                  <SolaTabs variant="segment" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
+                </div>
+              </div>
+            {:else if selectedComponent.componentName === 'SolaTooltip'}
+              <div class="w-full flex items-center justify-center gap-6 py-8">
+                <SolaTooltip text="Top tooltip" position="top">
+                  <SolaButton variant="secondary" label="Top" />
+                </SolaTooltip>
+                <SolaTooltip text="Bottom tooltip" position="bottom">
+                  <SolaButton variant="secondary" label="Bottom" />
+                </SolaTooltip>
+                <SolaTooltip text="Left tooltip" position="left">
+                  <SolaButton variant="secondary" label="Left" />
+                </SolaTooltip>
+                <SolaTooltip text="Right tooltip" position="right">
+                  <SolaButton variant="secondary" label="Right" />
+                </SolaTooltip>
+              </div>
+            {:else if selectedComponent.componentName === 'SolaAvatar'}
+              <div class="w-full flex flex-wrap items-end justify-center gap-4">
+                <SolaAvatar initials="AB" size="xs" status="online" />
+                <SolaAvatar initials="CD" size="sm" status="busy" />
+                <SolaAvatar initials={liveProps.initials || 'JD'} size={liveProps.size || 'default'} status={liveProps.status || 'online'} shape={liveProps.shape || 'circle'} />
+                <SolaAvatar initials="EF" size="lg" status="away" />
+                <SolaAvatar initials="GH" size="xl" status="offline" />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaSkeleton'}
+              <div class="w-full max-w-sm space-y-4">
+                <SolaSkeleton variant={liveProps.variant || 'card'} count={liveProps.count || 1} animate={liveProps.animate !== false} />
               </div>
             {:else}
               <!-- New components show schema-driven preview card -->
