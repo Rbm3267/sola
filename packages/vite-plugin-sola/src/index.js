@@ -1,4 +1,4 @@
-import { compile } from '@sola/compiler';
+import { compile } from '@sola-air-ui/compiler';
 import { readFileSync } from 'fs';
 
 export default function solaPlugin(options = {}) {

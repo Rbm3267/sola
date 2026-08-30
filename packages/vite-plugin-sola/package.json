@@ -1,5 +1,5 @@
 {
-  "name": "@sola/vite-plugin-sola",
+  "name": "@sola-air-ui/vite-plugin-sola",
   "version": "0.0.1",
   "description": "Vite plugin for Sola — compile .sola single-file components at build time",
   "type": "module",
@@ -15,7 +15,7 @@
     "url": "https://github.com/rbm3267/sola"
   },
   "dependencies": {
-    "@sola/compiler": "^1.0.0"
+    "@sola-air-ui/compiler": "^1.0.0"
   },
   "peerDependencies": {
     "vite": ">=4.0.0"

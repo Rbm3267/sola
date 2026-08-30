@@ -1,5 +1,5 @@
 {
-  "name": "@sola/relay",
+  "name": "@sola-air-ui/relay",
   "version": "1.0.0",
   "description": "Sola Relay — local data proxy that keeps credentials on-device and streams live data to Sola components",
   "type": "module",

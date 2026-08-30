@@ -1,5 +1,5 @@
 {
-  "name": "@sola/mcp",
+  "name": "@sola-air-ui/mcp",
   "version": "1.0.0",
   "description": "MCP server for Sola — compile .sola components and query the API reference directly from Claude Code",
   "type": "module",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@sola/compiler": "^1.0.0",
+    "@sola-air-ui/compiler": "^1.0.0",
     "zod": "^3.23.0"
   },
   "publishConfig": {
