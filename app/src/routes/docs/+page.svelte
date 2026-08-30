@@ -285,7 +285,7 @@ export function SolaIncidentCard({ incidentId }) {
   <title>{currentItem.title} - Sola Documentation</title>
 </svelte:head>
 
-<div class="flex flex-col w-full min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 transition-colors duration-200 font-sans">
+<div class="flex flex-col w-full min-h-screen overflow-x-hidden bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 transition-colors duration-200 font-sans">
   <Navbar />
 
   <!-- Mobile Sticky Header (Tailwind Style) -->
@@ -327,7 +327,7 @@ export function SolaIncidentCard({ incidentId }) {
   {/if}
 
   <!-- Main 3-Column Docs Layout Container (Tailwind CSS style) -->
-  <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col lg:flex-row gap-10 w-full items-start">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col lg:flex-row gap-10 w-full items-start">
     
     <!-- 1. Left Sidebar Navigation (Tailwind Rail style) -->
     <aside class="hidden lg:block w-64 shrink-0 sticky top-24 space-y-8 pr-4">
@@ -380,7 +380,7 @@ export function SolaIncidentCard({ incidentId }) {
     </aside>
 
     <!-- 2. Center Article Reader (Tailwind Prose & Code Blocks) -->
-    <main class="flex-1 w-full min-w-0 max-w-4xl space-y-12">
+    <main class="flex-1 w-full min-w-0 space-y-12">
       
       <!-- AI Answer Callout (if active) -->
       {#if aiAnswer}
