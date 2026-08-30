@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Sola UI",
-  "version": "0.9.1",
+  "version": "1.0.0",
   "description": "Preview ambient zero-VDOM Sola UI components directly on top of your live web apps in a closed Shadow DOM.",
   "permissions": [
     "activeTab",
