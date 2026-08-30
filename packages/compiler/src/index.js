@@ -25,6 +25,11 @@ function scopeStyles(css, scopeHash) {
       .map(part => {
         const trimmed = part.trim();
         if (!trimmed) return part;
+        // Insert scope hash before pseudo-class/element (e.g. button:hover → button.hash:hover)
+        const pseudoIdx = trimmed.search(/::?[\w-]/);
+        if (pseudoIdx > 0) {
+          return `${trimmed.slice(0, pseudoIdx)}.${scopeHash}${trimmed.slice(pseudoIdx)}`;
+        }
         return `${trimmed}.${scopeHash}`;
       })
       .join(', ');
@@ -69,6 +74,35 @@ export function compile(source, options = {}) {
   const scopedCss = hasStyles ? scopeStyles(styleContent, scopeHash) : '';
 
   let rawTemplate = rawTemplateSource;
+
+  // Pre-process attribute-bound expressions BEFORE extractExpressions.
+  // extractExpressions replaces {expr} with <sola-expr> HTML tags, which breaks
+  // htmlparser2 when those tags land inside attribute values.
+  const dynAttrs = []; // expressions for __soladyn_N__ markers
+
+  // Event handlers: on:event={expr} → on:event="expr"
+  rawTemplate = rawTemplate.replace(/\bon:([\w]+)=\{([^}]+)\}/g, 'on:$1="$2"');
+  // Bind: bind:prop={expr} → bind:prop="expr"
+  rawTemplate = rawTemplate.replace(/\bbind:([\w]+)=\{([^}]+)\}/g, 'bind:$1="$2"');
+  // Quoted string interpolation: attr="text {expr} text" → attr="__soladyn_N__"
+  // Run iteratively to handle multiple {expr} per value.
+  let _prev;
+  do {
+    _prev = rawTemplate;
+    rawTemplate = rawTemplate.replace(/([\w:-]+)="([^"]*\{[^{}]+\}[^"]*)"/g, (_, attr, val) => {
+      const jsExpr = '`' + val.replace(/\{([^{}]+)\}/g, (__, e) => `\${${e.trim()}}`) + '`';
+      const i = dynAttrs.length;
+      dynAttrs.push(jsExpr);
+      return `${attr}="__soladyn_${i}__"`;
+    });
+  } while (rawTemplate !== _prev);
+  // Unquoted attr expressions: attr={expr} → attr="__soladyn_N__"
+  rawTemplate = rawTemplate.replace(/([\w:-]+)=\{([^{}]+)\}/g, (_, attr, expr) => {
+    const i = dynAttrs.length;
+    dynAttrs.push(expr.trim());
+    return `${attr}="__soladyn_${i}__"`;
+  });
+
   rawTemplate = extractExpressions(rawTemplate);
 
   // Pre-process logic blocks: structured if-then-else
@@ -148,7 +182,7 @@ export function compile(source, options = {}) {
             exportedProps.push({ name, default: defaultVal });
             edits.push({
               start: node.start,
-              end: node.start + 7,
+              end: node.end,
               replacement: ''
             });
           });
@@ -173,10 +207,13 @@ export function compile(source, options = {}) {
                 const varName = decl.id.name;
                 const expr = decl.init.arguments[0];
                 const exprSrc = expr ? scriptContent.slice(expr.start, expr.end) : 'undefined';
+                const isFn = expr && (expr.type === 'ArrowFunctionExpression' || expr.type === 'FunctionExpression');
                 edits.push({
                   start: node.start,
                   end: node.end,
-                  replacement: `const ${varName} = createDerived(() => ${exprSrc});`
+                  replacement: isFn
+                    ? `const ${varName} = createDerived(${exprSrc});`
+                    : `const ${varName} = createDerived(() => ${exprSrc});`
                 });
               } else if (callee.type === 'Identifier' && callee.name === '$effect') {
                 const body = decl.init.arguments[0];
@@ -367,15 +404,31 @@ export function compile(source, options = {}) {
       domCode += `  ${id}.classList.add('${scopeHash}');\n`;
     }
 
+    const BOOLEAN_ATTRS = new Set(['disabled', 'checked', 'selected', 'readonly', 'required', 'multiple', 'open']);
     for (const [key, val] of Object.entries(node.attribs || {})) {
+      // Dynamic attribute pre-processed from {expr} in attribute values
+      const dynMatch = /^__soladyn_(\d+)__$/.exec(val);
+      if (dynMatch) {
+        const expr = dynAttrs[parseInt(dynMatch[1])];
+        if (BOOLEAN_ATTRS.has(key)) {
+          domCode += `  createEffect(() => { const _v = !!(${expr}); if (_v) ${id}.setAttribute('${key}', ''); else ${id}.removeAttribute('${key}'); });\n`;
+        } else if (key === 'class' || key === 'className') {
+          const suffix = hasStyles ? ` + ' ${scopeHash}'` : '';
+          domCode += `  createEffect(() => { ${id}.className = (${expr})${suffix}; });\n`;
+        } else {
+          domCode += `  createEffect(() => { ${id}.setAttribute('${key}', String(${expr})); });\n`;
+        }
+        continue;
+      }
       if (key.startsWith('on:')) {
         const eventName = key.slice(3);
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
-        domCode += `  ${id}.addEventListener('${eventName}', (e) => { ${val} });\n`;
+        // val is the handler expression (pre-processed from {expr}), pass directly
+        domCode += `  ${id}.addEventListener('${eventName}', ${val});\n`;
       } else if (key.startsWith('on')) {
         const eventName = key.slice(2).toLowerCase();
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
-        domCode += `  ${id}.addEventListener('${eventName}', (e) => { ${val} });\n`;
+        domCode += `  ${id}.addEventListener('${eventName}', ${val});\n`;
       } else if (key.startsWith('bind:')) {
         const prop = key.slice(5);
         if (prop === 'value') {
@@ -402,7 +455,7 @@ export function compile(source, options = {}) {
 
   // Assemble final output module
   let output = '';
-  output += `// Compiled by @sola-air-ui/compiler v1.0.0\n`;
+  output += `// Compiled by @sola-air-ui/compiler v1.0.1\n`;
   output += `import { createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } from '@sola-air-ui/core';\n`;
 
   for (const imp of componentImports) {
