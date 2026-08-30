@@ -1,13 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import mountSolaPlayground from './SolaPlayground.sola';
 
-  let container: HTMLDivElement;
+  let {
+    component = undefined,
+    props = {}
+  } = $props<{
+    component?: (target: HTMLElement, props?: Record<string, any>) => (() => void) | void;
+    props?: Record<string, any>;
+  }>();
+
+  let container = $state<HTMLDivElement | null>(null);
 
   onMount(() => {
-    if (container) {
-      const cleanup = mountSolaPlayground(container);
-      return cleanup;
+    if (container && typeof component === 'function') {
+      const cleanup = component(container, props);
+      return () => {
+        if (typeof cleanup === 'function') cleanup();
+      };
     }
   });
 </script>

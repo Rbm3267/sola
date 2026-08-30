@@ -1,0 +1,168 @@
+<script>
+  let signalTick = $state(148200);
+  let activeTab = $state("signals");
+
+  function triggerTick() {
+    signalTick += 1200;
+  }
+</script>
+
+<div class="sola-overview-root">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-badge">
+      <span>@sola/core • ZERO-VDOM REACTIVE RUNTIME</span>
+    </div>
+    <h1 class="hero-heading">
+      The Intent-Driven UI Engine for Modern Ambient Apps
+    </h1>
+    <p class="hero-subtext">
+      Sub-millisecond DOM updates, pure SVG physics controllers, and multi-framework export compiled from native .sola single-file components.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="/studio" class="cta-primary">Launch Studio Canvas →</a>
+      <a href="/components" class="cta-secondary">Explore 56 Primitives</a>
+    </div>
+  </div>
+
+  <!-- Grid Pillars -->
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-icon">01</div>
+      <h3 class="pillar-title">Zero-VDOM Signals</h3>
+      <p class="pillar-desc">O(1) direct DOM text-node mutations at 1,000Hz with zero garbage collection or React Fiber reconciliation overhead.</p>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-icon">02</div>
+      <h3 class="pillar-title">Tactile Spring Physics</h3>
+      <p class="pillar-desc">Rotary dials, range sliders, and rolling counters with true inertia, damping, and hardware-grade resistance.</p>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-icon">03</div>
+      <h3 class="pillar-title">Multi-Framework Portability</h3>
+      <p class="pillar-desc">One signal core compiles to native .sola, React 19 JSX, Svelte 5 runes, and framework-agnostic Web Components.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sola-overview-root {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #f8fafc;
+  }
+  .hero-section {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 64px auto;
+  }
+  .hero-badge {
+    display: inline-flex;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #10b981;
+    font-size: 11px;
+    font-family: monospace;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .hero-heading {
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 640px) {
+    .hero-heading { font-size: 32px; }
+  }
+  .hero-subtext {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #94a3b8;
+    margin-bottom: 32px;
+  }
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: #10b981;
+    color: #090d19;
+    font-weight: 800;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .cta-primary:hover {
+    background: #059669;
+    transform: translateY(-1px);
+  }
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 800px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+  }
+  .pillar-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 24px;
+    transition: all 0.2s ease;
+  }
+  .pillar-card:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  .pillar-icon {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 800;
+    color: #10b981;
+    margin-bottom: 12px;
+  }
+  .pillar-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .pillar-desc {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #94a3b8;
+  }
+</style>

@@ -1,0 +1,285 @@
+<script>
+  let activeTab = $state("dashboard");
+  let promptText = $state("");
+  let nodeCount = $state(5);
+  let statusText = $state("Nominal");
+
+  function triggerSignal() {
+    nodeCount++;
+    statusText = "Mesh Synced (" + nodeCount + ")";
+  }
+</script>
+
+<div class="sola-studio-root">
+  <div class="studio-topbar">
+    <div class="studio-brand">
+      <div class="studio-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="9" y1="21" x2="9" y2="9"/>
+        </svg>
+      </div>
+      <div class="studio-title-wrap">
+        <h1 class="studio-title">Sola Studio</h1>
+        <span class="studio-badge">Native .sola Canvas</span>
+      </div>
+    </div>
+
+    <div class="studio-actions">
+      <button class="studio-btn studio-btn-primary" onclick={triggerSignal}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span>Inject Signal ({nodeCount})</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="studio-canvas">
+    <div class="studio-grid">
+      <!-- Card 1: Metric Tile -->
+      <div class="sola-card col-1">
+        <div class="card-header">
+          <span class="card-label">INGESTION THROUGHPUT</span>
+          <span class="card-delta">+18.4%</span>
+        </div>
+        <div class="card-value">$148,200</div>
+        <div class="card-meta">Zero-VDOM O(1) Signal Target</div>
+      </div>
+
+      <!-- Card 2: Status HUD -->
+      <div class="sola-card col-1">
+        <div class="card-header">
+          <span class="card-label">CLUSTER STATE</span>
+          <span class="card-badge-live">Live</span>
+        </div>
+        <div class="card-value card-val-emerald">{statusText}</div>
+        <div class="card-meta">{nodeCount} Active Telemetry Nodes</div>
+      </div>
+
+      <!-- Card 3: Dial Controller -->
+      <div class="sola-card col-1">
+        <div class="card-header">
+          <span class="card-label">SIGNAL FREQUENCY</span>
+          <span class="card-delta">1,000Hz</span>
+        </div>
+        <div class="card-value">1.0 kHz</div>
+        <div class="card-meta">Sub-millisecond Patch Loop</div>
+      </div>
+
+      <!-- Card 4: Signal Stream Waterfall -->
+      <div class="sola-card col-2">
+        <div class="card-header">
+          <span class="card-label">TELEMETRY STREAM CASCADE</span>
+          <span class="card-delta">Zero GC</span>
+        </div>
+        <div class="spark-bars">
+          <div class="bar" style="height: 40%;"></div>
+          <div class="bar" style="height: 65%;"></div>
+          <div class="bar" style="height: 35%;"></div>
+          <div class="bar" style="height: 85%;"></div>
+          <div class="bar" style="height: 55%;"></div>
+          <div class="bar" style="height: 95%;"></div>
+          <div class="bar" style="height: 75%;"></div>
+          <div class="bar" style="height: 90%;"></div>
+        </div>
+        <div class="card-meta">Direct text node mutation without virtual DOM tree reconciliation</div>
+      </div>
+
+      <!-- Card 5: Pipeline Code Block -->
+      <div class="sola-card col-1">
+        <div class="card-header">
+          <span class="card-label">SIGNAL RUNTIME</span>
+          <span class="card-badge-live">@sola/core</span>
+        </div>
+        <div class="code-preview">
+          <code>const count = $state(0);<br/>count.subscribe(val => patch(val));</code>
+        </div>
+        <div class="card-meta">Single-file .sola compilation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sola-studio-root {
+    width: 100%;
+    min-height: calc(100vh - 64px);
+    background: #090d19;
+    color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  .studio-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(9, 13, 25, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .studio-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .studio-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .studio-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .studio-title {
+    font-size: 15px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .studio-badge {
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: 700;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    color: #94a3b8;
+  }
+  .studio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+  }
+  .studio-btn-primary {
+    background: #10b981;
+    color: #090d19;
+  }
+  .studio-btn-primary:hover {
+    background: #059669;
+    transform: translateY(-1px);
+  }
+  .studio-canvas {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+  .studio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .studio-grid { grid-template-columns: 1fr; }
+    .sola-card.col-2 { grid-column: span 1 !important; }
+  }
+  .sola-card {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+  }
+  .sola-card:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .sola-card.col-2 {
+    grid-column: span 2;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: monospace;
+    color: #64748b;
+    letter-spacing: 0.08em;
+  }
+  .card-delta {
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+  .card-badge-live {
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+  .card-value {
+    font-size: 26px;
+    font-weight: 800;
+    font-family: monospace;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .card-val-emerald {
+    color: #10b981;
+  }
+  .card-meta {
+    font-size: 11px;
+    color: #94a3b8;
+  }
+  .spark-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 60px;
+    margin: 12px 0;
+  }
+  .bar {
+    flex: 1;
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+  .bar:hover {
+    background: #10b981;
+  }
+  .code-preview {
+    background: #020617;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 11px;
+    font-family: monospace;
+    color: #38bdf8;
+    margin-bottom: 8px;
+  }
+</style>
