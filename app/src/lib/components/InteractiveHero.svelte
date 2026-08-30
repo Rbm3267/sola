@@ -36,7 +36,7 @@
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
     </span>
-    <span>Sola v1.0.0 • Zero-VDOM Intent Engine</span>
+    <span>Sola AIR v1.0.1 • Zero-VDOM Intent Engine</span>
     <span class="text-emerald-400/80">/</span>
     <span class="text-slate-500 dark:text-slate-400 font-normal">56 Primitives</span>
   </div>

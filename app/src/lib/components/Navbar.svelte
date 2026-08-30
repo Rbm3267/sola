@@ -24,9 +24,12 @@
     <div class="flex items-center gap-6">
       <a href="/" class="flex items-center gap-2.5 group">
         <SolaLogo size="sm" />
-        <div class="flex items-center gap-2">
-          <span class="text-lg font-black tracking-tight text-slate-900 dark:text-white font-sans">Sola</span>
-          <span class="text-[10px] font-mono font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 px-2 py-0.5 rounded-full">v1.0.0</span>
+        <div class="flex flex-col gap-0.5">
+          <div class="flex items-center gap-2">
+            <span class="text-lg font-black tracking-tight text-slate-900 dark:text-white font-sans leading-none">Sola <span class="text-emerald-600 dark:text-emerald-400">AIR</span></span>
+            <span class="text-[10px] font-mono font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 px-2 py-0.5 rounded-full">v1.0.1</span>
+          </div>
+          <span class="text-[9px] font-mono tracking-widest text-slate-400 dark:text-slate-500 leading-none uppercase"><span class="text-emerald-500 dark:text-emerald-400 font-bold">A</span>mbient · <span class="text-emerald-500 dark:text-emerald-400 font-bold">I</span>ntent · <span class="text-emerald-500 dark:text-emerald-400 font-bold">R</span>untime</span>
         </div>
       </a>
 
@@ -74,8 +77,8 @@
         class="flex items-center justify-between w-auto sm:w-56 h-9 px-3 rounded-xl bg-slate-100/70 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-2xs group">
         <div class="flex items-center gap-2">
           <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
-          <span class="font-medium text-slate-700 dark:text-slate-300 hidden sm:inline">Ask Sola Arc...</span>
-          <span class="font-medium text-slate-700 dark:text-slate-300 sm:hidden">Arc</span>
+          <span class="font-medium text-slate-700 dark:text-slate-300 hidden sm:inline">Ask Sola AIR...</span>
+          <span class="font-medium text-slate-700 dark:text-slate-300 sm:hidden">AIR</span>
         </div>
         <kbd class="hidden sm:inline text-[10px] font-mono bg-slate-200/60 dark:bg-white/10 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-400 font-bold">⌘K</kbd>
       </button>
