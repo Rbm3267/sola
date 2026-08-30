@@ -14,8 +14,19 @@
   <a href="https://sola-air.vercel.app"><b>sola-air.vercel.app →</b></a>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/sola-air"><img src="https://img.shields.io/npm/v/sola-air?label=sola-air&color=10b981&style=flat-square" alt="npm sola-air" /></a>
+  <a href="https://www.npmjs.com/package/@sola-air-ui/core"><img src="https://img.shields.io/npm/v/@sola-air-ui/core?label=%40sola-air-ui%2Fcore&color=10b981&style=flat-square" alt="npm @sola-air-ui/core" /></a>
+  <a href="https://www.npmjs.com/package/@sola-air-ui/compiler"><img src="https://img.shields.io/npm/v/@sola-air-ui/compiler?label=%40sola-air-ui%2Fcompiler&color=10b981&style=flat-square" alt="npm @sola-air-ui/compiler" /></a>
+  <a href="https://github.com/rbm3267/sola/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License" /></a>
+</p>
+
 ```bash
-npm create sola@latest
+# Install everything at once
+npm install sola-air
+
+# Or install individual packages
+npm install @sola-air-ui/core @sola-air-ui/compiler @sola-air-ui/vite-plugin-sola
 ```
 
 ---
