@@ -1,17 +1,21 @@
 {
   "name": "@sola/mcp",
   "version": "1.0.0",
+  "description": "MCP server for Sola — compile .sola components and query the API reference directly from Claude Code",
   "type": "module",
-  "description": "MCP server for the Sola zero-VDOM intent runtime",
   "bin": {
     "sola-mcp": "./src/index.js"
   },
-  "scripts": {
-    "start": "node src/index.js"
+  "keywords": ["sola", "mcp", "claude", "compiler", "model-context-protocol", "zero-vdom"],
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@sola/compiler": "*",
+    "@sola/compiler": "^1.0.0",
     "zod": "^3.23.0"
   },
   "publishConfig": {
