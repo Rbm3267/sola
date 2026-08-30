@@ -121,7 +121,19 @@
     }
   });
 
+  let confirmClearCanvas = $state(false);
+  let clearTimer: any = null;
+
   function clearCanvas() {
+    if (!confirmClearCanvas) {
+      confirmClearCanvas = true;
+      if (clearTimer) clearTimeout(clearTimer);
+      clearTimer = setTimeout(() => {
+        confirmClearCanvas = false;
+      }, 3000);
+      return;
+    }
+    confirmClearCanvas = false;
     cards = [];
     activeCardId = null;
     selectedPresetKey = 'blank';
@@ -434,8 +446,8 @@ export default function SolaCustomCanvas() {
               <div class="my-1 border-t border-slate-100 dark:border-white/5"></div>
               <button
                 onclick={clearCanvas}
-                class="w-full text-left px-3 py-2 rounded-xl text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors font-semibold cursor-pointer">
-                Clear Canvas
+                class="w-full text-left px-3 py-2 rounded-xl text-xs {confirmClearCanvas ? 'bg-rose-500 text-white font-bold' : 'text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 font-semibold'} transition-all cursor-pointer">
+                {confirmClearCanvas ? 'Tap again to confirm clear' : 'Clear Canvas'}
               </button>
             </div>
           {/if}
@@ -529,9 +541,23 @@ export default function SolaCustomCanvas() {
                   onclick={() => addCatalogComponent(item)}
                   class="group flex items-start gap-3 p-3 bg-slate-50 dark:bg-white/[0.03] hover:bg-emerald-50/60 dark:hover:bg-emerald-500/10 border border-slate-200/70 dark:border-white/5 hover:border-emerald-500/40 rounded-2xl text-left transition-all cursor-pointer shadow-2xs hover:shadow-xs">
                   <div class="w-8 h-8 rounded-xl bg-white dark:bg-white/10 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/>
-                    </svg>
+                    {#if item.category === 'Metrics & KPIs'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-6 4 4 6-8"/></svg>
+                    {:else if item.category === 'Controllers & Sliders'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="m12 12 4-4"/></svg>
+                    {:else if item.category === 'Forms & Inputs'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    {:else if item.category === 'Data Display'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+                    {:else if item.category === 'Status & HUD'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    {:else if item.category === 'Lists & Feeds'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    {:else if item.category === 'Matrices & Graphs'}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="6" y1="9" x2="6" y2="15"/></svg>
+                    {:else}
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/></svg>
+                    {/if}
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="flex items-center justify-between gap-1">
@@ -859,14 +885,19 @@ export default function SolaCustomCanvas() {
 
                 <!-- TYPE: HAPTIC RADIAL DIAL -->
                 {:else if card.type === 'radial_dial'}
+                  {@const valNum = Math.min(Math.max(0, Number(card.value) || 0), 100)}
+                  {@const circumference = 251.2}
+                  {@const strokeDash = (valNum / 100) * circumference}
+                  {@const strokeRest = circumference - strokeDash}
+                  {@const rotationAngle = (valNum / 100) * 360}
                   <div class="py-2 flex flex-col items-center text-center">
                     <svg width="80" height="80" viewBox="0 0 100 100">
                       <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" class="text-slate-100 dark:text-white/10" stroke-width="8"/>
-                      <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="8" stroke-dasharray="180 70" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="8" stroke-dasharray="{strokeDash} {strokeRest}" stroke-linecap="round" transform="rotate(-90 50 50)"/>
                       <circle cx="50" cy="50" r="5" fill="#10b981"/>
-                      <line x1="50" y1="50" x2="50" y2="20" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" transform="rotate(70 50 50)"/>
+                      <line x1="50" y1="50" x2="50" y2="20" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" transform="rotate({rotationAngle} 50 50)"/>
                     </svg>
-                    <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">{card.value}%</div>
+                    <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">{valNum}%</div>
                   </div>
 
                 <!-- TYPE: NODE GRAPH -->
