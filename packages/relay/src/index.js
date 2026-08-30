@@ -337,17 +337,22 @@ export class RelayServer {
     loadConfig();
 
     const server = createServer(async (req, res) => {
-      // CORS — Restricted to trusted origins
-      const origin = req.headers.origin;
-      const allowedOrigins = [
+      // CORS — restrict to trusted origins (sola-air.dev, localhost variants, chrome-extension)
+      const origin = req.headers['origin'];
+      const staticAllowed = [
         'https://www.sola-air.dev',
         'https://sola-air.dev',
         'http://localhost:5173',
         'http://localhost:4173',
         'http://127.0.0.1:5173'
       ];
-      if (origin && allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
+      const isDynLocalhost = origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+      const isExtension = origin && /^chrome-extension:\/\/[a-z]{32}$/.test(origin);
+      const allowedOrigin = (isDynLocalhost || isExtension || staticAllowed.includes(origin)) ? origin : null;
+
+      if (allowedOrigin) {
+        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+        res.setHeader('Vary', 'Origin');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       }
@@ -391,7 +396,7 @@ export class RelayServer {
           res.end(JSON.stringify({ source, schema }));
         } catch (e) {
           res.writeHead(500, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: e.message }));
+          res.end(JSON.stringify({ error: 'Schema fetch failed' }));
         }
         return;
       }
@@ -437,12 +442,20 @@ export class RelayServer {
           }
 
           const safeLimit = Math.min(Math.max(1, parseInt(limit, 10) || 100), 1000);
-          
-          // Execute parameterized/safe query
+
           let result;
           if (typeof query === 'object' && query !== null && typeof query.text === 'string') {
+            // Parameterized query — safe by construction
             const params = Array.isArray(query.params) ? query.params : [];
             result = await conn.connector.query(query.text, params);
+          } else if (typeof query === 'string') {
+            // String query — only SELECT permitted
+            if (!/^\s*SELECT\b/i.test(query)) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'Only SELECT queries are permitted' }));
+              return;
+            }
+            result = await conn.connector.query(query);
           } else {
             result = await conn.connector.query(`SELECT * FROM ${source} LIMIT ${safeLimit}`);
           }
@@ -462,7 +475,7 @@ export class RelayServer {
         } catch (e) {
           auditLog({ action: 'QUERY_ERROR', error: e.message });
           res.writeHead(500, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: e.message }));
+          res.end(JSON.stringify({ error: 'Query failed' }));
         }
         return;
       }
