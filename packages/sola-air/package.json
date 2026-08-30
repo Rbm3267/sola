@@ -1,14 +1,11 @@
 {
   "name": "sola-air",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Zero-VDOM intent runtime — install everything you need to build with Sola",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
-  },
-  "bin": {
-    "sola-relay": "./node_modules/@sola-air-ui/relay/src/cli.js"
   },
   "keywords": ["sola", "zero-vdom", "signals", "reactivity", "intent", "ui", "frontend", "compiler"],
   "license": "MIT",
