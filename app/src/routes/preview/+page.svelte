@@ -8,7 +8,9 @@
   let isAutoPlaying = $state(true);
   let isSidePanelOpen = $state(true);
   let isCardInjected = $state(false);
-  let selectedComponent = $state('Telemetry Chart');
+  let placementMode = $state<'floating' | 'target'>('floating');
+  let selectedComponent = $state('Telemetry Stream');
+  let isTargetHovered = $state(false);
 
   // Real Extension State
   let isExtensionDetected = $state(false);
@@ -23,7 +25,6 @@
       }
     }, 3200);
 
-    // Listen for extension connection
     function handleMessage(event: MessageEvent) {
       if (event.data && (event.data.type === 'SOLA_EXTENSION_CONNECTED' || event.data.type === 'SOLA_EXTENSION_READY')) {
         isExtensionDetected = true;
@@ -41,14 +42,18 @@
     if (step === 1) {
       isSidePanelOpen = false;
       isCardInjected = false;
+      isTargetHovered = false;
     } else if (step === 2) {
       isSidePanelOpen = true;
       isCardInjected = false;
+      isTargetHovered = false;
     } else if (step === 3) {
       isSidePanelOpen = true;
+      isTargetHovered = true;
       isCardInjected = true;
     } else if (step === 4) {
       isSidePanelOpen = true;
+      isTargetHovered = false;
       isCardInjected = true;
     }
   }
@@ -57,14 +62,6 @@
     isAutoPlaying = false;
     activeAnimationStep = step;
     syncAnimationState(step);
-  }
-
-  function copyInstallCode() {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText('https://chromewebstore.google.com/detail/sola-ui');
-      copied = true;
-      setTimeout(() => (copied = false), 2000);
-    }
   }
 </script>
 
@@ -88,11 +85,11 @@
       </div>
       
       <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.08]">
-        Preview UI Components on <span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 bg-clip-text text-transparent">Any Active Website</span>
+        Preview UI Components on <span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 bg-clip-text text-transparent">Any Live Web App</span>
       </h1>
       
       <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
-        Inject isolated zero-VDOM Shadow DOM preview cards directly over your live app (production, staging, or localhost) with zero CSS conflicts or code changes.
+        Inject isolated zero-VDOM Shadow DOM preview cards directly over any live web platform (production, staging, or localhost). Choose between a free-floating draggable HUD or 1-click DOM element anchoring.
       </p>
 
       <!-- Action CTAs -->
@@ -115,36 +112,69 @@
       </div>
     </div>
 
+    <!-- PLACEMENT MODES EXPLANATION -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Placement Mode 1: Draggable HUD -->
+      <div class="p-6 sm:p-7 rounded-3xl bg-slate-50/70 dark:bg-[#0c1222] border border-slate-200/80 dark:border-white/10 space-y-3 shadow-xs">
+        <div class="flex items-center justify-between">
+          <div class="w-9 h-9 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs">
+            A
+          </div>
+          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Mode 1</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Free-Floating Draggable HUD</h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+          The preview card docks automatically in the viewport corner. Grab the header bar to drag the component freely anywhere on your screen, or use the 1-tap snap toggle to cycle corner positions.
+        </p>
+      </div>
+
+      <!-- Placement Mode 2: DOM Target Picker -->
+      <div class="p-6 sm:p-7 rounded-3xl bg-slate-50/70 dark:bg-[#0c1222] border border-slate-200/80 dark:border-white/10 space-y-3 shadow-xs">
+        <div class="flex items-center justify-between">
+          <div class="w-9 h-9 rounded-2xl bg-sky-50 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold text-xs">
+            B
+          </div>
+          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-sky-600 dark:text-sky-400">Mode 2</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Target Element Selector (Click to Anchor)</h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+          Click <strong>🎯 Target Element</strong>. The extension highlights any container on your webpage with an emerald outline. Click any section (e.g. your app's header, sidebar, or metric container) to anchor the card directly next to it.
+        </p>
+      </div>
+
+    </div>
+
     <!-- LIVE INTERACTIVE ANIMATION SHOWCASE -->
     <section class="space-y-6">
       
       <!-- Interactive Step Controls & Animation Tracker -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-2">
         <div>
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">How It Works in the Real World</h2>
-          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Interactive live simulation of the Chrome Side Panel injecting onto a host page</p>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Interactive Live Workflow Demo</h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Watch the Chrome Side Panel inject and anchor a component onto an active website</p>
         </div>
 
         <!-- 4 Step Tabs -->
-        <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl">
+        <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl overflow-x-auto">
           <button
             onclick={() => setStep(1)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer {activeAnimationStep === 1 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 1 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
             1. Open Side Panel
           </button>
           <button
             onclick={() => setStep(2)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer {activeAnimationStep === 2 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
-            2. Browse 12+ Cards
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 2 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            2. Choose Component
           </button>
           <button
             onclick={() => setStep(3)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer {activeAnimationStep === 3 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
-            3. Live Shadow DOM Overlay
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 3 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            3. Anchor on Target Element
           </button>
           <button
             onclick={() => setStep(4)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer {activeAnimationStep === 4 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 4 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
             4. 1-Click Code Export
           </button>
         </div>
@@ -167,7 +197,7 @@
             <div class="flex items-center gap-2 truncate">
               <svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <span class="text-slate-400">https://</span>
-              <span class="font-bold text-slate-900 dark:text-white">your-saas-app.com/dashboard</span>
+              <span class="font-bold text-slate-900 dark:text-white">your-cloud-app.internal/analytics</span>
             </div>
             <span class="text-[10px] text-slate-400">Host Webpage</span>
           </div>
@@ -196,23 +226,29 @@
             <div class="space-y-6">
               <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-4">
                 <div>
-                  <h3 class="text-lg font-bold text-slate-900 dark:text-white">Live Application Console</h3>
-                  <p class="text-xs text-slate-400">Host web page DOM (e.g. your company dashboard, Stripe, or local dev server)</p>
+                  <h3 class="text-lg font-bold text-slate-900 dark:text-white">Active Cloud Console</h3>
+                  <p class="text-xs text-slate-400">Live host page DOM (e.g. internal dashboard, cloud admin, or local server)</p>
                 </div>
                 <span class="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-[10px] font-mono font-bold text-slate-500">
                   Host DOM
                 </span>
               </div>
 
-              <!-- Host Base Grid -->
+              <!-- Host Base Grid with Target Element Anchor Indicator -->
               <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/5">
-                  <span class="text-[11px] text-slate-400">Total Transactions</span>
-                  <div class="text-xl font-black font-mono mt-1 text-slate-900 dark:text-white">42,890</div>
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border {isTargetHovered ? 'border-2 border-dashed border-emerald-500 bg-emerald-500/5 ring-4 ring-emerald-500/10' : 'border-slate-200/80 dark:border-white/5'} transition-all relative">
+                  {#if isTargetHovered}
+                    <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-mono text-[9px] font-bold shadow-xs">
+                      Target Anchor Container
+                    </div>
+                  {/if}
+                  <span class="text-[11px] text-slate-400">Primary Ingress Volume</span>
+                  <div class="text-xl font-black font-mono mt-1 text-slate-900 dark:text-white">142,400 req/s</div>
                 </div>
+
                 <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/5">
-                  <span class="text-[11px] text-slate-400">Average Session</span>
-                  <div class="text-xl font-black font-mono mt-1 text-slate-900 dark:text-white">4m 12s</div>
+                  <span class="text-[11px] text-slate-400">Global Median Latency</span>
+                  <div class="text-xl font-black font-mono mt-1 text-slate-900 dark:text-white">3.4 ms</div>
                 </div>
               </div>
             </div>
@@ -227,17 +263,22 @@
                       Sola Shadow DOM • Injected Overlay
                     </span>
                   </div>
-                  <button
-                    onclick={() => (isCardInjected = false)}
-                    class="text-slate-400 hover:text-white text-xs px-2 py-0.5 rounded-md hover:bg-white/10">
-                    ✕ Close
-                  </button>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300">
+                      🎯 Anchored to Ingress Container
+                    </span>
+                    <button
+                      onclick={() => (isCardInjected = false)}
+                      class="text-slate-400 hover:text-white text-xs px-2 py-0.5 rounded-md hover:bg-white/10">
+                      ✕
+                    </button>
+                  </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                   <div>
                     <h4 class="text-base font-bold text-white">{selectedComponent}</h4>
-                    <p class="text-xs text-slate-400 mt-1">Zero-VDOM pure SVG reactive telemetry card rendered directly into closed Shadow DOM.</p>
+                    <p class="text-xs text-slate-400 mt-1">Zero-VDOM pure SVG reactive telemetry card rendered directly inside closed Shadow DOM.</p>
                   </div>
                   <div class="p-3 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-between font-mono">
                     <span class="text-xs text-slate-300">Throughput:</span>
@@ -256,9 +297,9 @@
               </div>
             {:else}
               <div class="my-6 p-8 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-3xl text-center space-y-2 bg-slate-50/50 dark:bg-white/[0.01]">
-                <p class="text-xs text-slate-400 font-medium">Click "View in My UI" in the Side Panel on the right to inject a zero-VDOM component overlay right here.</p>
+                <p class="text-xs text-slate-400 font-medium">Click "View in My UI" in the Side Panel on the right to anchor an isolated zero-VDOM component overlay right here.</p>
                 <button
-                  onclick={() => { isSidePanelOpen = true; isCardInjected = true; activeAnimationStep = 3; }}
+                  onclick={() => { isSidePanelOpen = true; isCardInjected = true; activeAnimationStep = 3; isTargetHovered = true; }}
                   class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 cursor-pointer shadow-xs">
                   + Trigger Live Overlay Preview
                 </button>
@@ -267,8 +308,8 @@
 
             <!-- Bottom Host Webpage Status -->
             <div class="pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-400">
-              <span>Ready for user interaction</span>
-              <span class="font-mono text-[10px]">Shadow DOM Root Sandbox: #sola-overlay-root</span>
+              <span>Host runtime active</span>
+              <span class="font-mono text-[10px]">Shadow DOM Sandbox: #sola-preview-root</span>
             </div>
           </div>
 
@@ -294,33 +335,33 @@
 
                   <!-- Item 1 -->
                   <button
-                    onclick={() => { selectedComponent = 'Telemetry Stream Chart'; isCardInjected = true; activeAnimationStep = 3; }}
+                    onclick={() => { selectedComponent = 'Telemetry Stream Chart'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
                     class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Telemetry Stream Chart' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Telemetry Stream</span>
-                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Overlay →</span>
+                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Zero-VDOM pure SVG live chart</p>
                   </button>
 
                   <!-- Item 2 -->
                   <button
-                    onclick={() => { selectedComponent = 'Haptic Rotary Dial'; isCardInjected = true; activeAnimationStep = 3; }}
+                    onclick={() => { selectedComponent = 'Haptic Rotary Dial'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
                     class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Haptic Rotary Dial' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Haptic Rotary Dial</span>
-                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Overlay →</span>
+                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Tactile rate-limiting throttle</p>
                   </button>
 
                   <!-- Item 3 -->
                   <button
-                    onclick={() => { selectedComponent = 'Date Range Horizon'; isCardInjected = true; activeAnimationStep = 3; }}
+                    onclick={() => { selectedComponent = 'Date Range Horizon'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
                     class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Date Range Horizon' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Date Range Horizon</span>
-                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Overlay →</span>
+                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Calendar matrix range filter</p>
                   </button>
@@ -362,7 +403,7 @@
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Open on Any Web App</h3>
         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          Navigate to your target app (e.g. <code>localhost:3000</code>, Stripe dashboard, or ServiceNow) and click the Sola icon in your browser toolbar.
+          Navigate to your target app (e.g. <code>localhost:3000</code> or your cloud dashboard) and click the Sola icon in your browser toolbar.
         </p>
       </div>
 
@@ -370,9 +411,9 @@
         <div class="w-10 h-10 rounded-2xl bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold text-sm">
           3
         </div>
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">1-Click Live Preview</h3>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Drag or Anchor to Element</h3>
         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          Click any component in the Side Panel to mount an isolated Shadow DOM overlay right on your screen, then copy the ready code!
+          Drag the card freely with your mouse or click "Target Element" to anchor the component directly to any container on your page!
         </p>
       </div>
 
