@@ -420,6 +420,7 @@ export function compile(source, filename = 'Component.sola') {
       // Event handlers: on:click={handler}
       if (key.startsWith('on:')) {
         const event = key.slice(3);
+        if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(event)) continue;
         const handler = value.replace(/^{|}$/g, '');
         domCode += `  ${id}.addEventListener('${event}', ${handler});\n`;
       }

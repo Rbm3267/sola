@@ -369,8 +369,15 @@
     });
   }
 
-  // Listen for postMessage from Sola web pages
+  // Listen for postMessage from Sola web pages — restrict to safe origins
+  const SOLA_ALLOWED_ORIGINS = [
+    'https://sola-air.dev',
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'http://127.0.0.1:5173'
+  ];
   window.addEventListener('message', (event) => {
+    if (!SOLA_ALLOWED_ORIGINS.includes(event.origin)) return;
     if (event.data && event.data.type === 'SOLA_MOUNT_IN_SITU' && event.data.component) {
       showComponent(event.data.component);
     }

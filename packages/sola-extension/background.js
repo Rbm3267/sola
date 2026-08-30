@@ -5,6 +5,8 @@ chrome.sidePanel
   .catch((error) => console.error(error));
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Only handle messages from this extension's own pages
+  if (sender.id !== chrome.runtime.id) return;
   if (message.type === 'INJECT_SOLA_WIDGET') {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]?.id) {
