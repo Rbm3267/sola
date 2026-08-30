@@ -871,9 +871,9 @@ export default function SolaDashboard() {
       {/if}
     </main>
 
-    <!-- 2C. Floating Contextual Card Inspector (Figma / Linear Style) -->
+    <!-- 2C. Docked Right Properties Inspector (Never Overlaps Canvas Cards) -->
     {#if activeCard}
-      <aside class="fixed top-28 right-6 z-40 w-80 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl rounded-2xl border border-slate-200/90 dark:border-white/10 p-5 shadow-2xl space-y-4 animate-[slideLeft_150ms_ease-out]">
+      <aside class="w-80 shrink-0 border-l border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#090d19]/80 backdrop-blur-xl h-[calc(100vh-6.5rem)] sticky top-28 overflow-y-auto p-4 flex flex-col z-20 transition-all duration-200">
         
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
           <div class="flex items-center gap-2">
@@ -887,14 +887,20 @@ export default function SolaDashboard() {
           </button>
         </div>
 
-        <div class="space-y-3 text-xs">
+        <div class="space-y-3.5 text-xs pt-3">
+          <!-- Active Card Badge -->
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex items-center justify-between">
+            <span class="text-[11px] font-mono text-slate-400">Selected Node</span>
+            <span class="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400">{activeCard.type}</span>
+          </div>
+
           <!-- Title -->
           <div>
             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Title</label>
             <input
               type="text"
               bind:value={activeCard.title}
-              class="w-full px-3 py-1.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none" />
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none" />
           </div>
 
           <!-- Subtitle -->
@@ -903,7 +909,7 @@ export default function SolaDashboard() {
             <input
               type="text"
               bind:value={activeCard.subtitle}
-              class="w-full px-3 py-1.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none" />
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none" />
           </div>
 
           <!-- Value -->
@@ -912,7 +918,7 @@ export default function SolaDashboard() {
             <input
               type="text"
               bind:value={activeCard.value}
-              class="w-full px-3 py-1.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none font-mono" />
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none font-mono" />
           </div>
 
           <!-- Column Span -->
@@ -921,27 +927,27 @@ export default function SolaDashboard() {
             <div class="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-white/5 p-1 rounded-xl border border-slate-200/60 dark:border-white/10 font-mono text-xs">
               <button
                 onclick={() => activeCard && (activeCard.cols = 1)}
-                class="py-1 rounded-lg transition-all {activeCard.cols === 1 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">1 Col</button>
+                class="py-1.5 rounded-lg transition-all {activeCard.cols === 1 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1 Col</button>
               <button
                 onclick={() => activeCard && (activeCard.cols = 2)}
-                class="py-1 rounded-lg transition-all {activeCard.cols === 2 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">2 Col</button>
+                class="py-1.5 rounded-lg transition-all {activeCard.cols === 2 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">2 Col</button>
               <button
                 onclick={() => activeCard && (activeCard.cols = 3)}
-                class="py-1 rounded-lg transition-all {activeCard.cols === 3 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">3 Col</button>
+                class="py-1.5 rounded-lg transition-all {activeCard.cols === 3 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">3 Col</button>
             </div>
           </div>
 
           <!-- Actions -->
-          <div class="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+          <div class="pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
             <button
               onclick={() => duplicateCard(activeCard)}
-              class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-800 dark:text-slate-200 cursor-pointer">
+              class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-800 dark:text-slate-200 cursor-pointer">
               Duplicate
             </button>
             <button
               onclick={() => removeCard(activeCard.id)}
-              class="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 cursor-pointer">
-              Delete
+              class="px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 cursor-pointer">
+              Delete Card
             </button>
           </div>
         </div>
