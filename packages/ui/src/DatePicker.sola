@@ -1,0 +1,32 @@
+<script>
+  let label = "DATE PICKER";
+  let value = $state("");
+  let placeholder = "Pick a date...";
+</script>
+
+<div class="sola-datepicker-root">
+  {#if label}
+    <label class="sola-label">{label}</label>
+  {/if}
+  <div class="sola-picker-input">
+    <input type="date" class="sola-input-native" bind:value="value" placeholder={placeholder} />
+  </div>
+</div>
+
+<style>
+  .sola-datepicker-root { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .sola-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; font-family: monospace; }
+  .sola-picker-input { position: relative; width: 100%; }
+  .sola-input-native {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+  }
+  .sola-input-native:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
+</style>
