@@ -1,13 +1,20 @@
 {
   "name": "@sola-air-ui/vite-plugin-sola",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "Vite plugin for Sola — compile .sola single-file components at build time",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
   },
-  "keywords": ["sola", "vite", "vite-plugin", "sfc", "compiler", "zero-vdom"],
+  "keywords": [
+    "sola",
+    "vite",
+    "vite-plugin",
+    "sfc",
+    "compiler",
+    "zero-vdom"
+  ],
   "license": "MIT",
   "homepage": "https://sola-air.dev",
   "repository": {
@@ -15,7 +22,7 @@
     "url": "https://github.com/rbm3267/sola"
   },
   "dependencies": {
-    "@sola-air-ui/compiler": "^1.0.0"
+    "@sola-air-ui/compiler": "^1.0.1"
   },
   "peerDependencies": {
     "vite": ">=4.0.0"
