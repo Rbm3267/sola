@@ -40,7 +40,10 @@ export default defineConfig({
 		alias: {
 			'@sola/core': path.resolve(__dirname, '../packages/core/src/index.js'),
 			'@sola/compiler': path.resolve(__dirname, '../packages/compiler/src/index.js'),
-			'@sola/ui': path.resolve(__dirname, '../packages/ui/src/index.js')
+			'@sola/ui': path.resolve(__dirname, '../packages/ui/src/index.js'),
+			'@sola-air-ui/core': path.resolve(__dirname, '../packages/core/src/index.js'),
+			'@sola-air-ui/compiler': path.resolve(__dirname, '../packages/compiler/src/index.js'),
+			'@sola-air-ui/ui': path.resolve(__dirname, '../packages/ui/src/index.js')
 		}
 	},
 	plugins: [
