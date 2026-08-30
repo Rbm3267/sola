@@ -1,6 +1,7 @@
 {
   "name": "@sola/relay",
   "version": "0.0.1",
+  "description": "Sola Relay — local data proxy that keeps credentials on-device and streams live data to Sola components",
   "type": "module",
   "bin": {
     "sola-relay": "./src/cli.js"
@@ -8,6 +9,13 @@
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
+  },
+  "keywords": ["sola", "relay", "data", "postgres", "local-first", "proxy"],
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola"
   },
   "dependencies": {
     "pg": "^8.11.0",
