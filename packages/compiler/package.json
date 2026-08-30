@@ -1,6 +1,7 @@
 {
   "name": "@sola/compiler",
   "version": "1.0.0",
+  "description": "Compiler for Sola single-file components (.sola) — transforms template + script + style to ES modules",
   "type": "module",
   "main": "./src/index.js",
   "bin": {
@@ -11,6 +12,13 @@
   },
   "scripts": {
     "test": "node test/compiler.test.js"
+  },
+  "keywords": ["sola", "compiler", "sfc", "single-file-component", "zero-vdom", "build-tool"],
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola"
   },
   "dependencies": {
     "acorn": "^8.10.0",

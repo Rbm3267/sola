@@ -1,68 +1,829 @@
 <script>
-  let activeSection = $state("quickstart");
+  let activeSection = $state("introduction");
+
+  function setSection(id) {
+    activeSection = id;
+    const allSections = document.querySelectorAll('[data-sec]');
+    const allLinks = document.querySelectorAll('[data-nav]');
+    allSections.forEach(s => s.style.display = s.getAttribute('data-sec') === id ? 'block' : 'none');
+    allLinks.forEach(l => {
+      const isActive = l.getAttribute('data-nav') === id;
+      l.style.color = isActive ? '#10b981' : '';
+      l.style.background = isActive ? 'rgba(16,185,129,0.08)' : '';
+      l.style.fontWeight = isActive ? '700' : '500';
+    });
+  }
+
+  let introCounterCode = [
+    '<span class="c-kw">&lt;script&gt;</span>',
+    '  <span class="c-kw">let</span> count = <span class="c-fn">$state</span>(<span class="c-num">0</span>);',
+    '  <span class="c-kw">let</span> doubled = <span class="c-fn">$derived</span>(() =&gt; count * <span class="c-num">2</span>);',
+    '<span class="c-kw">&lt;/script&gt;</span>',
+    '',
+    '<span class="c-tag">&lt;div&gt;</span>',
+    '  <span class="c-tag">&lt;p&gt;</span>Count: &#123;count&#125; &middot; Doubled: &#123;doubled&#125;<span class="c-tag">&lt;/p&gt;</span>',
+    '  <span class="c-tag">&lt;button</span> <span class="c-attr">onclick</span>=<span class="c-str">"count++"</span><span class="c-tag">&gt;</span>Increment<span class="c-tag">&lt;/button&gt;</span>',
+    '<span class="c-tag">&lt;/div&gt;</span>'
+  ].join('\n');
+
+  let quickstartAppCode = [
+    '<span class="c-kw">&lt;script&gt;</span>',
+    '  <span class="c-kw">let</span> name = <span class="c-fn">$state</span>(<span class="c-str">"World"</span>);',
+    '<span class="c-kw">&lt;/script&gt;</span>',
+    '',
+    '<span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"greeting"</span><span class="c-tag">&gt;</span>',
+    '  <span class="c-tag">&lt;h1&gt;</span>Hello, &#123;name&#125;!<span class="c-tag">&lt;/h1&gt;</span>',
+    '  <span class="c-tag">&lt;input</span> <span class="c-attr">value</span>=<span class="c-str">"&#123;name&#125;"</span> <span class="c-attr">oninput</span>=<span class="c-str">"name = event.target.value"</span> <span class="c-tag">/&gt;</span>',
+    '<span class="c-tag">&lt;/div&gt;</span>',
+    '',
+    '<span class="c-kw">&lt;style&gt;</span>',
+    '  <span class="c-sel">.greeting</span> &#123; padding: <span class="c-num">2rem</span>; font-family: system-ui; &#125;',
+    '<span class="c-kw">&lt;/style&gt;</span>'
+  ].join('\n');
+
+  let buttonStructureCode = [
+    '<span class="c-comment">&lt;!-- 1. Script block --&gt;</span>',
+    '<span class="c-kw">&lt;script&gt;</span>',
+    '  <span class="c-comment">// reactive state, logic, lifecycle</span>',
+    '<span class="c-kw">&lt;/script&gt;</span>',
+    '',
+    '<span class="c-comment">&lt;!-- 2. Template (HTML) --&gt;</span>',
+    '<span class="c-tag">&lt;button</span> <span class="c-attr">class</span>=<span class="c-str">"btn"</span><span class="c-tag">&gt;</span>',
+    '  <span class="c-tag">&lt;slot</span> <span class="c-tag">/&gt;</span>',
+    '<span class="c-tag">&lt;/button&gt;</span>',
+    '',
+    '<span class="c-comment">&lt;!-- 3. Scoped styles --&gt;</span>',
+    '<span class="c-kw">&lt;style&gt;</span>',
+    '  <span class="c-sel">.btn</span> &#123; <span class="c-prop">background</span>: <span class="c-num">#10b981</span>; <span class="c-prop">color</span>: white; &#125;',
+    '<span class="c-kw">&lt;/style&gt;</span>'
+  ].join('\n');
+
+  let conditionalsCode = [
+    '&#123;#if isLoggedIn&#125;',
+    '  <span class="c-tag">&lt;Dashboard /&gt;</span>',
+    '&#123;:else&#125;',
+    '  <span class="c-tag">&lt;Login /&gt;</span>',
+    '&#123;/if&#125;'
+  ].join('\n');
+
+  let eachCode = [
+    '&#123;#each items as item (item.id)&#125;',
+    '  <span class="c-tag">&lt;li&gt;</span>&#123;item.label&#125;<span class="c-tag">&lt;/li&gt;</span>',
+    '&#123;/each&#125;'
+  ].join('\n');
+
+  let viteConfigCode = [
+    '<span class="c-kw">import</span> { defineConfig } <span class="c-kw">from</span> <span class="c-str">\'vite\'</span>;',
+    '<span class="c-kw">import</span> { solaPlugin } <span class="c-kw">from</span> <span class="c-str">\'@sola-air/vite-plugin\'</span>;',
+    '',
+    '<span class="c-kw">export default</span> <span class="c-fn">defineConfig</span>(&#123;',
+    '  plugins: [<span class="c-fn">solaPlugin</span>()]',
+    '&#125;);'
+  ].join('\n');
+
+  let appDtsCode = [
+    '<span class="c-kw">declare module</span> <span class="c-str">\'*.sola\'</span> &#123;',
+    '  <span class="c-kw">const</span> mount: (',
+    '    target: HTMLElement,',
+    '    props?: Record&lt;<span class="c-kw">string</span>, <span class="c-kw">any</span>&gt;',
+    '  ) =&gt; (() =&gt; <span class="c-kw">void</span>) | <span class="c-kw">void</span>;',
+    '  <span class="c-kw">export default</span> mount;',
+    '&#125;'
+  ].join('\n');
+
+  let stateCode = [
+    '<span class="c-kw">let</span> count = <span class="c-fn">$state</span>(<span class="c-num">0</span>);',
+    '<span class="c-kw">let</span> user  = <span class="c-fn">$state</span>(&#123; name: <span class="c-str">"Ada"</span> &#125;);',
+    '',
+    'count++;',
+    'user.name = <span class="c-str">"Grace"</span>;'
+  ].join('\n');
+
+  let effectCode = [
+    '<span class="c-kw">let</span> query = <span class="c-fn">$state</span>(<span class="c-str">""</span>);',
+    '<span class="c-kw">let</span> results = <span class="c-fn">$effect</span>(() =&gt; &#123;',
+    '  <span class="c-kw">const</span> data = search(query);',
+    '  updateList(data);',
+    '  <span class="c-kw">return</span> () =&gt; cancelPendingRequest();',
+    '&#125;);'
+  ].join('\n');
+
+  let intentConfigCode = [
+    '<span class="c-kw">export default</span> &#123;',
+    '  intent: &#123;',
+    '    endpoint: <span class="c-str">\'https://api.sola-air.dev/intent\'</span>,',
+    '    model: <span class="c-str">\'gemini-2.5-flash\'</span>,',
+    '    apiKey: process.env.SOLA_API_KEY',
+    '  &#125;',
+    '&#125;;'
+  ].join('\n');
+
+  onMount(() => {
+    setSection('introduction');
+    const injections = {
+      'intro-counter-code': introCounterCode,
+      'qs-app-code': quickstartAppCode,
+      'vite-config-code': viteConfigCode,
+      'app-dts-code': appDtsCode,
+      'state-code': stateCode,
+      'btn-struct-code': buttonStructureCode,
+      'effect-code': effectCode,
+      'tpl-cond-code': conditionalsCode,
+      'tpl-each-code': eachCode,
+      'intent-config-code': intentConfigCode
+    };
+    for (const id in injections) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = injections[id];
+    }
+  });
 </script>
 
-<div class="sola-docs-root">
-  <div class="docs-header">
-    <div class="header-badge">DOCUMENTATION</div>
-    <h1 class="header-title">Sola Intent & Runtime Guide</h1>
-    <p class="header-desc">Everything you need to build zero-VDOM apps with native .sola single-file components.</p>
-  </div>
+<div class="sd-root">
+  <!-- Sidebar -->
+  <aside class="sd-sidebar">
+    <div class="sd-sidebar-inner">
+      <p class="sd-nav-group-label">GETTING STARTED</p>
+      <button class="sd-nav-link" data-nav="introduction" onclick="{() => setSection('introduction')}">Introduction</button>
+      <button class="sd-nav-link" data-nav="quickstart" onclick="{() => setSection('quickstart')}">Quick Start</button>
+      <button class="sd-nav-link" data-nav="installation" onclick="{() => setSection('installation')}">Installation</button>
 
-  <div class="docs-grid">
-    <div class="docs-section-card">
-      <h3>1. What is .sola?</h3>
-      <p>A single-file component architecture combining reactive signals, scoped styles, and declarative HTML templates compiled directly to O(1) DOM updates.</p>
+      <p class="sd-nav-group-label">CORE CONCEPTS</p>
+      <button class="sd-nav-link" data-nav="signals" onclick="{() => setSection('signals')}">Signals & State</button>
+      <button class="sd-nav-link" data-nav="components" onclick="{() => setSection('components')}">Components</button>
+      <button class="sd-nav-link" data-nav="effects" onclick="{() => setSection('effects')}">Effects</button>
+      <button class="sd-nav-link" data-nav="templates" onclick="{() => setSection('templates')}">Templates</button>
+
+      <p class="sd-nav-group-label">ADVANCED</p>
+      <button class="sd-nav-link" data-nav="intent" onclick="{() => setSection('intent')}">Intent API</button>
+      <button class="sd-nav-link" data-nav="export" onclick="{() => setSection('export')}">Framework Export</button>
+      <button class="sd-nav-link" data-nav="compiler" onclick="{() => setSection('compiler')}">Compiler</button>
+
+      <p class="sd-nav-group-label">REFERENCE</p>
+      <button class="sd-nav-link" data-nav="cli" onclick="{() => setSection('cli')}">CLI Reference</button>
+      <button class="sd-nav-link" data-nav="api" onclick="{() => setSection('api')}">Runtime API</button>
     </div>
-    <div class="docs-section-card">
-      <h3>2. Zero-VDOM Signals</h3>
-      <p>Use <code>$state(val)</code> and <code>$derived(() => expr)</code> to bind values straight to text nodes without virtual DOM diffing.</p>
+  </aside>
+
+  <!-- Content -->
+  <main class="sd-content">
+
+    <!-- INTRODUCTION -->
+    <div data-sec="introduction" class="sd-section">
+      <span class="sd-eyebrow">INTRODUCTION</span>
+      <h1 class="sd-h1">What is Sola AIR?</h1>
+      <p class="sd-lead">Sola AIR is a compiler-first JavaScript framework built around a single idea: reactive signals should compile directly to O(1) DOM operations — no virtual DOM, no diffing, no overhead.</p>
+
+      <div class="sd-callout">
+        <strong>~3.2 KB runtime.</strong> Sola ships a micro-runtime with zero dependencies. The compiler does the heavy lifting at build time, so your users only download what they actually use.
+      </div>
+
+      <h2 class="sd-h2">Why Sola?</h2>
+      <p class="sd-p">Every major framework — React, Vue, Svelte, Angular — carries a virtual DOM or a scheduler. They're powerful, but they trade memory and CPU cycles for developer ergonomics. Sola takes a different trade: push complexity into the compiler, keep the runtime razor-thin.</p>
+
+      <div class="sd-feature-grid">
+        <div class="sd-feature-card">
+          <div class="sd-feature-icon">&#9889;</div>
+          <h3>Zero VDOM</h3>
+          <p>Reactive primitives compile directly to targeted DOM patches. No tree diffing on every frame.</p>
+        </div>
+        <div class="sd-feature-card">
+          <div class="sd-feature-icon">&#129513;</div>
+          <h3>Single-File Components</h3>
+          <p>Script, template, and scoped styles in one <code>.sola</code> file. The compiler handles the rest.</p>
+        </div>
+        <div class="sd-feature-card">
+          <div class="sd-feature-icon">&#129302;</div>
+          <h3>Intent API</h3>
+          <p>The <code>$intent</code> macro converts natural-language annotations into reactive component logic.</p>
+        </div>
+        <div class="sd-feature-card">
+          <div class="sd-feature-icon">&#128268;</div>
+          <h3>Multi-Framework Export</h3>
+          <p>Write once in <code>.sola</code>, export to React 19, Svelte 5, or native Web Components.</p>
+        </div>
+      </div>
+
+      <h2 class="sd-h2">How it works</h2>
+      <p class="sd-p">You write a <code>.sola</code> single-file component. The Sola Vite plugin intercepts it at build time and compiles the reactive signals into direct DOM calls. The output is a plain <code>mount(target, props)</code> function — no framework required at runtime.</p>
+
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>counter.sola</span></div>
+        <pre><code id="intro-counter-code"></code></pre>
+      </div>
     </div>
-    <div class="docs-section-card">
-      <h3>3. Multi-Framework Export</h3>
-      <p>Write once in .sola and export directly to React 19 JSX, Svelte 5 runes, or standard Web Components.</p>
+
+    <!-- QUICK START -->
+    <div data-sec="quickstart" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">QUICK START</span>
+      <h1 class="sd-h1">Your first Sola app</h1>
+      <p class="sd-lead">Get a Sola project running in under two minutes.</p>
+
+      <h2 class="sd-h2">1. Create a project</h2>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>terminal</span></div>
+        <pre><code>npm create sola@latest my-app
+<span class="c-comment"># or</span>
+pnpm create sola@latest my-app</code></pre>
+      </div>
+
+      <h2 class="sd-h2">2. Write your first component</h2>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>src/App.sola</span></div>
+        <pre><code id="qs-app-code"></code></pre>
+      </div>
+
+      <h2 class="sd-h2">3. Mount it</h2>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>src/main.js</span></div>
+        <pre><code><span class="c-kw">import</span> mount <span class="c-kw">from</span> <span class="c-str">'./App.sola'</span>;
+
+mount(<span class="c-fn">document</span>.getElementById(<span class="c-str">'app'</span>));</code></pre>
+      </div>
+
+      <div class="sd-callout sd-callout--success">
+        That's it. Run <code>npm run dev</code> and open <code>localhost:5173</code>.
+      </div>
     </div>
-  </div>
+
+    <!-- INSTALLATION -->
+    <div data-sec="installation" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">INSTALLATION</span>
+      <h1 class="sd-h1">Setup & configuration</h1>
+      <p class="sd-lead">Add Sola AIR to an existing project or scaffold a new one from a template.</p>
+
+      <h2 class="sd-h2">Adding to an existing Vite project</h2>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>terminal</span></div>
+        <pre><code>npm install --save-dev @sola-air/vite-plugin
+npm install @sola-air/runtime</code></pre>
+      </div>
+
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>vite.config.ts</span></div>
+        <pre><code id="vite-config-code"></code></pre>
+      </div>
+
+      <h2 class="sd-h2">TypeScript support</h2>
+      <p class="sd-p">Add the module declaration to your <code>app.d.ts</code> so TypeScript understands <code>.sola</code> imports:</p>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>src/app.d.ts</span></div>
+        <pre><code id="app-dts-code"></code></pre>
+      </div>
+    </div>
+
+    <!-- SIGNALS -->
+    <div data-sec="signals" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">CORE CONCEPTS</span>
+      <h1 class="sd-h1">Signals & State</h1>
+      <p class="sd-lead">Sola's reactive core is built on three primitives: <code>$state</code>, <code>$derived</code>, and <code>$effect</code>. Together they form a synchronous, push-based signal graph.</p>
+
+      <h2 class="sd-h2">$state — mutable source</h2>
+      <p class="sd-p">Creates a reactive cell. When the value changes, any DOM nodes or derived signals that read it are updated synchronously — no batching, no scheduler.</p>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>.sola</span></div>
+        <pre><code id="state-code"></code></pre>
+      </div>
+
+      <h2 class="sd-h2">$derived — computed value</h2>
+      <p class="sd-p">A read-only signal that re-evaluates whenever its dependencies change. Sola tracks dependencies automatically during the computation.</p>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>.sola</span></div>
+        <pre><code><span class="c-kw">let</span> price = <span class="c-fn">$state</span>(<span class="c-num">100</span>);
+<span class="c-kw">let</span> qty   = <span class="c-fn">$state</span>(<span class="c-num">3</span>);
+<span class="c-kw">let</span> total = <span class="c-fn">$derived</span>(() =&gt; price * qty);
+
+price = <span class="c-num">120</span>;</code></pre>
+      </div>
+
+      <h2 class="sd-h2">Performance characteristics</h2>
+      <div class="sd-table-wrap">
+        <table class="sd-table">
+          <thead><tr><th>Operation</th><th>Cost</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>$state</code> read</td><td>O(1)</td><td>Direct memory read</td></tr>
+            <tr><td><code>$state</code> write</td><td>O(deps)</td><td>Notifies downstream nodes</td></tr>
+            <tr><td><code>$derived</code> read</td><td>O(1)</td><td>Cached; recomputes only when deps change</td></tr>
+            <tr><td>DOM patch</td><td>O(1)</td><td>Single targeted <code>textContent</code> / attribute set</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COMPONENTS -->
+    <div data-sec="components" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">CORE CONCEPTS</span>
+      <h1 class="sd-h1">Components</h1>
+      <p class="sd-lead">Every <code>.sola</code> file is a self-contained component with its own script, template, and scoped styles.</p>
+
+      <h2 class="sd-h2">File structure</h2>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>Button.sola</span></div>
+        <pre><code id="btn-struct-code"></code></pre>
+      </div>
+
+      <h2 class="sd-h2">Props</h2>
+      <p class="sd-p">Props flow in via the <code>props</code> argument of the compiled <code>mount</code> function.</p>
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>Card.sola</span></div>
+        <pre><code><span class="c-kw">&lt;script&gt;</span>
+  <span class="c-kw">let</span> { title, description, href } = props;
+<span class="c-kw">&lt;/script&gt;</span>
+
+<span class="c-tag">&lt;a</span> <span class="c-attr">href</span>=<span class="c-str">"{href}"</span> <span class="c-attr">class</span>=<span class="c-str">"card"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;h3&gt;</span>{title}<span class="c-tag">&lt;/h3&gt;</span>
+  <span class="c-tag">&lt;p&gt;</span>{description}<span class="c-tag">&lt;/p&gt;</span>
+<span class="c-tag">&lt;/a&gt;</span></code></pre>
+      </div>
+
+      <div class="sd-callout">
+        <strong>Scoped styles</strong> — the compiler hashes class names per-component, so <code>.card</code> in <code>Card.sola</code> never collides with <code>.card</code> in another file.
+      </div>
+    </div>
+
+    <!-- EFFECTS -->
+    <div data-sec="effects" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">CORE CONCEPTS</span>
+      <h1 class="sd-h1">Effects</h1>
+      <p class="sd-lead"><code>$effect</code> runs a side-effect whenever its reactive dependencies change. Use it for DOM imperative work, timers, subscriptions, and external integrations.</p>
+
+      <div class="sd-code-block">
+        <div class="sd-code-header"><span>.sola</span></div>
+        <pre><code id="effect-code"></code></pre>
+      </div>
+
+      <h2 class="sd-h2">Rules of effects</h2>
+      <div class="sd-rule-list">
+        <div class="sd-rule"><span class="sd-rule-dot sd-rule-dot--green"></span><p>Effects run synchronously after each reactive mutation by default.</p></div>
+        <div class="sd-rule"><span class="sd-rule-dot sd-rule-dot--green"></span><p>Return a cleanup function to cancel timers, event listeners, or subscriptions.</p></div>
+        <div class="sd-rule"><span class="sd-rule-dot sd-rule-dot--amber"></span><p>Avoid writing to signals <em>inside</em> an effect that reads those same signals — this causes a loop.</p></div>
+        <div class="sd-rule"><span class="sd-rule-dot sd-rule-dot--red"></span><p>Don't use <code>async</code> directly inside <code>$effect</code> — wrap the async call and handle cancellation manually.</p></div>
+      </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <div data-sec="templates" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">CORE CONCEPTS</span>
+      <h1 class="sd-h1">Templates</h1>
+      <p class="sd-lead">Sola templates are HTML-first. Signal interpolation, event binding, and conditional rendering use a minimal syntax that stays close to the platform.</p>
+
+      <h2 class="sd-h2">Interpolation</h2>
+      <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
+        <pre><code><span class="c-tag">&lt;p&gt;</span>Hello, {name}!<span class="c-tag">&lt;/p&gt;</span>
+<span class="c-tag">&lt;img</span> <span class="c-attr">src</span>=<span class="c-str">"{avatarUrl}"</span> <span class="c-attr">alt</span>=<span class="c-str">"{name}"</span> <span class="c-tag">/&gt;</span></code></pre>
+      </div>
+
+      <h2 class="sd-h2">Conditionals</h2>
+      <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
+        <pre><code id="tpl-cond-code"></code></pre>
+      </div>
+
+      <h2 class="sd-h2">Lists</h2>
+      <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
+        <pre><code id="tpl-each-code"></code></pre>
+      </div>
+    </div>
+
+    <!-- INTENT API -->
+    <div data-sec="intent" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">ADVANCED</span>
+      <h1 class="sd-h1">Intent API</h1>
+      <p class="sd-lead">The <code>$intent</code> macro is Sola's AI-native primitive. Annotate state transitions in natural language and the compiler — backed by a language model — generates the reactive logic.</p>
+
+      <div class="sd-callout sd-callout--amber">
+        <strong>Experimental.</strong> The Intent API requires an API key and a network round-trip at build time. It is not available in offline builds.
+      </div>
+
+      <h2 class="sd-h2">Basic usage</h2>
+      <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
+        <pre><code><span class="c-kw">let</span> cart = <span class="c-fn">$state</span>([]);
+
+<span class="c-fn">$intent</span>(<span class="c-str">"when the user clicks Add, push the product to cart and show a toast"</span>);
+<span class="c-fn">$intent</span>(<span class="c-str">"when cart is empty, show an empty state instead of the item list"</span>);</code></pre>
+      </div>
+
+      <p class="sd-p">At build time the compiler sends these intents to the configured LLM endpoint and replaces each <code>$intent()</code> call with generated reactive code. The generated code is committed to your repo — you own it, you can edit it.</p>
+
+      <h2 class="sd-h2">Configuring the endpoint</h2>
+      <div class="sd-code-block"><div class="sd-code-header"><span>sola.config.ts</span></div>
+        <pre><code id="intent-config-code"></code></pre>
+      </div>
+    </div>
+
+    <!-- FRAMEWORK EXPORT -->
+    <div data-sec="export" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">ADVANCED</span>
+      <h1 class="sd-h1">Framework Export</h1>
+      <p class="sd-lead">A single <code>.sola</code> component can be compiled to React 19, Svelte 5, or a native Web Component — with no changes to the source file.</p>
+
+      <div class="sd-code-block"><div class="sd-code-header"><span>terminal</span></div>
+        <pre><code><span class="c-comment"># Export to React</span>
+npx sola export --target react ./src/Button.sola
+
+<span class="c-comment"># Export to Svelte 5 runes</span>
+npx sola export --target svelte ./src/Button.sola
+
+<span class="c-comment"># Export to Web Component</span>
+npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre>
+      </div>
+
+      <h2 class="sd-h2">Output comparison</h2>
+      <div class="sd-table-wrap">
+        <table class="sd-table">
+          <thead><tr><th>Target</th><th>Output</th><th>Runtime dep</th></tr></thead>
+          <tbody>
+            <tr><td>Native <code>.sola</code></td><td>mount function</td><td>~3.2 KB</td></tr>
+            <tr><td>React 19</td><td>JSX component + hooks</td><td>React</td></tr>
+            <tr><td>Svelte 5</td><td><code>.svelte</code> with runes</td><td>Svelte</td></tr>
+            <tr><td>Web Component</td><td>Custom element class</td><td>None</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COMPILER -->
+    <div data-sec="compiler" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">ADVANCED</span>
+      <h1 class="sd-h1">Compiler</h1>
+      <p class="sd-lead">The Sola compiler is a standalone Node.js package. It parses <code>.sola</code> files, resolves reactive dependencies, and emits plain JavaScript with direct DOM calls.</p>
+
+      <h2 class="sd-h2">Compilation pipeline</h2>
+      <div class="sd-pipeline">
+        <div class="sd-pipeline-step"><span class="sd-step-num">01</span><div><strong>Parse</strong><p>Split file into script, template, and style blocks. Build an AST for each.</p></div></div>
+        <div class="sd-pipeline-step"><span class="sd-step-num">02</span><div><strong>Analyze</strong><p>Walk the script AST. Identify every <code>$state</code> and <code>$derived</code>. Build the dependency graph.</p></div></div>
+        <div class="sd-pipeline-step"><span class="sd-step-num">03</span><div><strong>Codegen</strong><p>For each signal reference in the template, emit a setter that writes directly to the target DOM node.</p></div></div>
+        <div class="sd-pipeline-step"><span class="sd-step-num">04</span><div><strong>Output</strong><p>Emit <code>export default function mount(__target, props)</code>. No framework imports required.</p></div></div>
+      </div>
+    </div>
+
+    <!-- CLI -->
+    <div data-sec="cli" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">REFERENCE</span>
+      <h1 class="sd-h1">CLI Reference</h1>
+      <p class="sd-lead">The <code>sola</code> CLI provides dev, build, export, and intent commands.</p>
+
+      <div class="sd-table-wrap">
+        <table class="sd-table">
+          <thead><tr><th>Command</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>sola dev</code></td><td>Start development server with HMR</td></tr>
+            <tr><td><code>sola build</code></td><td>Production build with tree-shaking and minification</td></tr>
+            <tr><td><code>sola export</code></td><td>Compile a <code>.sola</code> file to a target framework</td></tr>
+            <tr><td><code>sola intent</code></td><td>Run Intent API compilation pass manually</td></tr>
+            <tr><td><code>sola check</code></td><td>Type-check and lint all <code>.sola</code> files</td></tr>
+            <tr><td><code>sola inspect</code></td><td>Print compiled output for a component</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="sd-h2">Flags</h2>
+      <div class="sd-table-wrap">
+        <table class="sd-table">
+          <thead><tr><th>Flag</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>--target</code></td><td>string</td><td><code>react</code> | <code>svelte</code> | <code>wc</code> | <code>native</code></td></tr>
+            <tr><td><code>--outdir</code></td><td>path</td><td>Output directory (default: <code>dist</code>)</td></tr>
+            <tr><td><code>--minify</code></td><td>boolean</td><td>Minify emitted JS</td></tr>
+            <tr><td><code>--watch</code></td><td>boolean</td><td>Re-compile on file change</td></tr>
+            <tr><td><code>--sourcemap</code></td><td>boolean</td><td>Emit source maps</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- API -->
+    <div data-sec="api" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">REFERENCE</span>
+      <h1 class="sd-h1">Runtime API</h1>
+      <p class="sd-lead">The Sola micro-runtime exports a small set of primitives. Everything else is handled by the compiler.</p>
+
+      <div class="sd-table-wrap">
+        <table class="sd-table">
+          <thead><tr><th>Export</th><th>Signature</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>$state</code></td><td><code>&lt;T&gt;(init: T) =&gt; Signal&lt;T&gt;</code></td><td>Create a mutable reactive cell</td></tr>
+            <tr><td><code>$derived</code></td><td><code>&lt;T&gt;(fn: () =&gt; T) =&gt; ReadSignal&lt;T&gt;</code></td><td>Create a computed value</td></tr>
+            <tr><td><code>$effect</code></td><td><code>(fn: () =&gt; void | (() =&gt; void)) =&gt; void</code></td><td>Run a tracked side-effect</td></tr>
+            <tr><td><code>$intent</code></td><td><code>(description: string) =&gt; void</code></td><td>AI macro (build-time only)</td></tr>
+            <tr><td><code>tick</code></td><td><code>() =&gt; Promise&lt;void&gt;</code></td><td>Await pending DOM updates</td></tr>
+            <tr><td><code>untrack</code></td><td><code>&lt;T&gt;(fn: () =&gt; T) =&gt; T</code></td><td>Read signals without tracking</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
 </div>
 
 <style>
-  .sola-docs-root {
+  .sd-root {
+    display: flex;
     width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 24px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #f8fafc;
+    min-height: calc(100vh - 64px);
+    background: var(--sd-bg, #fafafa);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   }
-  .docs-header { text-align: center; margin-bottom: 40px; }
-  .header-badge {
-    display: inline-block;
-    font-family: monospace;
-    font-size: 11px;
+
+  /* ---- Sidebar ---- */
+  .sd-sidebar {
+    width: 248px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--sd-border, rgba(0,0,0,0.07));
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .sd-sidebar-inner {
+    padding: 24px 12px 40px;
+  }
+  .sd-nav-group-label {
+    font-size: 10px;
     font-weight: 700;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.1);
-    padding: 4px 10px;
-    border-radius: 9999px;
+    letter-spacing: 0.1em;
+    color: var(--sd-muted, #9ca3af);
+    padding: 16px 12px 6px;
+    margin: 0;
+    font-family: ui-monospace, "SF Mono", monospace;
+  }
+  .sd-nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--sd-nav-text, #4b5563);
+    transition: background 0.12s, color 0.12s;
+    line-height: 1.4;
+  }
+  .sd-nav-link:hover {
+    background: var(--sd-hover, rgba(0,0,0,0.04));
+    color: var(--sd-text, #111827);
+  }
+
+  /* ---- Content ---- */
+  .sd-content {
+    flex: 1;
+    min-width: 0;
+    padding: 48px 56px 80px;
+    max-width: 820px;
+  }
+
+  .sd-section { display: block; }
+
+  .sd-eyebrow {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #10b981;
+    font-family: ui-monospace, "SF Mono", monospace;
     margin-bottom: 12px;
   }
-  .header-title { font-size: 34px; font-weight: 900; color: #fff; margin-bottom: 8px; }
-  .header-desc { font-size: 15px; color: #94a3b8; }
-  .docs-grid { display: flex; flex-direction: column; gap: 16px; }
-  .docs-section-card {
-    background: rgba(15, 23, 42, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    padding: 24px;
+  .sd-h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--sd-text, #111827);
+    margin: 0 0 16px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
-  .docs-section-card h3 { font-size: 17px; font-weight: 800; color: #fff; margin-top: 0; margin-bottom: 8px; }
-  .docs-section-card p { font-size: 13px; color: #94a3b8; line-height: 1.6; margin: 0; }
-  .docs-section-card code {
-    background: rgba(0, 0, 0, 0.4);
-    color: #38bdf8;
-    padding: 2px 6px;
+  .sd-h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--sd-text, #111827);
+    margin: 36px 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .sd-lead {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--sd-subtle, #6b7280);
+    margin: 0 0 28px;
+    max-width: 620px;
+  }
+  .sd-p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--sd-body, #374151);
+    margin: 0 0 16px;
+  }
+
+  /* ---- Callout ---- */
+  .sd-callout {
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    color: var(--sd-body, #374151);
+    line-height: 1.6;
+    margin: 24px 0;
+  }
+  .sd-callout--success { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+  .sd-callout--amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.25); }
+  .sd-callout code {
+    background: rgba(16,185,129,0.1);
+    color: #059669;
+    padding: 1px 5px;
     border-radius: 4px;
-    font-family: monospace;
+    font-family: ui-monospace, "SF Mono", monospace;
     font-size: 12px;
+  }
+
+  /* ---- Code blocks ---- */
+  .sd-code-block {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--sd-border, rgba(0,0,0,0.08));
+    margin: 16px 0 24px;
+    font-size: 13px;
+  }
+  .sd-code-header {
+    background: var(--sd-code-head, #f3f4f6);
+    border-bottom: 1px solid var(--sd-border, rgba(0,0,0,0.08));
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sd-muted, #9ca3af);
+    font-family: ui-monospace, "SF Mono", monospace;
+    letter-spacing: 0.04em;
+  }
+  .sd-code-block pre {
+    background: var(--sd-code-bg, #f8f9fb);
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+    line-height: 1.65;
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+    font-size: 13px;
+    color: var(--sd-body, #374151);
+  }
+  .sd-code-block code { font-family: inherit; }
+
+  /* Syntax highlight tokens */
+  .c-kw  { color: #7c3aed; }
+  .c-fn  { color: #059669; }
+  .c-str { color: #d97706; }
+  .c-num { color: #2563eb; }
+  .c-tag { color: #7c3aed; }
+  .c-attr{ color: #2563eb; }
+  .c-comment { color: #9ca3af; font-style: italic; }
+  .c-sel  { color: #db2777; }
+  .c-prop { color: #2563eb; }
+
+  /* Inline code */
+  code {
+    background: var(--sd-inline-code-bg, rgba(16,185,129,0.08));
+    color: #059669;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 12.5px;
+  }
+  pre code { background: none; color: inherit; padding: 0; border-radius: 0; }
+
+  /* ---- Feature grid ---- */
+  .sd-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 24px 0 32px;
+  }
+  .sd-feature-card {
+    border: 1px solid var(--sd-border, rgba(0,0,0,0.07));
+    border-radius: 12px;
+    padding: 20px;
+    background: var(--sd-surface, #fff);
+  }
+  .sd-feature-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .sd-feature-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sd-text, #111827);
+    margin: 0 0 6px;
+  }
+  .sd-feature-card p {
+    font-size: 13px;
+    color: var(--sd-subtle, #6b7280);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ---- Tables ---- */
+  .sd-table-wrap { overflow-x: auto; margin: 16px 0 28px; border-radius: 10px; border: 1px solid var(--sd-border, rgba(0,0,0,0.08)); }
+  .sd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--sd-surface, #fff);
+  }
+  .sd-table thead tr { background: var(--sd-code-head, #f3f4f6); }
+  .sd-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--sd-muted, #9ca3af);
+    font-family: ui-monospace, "SF Mono", monospace;
+    border-bottom: 1px solid var(--sd-border, rgba(0,0,0,0.08));
+  }
+  .sd-table td {
+    padding: 10px 16px;
+    color: var(--sd-body, #374151);
+    border-bottom: 1px solid var(--sd-border, rgba(0,0,0,0.05));
+  }
+  .sd-table tr:last-child td { border-bottom: none; }
+
+  /* ---- Rule list ---- */
+  .sd-rule-list { margin: 16px 0 28px; display: flex; flex-direction: column; gap: 10px; }
+  .sd-rule { display: flex; gap: 12px; align-items: flex-start; }
+  .sd-rule-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .sd-rule-dot--green { background: #10b981; }
+  .sd-rule-dot--amber { background: #f59e0b; }
+  .sd-rule-dot--red   { background: #ef4444; }
+  .sd-rule p { font-size: 14px; color: var(--sd-body, #374151); line-height: 1.65; margin: 0; }
+
+  /* ---- Pipeline ---- */
+  .sd-pipeline { display: flex; flex-direction: column; gap: 0; margin: 20px 0 32px; border: 1px solid var(--sd-border, rgba(0,0,0,0.08)); border-radius: 12px; overflow: hidden; }
+  .sd-pipeline-step { display: flex; gap: 20px; padding: 20px 24px; background: var(--sd-surface, #fff); border-bottom: 1px solid var(--sd-border, rgba(0,0,0,0.06)); align-items: flex-start; }
+  .sd-pipeline-step:last-child { border-bottom: none; }
+  .sd-step-num {
+    font-size: 11px; font-weight: 800; font-family: ui-monospace, "SF Mono", monospace;
+    color: #10b981; background: rgba(16,185,129,0.1); padding: 3px 8px;
+    border-radius: 6px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.04em;
+  }
+  .sd-pipeline-step strong { font-size: 14px; font-weight: 700; color: var(--sd-text, #111827); display: block; margin-bottom: 4px; }
+  .sd-pipeline-step p { font-size: 13px; color: var(--sd-subtle, #6b7280); line-height: 1.6; margin: 0; }
+
+  /* ---- Dark mode ---- */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .sd-root {
+      --sd-bg: #090d19;
+      --sd-surface: #0e1628;
+      --sd-text: #f1f5f9;
+      --sd-body: #cbd5e1;
+      --sd-subtle: #64748b;
+      --sd-muted: #475569;
+      --sd-nav-text: #94a3b8;
+      --sd-border: rgba(255,255,255,0.08);
+      --sd-hover: rgba(255,255,255,0.05);
+      --sd-code-bg: #0d1526;
+      --sd-code-head: #111c30;
+      --sd-inline-code-bg: rgba(16,185,129,0.12);
+    }
+  }
+  :root[data-theme="dark"] .sd-root {
+    --sd-bg: #090d19;
+    --sd-surface: #0e1628;
+    --sd-text: #f1f5f9;
+    --sd-body: #cbd5e1;
+    --sd-subtle: #64748b;
+    --sd-muted: #475569;
+    --sd-nav-text: #94a3b8;
+    --sd-border: rgba(255,255,255,0.08);
+    --sd-hover: rgba(255,255,255,0.05);
+    --sd-code-bg: #0d1526;
+    --sd-code-head: #111c30;
+    --sd-inline-code-bg: rgba(16,185,129,0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .c-kw  { color: #c084fc; }
+    :root:not([data-theme="light"]) .c-fn  { color: #34d399; }
+    :root:not([data-theme="light"]) .c-str { color: #fbbf24; }
+    :root:not([data-theme="light"]) .c-num { color: #60a5fa; }
+    :root:not([data-theme="light"]) .c-tag { color: #c084fc; }
+    :root:not([data-theme="light"]) .c-attr{ color: #60a5fa; }
+    :root:not([data-theme="light"]) .c-sel { color: #f472b6; }
+    :root:not([data-theme="light"]) .c-prop{ color: #60a5fa; }
+    :root:not([data-theme="light"]) code { background: rgba(16,185,129,0.12); color: #34d399; }
+  }
+  :root[data-theme="dark"] .c-kw  { color: #c084fc; }
+  :root[data-theme="dark"] .c-fn  { color: #34d399; }
+  :root[data-theme="dark"] .c-str { color: #fbbf24; }
+  :root[data-theme="dark"] .c-num { color: #60a5fa; }
+  :root[data-theme="dark"] .c-tag { color: #c084fc; }
+  :root[data-theme="dark"] .c-attr{ color: #60a5fa; }
+  :root[data-theme="dark"] .c-sel { color: #f472b6; }
+  :root[data-theme="dark"] .c-prop{ color: #60a5fa; }
+  :root[data-theme="dark"] code   { background: rgba(16,185,129,0.12); color: #34d399; }
+
+  @media (max-width: 768px) {
+    .sd-root { flex-direction: column; }
+    .sd-sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--sd-border, rgba(0,0,0,0.07)); }
+    .sd-sidebar-inner { display: flex; flex-wrap: wrap; gap: 4px; padding: 12px; }
+    .sd-nav-group-label { display: none; }
+    .sd-content { padding: 32px 20px 60px; max-width: 100%; }
+    .sd-feature-grid { grid-template-columns: 1fr; }
   }
 </style>

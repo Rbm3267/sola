@@ -368,8 +368,13 @@ export function compile(source, options = {}) {
     }
 
     for (const [key, val] of Object.entries(node.attribs || {})) {
-      if (key.startsWith('on')) {
+      if (key.startsWith('on:')) {
+        const eventName = key.slice(3);
+        if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
+        domCode += `  ${id}.addEventListener('${eventName}', (e) => { ${val} });\n`;
+      } else if (key.startsWith('on')) {
         const eventName = key.slice(2).toLowerCase();
+        if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
         domCode += `  ${id}.addEventListener('${eventName}', (e) => { ${val} });\n`;
       } else if (key.startsWith('bind:')) {
         const prop = key.slice(5);
