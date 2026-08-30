@@ -29,7 +29,7 @@
     {
       name: 'Getting Started',
       items: [
-        { id: 'quickstart', title: 'Installation & Setup', badge: 'v1.0.0' },
+        { id: 'quickstart', title: 'Installation & Setup', badge: 'v1.0.1' },
         { id: 'syntax', title: 'The .sola Format' }
       ]
     },
@@ -82,7 +82,7 @@
         aiAnswer = JSON.stringify(data, null, 2);
       }
     } catch {
-      aiAnswer = "Sola components compile directly into native reactive DOM nodes via @sola/compiler. Use createSignal() for local state, $intent for ambient generative resolution, and $data for live remote polling without virtual DOM overhead.";
+      aiAnswer = "Sola AIR components compile directly into native reactive DOM nodes via @sola-air-ui/compiler. Use createSignal() for local state, $intent for ambient generative resolution, and $data for live remote polling without virtual DOM overhead.";
     } finally {
       askLoading = false;
     }
@@ -97,14 +97,14 @@
   };
 
   const installCmds = {
-    npm: 'npm install @sola/core @sola/compiler @sola/vite-plugin-sola',
-    pnpm: 'pnpm add @sola/core @sola/compiler @sola/vite-plugin-sola',
-    yarn: 'yarn add @sola/core @sola/compiler @sola/vite-plugin-sola',
-    bun: 'bun add @sola/core @sola/compiler @sola/vite-plugin-sola'
+    npm: 'npm install @sola-air-ui/core @sola-air-ui/compiler @sola-air-ui/vite-plugin-sola',
+    pnpm: 'pnpm add @sola-air-ui/core @sola-air-ui/compiler @sola-air-ui/vite-plugin-sola',
+    yarn: 'yarn add @sola-air-ui/core @sola-air-ui/compiler @sola-air-ui/vite-plugin-sola',
+    bun: 'bun add @sola-air-ui/core @sola-air-ui/compiler @sola-air-ui/vite-plugin-sola'
   };
-  
+
   const viteConfigCode = `import { defineConfig } from 'vite';
-import sola from '@sola/vite-plugin-sola';
+import sola from '@sola-air-ui/vite-plugin-sola';
 
 export default defineConfig({
   plugins: [sola()]
@@ -140,7 +140,7 @@ export default defineConfig({
   }
 <` + `/style>`;
 
-  const signalExample = `import { createSignal } from '@sola/core';
+  const signalExample = `import { createSignal } from '@sola-air-ui/core';
 
 // Create a reactive state tuple
 const [getCount, setCount] = createSignal(0);
@@ -149,7 +149,7 @@ console.log(getCount()); // 0
 setCount(prev => prev + 1);
 console.log(getCount()); // 1`;
 
-  const derivedExample = `import { createSignal, createDerived } from '@sola/core';
+  const derivedExample = `import { createSignal, createDerived } from '@sola-air-ui/core';
 
 const [getRps, setRps] = createSignal(1200);
 // Automatically recomputes when getRps updates
@@ -157,7 +157,7 @@ const getThroughput = createDerived(() => \`\${getRps() * 60} req/min\`);
 
 console.log(getThroughput()); // "72000 req/min"`;
 
-  const effectExample = `import { createSignal, createEffect } from '@sola/core';
+  const effectExample = `import { createSignal, createEffect } from '@sola-air-ui/core';
 
 const [getLatency, setLatency] = createSignal(12);
 
@@ -264,7 +264,7 @@ function(spUtil) {
 }`;
 
   const reactEmbedCode = `import React, { useEffect, useRef } from 'react';
-import mountSolaComponent from '@sola/ui/IncidentTriageMatrix';
+import mountSolaComponent from '@sola-air-ui/ui/IncidentTriageMatrix';
 
 export function SolaIncidentCard({ incidentId }) {
   const containerRef = useRef(null);
@@ -371,7 +371,7 @@ export function SolaIncidentCard({ incidentId }) {
       <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-xs space-y-2">
         <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          <span>Sola v0.9 Engine</span>
+          <span>Sola AIR v1.0.1</span>
         </div>
         <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">
           Single-file zero-VDOM reactivity for the ambient web.

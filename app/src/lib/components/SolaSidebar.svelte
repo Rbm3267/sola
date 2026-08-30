@@ -67,7 +67,7 @@
         {#if !collapsed}
           <div class="truncate">
             <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Sola Core</h2>
-            <p class="text-[10px] text-slate-400 font-mono">Enterprise v1.0.0</p>
+            <p class="text-[10px] text-slate-400 font-mono">Enterprise v1.0.1</p>
           </div>
         {/if}
       </div>

@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="brand/logo/sola-logo-transparent.png" alt="Sola Logo" width="120" height="120" />
+  <img src="brand/logo/sola-logo-transparent.png" alt="Sola AIR Logo" width="120" height="120" />
 </p>
 
-<h1 align="center">Sola</h1>
+<h1 align="center">Sola AIR</h1>
 
 <p align="center">
-  <b>The Ambient Intent Framework</b><br>
+  <b>Ambient · Intent · Runtime</b><br>
   Compile <code>.sola</code> components into zero-dependency vanilla DOM with native <code>$intent</code> signals that resolve AI state at the framework level.
 </p>
 
@@ -20,9 +20,9 @@ npm create sola@latest
 
 ---
 
-## What is Sola?
+## What is Sola AIR?
 
-Sola is a compiler-first JavaScript framework where AI isn't bolted on — it's a first-class reactive primitive. Write `.sola` files with familiar syntax, and the custom AST compiler outputs hyper-optimized vanilla DOM instructions. No virtual DOM. No heavy runtime framework. Just raw performance.
+Sola AIR is a compiler-first JavaScript framework where AI isn't bolted on — it's a first-class reactive primitive. Write `.sola` files with familiar syntax, and the custom AST compiler outputs hyper-optimized vanilla DOM instructions. No virtual DOM. No heavy runtime framework. Just raw performance.
 
 ```html
 <script>
@@ -55,9 +55,9 @@ The compiler transforms this into a self-contained ES module with:
 
 ---
 
-## Why Sola?
+## Why Sola AIR?
 
-| Feature | Sola | React | Svelte | Vue |
+| Feature | Sola AIR | React | Svelte | Vue |
 |---|---|---|---|---|
 | **Bundle size** (hello world) | **~3.2 KB** | ~45 KB | ~4 KB | ~33 KB |
 | **Virtual DOM Overhead** | **None (Direct DOM)** | Yes | No | Yes |
@@ -78,17 +78,35 @@ The compiler transforms this into a self-contained ES module with:
 
 ---
 
+## Packages
+
+| Package | npm | Description |
+|---|---|---|
+| `sola-air` | [![npm](https://img.shields.io/npm/v/sola-air)](https://www.npmjs.com/package/sola-air) | Meta-package — install everything at once |
+| `@sola-air-ui/core` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/core)](https://www.npmjs.com/package/@sola-air-ui/core) | Reactive runtime engine (signals, effects, $intent, $data) |
+| `@sola-air-ui/compiler` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/compiler)](https://www.npmjs.com/package/@sola-air-ui/compiler) | Custom Acorn AST compiler (.sola → JS + CSS) |
+| `@sola-air-ui/vite-plugin-sola` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/vite-plugin-sola)](https://www.npmjs.com/package/@sola-air-ui/vite-plugin-sola) | Vite plugin for .sola single-file components |
+| `@sola-air-ui/ui` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/ui)](https://www.npmjs.com/package/@sola-air-ui/ui) | Standard component library |
+| `@sola-air-ui/relay` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/relay)](https://www.npmjs.com/package/@sola-air-ui/relay) | Zero-knowledge local data proxy (PostgreSQL, MySQL) |
+| `@sola-air-ui/mcp` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/mcp)](https://www.npmjs.com/package/@sola-air-ui/mcp) | MCP server for AI-driven component generation |
+
+---
+
 ## Monorepo Architecture
 
 ```
 sola/
 ├── packages/
-│   ├── compiler/    # Custom Acorn AST compiler (.sola -> JS + CSS)
-│   ├── core/        # Reactive runtime engine (signals, effects, $intent, $data)
-│   ├── ui/          # Standard component library (.sola files)
-│   └── relay/       # Zero-knowledge local data proxy (PostgreSQL, MySQL)
-├── brand/           # Official brand kit, logos, and favicons
-└── app/             # Marketing site & interactive playground
+│   ├── compiler/          # Custom Acorn AST compiler (.sola -> JS + CSS)
+│   ├── core/              # Reactive runtime engine (signals, effects, $intent, $data)
+│   ├── ui/                # Standard component library (.sola files)
+│   ├── relay/             # Zero-knowledge local data proxy (PostgreSQL, MySQL)
+│   ├── sola-mcp/          # MCP server for AI-driven component generation
+│   ├── sola-air/          # Meta-package (installs the full Sola AIR stack)
+│   ├── vite-plugin-sola/  # Vite plugin for .sola SFC compilation
+│   └── create-sola/       # Project scaffolding CLI
+├── brand/                 # Official brand kit, logos, and favicons
+└── app/                   # Marketing site & interactive playground
 ```
 
 ---
@@ -103,7 +121,7 @@ sola/
 ### ⚙️ System Administrators
 *   **Deployment**: Deploy the Sola Relay server on-premises or close to the databases.
     ```bash
-    npm install -g @sola/relay
+    npm install -g @sola-air-ui/relay
     sola-relay --config ./relay.json
     ```
 *   **Access Provisioning**: Configure connection strings and table filters in `relay.json`.
@@ -118,5 +136,4 @@ sola/
 
 ## License
 
-MIT © 2026 Sola Contributors
-
+MIT © 2026 Sola AIR Contributors
