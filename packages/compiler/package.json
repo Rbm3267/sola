@@ -6,6 +6,9 @@
   "exports": {
     ".": "./src/index.js"
   },
+  "scripts": {
+    "test": "node test/compiler.test.js"
+  },
   "dependencies": {
     "acorn": "^8.10.0",
     "htmlparser2": "^9.0.0"
