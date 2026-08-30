@@ -6,20 +6,22 @@ let effectStack = [];
 let pendingEffects = new Set();
 let isFlushing = false;
 
+export function flushSync() {
+  while (pendingEffects.size > 0) {
+    const effects = [...pendingEffects];
+    pendingEffects.clear();
+    for (const effect of effects) {
+      effect.execute();
+    }
+  }
+  isFlushing = false;
+}
+
 // ─── Batched Updates ───
 function scheduleFlush() {
   if (!isFlushing) {
     isFlushing = true;
-    queueMicrotask(() => {
-      while (pendingEffects.size > 0) {
-        const effects = [...pendingEffects];
-        pendingEffects.clear();
-        for (const effect of effects) {
-          effect.execute();
-        }
-      }
-      isFlushing = false;
-    });
+    queueMicrotask(flushSync);
   }
 }
 
@@ -143,41 +145,58 @@ export function createDerived(fn) {
   return read;
 }
 
-// ─── Lifecycle Hooks ───
-let mountCallbacks = [];
-let destroyCallbacks = [];
-let isMounted = false;
+// ─── Component Lifecycle Scope Context Stack ───
+const contextStack = [];
+let activeContext = null;
+
+export function pushContext() {
+  const ctx = { mounts: [], destroys: [] };
+  contextStack.push(ctx);
+  activeContext = ctx;
+  return ctx;
+}
+
+export function popContext(ctx) {
+  const idx = contextStack.lastIndexOf(ctx);
+  if (idx !== -1) {
+    contextStack.splice(idx, 1);
+  }
+  activeContext = contextStack.length > 0 ? contextStack[contextStack.length - 1] : null;
+}
 
 export function onMount(fn) {
-  if (isMounted) {
-    // Already mounted, run immediately
-    fn();
+  if (activeContext) {
+    activeContext.mounts.push(fn);
   } else {
-    mountCallbacks.push(fn);
+    fn();
   }
 }
 
 export function onDestroy(fn) {
-  destroyCallbacks.push(fn);
+  if (activeContext) {
+    activeContext.destroys.push(fn);
+  }
 }
 
-// Called by the compiled mount() function after DOM is built
+// Called by compiled mount() function to flush instance mounts
 export function __flush_mounts() {
-  isMounted = true;
-  const cbs = [...mountCallbacks];
-  mountCallbacks = [];
-  for (const cb of cbs) {
-    cb();
+  if (activeContext && activeContext.mounts.length > 0) {
+    const cbs = [...activeContext.mounts];
+    activeContext.mounts = [];
+    for (const cb of cbs) {
+      cb();
+    }
   }
 }
 
 // Called when a component is torn down
 export function __flush_destroys() {
-  isMounted = false;
-  const cbs = [...destroyCallbacks];
-  destroyCallbacks = [];
-  for (const cb of cbs) {
-    cb();
+  if (activeContext && activeContext.destroys.length > 0) {
+    const cbs = [...activeContext.destroys];
+    activeContext.destroys = [];
+    for (const cb of cbs) {
+      cb();
+    }
   }
 }
 
@@ -186,7 +205,7 @@ export function __flush_destroys() {
 const defaultIntentConfig = {
   provider: 'local',
   endpoint: '/api/intent',
-  model: 'gemini-3.6-flash'
+  model: 'gemini-2.5-flash'
 };
 
 let globalIntentConfig = { ...defaultIntentConfig };
@@ -200,6 +219,10 @@ export function createIntent(promptFn, options = {}) {
   const [read, write] = createSignal(options.initial || 'Resolving...');
   let abortController = null;
 
+  onDestroy(() => {
+    if (abortController) abortController.abort();
+  });
+
   createEffect(() => {
     const currentPrompt = typeof promptFn === 'function' ? promptFn() : promptFn;
     if (!currentPrompt) return;
@@ -209,13 +232,7 @@ export function createIntent(promptFn, options = {}) {
     }
     abortController = new AbortController();
 
-    // Resolve the endpoint
-    let url = config.endpoint;
-    if (config.provider === 'local') {
-      // Use relative URL for same-origin
-      url = config.endpoint;
-    }
-
+    const url = config.endpoint;
     write('Resolving...');
 
     fetch(url, {

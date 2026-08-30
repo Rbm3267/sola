@@ -20,7 +20,7 @@ function sola() {
 			setTimeout(() => {
 				console.log('');
 				console.log(`   ${c1} ✧ ${r}`);
-				console.log(`  ${c1}✧${r} ${c2}◯${r} ${c3}✧${r}    ${b}Sola${r} ${d}v0.9${r}`);
+				console.log(`  ${c1}✧${r} ${c2}◯${r} ${c3}✧${r}    ${b}Sola${r} ${d}v1.0.0${r}`);
 				console.log(`   ${c3} ✧ ${r}      ${c2}Ambient Zero-VDOM Intent Runtime${r}`);
 				console.log(`            ${d}Compiler ready in ${Math.round(performance.now())}ms${r}`);
 				console.log('');

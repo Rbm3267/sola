@@ -1,115 +1,86 @@
 import * as acorn from 'acorn';
 import * as htmlparser2 from 'htmlparser2';
-import { createHash } from 'crypto';
 
-// ─── Void (self-closing) HTML elements ───
 const VOID_ELEMENTS = new Set([
   'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
   'link', 'meta', 'param', 'source', 'track', 'wbr'
 ]);
 
-// ─── Generate scoped class hash ───
-function scopeHash(source) {
-  return 'sola-' + createHash('md5').update(source).digest('hex').slice(0, 8);
+function hashString(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return 'sola-' + Math.abs(hash).toString(36);
 }
 
-// ─── Scope CSS selectors ───
-function scopeStyles(css, hash) {
-  // Add the hash class to every selector
-  return css.replace(
-    /([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g,
-    (match, selector, suffix) => {
-      selector = selector.trim();
-      if (!selector || selector.startsWith('@') || selector.startsWith('from') ||
-          selector.startsWith('to') || /^\d+%$/.test(selector)) {
-        return match;
-      }
-      // Handle :global() passthrough
-      if (selector.includes(':global(')) {
-        return selector.replace(/:global\(([^)]+)\)/g, '$1') + suffix;
-      }
-      return `${selector}.${hash}${suffix}`;
+function scopeStyles(css, scopeHash) {
+  return css.replace(/([^\r\n,{}]+)(,(?=[^{}]*{)|\s*{)/g, (match, selector, trailing) => {
+    if (selector.trim().startsWith('@') || selector.trim().startsWith('from') || selector.trim().startsWith('to') || /^\d+%/.test(selector.trim())) {
+      return match;
     }
-  );
+    const scopedSelector = selector
+      .split(',')
+      .map(part => {
+        const trimmed = part.trim();
+        if (!trimmed) return part;
+        return `${trimmed}.${scopeHash}`;
+      })
+      .join(', ');
+    return scopedSelector + trailing;
+  });
 }
 
-export function compile(source, filename = 'Component.sola') {
-  // ─── 1. Extract blocks ───
-  const scriptMatch = source.match(/<script[^>]*>([\s\S]*?)<\/script>/);
-  const styleMatch = source.match(/<style[^>]*>([\s\S]*?)<\/style>/);
-  const scriptContent = scriptMatch ? scriptMatch[1] : '';
-  const rawCSS = styleMatch ? styleMatch[1] : '';
+function extractScriptAndStyle(source) {
+  let script = '';
+  let style = '';
+  let template = source;
 
-  let rawTemplate = source
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/, '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/, '');
-
-  // Strip <template> wrapper if present
-  const templateWrapperMatch = rawTemplate.match(/<template>([\s\S]*)<\/template>/);
-  if (templateWrapperMatch) {
-    rawTemplate = templateWrapperMatch[1];
+  const scriptMatch = template.match(/<script(?:\s+lang=["'](?:ts|js)["'])?>([\s\S]*?)<\/script>/);
+  if (scriptMatch) {
+    script = scriptMatch[1];
+    template = template.replace(scriptMatch[0], '');
   }
 
-  // ─── 2. Scope hash ───
-  const hash = scopeHash(source);
-  const scopedCSS = rawCSS ? scopeStyles(rawCSS.trim(), hash) : '';
+  const styleMatch = template.match(/<style(?:\s+scoped)?>([\s\S]*?)<\/style>/);
+  if (styleMatch) {
+    style = styleMatch[1];
+    template = template.replace(styleMatch[0], '');
+  }
 
-  // ─── 3. Extract JS expressions from attributes before HTML parsing ───
-  // htmlparser2 breaks on {() => x > 5} because > looks like tag close
-  const expressionMap = new Map();
-  let exprId = 0;
+  return { script, style, template };
+}
 
-  function extractExpressions(template) {
-    let result = '';
-    let i = 0;
-    while (i < template.length) {
-      if (template[i] === '{' && template[i-1] !== '\\') {
-        // Check if we're inside an HTML tag attribute
-        let depth = 1;
-        let j = i + 1;
-        while (j < template.length && depth > 0) {
-          if (template[j] === '{') depth++;
-          else if (template[j] === '}') depth--;
-          j++;
-        }
-        const expr = template.slice(i, j);
-        // Only replace if it contains dangerous chars for HTML parsing
-        if (expr.includes('>') || expr.includes('<') || expr.includes('"')) {
-          const placeholder = `__SOLA_EXPR_${exprId}__`;
-          expressionMap.set(placeholder, expr);
-          exprId++;
-          result += placeholder;
-        } else {
-          result += expr;
-        }
-        i = j;
-      } else {
-        result += template[i];
-        i++;
-      }
+function extractExpressions(text) {
+  return text.replace(/{([^{}]+)}/g, (match, expr) => {
+    const trimmed = expr.trim();
+    if (trimmed.startsWith('#') || trimmed.startsWith('/') || trimmed.startsWith(':')) {
+      return match;
     }
-    return result;
-  }
+    return `<sola-expr expr="${trimmed.replace(/"/g, '&quot;')}"></sola-expr>`;
+  });
+}
 
-  function restoreExpressions(str) {
-    for (const [placeholder, expr] of expressionMap) {
-      str = str.split(placeholder).join(expr);
-    }
-    return str;
-  }
+export function compile(source, options = {}) {
+  const { script: scriptContent, style: styleContent, template: rawTemplateSource } = extractScriptAndStyle(source);
+  const scopeHash = hashString(styleContent || rawTemplateSource);
+  const hasStyles = styleContent.trim().length > 0;
+  const scopedCss = hasStyles ? scopeStyles(styleContent, scopeHash) : '';
 
+  let rawTemplate = rawTemplateSource;
   rawTemplate = extractExpressions(rawTemplate);
 
-  // ─── 4. Pre-process logic blocks into custom tags ───
+  // Pre-process logic blocks: structured if-then-else
+  // Process nested or sequential if/else blocks cleanly
   rawTemplate = rawTemplate
-    .replace(/{#if\s+([\s\S]*?)}/g, '<sola-if condition="$1">')
-    .replace(/{:else}/g, '</sola-if><sola-else>')
-    .replace(/{\/if}/g, '</sola-if>')
+    .replace(/{#if\s+([\s\S]*?)}([\s\S]*?){:else}([\s\S]*?){\/if}/g, '<sola-if condition="$1"><sola-then>$2</sola-then><sola-else>$3</sola-else></sola-if>')
+    .replace(/{#if\s+([\s\S]*?)}([\s\S]*?){\/if}/g, '<sola-if condition="$1"><sola-then>$2</sola-then></sola-if>')
     .replace(/{#each\s+([\s\S]*?)\s+as\s+([\w]+)(?:\s*,\s*([\w]+))?}/g,
       (_, arr, item, index) => `<sola-each array="${arr}" item="${item}"${index ? ` index="${index}"` : ''}>`)
     .replace(/{\/each}/g, '</sola-each>');
 
-  // ─── 4. Parse HTML AST ───
+  // Parse HTML AST
   const templateNodes = [];
   let root = { type: 'element', name: '__root__', attribs: {}, children: [] };
   templateNodes.push(root);
@@ -137,11 +108,11 @@ export function compile(source, filename = 'Component.sola') {
   parser.write(rawTemplate.trim() || '<div></div>');
   parser.end();
 
-  // ─── 5. Parse JS AST with Acorn ───
+  // Parse JS AST with Acorn
   let jsOutput = scriptContent;
   const stateVars = new Set();
-  const exportedProps = []; // { name, default }
-  const componentImports = []; // { localName, path }
+  const exportedProps = [];
+  const componentImports = [];
 
   if (scriptContent.trim()) {
     try {
@@ -151,7 +122,7 @@ export function compile(source, filename = 'Component.sola') {
       function walkAST(node, parent) {
         if (!node || typeof node !== 'object') return;
 
-        // Track component imports (import X from './X.sola')
+        // Track component imports
         if (node.type === 'ImportDeclaration') {
           const src = node.source.value;
           if (src.endsWith('.sola')) {
@@ -159,7 +130,6 @@ export function compile(source, filename = 'Component.sola') {
               componentImports.push({ localName: spec.local.name, path: src });
             });
           }
-          // Remove ALL imports from function body — they'll be hoisted to module level
           edits.push({
             start: node.start,
             end: node.end,
@@ -167,7 +137,7 @@ export function compile(source, filename = 'Component.sola') {
           });
         }
 
-        // Exported props: export let title = 'default'
+        // Exported props
         if (node.type === 'ExportNamedDeclaration' && node.declaration &&
             node.declaration.type === 'VariableDeclaration') {
           node.declaration.declarations.forEach(decl => {
@@ -176,56 +146,63 @@ export function compile(source, filename = 'Component.sola') {
               ? scriptContent.slice(decl.init.start, decl.init.end)
               : 'undefined';
             exportedProps.push({ name, default: defaultVal });
-            // Remove the export keyword, just make it a regular let
             edits.push({
               start: node.start,
-              end: node.end,
-              replacement: `let ${name} = props.${name} !== undefined ? props.${name} : ${defaultVal};`
+              end: node.start + 7,
+              replacement: ''
             });
           });
         }
 
-        // $state rune → createSignal
+        // $state() -> createSignal()
         if (node.type === 'VariableDeclaration') {
           node.declarations.forEach(decl => {
-            if (decl.init && decl.init.type === 'CallExpression' && decl.init.callee) {
-              const calleeName = decl.init.callee.name;
-              if (calleeName === '$state') {
-                stateVars.add(decl.id.name);
-                const argSource = decl.init.arguments.length > 0
-                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
-                  : 'undefined';
+            if (decl.init && decl.init.type === 'CallExpression') {
+              const callee = decl.init.callee;
+              if (callee.type === 'Identifier' && callee.name === '$state') {
+                const varName = decl.id.name;
+                stateVars.add(varName);
+                const initArg = decl.init.arguments[0];
+                const initVal = initArg ? scriptContent.slice(initArg.start, initArg.end) : 'undefined';
                 edits.push({
                   start: node.start,
                   end: node.end,
-                  replacement: `const [${decl.id.name}, set_${decl.id.name}] = createSignal(${argSource});`
+                  replacement: `const [${varName}, set_${varName}] = createSignal(${initVal});`
                 });
-              } else if (calleeName === '$intent') {
-                const argSource = decl.init.arguments.length > 0
-                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
-                  : '""';
-                const optsSource = decl.init.arguments.length > 1
-                  ? ', ' + scriptContent.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
-                  : '';
+              } else if (callee.type === 'Identifier' && callee.name === '$derived') {
+                const varName = decl.id.name;
+                const expr = decl.init.arguments[0];
+                const exprSrc = expr ? scriptContent.slice(expr.start, expr.end) : 'undefined';
                 edits.push({
                   start: node.start,
                   end: node.end,
-                  replacement: `const ${decl.id.name} = createIntent(() => ${argSource}${optsSource});`
+                  replacement: `const ${varName} = createDerived(() => ${exprSrc});`
                 });
-              } else if (calleeName === '$derived') {
-                const argSource = decl.init.arguments.length > 0
-                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
-                  : '() => undefined';
+              } else if (callee.type === 'Identifier' && callee.name === '$effect') {
+                const body = decl.init.arguments[0];
+                const bodySrc = body ? scriptContent.slice(body.start, body.end) : '() => {}';
                 edits.push({
                   start: node.start,
                   end: node.end,
-                  replacement: `const ${decl.id.name} = createDerived(${argSource});`
+                  replacement: `createEffect(${bodySrc});`
                 });
-              } else if (calleeName === '$data') {
-                const sourceArg = decl.init.arguments.length > 0
+              } else if (callee.type === 'Identifier' && callee.name === '$intent') {
+                const promptArg = decl.init.arguments[0]
                   ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
-                  : '""';
-                const optsArg = decl.init.arguments.length > 1
+                  : "''";
+                const fallbackArg = decl.init.arguments[1]
+                  ? scriptContent.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
+                  : 'null';
+                edits.push({
+                  start: node.start,
+                  end: node.end,
+                  replacement: `const ${decl.id.name} = createIntent(${promptArg}, ${fallbackArg});`
+                });
+              } else if (callee.type === 'Identifier' && callee.name === '$data') {
+                const sourceArg = decl.init.arguments[0]
+                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
+                  : "''";
+                const optsArg = decl.init.arguments[1]
                   ? ', ' + scriptContent.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
                   : '';
                 edits.push({
@@ -238,29 +215,17 @@ export function compile(source, filename = 'Component.sola') {
           });
         }
 
-        // Assignment to state var: count = x → set_count(x)
+        // Assignment to state var: count = x -> set_count(x) (supporting all 10 assignment operators)
         if (node.type === 'AssignmentExpression' &&
             node.left.type === 'Identifier' &&
             stateVars.has(node.left.name)) {
+          const name = node.left.name;
           const rightSource = scriptContent.slice(node.right.start, node.right.end);
           if (node.operator === '=') {
-            edits.push({
-              start: node.start,
-              end: node.end,
-              replacement: `set_${node.left.name}(${rightSource})`
-            });
-          } else if (node.operator === '+=') {
-            edits.push({
-              start: node.start,
-              end: node.end,
-              replacement: `set_${node.left.name}(${node.left.name}() + ${rightSource})`
-            });
-          } else if (node.operator === '-=') {
-            edits.push({
-              start: node.start,
-              end: node.end,
-              replacement: `set_${node.left.name}(${node.left.name}() - ${rightSource})`
-            });
+            edits.push({ start: node.start, end: node.end, replacement: `set_${name}(${rightSource})` });
+          } else {
+            const rawOp = node.operator.slice(0, -1);
+            edits.push({ start: node.start, end: node.end, replacement: `set_${name}(${name}() ${rawOp} (${rightSource}))` });
           }
         }
 
@@ -277,7 +242,6 @@ export function compile(source, filename = 'Component.sola') {
           });
         }
 
-        // Recurse
         for (const key of Object.keys(node)) {
           if (key === 'type') continue;
           const child = node[key];
@@ -291,91 +255,88 @@ export function compile(source, filename = 'Component.sola') {
 
       walkAST(ast, null);
 
-      // Apply edits in reverse order
       edits.sort((a, b) => b.start - a.start);
       for (const edit of edits) {
         jsOutput = jsOutput.slice(0, edit.start) + edit.replacement + jsOutput.slice(edit.end);
       }
-    } catch (e) {
-      console.error('[Sola Compiler] Acorn Parse Error:', e.message);
+    } catch (err) {
+      console.warn('[sola compiler] Acorn parse warning:', err.message);
     }
   }
 
-  // ─── 6. Generate DOM instructions ───
-  let domCode = '';
+  // Generate DOM creation instructions
   let uid = 0;
+  let domCode = '';
+  const importedComponentSet = new Set(componentImports.map(i => i.localName));
 
   function emitNode(node, parentVar) {
+    if (!node) return;
+
     if (node.type === 'text') {
-      const id = `t${uid++}`;
-      const data = restoreExpressions(node.data);
-      if (data.includes('{')) {
-        // Reactive text
-        const expr = data
-          .replace(/\\/g, '\\\\')
-          .replace(/'/g, "\\'")
-          .replace(/{([^}]+)}/g, "'+($1)+'")
-          .replace(/\n/g, '\\n');
-        domCode += `  const ${id} = document.createTextNode('');\n`;
-        domCode += `  createEffect(() => { ${id}.textContent = '${expr}'; });\n`;
-      } else {
-        domCode += `  const ${id} = document.createTextNode(${JSON.stringify(data)});\n`;
+      const text = node.data.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
+      if (text.trim().length > 0) {
+        const id = `t${uid++}`;
+        domCode += `  const ${id} = document.createTextNode(\`${text}\`);\n`;
+        domCode += `  ${parentVar}.appendChild(${id});\n`;
       }
+      return;
+    }
+
+    if (node.name === 'sola-expr') {
+      const expr = (node.attribs.expr || '').replace(/&quot;/g, '"');
+      const id = `e${uid++}`;
+      domCode += `  const ${id} = document.createTextNode('');\n`;
       domCode += `  ${parentVar}.appendChild(${id});\n`;
+      domCode += `  createEffect(() => { ${id}.textContent = String(${expr} ?? ''); });\n`;
       return;
     }
 
-    if (node.name === '__root__') {
-      node.children.forEach(child => emitNode(child, parentVar));
+    // Nested custom component
+    if (importedComponentSet.has(node.name)) {
+      const cid = `comp${uid++}`;
+      domCode += `  const ${cid}_target = document.createElement('div');\n`;
+      domCode += `  ${cid}_target.className = 'sola-component-root';\n`;
+      domCode += `  ${parentVar}.appendChild(${cid}_target);\n`;
+      const propsObj = {};
+      for (const [key, val] of Object.entries(node.attribs || {})) {
+        propsObj[key] = val;
+      }
+      domCode += `  ${node.name}(${cid}_target, ${JSON.stringify(propsObj)});\n`;
       return;
     }
 
-    // ── {#if} ──
+    // {#if ...} {:else} ... {/if}
     if (node.name === 'sola-if') {
       const cid = `c${uid++}`;
       domCode += `  const ${cid}_a = document.createComment('if');\n`;
       domCode += `  ${parentVar}.appendChild(${cid}_a);\n`;
       domCode += `  let ${cid}_els = [];\n`;
+      
+      const thenChild = node.children.find(c => c.name === 'sola-then');
+      const elseChild = node.children.find(c => c.name === 'sola-else');
 
-      // Check if there's a sola-else sibling following this node
-      // (We pre-processed {:else} into </sola-if><sola-else> so they are siblings)
       domCode += `  createEffect(() => {\n`;
       domCode += `    ${cid}_els.forEach(e => e.remove()); ${cid}_els = [];\n`;
       domCode += `    if (${node.attribs.condition}) {\n`;
-      domCode += `      const f = document.createDocumentFragment();\n`;
-      node.children.forEach(child => emitNode(child, 'f'));
-      domCode += `      Array.from(f.childNodes).forEach(n => ${cid}_els.push(n));\n`;
-      domCode += `      ${cid}_a.parentNode.insertBefore(f, ${cid}_a.nextSibling);\n`;
+      if (thenChild) {
+        domCode += `      const f = document.createDocumentFragment();\n`;
+        thenChild.children.forEach(child => emitNode(child, 'f'));
+        domCode += `      Array.from(f.childNodes).forEach(n => ${cid}_els.push(n));\n`;
+        domCode += `      ${cid}_a.parentNode.insertBefore(f, ${cid}_a.nextSibling);\n`;
+      }
+      domCode += `    } else {\n`;
+      if (elseChild) {
+        domCode += `      const f = document.createDocumentFragment();\n`;
+        elseChild.children.forEach(child => emitNode(child, 'f'));
+        domCode += `      Array.from(f.childNodes).forEach(n => ${cid}_els.push(n));\n`;
+        domCode += `      ${cid}_a.parentNode.insertBefore(f, ${cid}_a.nextSibling);\n`;
+      }
       domCode += `    }\n`;
       domCode += `  });\n`;
       return;
     }
 
-    // ── {:else} ──
-    if (node.name === 'sola-else') {
-      const cid = `c${uid++}`;
-      domCode += `  const ${cid}_a = document.createComment('else');\n`;
-      domCode += `  ${parentVar}.appendChild(${cid}_a);\n`;
-      domCode += `  let ${cid}_els = [];\n`;
-
-      // Find the preceding sola-if condition — we need to negate it
-      // The sola-else doesn't have its own condition; we look for the preceding if anchor
-      // For now, we mark it and let the compiler figure it out
-      // Actually, since {:else} becomes a sibling after </sola-if>, we can't easily
-      // reference the if's condition. Let's handle this differently.
-      // We'll just emit it unconditionally for now and fix the preprocessor to keep
-      // if/else together.
-      domCode += `  // else block (rendered by paired if)\n`;
-      domCode += `  {\n`;
-      domCode += `    const f = document.createDocumentFragment();\n`;
-      node.children.forEach(child => emitNode(child, 'f'));
-      domCode += `    Array.from(f.childNodes).forEach(n => ${cid}_els.push(n));\n`;
-      domCode += `    ${cid}_a.parentNode.insertBefore(f, ${cid}_a.nextSibling);\n`;
-      domCode += `  }\n`;
-      return;
-    }
-
-    // ── {#each} ──
+    // {#each} (Rendering in correct ascending order)
     if (node.name === 'sola-each') {
       const eid = `e${uid++}`;
       domCode += `  const ${eid}_a = document.createComment('each');\n`;
@@ -384,123 +345,105 @@ export function compile(source, filename = 'Component.sola') {
       domCode += `  createEffect(() => {\n`;
       domCode += `    ${eid}_els.forEach(e => e.remove()); ${eid}_els = [];\n`;
       domCode += `    const _items = ${node.attribs.array} || [];\n`;
+      domCode += `    const f = document.createDocumentFragment();\n`;
       domCode += `    for (let _i = 0; _i < _items.length; _i++) {\n`;
       domCode += `      const ${node.attribs.item} = _items[_i];\n`;
       if (node.attribs.index) {
         domCode += `      const ${node.attribs.index} = _i;\n`;
       }
-      domCode += `      const f = document.createDocumentFragment();\n`;
       node.children.forEach(child => emitNode(child, 'f'));
-      domCode += `      Array.from(f.childNodes).forEach(n => ${eid}_els.push(n));\n`;
-      domCode += `      ${eid}_a.parentNode.insertBefore(f, ${eid}_a.nextSibling);\n`;
       domCode += `    }\n`;
+      domCode += `    Array.from(f.childNodes).forEach(n => ${eid}_els.push(n));\n`;
+      domCode += `    ${eid}_a.parentNode.insertBefore(f, ${eid}_a.nextSibling);\n`;
       domCode += `  });\n`;
       return;
     }
 
-    // ── Normal element ──
+    // Normal element
     const id = `n${uid++}`;
+    domCode += `  const ${id} = document.createElement('${node.name}');\n`;
 
-    if (VOID_ELEMENTS.has(node.name)) {
-      domCode += `  const ${id} = document.createElement('${node.name}');\n`;
-    } else {
-      domCode += `  const ${id} = document.createElement('${node.name}');\n`;
+    if (hasStyles) {
+      domCode += `  ${id}.classList.add('${scopeHash}');\n`;
     }
 
-    // Add scope hash class for style scoping
-    if (scopedCSS) {
-      domCode += `  ${id}.classList.add('${hash}');\n`;
-    }
-
-    // Process attributes
-    for (const [rawKey, rawValue] of Object.entries(node.attribs)) {
-      const key = restoreExpressions(rawKey);
-      const value = restoreExpressions(rawValue);
-      
-      // Event handlers: on:click={handler}
+    for (const [key, val] of Object.entries(node.attribs || {})) {
       if (key.startsWith('on:')) {
-        const event = key.slice(3);
-        if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(event)) continue;
-        const handler = value.replace(/^{|}$/g, '');
-        domCode += `  ${id}.addEventListener('${event}', ${handler});\n`;
-      }
-      // Event handlers: onclick={handler}
-      else if (/^on[a-z]+$/.test(key)) {
-        const event = key.slice(2);
-        const handler = value.replace(/^{|}$/g, '');
-        domCode += `  ${id}.addEventListener('${event}', ${handler});\n`;
-      }
-      // bind:value
-      else if (key === 'bind:value') {
-        const signalName = value.replace(/^{|}$/g, '').replace(/"/g, '');
-        domCode += `  createEffect(() => { ${id}.value = ${signalName}(); });\n`;
-        domCode += `  ${id}.addEventListener('input', (e) => set_${signalName}(e.target.value));\n`;
-      }
-      // Class attribute handling (merging with scoped CSS hash)
-      else if (key === 'class') {
-        if (value.includes('{')) {
-          const expr = restoreExpressions(value).replace(/{([^}]+)}/g, "'+($1)+'");
-          const baseHash = scopedCSS ? `'${hash} ' + ` : '';
-          domCode += `  createEffect(() => { ${id}.className = ${baseHash}'${expr}'; });\n`;
-        } else {
-          const classVal = scopedCSS ? `${value} ${hash}` : value;
-          domCode += `  ${id}.setAttribute('class', '${classVal}');\n`;
+        const eventName = key.slice(3);
+        if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
+        domCode += `  ${id}.addEventListener('${eventName}', (e) => { ${val} });\n`;
+      } else if (key.startsWith('on')) {
+        const eventName = key.slice(2).toLowerCase();
+        if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
+        domCode += `  ${id}.addEventListener('${eventName}', (e) => { ${val} });\n`;
+      } else if (key.startsWith('bind:')) {
+        const prop = key.slice(5);
+        if (prop === 'value') {
+          domCode += `  ${id}.addEventListener('input', (e) => { set_${val}(e.target.value); });\n`;
+          domCode += `  createEffect(() => { ${id}.value = ${val}() ?? ''; });\n`;
         }
-      }
-      // Dynamic attributes with {expression}
-      else if (value.includes('{') && value.includes('}')) {
-        const expr = value.replace(/{([^}]+)}/g, "'+($1)+'");
-        domCode += `  createEffect(() => { ${id}.setAttribute('${key}', '${expr}'); });\n`;
-      }
-      // Static attributes
-      else {
-        domCode += `  ${id}.setAttribute('${key}', ${JSON.stringify(value)});\n`;
+      } else if (key === 'class' || key === 'className') {
+        domCode += `  ${id}.className += ' ' + \`${val}\`;\n`;
+      } else {
+        domCode += `  ${id}.setAttribute('${key}', \`${val}\`);\n`;
       }
     }
 
     domCode += `  ${parentVar}.appendChild(${id});\n`;
 
-    // Process children
-    if (node.children) {
-      node.children.forEach(child => emitNode(child, id));
+    if (node.children && !VOID_ELEMENTS.has(node.name)) {
+      for (const child of node.children) {
+        emitNode(child, id);
+      }
     }
   }
 
-  // Walk all root children
-  emitNode(root, '__target');
+  root.children.forEach(child => emitNode(child, '__target'));
 
-  // ─── 7. Assemble final output ───
-  const propsSignature = exportedProps.length > 0 ? 'props = {}' : '';
+  // Assemble final output module
+  let output = '';
+  output += `// Compiled by @sola/compiler v1.0.0\n`;
+  output += `import { createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } from '@sola/core';\n`;
 
-  let output = `import { createSignal, createEffect, createDerived, createIntent, createData, onMount, onDestroy, __flush_mounts, __flush_destroys } from '@sola/core';\n`;
-
-  // Component imports
   for (const imp of componentImports) {
     output += `import ${imp.localName} from '${imp.path}';\n`;
   }
 
-  output += `\nexport default function mount(__target, ${propsSignature}) {\n`;
-  output += `  if (typeof document === 'undefined' || !__target) return () => {};\n`;
-  output += jsOutput + '\n';
+  output += `\n`;
+  output += `export default function mount(__target, props = {}) {\n`;
+  output += `  const __ctx = pushContext();\n\n`;
 
-  // Inject scoped styles
-  if (scopedCSS) {
-    output += `\n  // Scoped styles\n`;
-    output += `  if (typeof document !== 'undefined') {\n`;
-    output += `    const __style = document.createElement('style');\n`;
-    output += `    __style.textContent = ${JSON.stringify(scopedCSS)};\n`;
-    output += `    document.head.appendChild(__style);\n`;
-    output += `  }\n`;
+  if (hasStyles) {
+    output += `  if (typeof document !== 'undefined' && !window['__SOLA_STYLE_${scopeHash}']) {\n`;
+    output += `    window['__SOLA_STYLE_${scopeHash}'] = true;\n`;
+    output += `    const styleEl = document.createElement('style');\n`;
+    output += `    styleEl.textContent = \`${scopedCss}\`;\n`;
+    output += `    document.head.appendChild(styleEl);\n`;
+    output += `  }\n\n`;
   }
 
-  output += '\n' + domCode;
-  output += '\n  __flush_mounts();\n';
-  output += '\n  return () => { __flush_destroys(); };\n';
-  output += '}\n';
+  for (const prop of exportedProps) {
+    output += `  let ${prop.name} = props.${prop.name} !== undefined ? props.${prop.name} : ${prop.default};\n`;
+  }
+
+  output += `\n  // User script\n`;
+  output += jsOutput.split('\n').map(l => '  ' + l).join('\n') + '\n\n';
+
+  output += `  // Reactive DOM graph\n`;
+  output += domCode;
+
+  output += `\n  __flush_mounts();\n`;
+  output += `\n  return () => {\n`;
+  output += `    // Cleanup\n`;
+  output += `    __flush_destroys();\n`;
+  output += `    popContext(__ctx);\n`;
+  output += `    __target.innerHTML = '';\n`;
+  output += `  };\n`;
+  output += `}\n`;
 
   return {
     code: output,
-    js: output,
-    css: scopedCSS
+    scopeHash,
+    css: scopedCss
   };
 }

@@ -56,7 +56,8 @@
     <!-- Page Header -->
     <div class="text-center max-w-3xl mx-auto space-y-3">
       <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold shadow-2xs">
-        <span>✦ Community Presets & Starter Kits</span>
+        <svg class="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+        <span>Community Presets & Starter Kits</span>
       </div>
       <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
         Pre-Built Layouts & Starter Kits
