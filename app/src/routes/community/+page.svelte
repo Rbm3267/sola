@@ -10,8 +10,10 @@
 
   const categories = [
     'All',
+    'Autonomous AI & Agents',
+    'Edge & Neural Systems',
+    'Robotics & Spatial',
     'SaaS & Analytics',
-    'Developer & AI',
     'Commerce & Retail',
     'Productivity & Tasks',
     'Operations & Health'

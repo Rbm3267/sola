@@ -1,7 +1,7 @@
 export interface SolaTemplate {
   id: string;
   name: string;
-  category: 'SaaS & Analytics' | 'Developer & AI' | 'Commerce & Retail' | 'Productivity & Tasks' | 'Operations & Health';
+  category: 'Autonomous AI & Agents' | 'Edge & Neural Systems' | 'Robotics & Spatial' | 'SaaS & Analytics' | 'Commerce & Retail' | 'Productivity & Tasks' | 'Operations & Health';
   tagline: string;
   description: string;
   badge: string;
@@ -21,7 +21,165 @@ export interface SolaTemplate {
 }
 
 export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
+  // ==========================================
+  // --- Category: Autonomous AI & Agents ---
+  // ==========================================
+  {
+    id: 'ai-agent-swarm-mesh',
+    name: 'Autonomous Multi-Agent Swarm & Intent Mesh',
+    category: 'Autonomous AI & Agents',
+    tagline: 'Orchestrates multi-agent task handoffs, thought trace loops, and tool execution matrices',
+    description: 'Real-time agent swarm cockpit tracking active subagent delegations, tool calls, context window saturation, and consensus verification.',
+    badge: 'Bleeding Edge',
+    signals: ['agent/swarm_active_nodes', 'agent/reasoning_depth', 'agent/tool_execution_ms'],
+    cards: [
+      { id: 'as1', type: 'node_graph', title: 'Agent Topology Mesh', subtitle: 'Dynamic task delegation graph', cols: 2, value: '8 Subagents', accentColor: 'emerald' },
+      { id: 'as2', type: 'stat', title: 'Swarm Consensus Rate', subtitle: 'Multi-model agreement index', cols: 1, value: '99.4%', delta: '+0.8%', accentColor: 'emerald' },
+      { id: 'as3', type: 'feed', title: 'Live Reasoning & Thought Stream', subtitle: 'Autonomous subagent reflection trace', cols: 2, value: 'Executing', accentColor: 'slate' },
+      { id: 'as4', type: 'slider', title: 'Autonomy & Permission Dial', subtitle: 'Max allowable tool risk threshold', cols: 1, value: 85, accentColor: 'emerald' }
+    ],
+    solaCode: `<script>
+  let subagentCount = $state(8);
+  let consensus = $state(99.4);
+  let autonomyLevel = $state(85);
+</script>
+
+<div class="agent-mesh">
+  <h2>Active Subagents: {subagentCount}</h2>
+  <span>Consensus: {consensus}%</span>
+  <SolaSlider bind:value={autonomyLevel} />
+</div>`
+  },
+  {
+    id: 'llm-streaming-token-hud',
+    name: 'Real-Time Neural Token Streaming & TTFT HUD',
+    category: 'Autonomous AI & Agents',
+    tagline: 'High-throughput LLM streaming monitor with sub-millisecond text-node patch rendering',
+    description: 'Tracks time-to-first-token (TTFT), token output velocity (tok/s), context buffer compaction, and live inference cost.',
+    badge: 'Next Gen',
+    signals: ['neural/token_rate', 'neural/ttft_latency', 'neural/context_fill'],
+    cards: [
+      { id: 'nt1', type: 'stat', title: 'Token Throughput', subtitle: 'Streaming generation velocity', cols: 1, value: '4,280 tok/s', delta: '+340 tok/s', accentColor: 'violet' },
+      { id: 'nt2', type: 'progress', title: 'Context Window Saturation', subtitle: '128k token allocation', cols: 1, value: 68, delta: '68%', accentColor: 'violet' },
+      { id: 'nt3', type: 'chart', title: 'Token Egress Velocity Stream', subtitle: '1,000Hz text node mutation rate', cols: 2, value: '4.2k tok/s', accentColor: 'violet' },
+      { id: 'nt4', type: 'code', title: 'Zero-VDOM Streaming Buffer', subtitle: 'Direct reactive DOM binding', cols: 2, value: 'Prompt Engine', accentColor: 'slate' }
+    ],
+    solaCode: `<script>
+  let tokenRate = $state(4280);
+  let contextFill = $state(68);
+</script>
+
+<div class="token-hud">
+  <span class="rate">{tokenRate} tok/s</span>
+  <SolaProgressRing value={contextFill} />
+</div>`
+  },
+
+  // ==========================================
+  // --- Category: Edge & Neural Systems ---
+  // ==========================================
+  {
+    id: 'edge-wasm-sandbox',
+    name: 'Edge WASM Sandbox & Isolate Memory HUD',
+    category: 'Edge & Neural Systems',
+    tagline: 'Sub-0.1ms WebAssembly isolate lifecycle tracker with zero cold-start telemetry',
+    description: 'Monitors globally distributed edge micro-VMs, memory watermarks, cold-start latency percentiles, and instant routing failover.',
+    badge: 'High Perf',
+    signals: ['wasm/isolate_boot_ms', 'wasm/memory_watermark', 'edge/global_pops'],
+    cards: [
+      { id: 'ew1', type: 'stat', title: 'Cold-Start Latency', subtitle: 'Sub-millisecond isolate spawn', cols: 1, value: '0.08ms', delta: '-0.02ms', accentColor: 'emerald' },
+      { id: 'ew2', type: 'progress', title: 'Linear Memory Allocation', subtitle: '4MB per isolate cap', cols: 1, value: 42, delta: '42%', accentColor: 'emerald' },
+      { id: 'ew3', type: 'chart', title: 'Global Edge Ingress Map', subtitle: '32 Edge PoPs real-time load', cols: 2, value: '98k req/s', accentColor: 'emerald' },
+      { id: 'ew4', type: 'radial_dial', title: 'Concurrency Limiter', subtitle: 'Dynamic worker scaling cap', cols: 1, value: 75, accentColor: 'emerald' }
+    ],
+    solaCode: `<script>
+  let coldStart = $state(0.08);
+  let memoryUsage = $state(42);
+</script>
+
+<div class="wasm-hud">
+  <h2>Boot Time: {coldStart}ms</h2>
+  <p>Memory: {memoryUsage}%</p>
+</div>`
+  },
+  {
+    id: 'zkp-verification-pipeline',
+    name: 'Zero-Knowledge Proof & Circuit Validator',
+    category: 'Edge & Neural Systems',
+    tagline: 'Cryptographic proof generation pipeline with constraint validation gauges',
+    description: 'Tracks zero-knowledge SNARK/STARK proof synthesis, circuit constraint depth, gas verification fees, and state commitment roots.',
+    badge: 'Crypto',
+    signals: ['zkp/proof_gen_ms', 'zkp/circuit_constraints', 'zkp/verified_state'],
+    cards: [
+      { id: 'zk1', type: 'stat', title: 'Proof Synthesis Time', subtitle: 'PlonKish arithmetization speed', cols: 1, value: '380ms', delta: '-45ms', accentColor: 'sky' },
+      { id: 'zk2', type: 'stat', title: 'Verified State Root', subtitle: 'Cryptographic state anchor', cols: 1, value: '0x7F...9A4', delta: 'Confirmed', accentColor: 'sky' },
+      { id: 'zk3', type: 'waterfall', title: 'Proof Generation Stages', subtitle: 'Witness generation to commitment', cols: 2, value: '380ms', accentColor: 'sky', config: { bars: [{ name: 'Witness Gen', val: 120, d: '120ms' }, { name: 'FFT Polynomial', val: 180, d: '180ms' }, { name: 'MSM Commitment', val: 80, d: '80ms' }] } }
+    ],
+    solaCode: `<script>
+  let proofTime = $state(380);
+  let stateRoot = $state("0x7F89B2...9A4E");
+</script>
+
+<div class="zkp-card">
+  <h3>Proof Synthesized in {proofTime}ms</h3>
+  <code>State: {stateRoot}</code>
+</div>`
+  },
+
+  // ==========================================
+  // --- Category: Robotics & Spatial ---
+  // ==========================================
+  {
+    id: 'robotics-actuator-telemetry',
+    name: 'Robotics Actuator Kinematics & 1,000Hz Telemetry',
+    category: 'Robotics & Spatial',
+    tagline: '6-DOF joint angle dials, torque sensor curves, and emergency e-stop sentinel',
+    description: 'Real-time robotics telemetry dashboard operating at 1,000Hz direct DOM patch loop without virtual DOM latency spikes.',
+    badge: 'Hardware',
+    signals: ['robot/joint_angles', 'robot/torque_nm', 'robot/estop_state'],
+    cards: [
+      { id: 'rb1', type: 'radial_dial', title: 'End-Effector Joint Angle', subtitle: 'Haptic precision angle control', cols: 1, value: 45, accentColor: 'amber' },
+      { id: 'rb2', type: 'stat', title: 'Actuator Torque Peak', subtitle: 'Load sensor feedback', cols: 1, value: '28.4 Nm', delta: 'Nominal', accentColor: 'amber' },
+      { id: 'rb3', type: 'chart', title: '1,000Hz Sensor Fusion Curve', subtitle: 'IMU & Torque continuous telemetry', cols: 2, value: '1.0 kHz', accentColor: 'amber' },
+      { id: 'rb4', type: 'status', title: 'Hardware Sentinel Condition', subtitle: 'E-Stop closed-loop watchdog', cols: 1, value: 'Armed & Nominal', accentColor: 'emerald' }
+    ],
+    solaCode: `<script>
+  let jointAngle = $state(45);
+  let torque = $state(28.4);
+</script>
+
+<div class="robotics-hud">
+  <h2>Joint Angle: {jointAngle}°</h2>
+  <span>Torque: {torque} Nm</span>
+</div>`
+  },
+  {
+    id: 'spatial-audio-haptics',
+    name: 'Spatial Coordinates & Soundfield Stage',
+    category: 'Robotics & Spatial',
+    tagline: '360° tactile coordinate stage with inertia damping and spring physics',
+    description: 'Spatial UI controller allowing fluid dragging of audio sources and tactile anchor points in 3D coordinate space.',
+    badge: 'Spatial',
+    signals: ['spatial/pan_azimuth', 'spatial/elevation', 'spatial/haptic_intensity'],
+    cards: [
+      { id: 'sa1', type: 'slider', title: 'Azimuth Soundfield Orientation', subtitle: '360 degree spatial panning', cols: 1, value: 180, accentColor: 'emerald' },
+      { id: 'sa2', type: 'slider', title: 'Haptic Vibration Damping', subtitle: 'Tactile spring resistance', cols: 1, value: 65, accentColor: 'emerald' },
+      { id: 'sa3', type: 'node_graph', title: 'Acoustic Anchor Nodes', subtitle: 'Virtual spatial emitters', cols: 2, value: '6 Emitters', accentColor: 'emerald' }
+    ],
+    solaCode: `<script>
+  let azimuth = $state(180);
+  let damping = $state(65);
+</script>
+
+<div class="spatial-stage">
+  <h3>Azimuth: {azimuth}°</h3>
+  <SolaSlider bind:value={damping} />
+</div>`
+  },
+
+  // ==========================================
   // --- Category: SaaS & Analytics ---
+  // ==========================================
   {
     id: 'saas-revenue-waterfall',
     name: 'Subscription ARR & Realization Waterfall',
@@ -101,79 +259,9 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
 </div>`
   },
 
-  // --- Category: Developer & AI ---
-  {
-    id: 'api-gateway-dial',
-    name: 'API Gateway Rate Limiter & Token Dial',
-    category: 'Developer & AI',
-    tagline: 'Haptic rotary throttle and token bucket saturation monitor',
-    description: 'Live rate limit governance HUD with real-time throughput dial, token bucket status, and latency counters.',
-    badge: 'Developer',
-    signals: ['gateway/throughput', 'rate_limit/bucket_depth', 'network/p99'],
-    cards: [
-      { id: 'gw1', type: 'radial_dial', title: 'Ingress Rate Throttle', subtitle: 'Dynamic RPS cap adjuster', cols: 1, value: 65, accentColor: 'emerald' },
-      { id: 'gw2', type: 'stat', title: 'Ingress Latency p99', subtitle: 'Global edge median', cols: 1, value: '14.2ms', delta: '-2.1ms', accentColor: 'emerald' },
-      { id: 'gw3', type: 'code', title: 'Signal Rate Limiter Hook', subtitle: 'Zero-VDOM edge handler', cols: 2, value: 'TypeScript', accentColor: 'slate' },
-      { id: 'gw4', type: 'chart', title: 'Live Ingress Requests', subtitle: 'Telemetry throughput', cols: 2, value: '1,420 req/s', accentColor: 'emerald' }
-    ],
-    solaCode: `<script>
-  let rpsLimit = $state(6500);
-  let p99 = $state(14.2);
-</script>
-
-<div class="gateway-hud">
-  <SolaRadialDial bind:value={rpsLimit} />
-  <span>p99 Latency: {p99}ms</span>
-</div>`
-  },
-  {
-    id: 'llm-prompt-workbench',
-    name: 'LLM Prompt Studio & Token Ingress',
-    category: 'Developer & AI',
-    tagline: 'Real-time prompt engineering console with token streaming and latency metrics',
-    description: 'Configurable AI prompt evaluator with parameter sliders (temperature, top-p), token velocity, and response cost indicators.',
-    badge: 'AI Engine',
-    signals: ['ai/token_velocity', 'ai/cost_per_query', 'ai/ttft_latency'],
-    cards: [
-      { id: 'ai1', type: 'stat', title: 'Time to First Token (TTFT)', subtitle: 'Streaming response latency', cols: 1, value: '142ms', delta: '-18ms', accentColor: 'violet' },
-      { id: 'ai2', type: 'slider', title: 'Temperature Control', subtitle: 'Creativity variance parameter', cols: 1, value: 70, accentColor: 'violet' },
-      { id: 'ai3', type: 'code', title: 'Streaming Response Buffer', subtitle: 'Direct reactive text node binding', cols: 2, value: 'Prompt Output', accentColor: 'slate' },
-      { id: 'ai4', type: 'chart', title: 'Token Consumption Stream', subtitle: 'Ingress vs Egress throughput', cols: 2, value: '3,800 tok/s', accentColor: 'violet' }
-    ],
-    solaCode: `<script>
-  let ttft = $state(142);
-  let temp = $state(0.7);
-</script>
-
-<div class="ai-workbench">
-  <h3>TTFT: {ttft}ms</h3>
-  <p>Temperature: {temp}</p>
-</div>`
-  },
-  {
-    id: 'kinetic-node-topology',
-    name: 'Kinetic Microservice Mesh & Topology',
-    category: 'Developer & AI',
-    tagline: 'Self-clustering interactive node graph representing distributed services',
-    description: 'Visualizes microservice interconnection, shard replication lag, and network partition states with zero layout lag.',
-    badge: 'Architecture',
-    signals: ['mesh/nodes_healthy', 'mesh/replication_lag', 'mesh/tps'],
-    cards: [
-      { id: 'kn1', type: 'node_graph', title: 'Distributed Cluster Graph', subtitle: 'Auto-balancing service nodes', cols: 2, value: '18 Nodes', accentColor: 'emerald' },
-      { id: 'kn2', type: 'stat', title: 'Mesh Health Index', subtitle: 'Global cluster status', cols: 1, value: '99.98%', delta: 'Optimal', accentColor: 'emerald' }
-    ],
-    solaCode: `<script>
-  let nodeCount = $state(18);
-  let healthIndex = $state(99.98);
-</script>
-
-<div class="node-mesh">
-  <h3>Mesh Nodes: {nodeCount}</h3>
-  <p>Health: {healthIndex}%</p>
-</div>`
-  },
-
+  // ==========================================
   // --- Category: Commerce & Retail ---
+  // ==========================================
   {
     id: 'ecommerce-order-flow',
     name: 'Storefront Order Fulfillment Pipeline',
@@ -222,7 +310,9 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
 </div>`
   },
 
+  // ==========================================
   // --- Category: Productivity & Tasks ---
+  // ==========================================
   {
     id: 'sprint-velocity-horizon',
     name: 'Engineering Sprint Velocity & Task Horizon',
@@ -271,7 +361,9 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
 </div>`
   },
 
+  // ==========================================
   // --- Category: Operations & Health ---
+  // ==========================================
   {
     id: 'multi-region-cluster-mesh',
     name: 'Multi-Region Infrastructure & NOC Sentinel',
