@@ -26,7 +26,7 @@
         <SolaLogo size="sm" />
         <div class="flex items-center gap-2">
           <span class="text-lg font-black tracking-tight text-slate-900 dark:text-white font-sans">Sola</span>
-          <span class="text-[10px] font-mono font-bold tracking-wider text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-white/10 px-2 py-0.5 rounded-full">v0.9</span>
+          <span class="text-[10px] font-mono font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 px-2 py-0.5 rounded-full">v1.0.0</span>
         </div>
       </a>
 
