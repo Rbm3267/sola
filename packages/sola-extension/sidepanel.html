@@ -2,75 +2,304 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sola Component Dock</title>
+  <title>Sola UI</title>
   <style>
     body {
       background: #090d19;
       color: #f8fafc;
       font-family: system-ui, -apple-system, sans-serif;
       margin: 0;
-      padding: 16px;
+      padding: 0;
       font-size: 13px;
     }
-    h2 { font-size: 14px; margin-bottom: 8px; color: #fff; }
-    p { font-size: 11px; color: #94a3b8; margin-bottom: 16px; line-height: 1.4; }
+
+    /* Header */
+    .header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .header h1 {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header h1 svg { opacity: 0.6; }
+    .header p {
+      font-size: 11px;
+      color: #64748b;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Setup Guide */
+    .guide {
+      margin: 12px 16px;
+      padding: 12px;
+      background: rgba(16, 185, 129, 0.06);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      border-radius: 12px;
+    }
+    .guide-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #10b981;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .guide ol {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .guide ol li { margin-bottom: 2px; }
+    .guide-dismiss {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+      padding: 0;
+    }
+    .guide-dismiss:hover { color: #94a3b8; }
+
+    /* Category Labels */
+    .category-label {
+      padding: 8px 16px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Component Buttons */
     .dock-btn {
-      width: 100%;
+      width: calc(100% - 32px);
+      margin: 0 16px 6px;
       background: #1e293b;
       color: #f8fafc;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 12px;
       border-radius: 10px;
-      font-weight: 600;
+      font-weight: 500;
+      font-size: 12px;
       cursor: pointer;
-      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .dock-btn:hover {
       background: #334155;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+    .dock-btn.active {
       border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
     }
     .pill {
-      background: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.15);
       color: #10b981;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 6px;
       font-size: 10px;
+      font-weight: 600;
       font-family: monospace;
     }
+    .comp-name { font-weight: 600; }
+    .comp-desc {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      padding: 6px 16px;
+      font-size: 10px;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    /* Install Box */
     .install-box {
-      margin-top: 20px;
+      margin: 12px 16px;
       padding: 12px;
       background: #030712;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 12px;
     }
-    code { font-family: monospace; color: #38bdf8; font-size: 11px; }
+    .install-box .label {
+      font-weight: 700;
+      font-size: 10px;
+      color: #475569;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: #38bdf8;
+      font-size: 11px;
+    }
+
+    /* Scrollable area */
+    .scroll-area {
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    .scroll-area::-webkit-scrollbar { width: 4px; }
+    .scroll-area::-webkit-scrollbar-track { background: transparent; }
+    .scroll-area::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
   </style>
 </head>
 <body>
-  <h2>Sola Component Dock</h2>
-  <p>Preview and trigger live Sola ambient components on the active browser tab.</p>
+  <div class="header">
+    <h1>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      Sola UI
+    </h1>
+    <p>Preview Sola components live on any page.</p>
+  </div>
 
-  <button class="dock-btn" id="btn-datacard">
-    <span>DataCard (MRR Metric)</span>
-    <span class="pill">⚡ Test</span>
-  </button>
-  <button class="dock-btn" id="btn-waterfall">
-    <span>FlowWaterfall (ARR)</span>
-    <span class="pill">⚡ Test</span>
-  </button>
-  <button class="dock-btn" id="btn-dial">
-    <span>TactileDial (Capacity)</span>
-    <span class="pill">⚡ Test</span>
-  </button>
+  <div class="scroll-area">
 
-  <div class="install-box">
-    <div style="font-weight: 700; font-size: 11px; color: #94a3b8; margin-bottom: 6px;">PRODUCTION INSTALL</div>
-    <code>npm install @sola/core @sola/ui</code>
+    <!-- Setup Guide (dismissible) -->
+    <div class="guide" id="setup-guide">
+      <div class="guide-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Quick Start
+      </div>
+      <ol>
+        <li>Click any component below</li>
+        <li>It renders live on the current page</li>
+        <li>Click again to remove it</li>
+        <li>Use the code snippet to add to your app</li>
+      </ol>
+      <button class="guide-dismiss" id="dismiss-guide">Dismiss</button>
+    </div>
+
+    <!-- Metrics & KPIs -->
+    <div class="category-label">Metrics & Data</div>
+    <button class="dock-btn" data-component="datacard">
+      <div>
+        <div class="comp-name">DataCard</div>
+        <div class="comp-desc">KPI metric with trend sparkline</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="gauge">
+      <div>
+        <div class="comp-name">GaugeCard</div>
+        <div class="comp-desc">Radial progress ring</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="waterfall">
+      <div>
+        <div class="comp-name">FlowWaterfall</div>
+        <div class="comp-desc">Revenue bridge chart</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+
+    <!-- Controllers -->
+    <div class="category-label">Controllers & Inputs</div>
+    <button class="dock-btn" data-component="dial">
+      <div>
+        <div class="comp-name">TactileDial</div>
+        <div class="comp-desc">Rotary dial controller</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="toggle">
+      <div>
+        <div class="comp-name">Toggle Switch</div>
+        <div class="comp-desc">On/off labeled toggle</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="slider">
+      <div>
+        <div class="comp-name">Range Slider</div>
+        <div class="comp-desc">Dual-thumb range selector</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+
+    <!-- Feeds & Lists -->
+    <div class="category-label">Feeds & Status</div>
+    <button class="dock-btn" data-component="listblock">
+      <div>
+        <div class="comp-name">ListBlock</div>
+        <div class="comp-desc">Scrollable data feed</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="stream">
+      <div>
+        <div class="comp-name">StreamView</div>
+        <div class="comp-desc">Live event log</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="sentinel">
+      <div>
+        <div class="comp-name">SentinelCapsule</div>
+        <div class="comp-desc">System health HUD</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+
+    <!-- Foundation Primitives -->
+    <div class="category-label">Foundation UI</div>
+    <button class="dock-btn" data-component="button">
+      <div>
+        <div class="comp-name">Button</div>
+        <div class="comp-desc">5 variants, spring press</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="tabs">
+      <div>
+        <div class="comp-name">Tabs</div>
+        <div class="comp-desc">Underline, pill, segmented</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+    <button class="dock-btn" data-component="avatar">
+      <div>
+        <div class="comp-name">Avatar</div>
+        <div class="comp-desc">User identity with status</div>
+      </div>
+      <span class="pill">Preview</span>
+    </button>
+
+    <div class="status-bar">
+      <span class="status-dot"></span>
+      <span>12 components available</span>
+    </div>
+
+    <div class="install-box">
+      <div class="label">Production Install</div>
+      <code>npm install @sola/core @sola/ui</code>
+    </div>
   </div>
 
   <script src="sidepanel.js"></script>
