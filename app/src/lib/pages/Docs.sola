@@ -14,8 +14,128 @@
     });
   }
 
-  $effect(() => {
-    setSection("introduction");
+  let introCounterCode = [
+    '<span class="c-kw">&lt;script&gt;</span>',
+    '  <span class="c-kw">let</span> count = <span class="c-fn">$state</span>(<span class="c-num">0</span>);',
+    '  <span class="c-kw">let</span> doubled = <span class="c-fn">$derived</span>(() =&gt; count * <span class="c-num">2</span>);',
+    '<span class="c-kw">&lt;/script&gt;</span>',
+    '',
+    '<span class="c-tag">&lt;div&gt;</span>',
+    '  <span class="c-tag">&lt;p&gt;</span>Count: &#123;count&#125; &middot; Doubled: &#123;doubled&#125;<span class="c-tag">&lt;/p&gt;</span>',
+    '  <span class="c-tag">&lt;button</span> <span class="c-attr">onclick</span>=<span class="c-str">"count++"</span><span class="c-tag">&gt;</span>Increment<span class="c-tag">&lt;/button&gt;</span>',
+    '<span class="c-tag">&lt;/div&gt;</span>'
+  ].join('\n');
+
+  let quickstartAppCode = [
+    '<span class="c-kw">&lt;script&gt;</span>',
+    '  <span class="c-kw">let</span> name = <span class="c-fn">$state</span>(<span class="c-str">"World"</span>);',
+    '<span class="c-kw">&lt;/script&gt;</span>',
+    '',
+    '<span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"greeting"</span><span class="c-tag">&gt;</span>',
+    '  <span class="c-tag">&lt;h1&gt;</span>Hello, &#123;name&#125;!<span class="c-tag">&lt;/h1&gt;</span>',
+    '  <span class="c-tag">&lt;input</span> <span class="c-attr">value</span>=<span class="c-str">"&#123;name&#125;"</span> <span class="c-attr">oninput</span>=<span class="c-str">"name = event.target.value"</span> <span class="c-tag">/&gt;</span>',
+    '<span class="c-tag">&lt;/div&gt;</span>',
+    '',
+    '<span class="c-kw">&lt;style&gt;</span>',
+    '  <span class="c-sel">.greeting</span> &#123; padding: <span class="c-num">2rem</span>; font-family: system-ui; &#125;',
+    '<span class="c-kw">&lt;/style&gt;</span>'
+  ].join('\n');
+
+  let buttonStructureCode = [
+    '<span class="c-comment">&lt;!-- 1. Script block --&gt;</span>',
+    '<span class="c-kw">&lt;script&gt;</span>',
+    '  <span class="c-comment">// reactive state, logic, lifecycle</span>',
+    '<span class="c-kw">&lt;/script&gt;</span>',
+    '',
+    '<span class="c-comment">&lt;!-- 2. Template (HTML) --&gt;</span>',
+    '<span class="c-tag">&lt;button</span> <span class="c-attr">class</span>=<span class="c-str">"btn"</span><span class="c-tag">&gt;</span>',
+    '  <span class="c-tag">&lt;slot</span> <span class="c-tag">/&gt;</span>',
+    '<span class="c-tag">&lt;/button&gt;</span>',
+    '',
+    '<span class="c-comment">&lt;!-- 3. Scoped styles --&gt;</span>',
+    '<span class="c-kw">&lt;style&gt;</span>',
+    '  <span class="c-sel">.btn</span> &#123; <span class="c-prop">background</span>: <span class="c-num">#10b981</span>; <span class="c-prop">color</span>: white; &#125;',
+    '<span class="c-kw">&lt;/style&gt;</span>'
+  ].join('\n');
+
+  let conditionalsCode = [
+    '&#123;#if isLoggedIn&#125;',
+    '  <span class="c-tag">&lt;Dashboard /&gt;</span>',
+    '&#123;:else&#125;',
+    '  <span class="c-tag">&lt;Login /&gt;</span>',
+    '&#123;/if&#125;'
+  ].join('\n');
+
+  let eachCode = [
+    '&#123;#each items as item (item.id)&#125;',
+    '  <span class="c-tag">&lt;li&gt;</span>&#123;item.label&#125;<span class="c-tag">&lt;/li&gt;</span>',
+    '&#123;/each&#125;'
+  ].join('\n');
+
+  let viteConfigCode = [
+    '<span class="c-kw">import</span> { defineConfig } <span class="c-kw">from</span> <span class="c-str">\'vite\'</span>;',
+    '<span class="c-kw">import</span> { solaPlugin } <span class="c-kw">from</span> <span class="c-str">\'@sola-air/vite-plugin\'</span>;',
+    '',
+    '<span class="c-kw">export default</span> <span class="c-fn">defineConfig</span>(&#123;',
+    '  plugins: [<span class="c-fn">solaPlugin</span>()]',
+    '&#125;);'
+  ].join('\n');
+
+  let appDtsCode = [
+    '<span class="c-kw">declare module</span> <span class="c-str">\'*.sola\'</span> &#123;',
+    '  <span class="c-kw">const</span> mount: (',
+    '    target: HTMLElement,',
+    '    props?: Record&lt;<span class="c-kw">string</span>, <span class="c-kw">any</span>&gt;',
+    '  ) =&gt; (() =&gt; <span class="c-kw">void</span>) | <span class="c-kw">void</span>;',
+    '  <span class="c-kw">export default</span> mount;',
+    '&#125;'
+  ].join('\n');
+
+  let stateCode = [
+    '<span class="c-kw">let</span> count = <span class="c-fn">$state</span>(<span class="c-num">0</span>);',
+    '<span class="c-kw">let</span> user  = <span class="c-fn">$state</span>(&#123; name: <span class="c-str">"Ada"</span> &#125;);',
+    '',
+    'count++;',
+    'user.name = <span class="c-str">"Grace"</span>;'
+  ].join('\n');
+
+  let effectCode = [
+    '<span class="c-kw">let</span> query = <span class="c-fn">$state</span>(<span class="c-str">""</span>);',
+    '<span class="c-kw">let</span> results = <span class="c-fn">$effect</span>(() =&gt; &#123;',
+    '  <span class="c-kw">const</span> data = search(query);',
+    '  updateList(data);',
+    '  <span class="c-kw">return</span> () =&gt; cancelPendingRequest();',
+    '&#125;);'
+  ].join('\n');
+
+  let intentConfigCode = [
+    '<span class="c-kw">export default</span> &#123;',
+    '  intent: &#123;',
+    '    endpoint: <span class="c-str">\'https://api.sola-air.dev/intent\'</span>,',
+    '    model: <span class="c-str">\'gemini-2.5-flash\'</span>,',
+    '    apiKey: process.env.SOLA_API_KEY',
+    '  &#125;',
+    '&#125;;'
+  ].join('\n');
+
+  onMount(() => {
+    setSection('introduction');
+    const injections = {
+      'intro-counter-code': introCounterCode,
+      'qs-app-code': quickstartAppCode,
+      'vite-config-code': viteConfigCode,
+      'app-dts-code': appDtsCode,
+      'state-code': stateCode,
+      'btn-struct-code': buttonStructureCode,
+      'effect-code': effectCode,
+      'tpl-cond-code': conditionalsCode,
+      'tpl-each-code': eachCode,
+      'intent-config-code': intentConfigCode
+    };
+    for (const id in injections) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = injections[id];
+    }
   });
 </script>
 
@@ -24,24 +144,24 @@
   <aside class="sd-sidebar">
     <div class="sd-sidebar-inner">
       <p class="sd-nav-group-label">GETTING STARTED</p>
-      <button class="sd-nav-link" data-nav="introduction" onclick="setSection('introduction')">Introduction</button>
-      <button class="sd-nav-link" data-nav="quickstart" onclick="setSection('quickstart')">Quick Start</button>
-      <button class="sd-nav-link" data-nav="installation" onclick="setSection('installation')">Installation</button>
+      <button class="sd-nav-link" data-nav="introduction" onclick="{() => setSection('introduction')}">Introduction</button>
+      <button class="sd-nav-link" data-nav="quickstart" onclick="{() => setSection('quickstart')}">Quick Start</button>
+      <button class="sd-nav-link" data-nav="installation" onclick="{() => setSection('installation')}">Installation</button>
 
       <p class="sd-nav-group-label">CORE CONCEPTS</p>
-      <button class="sd-nav-link" data-nav="signals" onclick="setSection('signals')">Signals & State</button>
-      <button class="sd-nav-link" data-nav="components" onclick="setSection('components')">Components</button>
-      <button class="sd-nav-link" data-nav="effects" onclick="setSection('effects')">Effects</button>
-      <button class="sd-nav-link" data-nav="templates" onclick="setSection('templates')">Templates</button>
+      <button class="sd-nav-link" data-nav="signals" onclick="{() => setSection('signals')}">Signals & State</button>
+      <button class="sd-nav-link" data-nav="components" onclick="{() => setSection('components')}">Components</button>
+      <button class="sd-nav-link" data-nav="effects" onclick="{() => setSection('effects')}">Effects</button>
+      <button class="sd-nav-link" data-nav="templates" onclick="{() => setSection('templates')}">Templates</button>
 
       <p class="sd-nav-group-label">ADVANCED</p>
-      <button class="sd-nav-link" data-nav="intent" onclick="setSection('intent')">Intent API</button>
-      <button class="sd-nav-link" data-nav="export" onclick="setSection('export')">Framework Export</button>
-      <button class="sd-nav-link" data-nav="compiler" onclick="setSection('compiler')">Compiler</button>
+      <button class="sd-nav-link" data-nav="intent" onclick="{() => setSection('intent')}">Intent API</button>
+      <button class="sd-nav-link" data-nav="export" onclick="{() => setSection('export')}">Framework Export</button>
+      <button class="sd-nav-link" data-nav="compiler" onclick="{() => setSection('compiler')}">Compiler</button>
 
       <p class="sd-nav-group-label">REFERENCE</p>
-      <button class="sd-nav-link" data-nav="cli" onclick="setSection('cli')">CLI Reference</button>
-      <button class="sd-nav-link" data-nav="api" onclick="setSection('api')">Runtime API</button>
+      <button class="sd-nav-link" data-nav="cli" onclick="{() => setSection('cli')}">CLI Reference</button>
+      <button class="sd-nav-link" data-nav="api" onclick="{() => setSection('api')}">Runtime API</button>
     </div>
   </aside>
 
@@ -63,22 +183,22 @@
 
       <div class="sd-feature-grid">
         <div class="sd-feature-card">
-          <div class="sd-feature-icon">⚡</div>
+          <div class="sd-feature-icon">&#9889;</div>
           <h3>Zero VDOM</h3>
           <p>Reactive primitives compile directly to targeted DOM patches. No tree diffing on every frame.</p>
         </div>
         <div class="sd-feature-card">
-          <div class="sd-feature-icon">🧩</div>
+          <div class="sd-feature-icon">&#129513;</div>
           <h3>Single-File Components</h3>
           <p>Script, template, and scoped styles in one <code>.sola</code> file. The compiler handles the rest.</p>
         </div>
         <div class="sd-feature-card">
-          <div class="sd-feature-icon">🤖</div>
+          <div class="sd-feature-icon">&#129302;</div>
           <h3>Intent API</h3>
           <p>The <code>$intent</code> macro converts natural-language annotations into reactive component logic.</p>
         </div>
         <div class="sd-feature-card">
-          <div class="sd-feature-icon">🔌</div>
+          <div class="sd-feature-icon">&#128268;</div>
           <h3>Multi-Framework Export</h3>
           <p>Write once in <code>.sola</code>, export to React 19, Svelte 5, or native Web Components.</p>
         </div>
@@ -89,15 +209,7 @@
 
       <div class="sd-code-block">
         <div class="sd-code-header"><span>counter.sola</span></div>
-        <pre><code><span class="c-kw">&lt;script&gt;</span>
-  <span class="c-kw">let</span> count = <span class="c-fn">$state</span>(<span class="c-num">0</span>);
-  <span class="c-kw">let</span> doubled = <span class="c-fn">$derived</span>(() =&gt; count * <span class="c-num">2</span>);
-<span class="c-kw">&lt;/script&gt;</span>
-
-<span class="c-tag">&lt;div&gt;</span>
-  <span class="c-tag">&lt;p&gt;</span>Count: {count} · Doubled: {doubled}<span class="c-tag">&lt;/p&gt;</span>
-  <span class="c-tag">&lt;button</span> <span class="c-attr">onclick</span>=<span class="c-str">"count++"</span><span class="c-tag">&gt;</span>Increment<span class="c-tag">&lt;/button&gt;</span>
-<span class="c-tag">&lt;/div&gt;</span></code></pre>
+        <pre><code id="intro-counter-code"></code></pre>
       </div>
     </div>
 
@@ -118,18 +230,7 @@ pnpm create sola@latest my-app</code></pre>
       <h2 class="sd-h2">2. Write your first component</h2>
       <div class="sd-code-block">
         <div class="sd-code-header"><span>src/App.sola</span></div>
-        <pre><code><span class="c-kw">&lt;script&gt;</span>
-  <span class="c-kw">let</span> name = <span class="c-fn">$state</span>(<span class="c-str">"World"</span>);
-<span class="c-kw">&lt;/script&gt;</span>
-
-<span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"greeting"</span><span class="c-tag">&gt;</span>
-  <span class="c-tag">&lt;h1&gt;</span>Hello, {name}!<span class="c-tag">&lt;/h1&gt;</span>
-  <span class="c-tag">&lt;input</span> <span class="c-attr">value</span>=<span class="c-str">"{name}"</span> <span class="c-attr">oninput</span>=<span class="c-str">"name = event.target.value"</span> <span class="c-tag">/&gt;</span>
-<span class="c-tag">&lt;/div&gt;</span>
-
-<span class="c-kw">&lt;style&gt;</span>
-  <span class="c-sel">.greeting</span> { padding: <span class="c-num">2rem</span>; font-family: system-ui; }
-<span class="c-kw">&lt;/style&gt;</span></code></pre>
+        <pre><code id="qs-app-code"></code></pre>
       </div>
 
       <h2 class="sd-h2">3. Mount it</h2>
@@ -160,25 +261,14 @@ npm install @sola-air/runtime</code></pre>
 
       <div class="sd-code-block">
         <div class="sd-code-header"><span>vite.config.ts</span></div>
-        <pre><code><span class="c-kw">import</span> { defineConfig } <span class="c-kw">from</span> <span class="c-str">'vite'</span>;
-<span class="c-kw">import</span> { solaPlugin } <span class="c-kw">from</span> <span class="c-str">'@sola-air/vite-plugin'</span>;
-
-<span class="c-kw">export default</span> <span class="c-fn">defineConfig</span>({
-  plugins: [<span class="c-fn">solaPlugin</span>()]
-});</code></pre>
+        <pre><code id="vite-config-code"></code></pre>
       </div>
 
       <h2 class="sd-h2">TypeScript support</h2>
       <p class="sd-p">Add the module declaration to your <code>app.d.ts</code> so TypeScript understands <code>.sola</code> imports:</p>
       <div class="sd-code-block">
         <div class="sd-code-header"><span>src/app.d.ts</span></div>
-        <pre><code><span class="c-kw">declare module</span> <span class="c-str">'*.sola'</span> {
-  <span class="c-kw">const</span> mount: (
-    target: HTMLElement,
-    props?: Record&lt;<span class="c-kw">string</span>, <span class="c-kw">any</span>&gt;
-  ) =&gt; (() =&gt; <span class="c-kw">void</span>) | <span class="c-kw">void</span>;
-  <span class="c-kw">export default</span> mount;
-}</code></pre>
+        <pre><code id="app-dts-code"></code></pre>
       </div>
     </div>
 
@@ -192,11 +282,7 @@ npm install @sola-air/runtime</code></pre>
       <p class="sd-p">Creates a reactive cell. When the value changes, any DOM nodes or derived signals that read it are updated synchronously — no batching, no scheduler.</p>
       <div class="sd-code-block">
         <div class="sd-code-header"><span>.sola</span></div>
-        <pre><code><span class="c-kw">let</span> count = <span class="c-fn">$state</span>(<span class="c-num">0</span>);       <span class="c-comment">// primitive</span>
-<span class="c-kw">let</span> user  = <span class="c-fn">$state</span>({ name: <span class="c-str">"Ada"</span> }); <span class="c-comment">// object — deep reactive</span>
-
-count++;              <span class="c-comment">// triggers update</span>
-user.name = <span class="c-str">"Grace"</span>; <span class="c-comment">// also triggers update</span></code></pre>
+        <pre><code id="state-code"></code></pre>
       </div>
 
       <h2 class="sd-h2">$derived — computed value</h2>
@@ -205,9 +291,9 @@ user.name = <span class="c-str">"Grace"</span>; <span class="c-comment">// also 
         <div class="sd-code-header"><span>.sola</span></div>
         <pre><code><span class="c-kw">let</span> price = <span class="c-fn">$state</span>(<span class="c-num">100</span>);
 <span class="c-kw">let</span> qty   = <span class="c-fn">$state</span>(<span class="c-num">3</span>);
-<span class="c-kw">let</span> total = <span class="c-fn">$derived</span>(() =&gt; price * qty); <span class="c-comment">// 300</span>
+<span class="c-kw">let</span> total = <span class="c-fn">$derived</span>(() =&gt; price * qty);
 
-price = <span class="c-num">120</span>; <span class="c-comment">// total becomes 360 automatically</span></code></pre>
+price = <span class="c-num">120</span>;</code></pre>
       </div>
 
       <h2 class="sd-h2">Performance characteristics</h2>
@@ -233,20 +319,7 @@ price = <span class="c-num">120</span>; <span class="c-comment">// total becomes
       <h2 class="sd-h2">File structure</h2>
       <div class="sd-code-block">
         <div class="sd-code-header"><span>Button.sola</span></div>
-        <pre><code><span class="c-comment">&lt;!-- 1. Script block --&gt;</span>
-<span class="c-kw">&lt;script&gt;</span>
-  <span class="c-comment">// reactive state, logic, lifecycle</span>
-<span class="c-kw">&lt;/script&gt;</span>
-
-<span class="c-comment">&lt;!-- 2. Template (HTML) --&gt;</span>
-<span class="c-tag">&lt;button</span> <span class="c-attr">class</span>=<span class="c-str">"btn"</span><span class="c-tag">&gt;</span>
-  <span class="c-tag">&lt;slot</span> <span class="c-tag">/&gt;</span>
-<span class="c-tag">&lt;/button&gt;</span>
-
-<span class="c-comment">&lt;!-- 3. Scoped styles --&gt;</span>
-<span class="c-kw">&lt;style&gt;</span>
-  <span class="c-sel">.btn</span> { <span class="c-prop">background</span>: <span class="c-num">#10b981</span>; <span class="c-prop">color</span>: white; }
-<span class="c-kw">&lt;/style&gt;</span></code></pre>
+        <pre><code id="btn-struct-code"></code></pre>
       </div>
 
       <h2 class="sd-h2">Props</h2>
@@ -276,16 +349,7 @@ price = <span class="c-num">120</span>; <span class="c-comment">// total becomes
 
       <div class="sd-code-block">
         <div class="sd-code-header"><span>.sola</span></div>
-        <pre><code><span class="c-kw">let</span> query = <span class="c-fn">$state</span>(<span class="c-str">""</span>);
-
-<span class="c-fn">$effect</span>(() =&gt; {
-  <span class="c-comment">// runs on mount, and whenever `query` changes</span>
-  <span class="c-kw">const</span> results = search(query);
-  updateList(results);
-
-  <span class="c-comment">// optional cleanup — runs before next effect or on unmount</span>
-  <span class="c-kw">return</span> () =&gt; cancelPendingRequest();
-});</code></pre>
+        <pre><code id="effect-code"></code></pre>
       </div>
 
       <h2 class="sd-h2">Rules of effects</h2>
@@ -311,18 +375,12 @@ price = <span class="c-num">120</span>; <span class="c-comment">// total becomes
 
       <h2 class="sd-h2">Conditionals</h2>
       <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
-        <pre><code>{#if isLoggedIn}
-  <span class="c-tag">&lt;Dashboard /&gt;</span>
-{:else}
-  <span class="c-tag">&lt;Login /&gt;</span>
-{/if}</code></pre>
+        <pre><code id="tpl-cond-code"></code></pre>
       </div>
 
       <h2 class="sd-h2">Lists</h2>
       <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
-        <pre><code>{#each items as item (item.id)}
-  <span class="c-tag">&lt;li&gt;</span>{item.label}<span class="c-tag">&lt;/li&gt;</span>
-{/each}</code></pre>
+        <pre><code id="tpl-each-code"></code></pre>
       </div>
     </div>
 
@@ -344,17 +402,11 @@ price = <span class="c-num">120</span>; <span class="c-comment">// total becomes
 <span class="c-fn">$intent</span>(<span class="c-str">"when cart is empty, show an empty state instead of the item list"</span>);</code></pre>
       </div>
 
-      <p class="sd-p">At build time the compiler sends these intents to the configured LLM endpoint and replaces each <code>$intent()</code> call with generated reactive code that satisfies the annotation. The generated code is committed to your repo — you own it, you can edit it.</p>
+      <p class="sd-p">At build time the compiler sends these intents to the configured LLM endpoint and replaces each <code>$intent()</code> call with generated reactive code. The generated code is committed to your repo — you own it, you can edit it.</p>
 
       <h2 class="sd-h2">Configuring the endpoint</h2>
       <div class="sd-code-block"><div class="sd-code-header"><span>sola.config.ts</span></div>
-        <pre><code><span class="c-kw">export default</span> {
-  intent: {
-    endpoint: <span class="c-str">'https://api.sola-air.dev/intent'</span>,
-    model: <span class="c-str">'gemini-2.5-flash'</span>,
-    apiKey: process.env.SOLA_API_KEY
-  }
-};</code></pre>
+        <pre><code id="intent-config-code"></code></pre>
       </div>
     </div>
 
@@ -400,7 +452,7 @@ npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre
         <div class="sd-pipeline-step"><span class="sd-step-num">01</span><div><strong>Parse</strong><p>Split file into script, template, and style blocks. Build an AST for each.</p></div></div>
         <div class="sd-pipeline-step"><span class="sd-step-num">02</span><div><strong>Analyze</strong><p>Walk the script AST. Identify every <code>$state</code> and <code>$derived</code>. Build the dependency graph.</p></div></div>
         <div class="sd-pipeline-step"><span class="sd-step-num">03</span><div><strong>Codegen</strong><p>For each signal reference in the template, emit a setter that writes directly to the target DOM node.</p></div></div>
-        <div class="sd-pipeline-step"><span class="sd-step-num">04</span><div><strong>Output</strong><p>Emit <code>export default function mount(__target, props) {...}</code>. No imports required.</p></div></div>
+        <div class="sd-pipeline-step"><span class="sd-step-num">04</span><div><strong>Output</strong><p>Emit <code>export default function mount(__target, props)</code>. No framework imports required.</p></div></div>
       </div>
     </div>
 
@@ -449,12 +501,12 @@ npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre
         <table class="sd-table">
           <thead><tr><th>Export</th><th>Signature</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td><code>$state</code></td><td><code>&lt;T&gt;(init: T) → Signal&lt;T&gt;</code></td><td>Create a mutable reactive cell</td></tr>
-            <tr><td><code>$derived</code></td><td><code>&lt;T&gt;(fn: () → T) → ReadSignal&lt;T&gt;</code></td><td>Create a computed value</td></tr>
-            <tr><td><code>$effect</code></td><td><code>(fn: () → void | (() → void)) → void</code></td><td>Run a tracked side-effect</td></tr>
-            <tr><td><code>$intent</code></td><td><code>(description: string) → void</code></td><td>AI macro (build-time only)</td></tr>
-            <tr><td><code>tick</code></td><td><code>() → Promise&lt;void&gt;</code></td><td>Await pending DOM updates</td></tr>
-            <tr><td><code>untrack</code></td><td><code>&lt;T&gt;(fn: () → T) → T</code></td><td>Read signals without tracking</td></tr>
+            <tr><td><code>$state</code></td><td><code>&lt;T&gt;(init: T) =&gt; Signal&lt;T&gt;</code></td><td>Create a mutable reactive cell</td></tr>
+            <tr><td><code>$derived</code></td><td><code>&lt;T&gt;(fn: () =&gt; T) =&gt; ReadSignal&lt;T&gt;</code></td><td>Create a computed value</td></tr>
+            <tr><td><code>$effect</code></td><td><code>(fn: () =&gt; void | (() =&gt; void)) =&gt; void</code></td><td>Run a tracked side-effect</td></tr>
+            <tr><td><code>$intent</code></td><td><code>(description: string) =&gt; void</code></td><td>AI macro (build-time only)</td></tr>
+            <tr><td><code>tick</code></td><td><code>() =&gt; Promise&lt;void&gt;</code></td><td>Await pending DOM updates</td></tr>
+            <tr><td><code>untrack</code></td><td><code>&lt;T&gt;(fn: () =&gt; T) =&gt; T</code></td><td>Read signals without tracking</td></tr>
           </tbody>
         </table>
       </div>
@@ -606,7 +658,7 @@ npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre
   .sd-code-block pre {
     background: var(--sd-code-bg, #f8f9fb);
     margin: 0;
-    padding: 20px 20px;
+    padding: 20px;
     overflow-x: auto;
     line-height: 1.65;
     font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
@@ -716,8 +768,7 @@ npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre
 
   /* ---- Dark mode ---- */
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .sd-root,
-    :root:not([data-theme="light"]) .sd-root * {
+    :root:not([data-theme="light"]) .sd-root {
       --sd-bg: #090d19;
       --sd-surface: #0e1628;
       --sd-text: #f1f5f9;
@@ -732,8 +783,7 @@ npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre
       --sd-inline-code-bg: rgba(16,185,129,0.12);
     }
   }
-  :root[data-theme="dark"] .sd-root,
-  :root[data-theme="dark"] .sd-root * {
+  :root[data-theme="dark"] .sd-root {
     --sd-bg: #090d19;
     --sd-surface: #0e1628;
     --sd-text: #f1f5f9;
