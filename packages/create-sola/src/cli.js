@@ -67,11 +67,11 @@ async function run() {
       preview: 'vite preview'
     },
     dependencies: {
-      '@sola/core': '^1.0.0',
-      '@sola/ui': '^1.0.0'
+      '@sola-air-ui/core': '^1.0.0',
+      '@sola-air-ui/ui': '^1.0.0'
     },
     devDependencies: {
-      '@sola/compiler': '^1.0.0',
+      '@sola-air-ui/compiler': '^1.0.0',
       'vite': '^6.0.0'
     }
   };
@@ -79,7 +79,7 @@ async function run() {
 
   // 2. vite.config.js
   const viteConfig = `import { defineConfig } from 'vite';
-import { compile } from '@sola/compiler';
+import { compile } from '@sola-air-ui/compiler';
 import fs from 'node:fs';
 
 function sola() {

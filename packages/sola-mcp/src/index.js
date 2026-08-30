@@ -2,7 +2,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
-import { compile } from '@sola/compiler';
+import { compile } from '@sola-air-ui/compiler';
 
 const server = new McpServer({
   name: 'sola-mcp',
@@ -154,7 +154,7 @@ Child component usage
 
 ## Compiler API
 
-  import { compile } from '@sola/compiler';
+  import { compile } from '@sola-air-ui/compiler';
 
   const { js, css } = compile(source, filename?);
   // js   — ES module string; exports default mount(target, props)

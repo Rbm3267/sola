@@ -1,5 +1,5 @@
 {
-  "name": "@sola/core",
+  "name": "@sola-air-ui/core",
   "version": "1.0.0",
   "description": "Zero-VDOM reactivity engine — signals, effects, lifecycle, and intent primitives",
   "type": "module",
