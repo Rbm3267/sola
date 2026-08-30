@@ -1,10 +1,11 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
+  import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
 
   // --- 1. Universal Canvas Card Data Model ---
   interface StudioCard {
     id: string;
-    type: 'stat' | 'progress' | 'waterfall' | 'slider' | 'form' | 'feed' | 'status' | 'node_graph' | 'radial_dial' | 'chart' | 'table' | 'datepicker' | 'code';
+    type: string;
     title: string;
     subtitle?: string;
     cols: 1 | 2 | 3;
@@ -19,47 +20,35 @@
   let activeCardId = $state<string | null>(null);
   let exportModalOpen = $state(false);
   let exportTab = $state<'react' | 'svelte' | 'webcomponent'>('react');
+  let presetMenuOpen = $state(false);
 
-  // Component Panel State
-  let componentPanelOpen = $state(true);
+  // Component Drawer State
+  let componentDrawerOpen = $state(false);
   let componentSearch = $state('');
   let componentCategory = $state('All');
 
-  const studioComponents = [
-    { type: 'stat' as const, name: 'Metric Tile', category: 'Metrics', desc: 'KPI with real-time trend delta', icon: 'metric' },
-    { type: 'progress' as const, name: 'Progress Ring', category: 'Metrics', desc: 'Circular completion gauge', icon: 'progress' },
-    { type: 'waterfall' as const, name: 'Step Breakdown', category: 'Metrics', desc: 'Value distribution bridge', icon: 'waterfall' },
-    { type: 'chart' as const, name: 'Telemetry Chart', category: 'Metrics', desc: 'Area / line signal stream', icon: 'chart' },
-    { type: 'status' as const, name: 'System Health HUD', category: 'Status & NOC', desc: 'Operational status beacon', icon: 'status' },
-    { type: 'slider' as const, name: 'Control Slider', category: 'Controls', desc: 'Tactile range input', icon: 'slider' },
-    { type: 'radial_dial' as const, name: 'Radial Dial', category: 'Controls', desc: 'Hardware-grade rotary dial', icon: 'dial' },
-    { type: 'form' as const, name: 'Input Form', category: 'Controls', desc: 'Schema-driven inputs', icon: 'form' },
-    { type: 'datepicker' as const, name: 'Date Range Picker', category: 'Controls', desc: 'Calendar date picker', icon: 'calendar' },
-    { type: 'table' as const, name: 'Data Table', category: 'Data & Feeds', desc: 'Sortable structured records', icon: 'table' },
-    { type: 'feed' as const, name: 'Activity Stream', category: 'Data & Feeds', desc: 'Real-time event feed', icon: 'feed' },
-    { type: 'node_graph' as const, name: 'Node Graph', category: 'Data & Feeds', desc: 'Auto-clustering nodes', icon: 'graph' },
-    { type: 'code' as const, name: 'Code Block', category: 'Status & NOC', desc: 'Syntax-highlighted viewer', icon: 'code' },
-  ];
+  // Extract all categories dynamically from catalog
+  const catalogCategories = ['All', 'Metrics & KPIs', 'Controllers & Sliders', 'Forms & Inputs', 'Data Display', 'Navigation', 'Status & HUD', 'Overlays & Dialogs', 'Flows & Cascades', 'Lists & Feeds', 'Matrices & Graphs'];
 
-  const studioCategories = ['All', 'Metrics', 'Controls', 'Data & Feeds', 'Status & NOC'];
-
-  const filteredComponents = $derived(
-    studioComponents.filter(c => {
+  const filteredCatalog = $derived(
+    COMPONENT_CATALOG.filter(c => {
       const matchCat = componentCategory === 'All' || c.category === componentCategory;
-      const matchSearch = !componentSearch || c.name.toLowerCase().includes(componentSearch.toLowerCase()) || c.desc.toLowerCase().includes(componentSearch.toLowerCase());
+      const matchSearch = !componentSearch || c.name.toLowerCase().includes(componentSearch.toLowerCase()) || c.description.toLowerCase().includes(componentSearch.toLowerCase()) || c.tagline.toLowerCase().includes(componentSearch.toLowerCase());
       return matchCat && matchSearch;
     })
   );
+
   let copyNotification = $state(false);
 
   // Drag-and-Drop & Snap-to-Grid State
   let draggedCardId = $state<string | null>(null);
   let dragOverCardId = $state<string | null>(null);
 
-  // Sample Starters
-  const samplePresets: Record<string, { label: string; cards: StudioCard[] }> = {
+  // Universal Layout Presets
+  const samplePresets: Record<string, { label: string; desc: string; cards: StudioCard[] }> = {
     general: {
-      label: 'Standard Dashboard',
+      label: 'Executive Analytics',
+      desc: 'KPI stat tiles, telemetry chart, and event feeds',
       cards: [
         { id: 'c1', type: 'stat', title: 'Primary Metric', subtitle: 'Live aggregated total', cols: 1, value: '$48,500', delta: '+14.2%', accentColor: 'emerald' },
         { id: 'c2', type: 'progress', title: 'Goal Completion', subtitle: 'Target milestone progress', cols: 1, value: 78, delta: '78%', accentColor: 'emerald' },
@@ -68,18 +57,30 @@
         { id: 'c5', type: 'feed', title: 'Activity & Updates', subtitle: 'Recent events log', cols: 1, value: 'Active', accentColor: 'slate' }
       ]
     },
+    noc: {
+      label: 'Telemetry & Ops NOC',
+      desc: 'System health beacons, latency charts, and data tables',
+      cards: [
+        { id: 'n1', type: 'status', title: 'System Health HUD', subtitle: 'All 24 cluster nodes nominal', cols: 1, value: 'Optimal', accentColor: 'emerald' },
+        { id: 'n2', type: 'chart', title: 'P99 Cluster Latency', subtitle: '12ms average across edge', cols: 2, value: '12.4ms', accentColor: 'emerald' },
+        { id: 'n3', type: 'table', title: 'Active Ingestion Nodes', subtitle: 'Zero-VDOM stream brokers', cols: 2, value: 'Active', accentColor: 'slate' },
+        { id: 'n4', type: 'radial_dial', title: 'CPU Ceiling Dial', subtitle: 'Haptic throttle limiter', cols: 1, value: 64, accentColor: 'emerald' }
+      ]
+    },
     product: {
-      label: 'Project & Task Tracker',
+      label: 'Sprint & Project Board',
+      desc: 'Velocity counters, task backlog table, and date range',
       cards: [
         { id: 'p1', type: 'stat', title: 'Sprint Velocity', subtitle: 'Story points completed', cols: 1, value: '94 pts', delta: '+8.2%', accentColor: 'indigo' },
-        { id: 'p2', type: 'progress', title: 'Sprint 24 Progress', subtitle: 'Target: 100 points', cols: 1, value: 86, delta: '86%', accentColor: 'indigo' },
-        { id: 'p3', type: 'status', title: 'Deployment Health', subtitle: 'All integration tests passing', cols: 1, value: 'Passing', accentColor: 'emerald' },
-        { id: 'p4', type: 'table', title: 'Sprint Backlog Items', subtitle: 'Assigned engineering tasks', cols: 2, value: 'Backlog', accentColor: 'slate' },
-        { id: 'p5', type: 'datepicker', title: 'Sprint Horizon', subtitle: 'Sprint 24 timeline', cols: 1, value: '2026-08-30', accentColor: 'emerald' }
+        { id: 'p2', type: 'progress', title: 'Sprint Progress', subtitle: 'Target: 100 points', cols: 1, value: 86, delta: '86%', accentColor: 'indigo' },
+        { id: 'p3', type: 'datepicker', title: 'Sprint Timeline', subtitle: 'Sprint 24 milestone window', cols: 1, value: '2026-08-30', accentColor: 'emerald' },
+        { id: 'p4', type: 'table', title: 'Assigned Work Items', subtitle: 'Active deliverables', cols: 2, value: 'Backlog', accentColor: 'slate' },
+        { id: 'p5', type: 'code', title: 'Automation Hook', subtitle: 'Zero-VDOM state binding', cols: 1, value: 'TypeScript', accentColor: 'slate' }
       ]
     },
     ecommerce: {
-      label: 'E-Commerce Store',
+      label: 'Commerce & Funnels',
+      desc: 'Revenue waterfall bridges, conversion gauges, and discount sliders',
       cards: [
         { id: 'e1', type: 'stat', title: 'Daily Revenue', subtitle: 'Store orders volume', cols: 1, value: '$24,800', delta: '+22.4%', accentColor: 'emerald' },
         { id: 'e2', type: 'progress', title: 'Checkout Conversion', subtitle: 'Goal: > 3.5%', cols: 1, value: 82, delta: '4.1%', accentColor: 'emerald' },
@@ -96,6 +97,7 @@
 
   function loadSample(key: string) {
     selectedPresetKey = key;
+    presetMenuOpen = false;
     if (samplePresets[key]) {
       cards = JSON.parse(JSON.stringify(samplePresets[key].cards));
       activeCardId = null;
@@ -106,6 +108,7 @@
     cards = [];
     activeCardId = null;
     selectedPresetKey = 'blank';
+    presetMenuOpen = false;
   }
 
   // --- Drag and Drop & Snap-to-Grid Handlers ---
@@ -201,6 +204,55 @@
 
     cards = [...cards, newCard];
     activeCardId = newId;
+    componentDrawerOpen = false;
+  }
+
+  function addCatalogComponent(item: CatalogComponent) {
+    const newId = 'c_' + Math.random().toString(36).substring(2, 8);
+    const cat = item.category;
+    let cardType = 'stat';
+    let cols: 1 | 2 | 3 = 1;
+
+    if (cat === 'Metrics & KPIs') {
+      cardType = item.id === 'sola-chart' ? 'chart' : 'stat';
+      cols = item.id === 'sola-chart' ? 2 : 1;
+    } else if (cat === 'Gauges & Rings') {
+      cardType = 'progress';
+    } else if (cat === 'Controllers & Sliders') {
+      cardType = item.id.includes('dial') ? 'radial_dial' : 'slider';
+    } else if (cat === 'Flows & Cascades') {
+      cardType = 'waterfall';
+      cols = 2;
+    } else if (cat === 'Lists & Feeds') {
+      cardType = 'feed';
+    } else if (cat === 'Matrices & Graphs') {
+      cardType = 'node_graph';
+      cols = 2;
+    } else if (cat === 'Forms & Inputs') {
+      cardType = item.id === 'sola-date-picker' ? 'datepicker' : 'form';
+      cols = item.id === 'sola-date-picker' ? 1 : 2;
+    } else if (cat === 'Data Display') {
+      cardType = item.id === 'sola-data-table' ? 'table' : item.id === 'sola-code-block' ? 'code' : 'stat';
+      cols = 2;
+    } else {
+      cardType = 'status';
+    }
+
+    const newCard: StudioCard = {
+      id: newId,
+      type: cardType,
+      title: item.name,
+      subtitle: item.tagline || item.description.slice(0, 45) + '...',
+      cols,
+      value: item.defaultConfig?.value || (cardType === 'progress' ? 75 : cardType === 'slider' ? 50 : 'Active'),
+      delta: item.defaultConfig?.delta || '+12.4%',
+      accentColor: 'emerald',
+      config: item.defaultConfig
+    };
+
+    cards = [...cards, newCard];
+    activeCardId = newId;
+    componentDrawerOpen = false;
   }
 
   function removeCard(id: string, e?: Event) {
@@ -311,61 +363,70 @@ export default function SolaCustomCanvas() {
   <Navbar />
 
   <!-- 1. Top Navigation Bar -->
-  <header class="sticky top-16 z-30 bg-white/70 dark:bg-[#090d19]/75 backdrop-blur-xl border-b border-slate-900/[0.03] dark:border-white/[0.04] px-4 sm:px-6 lg:px-8 py-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_-6px_rgba(0,0,0,0.3)]">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+  <header class="sticky top-16 z-30 bg-white/80 dark:bg-[#090d19]/80 backdrop-blur-xl border-b border-slate-200/70 dark:border-white/10 px-4 sm:px-6 lg:px-8 py-3 shadow-xs">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       
-      <!-- Studio Canvas Branding & Layout Presets -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
-        <div class="flex items-center gap-2 shrink-0">
-          <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/60 dark:border-emerald-500/20 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm shadow-2xs shrink-0">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          </div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="font-black tracking-tight text-slate-900 dark:text-white text-sm whitespace-nowrap">Studio Canvas</span>
-            <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100/80 dark:bg-white/10 text-slate-700 dark:text-slate-300 rounded-full whitespace-nowrap">Drag & Drop</span>
-          </div>
+      <!-- Left: Studio Branding & Component Count -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/60 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm shadow-2xs shrink-0">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
         </div>
-
-        <div class="h-4 w-px bg-slate-200/60 dark:bg-white/10 hidden sm:block"></div>
-
-        <!-- Sample Layout Selector -->
-        <div class="flex items-center overflow-x-auto w-full sm:w-auto bg-slate-100/70 dark:bg-white/5 p-1 rounded-xl text-xs font-medium no-scrollbar">
-          <button
-            onclick={() => loadSample('general')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'general' ? 'bg-white dark:bg-white/15 text-slate-900 dark:text-white shadow-xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-            Dashboard
-          </button>
-          <button
-            onclick={() => loadSample('product')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'product' ? 'bg-white dark:bg-white/15 text-slate-900 dark:text-white shadow-xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-            Tasks
-          </button>
-          <button
-            onclick={() => loadSample('ecommerce')}
-            class="px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap {selectedPresetKey === 'ecommerce' ? 'bg-white dark:bg-white/15 text-slate-900 dark:text-white shadow-xs font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-            E-Commerce
-          </button>
-          <button
-            onclick={clearCanvas}
-            class="px-2.5 py-1 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all cursor-pointer whitespace-nowrap font-medium {selectedPresetKey === 'blank' ? 'bg-white dark:bg-white/15 shadow-xs font-bold' : ''}">
-            Clear
-          </button>
+        <div class="flex items-center gap-2">
+          <span class="font-black tracking-tight text-slate-900 dark:text-white text-sm whitespace-nowrap">Studio Canvas</span>
+          <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full border border-emerald-200/60 dark:border-emerald-500/20">
+            {cards.length} {cards.length === 1 ? 'node' : 'nodes'}
+          </span>
         </div>
       </div>
 
-      <!-- Right: Palette Toggle & Export Action -->
+      <!-- Center / Actions: Add Component + Presets -->
       <div class="flex items-center gap-2">
+        <!-- + Add Component Button (Opens Full 56-Component Drawer) -->
         <button
-          onclick={() => (componentPanelOpen = !componentPanelOpen)}
-          class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer shadow-xs {componentPanelOpen ? 'bg-emerald-500 text-slate-950 border-emerald-500 shadow-emerald-500/20' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/10'}">
+          onclick={() => (componentDrawerOpen = true)}
+          class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-xs shadow-emerald-500/20 transition-all cursor-pointer">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
-            <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
-          <span>Component Palette</span>
-          <span class="px-1.5 py-0.2 bg-slate-900/10 dark:bg-white/15 rounded-md text-[10px] font-mono">{filteredComponents.length}</span>
+          <span>Add Component</span>
+          <span class="px-1.5 py-0.2 bg-slate-950/15 rounded-md text-[10px] font-mono">{COMPONENT_CATALOG.length}</span>
         </button>
 
+        <!-- Presets Menu Dropdown -->
+        <div class="relative">
+          <button
+            onclick={() => (presetMenuOpen = !presetMenuOpen)}
+            class="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl text-xs font-semibold transition-all cursor-pointer">
+            <span>Templates</span>
+            <svg class="w-3.5 h-3.5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+
+          {#if presetMenuOpen}
+            <div class="absolute left-0 mt-2 w-64 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl p-1.5 z-50 animate-[fadeSlide_120ms_ease-out]">
+              <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
+                Starter Templates
+              </div>
+              {#each Object.entries(samplePresets) as [key, preset]}
+                <button
+                  onclick={() => loadSample(key)}
+                  class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold' : 'text-slate-800 dark:text-slate-200'}">
+                  <div class="font-bold">{preset.label}</div>
+                  <div class="text-[10px] text-slate-400 font-normal">{preset.desc}</div>
+                </button>
+              {/each}
+              <div class="my-1 border-t border-slate-100 dark:border-white/5"></div>
+              <button
+                onclick={clearCanvas}
+                class="w-full text-left px-3 py-2 rounded-xl text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors font-semibold cursor-pointer">
+                Clear Canvas
+              </button>
+            </div>
+          {/if}
+        </div>
+      </div>
+
+      <!-- Right: Export Action -->
+      <div class="flex items-center gap-2">
         <button
           onclick={() => (exportModalOpen = true)}
           class="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border border-transparent dark:border-white/10 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer">
@@ -378,93 +439,96 @@ export default function SolaCustomCanvas() {
     </div>
   </header>
 
-  <!-- 2. Searchable, Categorized Component Shelf -->
-  {#if componentPanelOpen}
-    <div class="bg-white dark:bg-[#0c1222] border-b border-slate-200/80 dark:border-white/10 px-4 sm:px-6 lg:px-8 py-4 shadow-sm animate-[fadeSlide_150ms_ease-out]">
-      <div class="max-w-7xl mx-auto space-y-3">
-        <!-- Search & Filter Controls -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <!-- Search Input -->
-          <div class="relative flex-1 max-w-md">
-            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-              </svg>
+  <!-- 2. Slide-Over Component Drawer (All 56 Foundational Components) -->
+  {#if componentDrawerOpen}
+    <!-- Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div
+      onclick={() => (componentDrawerOpen = false)}
+      class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex justify-start">
+      
+      <!-- Drawer Body -->
+      <div
+        onclick={(e) => e.stopPropagation()}
+        class="w-full max-w-xl bg-white dark:bg-[#0c1222] h-full shadow-2xl border-r border-slate-200 dark:border-white/10 flex flex-col animate-[slideRight_200ms_cubic-bezier(0.16,1,0.3,1)]">
+        
+        <!-- Drawer Header -->
+        <div class="p-5 border-b border-slate-200/80 dark:border-white/10 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
             </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white">Component Palette</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Click any of the {COMPONENT_CATALOG.length} primitives to mount on canvas</p>
+            </div>
+          </div>
+          <button
+            onclick={() => (componentDrawerOpen = false)}
+            class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 flex items-center justify-center text-slate-500 dark:text-slate-400 cursor-pointer">
+            &times;
+          </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="p-4 border-b border-slate-100 dark:border-white/5 space-y-3">
+          <div class="relative">
+            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <input
               type="text"
               bind:value={componentSearch}
-              placeholder="Search components (e.g., metric, chart, dial, form)..."
-              class="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-sans"
+              placeholder="Search all 56 components (e.g. chart, date, table, modal, dial)..."
+              class="w-full pl-9 pr-8 py-2.5 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-sans"
             />
             {#if componentSearch}
-              <button
-                onclick={() => (componentSearch = '')}
-                class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs">
-                &times;
-              </button>
+              <button onclick={() => (componentSearch = '')} class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">&times;</button>
             {/if}
           </div>
 
-          <!-- Category Filter Pills -->
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
-            {#each studioCategories as cat}
+          <!-- Category Pills -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            {#each catalogCategories as cat}
               <button
                 onclick={() => (componentCategory = cat)}
-                class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
+                class="px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
                 {cat}
               </button>
             {/each}
           </div>
         </div>
 
-        <!-- Component Cards Grid -->
-        {#if filteredComponents.length === 0}
-          <div class="py-6 text-center text-xs text-slate-400">
-            No components match "{componentSearch}". Try searching for "metric", "chart", or "dial".
-          </div>
-        {:else}
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 pt-1">
-            {#each filteredComponents as comp}
-              <button
-                onclick={() => addComponent(comp.type)}
-                class="group flex flex-col items-start p-3 bg-slate-50 dark:bg-white/[0.03] hover:bg-emerald-50/60 dark:hover:bg-emerald-500/10 border border-slate-200/70 dark:border-white/5 hover:border-emerald-500/40 rounded-2xl text-left transition-all cursor-pointer shadow-2xs hover:shadow-xs hover:-translate-y-0.5">
-                <div class="w-full flex items-center justify-between mb-2">
-                  <div class="w-7 h-7 rounded-lg bg-white dark:bg-white/10 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      {#if comp.type === 'stat'}
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                      {:else if comp.type === 'progress'}
-                        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-                      {:else if comp.type === 'chart'}
-                        <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
-                      {:else if comp.type === 'slider' || comp.type === 'radial_dial'}
-                        <circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/>
-                      {:else if comp.type === 'table'}
-                        <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/>
-                      {:else if comp.type === 'datepicker'}
-                        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                      {:else if comp.type === 'code'}
-                        <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-                      {:else if comp.type === 'feed'}
-                        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
-                      {:else}
-                        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/>
-                      {/if}
+        <!-- Scrollable Component Cards List -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-2">
+          {#if filteredCatalog.length === 0}
+            <div class="py-12 text-center text-xs text-slate-400">
+              No components found matching "{componentSearch}".
+            </div>
+          {:else}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {#each filteredCatalog as item}
+                <button
+                  type="button"
+                  onclick={() => addCatalogComponent(item)}
+                  class="group flex items-start gap-3 p-3 bg-slate-50 dark:bg-white/[0.03] hover:bg-emerald-50/60 dark:hover:bg-emerald-500/10 border border-slate-200/70 dark:border-white/5 hover:border-emerald-500/40 rounded-2xl text-left transition-all cursor-pointer shadow-2xs hover:shadow-xs">
+                  <div class="w-8 h-8 rounded-xl bg-white dark:bg-white/10 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/>
                     </svg>
                   </div>
-                  <span class="text-[9px] font-mono font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">+ Add</span>
-                </div>
-                <div class="font-bold text-xs text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate w-full">
-                  {comp.name}
-                </div>
-                <div class="text-[10px] text-slate-500 dark:text-slate-400 truncate w-full mt-0.5 leading-tight">
-                  {comp.desc}
-                </div>
-              </button>
-            {/each}
-          </div>
-        {/if}
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center justify-between gap-1">
+                      <span class="font-bold text-xs text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate">{item.name}</span>
+                      <span class="text-[9px] font-mono text-emerald-600 font-bold shrink-0">+ Add</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 truncate mt-0.5">{item.tagline || item.description}</p>
+                    <span class="inline-block mt-1 text-[9px] font-mono font-medium px-1.5 py-0.2 rounded bg-slate-200/60 dark:bg-white/5 text-slate-500">{item.category}</span>
+                  </div>
+                </button>
+              {/each}
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
   {/if}
