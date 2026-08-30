@@ -21,7 +21,7 @@
     "@sola/core": "^1.0.0",
     "@sola/compiler": "^1.0.0",
     "@sola/vite-plugin-sola": "^0.0.1",
-    "@sola/relay": "^0.0.1",
+    "@sola/relay": "^1.0.0",
     "@sola/mcp": "^1.0.0"
   },
   "publishConfig": {
