@@ -337,8 +337,16 @@ export class RelayServer {
     loadConfig();
 
     const server = createServer(async (req, res) => {
-      // CORS
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      // CORS — restrict to localhost and chrome-extension origins only
+      const origin = req.headers['origin'];
+      const isLocalhost = origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+      const isExtension = origin && /^chrome-extension:\/\/[a-z]{32}$/.test(origin);
+      const allowedOrigin = (isLocalhost || isExtension) ? origin : null;
+
+      if (allowedOrigin) {
+        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+        res.setHeader('Vary', 'Origin');
+      }
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -377,7 +385,7 @@ export class RelayServer {
           res.end(JSON.stringify({ source, schema }));
         } catch (e) {
           res.writeHead(500, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: e.message }));
+          res.end(JSON.stringify({ error: 'Schema fetch failed' }));
         }
         return;
       }
@@ -403,8 +411,26 @@ export class RelayServer {
             return;
           }
 
+          // Validate inputs to prevent injection
+          if (query !== undefined) {
+            // Only allow SELECT statements
+            if (!/^\s*SELECT\b/i.test(query)) {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'Only SELECT queries are permitted' }));
+              return;
+            }
+          }
+          // Validate source is a safe identifier and limit is numeric
+          if (source && !/^[a-zA-Z_][a-zA-Z0-9_.]*$/.test(source)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Invalid source name' }));
+            return;
+          }
+          const safeLimit = parseInt(limit, 10) || 100;
+
           // Execute query
-          const result = await conn.connector.query(query || `SELECT * FROM ${source} LIMIT ${limit || 100}`);
+          const sql = query || `SELECT * FROM ${source} LIMIT ${safeLimit}`;
+          const result = await conn.connector.query(sql);
 
           // Audit log — HIPAA compliant
           auditLog({
@@ -421,7 +447,7 @@ export class RelayServer {
         } catch (e) {
           auditLog({ action: 'QUERY_ERROR', error: e.message });
           res.writeHead(500, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: e.message }));
+          res.end(JSON.stringify({ error: 'Query failed' }));
         }
         return;
       }
