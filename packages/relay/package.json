@@ -1,6 +1,6 @@
 {
   "name": "@sola/relay",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "bin": {
     "sola-relay": "./src/cli.js"
