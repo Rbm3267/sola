@@ -45,4 +45,5 @@ start_aura.vbs
 .env*
 servicenow.local.json
 *.credentials.json
+*.tgz
 scratch/

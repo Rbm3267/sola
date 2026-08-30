@@ -29,7 +29,7 @@
     {
       name: 'Getting Started',
       items: [
-        { id: 'quickstart', title: 'Installation & Setup', badge: 'v0.9' },
+        { id: 'quickstart', title: 'Installation & Setup', badge: 'v1.0.0' },
         { id: 'syntax', title: 'The .sola Format' }
       ]
     },
@@ -778,7 +778,7 @@ export function SolaIncidentCard({ incidentId }) {
               AI Prompting Spec
             </h1>
             <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
-              System prompt context for Claude 3.7, GPT-4o, and Gemini models.
+              System prompt context for Claude 3.5 Sonnet, GPT-4o, and Gemini 2.5 Flash models.
             </p>
           </header>
 

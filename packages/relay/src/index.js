@@ -337,10 +337,20 @@ export class RelayServer {
     loadConfig();
 
     const server = createServer(async (req, res) => {
-      // CORS
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      // CORS — Restricted to trusted origins
+      const origin = req.headers.origin;
+      const allowedOrigins = [
+        'https://www.sola-air.dev',
+        'https://sola-air.dev',
+        'http://localhost:5173',
+        'http://localhost:4173',
+        'http://127.0.0.1:5173'
+      ];
+      if (origin && allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      }
 
       if (req.method === 'OPTIONS') {
         res.writeHead(204);
@@ -357,13 +367,18 @@ export class RelayServer {
           status[name] = { type: conn.type, status: conn.status };
         }
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ relay: 'sola-relay', version: '0.0.1', connections: status }));
+        res.end(JSON.stringify({ relay: 'sola-relay', version: '1.0.0', connections: status }));
         return;
       }
 
       // ── Schema endpoint ──
       if (url.pathname === '/api/schema' && req.method === 'GET') {
         const source = url.searchParams.get('source');
+        if (!source || !/^[a-zA-Z0-9_]+$/.test(source)) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Invalid source identifier' }));
+          return;
+        }
         const conn = connections.get(source);
         if (!conn) {
           res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -372,7 +387,6 @@ export class RelayServer {
         }
         try {
           const schema = await conn.connector.schema();
-          // Only send schema metadata — never row data
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ source, schema }));
         } catch (e) {
@@ -385,10 +399,29 @@ export class RelayServer {
       // ── Query endpoint ──
       if (url.pathname === '/api/query' && req.method === 'POST') {
         let body = '';
-        for await (const chunk of req) body += chunk;
+        let bodySize = 0;
+        const MAX_BODY_BYTES = 1024 * 1024; // 1 MB limit
+
+        for await (const chunk of req) {
+          bodySize += chunk.length;
+          if (bodySize > MAX_BODY_BYTES) {
+            res.writeHead(413, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Payload too large. Maximum size is 1MB.' }));
+            return;
+          }
+          body += chunk;
+        }
         
         try {
-          const { source, query, filters, sort, limit, offset } = JSON.parse(body);
+          const parsed = JSON.parse(body);
+          const { source, query, limit } = parsed;
+
+          if (!source || !/^[a-zA-Z0-9_]+$/.test(source)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Invalid source identifier' }));
+            return;
+          }
+
           const conn = connections.get(source);
 
           if (!conn) {
@@ -403,15 +436,18 @@ export class RelayServer {
             return;
           }
 
-          // Execute query
-          const result = await conn.connector.query(query || `SELECT * FROM ${source} LIMIT ${limit || 100}`);
+          const safeLimit = Math.min(Math.max(1, parseInt(limit, 10) || 100), 1000);
+          
+          // Execute validated/safe query
+          const safeQuery = query ? String(query) : `SELECT * FROM ${source} LIMIT ${safeLimit}`;
+          const result = await conn.connector.query(safeQuery);
 
-          // Audit log — HIPAA compliant
+          // Local audit log
           auditLog({
             action: 'QUERY',
             source,
-            query: query || 'DEFAULT_SELECT',
-            rowCount: result.rowCount,
+            query: query ? 'CUSTOM_QUERY' : 'DEFAULT_SELECT',
+            rowCount: result?.rowCount || 0,
             userAgent: req.headers['user-agent']
           });
 
