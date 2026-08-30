@@ -1,14 +1,13 @@
 {
   "name": "create-sola",
-  "version": "0.2.0",
-  "description": "Scaffold a new Sola application",
+  "version": "1.0.0",
+  "description": "Scaffold a new zero-VDOM Sola application in seconds",
   "type": "module",
   "bin": {
     "create-sola": "./src/cli.js"
   },
   "files": [
-    "src",
-    "templates"
+    "src"
   ],
   "keywords": [
     "sola",
@@ -17,7 +16,9 @@
     "compiler",
     "ai",
     "intent",
-    "scaffold"
+    "scaffold",
+    "zero-vdom",
+    "signals"
   ],
   "author": "Sola Contributors",
   "license": "MIT",

@@ -4,8 +4,14 @@
   "description": "Compiler for Sola single-file components (.sola) — transforms template + script + style to ES modules",
   "type": "module",
   "main": "./src/index.js",
+  "bin": {
+    "sola": "./src/cli.js"
+  },
   "exports": {
     ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node test/compiler.test.js"
   },
   "keywords": ["sola", "compiler", "sfc", "single-file-component", "zero-vdom", "build-tool"],
   "license": "MIT",

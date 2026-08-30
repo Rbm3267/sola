@@ -156,7 +156,7 @@
         </div>
 
         <!-- 4 Step Tabs -->
-        <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl overflow-x-auto">
+        <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl overflow-x-auto no-scrollbar">
           <button
             onclick={() => setStep(1)}
             class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 1 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
@@ -258,19 +258,20 @@
               <div class="my-6 p-6 rounded-3xl bg-slate-950/95 text-white border-2 border-emerald-500 shadow-2xl shadow-emerald-500/20 animate-[slideUp_250ms_cubic-bezier(0.16,1,0.3,1)] relative z-20">
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping motion-reduce:animate-none"></span>
                     <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
                       Sola Shadow DOM • Injected Overlay
                     </span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300">
-                      🎯 Anchored to Ingress Container
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300">
+                      <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+                      <span>Anchored to Ingress Container</span>
                     </span>
                     <button
                       onclick={() => (isCardInjected = false)}
-                      class="text-slate-400 hover:text-white text-xs px-2 py-0.5 rounded-md hover:bg-white/10">
-                      ✕
+                      class="text-slate-400 hover:text-white text-xs p-1 rounded-md hover:bg-white/10 flex items-center justify-center cursor-pointer">
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                   </div>
                 </div>

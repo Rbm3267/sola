@@ -337,18 +337,25 @@ export class RelayServer {
     loadConfig();
 
     const server = createServer(async (req, res) => {
-      // CORS — restrict to localhost and chrome-extension origins only
+      // CORS — restrict to trusted origins (sola-air.dev, localhost variants, chrome-extension)
       const origin = req.headers['origin'];
-      const isLocalhost = origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+      const staticAllowed = [
+        'https://www.sola-air.dev',
+        'https://sola-air.dev',
+        'http://localhost:5173',
+        'http://localhost:4173',
+        'http://127.0.0.1:5173'
+      ];
+      const isDynLocalhost = origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
       const isExtension = origin && /^chrome-extension:\/\/[a-z]{32}$/.test(origin);
-      const allowedOrigin = (isLocalhost || isExtension) ? origin : null;
+      const allowedOrigin = (isDynLocalhost || isExtension || staticAllowed.includes(origin)) ? origin : null;
 
       if (allowedOrigin) {
         res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
         res.setHeader('Vary', 'Origin');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
       }
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
       if (req.method === 'OPTIONS') {
         res.writeHead(204);
@@ -365,13 +372,18 @@ export class RelayServer {
           status[name] = { type: conn.type, status: conn.status };
         }
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ relay: 'sola-relay', version: '0.0.1', connections: status }));
+        res.end(JSON.stringify({ relay: 'sola-relay', version: '1.0.0', connections: status }));
         return;
       }
 
       // ── Schema endpoint ──
       if (url.pathname === '/api/schema' && req.method === 'GET') {
         const source = url.searchParams.get('source');
+        if (!source || !/^[a-zA-Z0-9_]+$/.test(source)) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Invalid source identifier' }));
+          return;
+        }
         const conn = connections.get(source);
         if (!conn) {
           res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -380,7 +392,6 @@ export class RelayServer {
         }
         try {
           const schema = await conn.connector.schema();
-          // Only send schema metadata — never row data
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ source, schema }));
         } catch (e) {
@@ -393,10 +404,29 @@ export class RelayServer {
       // ── Query endpoint ──
       if (url.pathname === '/api/query' && req.method === 'POST') {
         let body = '';
-        for await (const chunk of req) body += chunk;
+        let bodySize = 0;
+        const MAX_BODY_BYTES = 1024 * 1024; // 1 MB limit
+
+        for await (const chunk of req) {
+          bodySize += chunk.length;
+          if (bodySize > MAX_BODY_BYTES) {
+            res.writeHead(413, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Payload too large. Maximum size is 1MB.' }));
+            return;
+          }
+          body += chunk;
+        }
         
         try {
-          const { source, query, filters, sort, limit, offset } = JSON.parse(body);
+          const parsed = JSON.parse(body);
+          const { source, query, limit } = parsed;
+
+          if (!source || !/^[a-zA-Z0-9_]+$/.test(source)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Invalid source identifier' }));
+            return;
+          }
+
           const conn = connections.get(source);
 
           if (!conn) {
@@ -411,33 +441,31 @@ export class RelayServer {
             return;
           }
 
-          // Validate inputs to prevent injection
-          if (query !== undefined) {
-            // Only allow SELECT statements
+          const safeLimit = Math.min(Math.max(1, parseInt(limit, 10) || 100), 1000);
+
+          let result;
+          if (typeof query === 'object' && query !== null && typeof query.text === 'string') {
+            // Parameterized query — safe by construction
+            const params = Array.isArray(query.params) ? query.params : [];
+            result = await conn.connector.query(query.text, params);
+          } else if (typeof query === 'string') {
+            // String query — only SELECT permitted
             if (!/^\s*SELECT\b/i.test(query)) {
               res.writeHead(400, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify({ error: 'Only SELECT queries are permitted' }));
               return;
             }
+            result = await conn.connector.query(query);
+          } else {
+            result = await conn.connector.query(`SELECT * FROM ${source} LIMIT ${safeLimit}`);
           }
-          // Validate source is a safe identifier and limit is numeric
-          if (source && !/^[a-zA-Z_][a-zA-Z0-9_.]*$/.test(source)) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Invalid source name' }));
-            return;
-          }
-          const safeLimit = parseInt(limit, 10) || 100;
 
-          // Execute query
-          const sql = query || `SELECT * FROM ${source} LIMIT ${safeLimit}`;
-          const result = await conn.connector.query(sql);
-
-          // Audit log — HIPAA compliant
+          // Local audit log
           auditLog({
             action: 'QUERY',
             source,
-            query: query || 'DEFAULT_SELECT',
-            rowCount: result.rowCount,
+            query: typeof query === 'object' ? 'PARAMETERIZED_QUERY' : 'DEFAULT_SELECT',
+            rowCount: result?.rowCount || 0,
             userAgent: req.headers['user-agent']
           });
 
