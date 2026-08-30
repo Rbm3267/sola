@@ -1,6 +1,6 @@
 {
   "name": "create-sola",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scaffold a new zero-VDOM Sola application in seconds",
   "type": "module",
   "bin": {
@@ -20,6 +20,11 @@
     "zero-vdom",
     "signals"
   ],
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola-air"
+  },
   "author": "Sola Contributors",
   "license": "MIT",
   "publishConfig": {
