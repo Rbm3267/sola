@@ -12,7 +12,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://sola-air.dev',
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:5174',
     trace: 'on-first-retry',
   },
   projects: [

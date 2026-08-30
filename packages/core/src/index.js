@@ -6,20 +6,22 @@ let effectStack = [];
 let pendingEffects = new Set();
 let isFlushing = false;
 
+export function flushSync() {
+  while (pendingEffects.size > 0) {
+    const effects = [...pendingEffects];
+    pendingEffects.clear();
+    for (const effect of effects) {
+      effect.execute();
+    }
+  }
+  isFlushing = false;
+}
+
 // ─── Batched Updates ───
 function scheduleFlush() {
   if (!isFlushing) {
     isFlushing = true;
-    queueMicrotask(() => {
-      while (pendingEffects.size > 0) {
-        const effects = [...pendingEffects];
-        pendingEffects.clear();
-        for (const effect of effects) {
-          effect.execute();
-        }
-      }
-      isFlushing = false;
-    });
+    queueMicrotask(flushSync);
   }
 }
 
