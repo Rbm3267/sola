@@ -1089,5 +1089,437 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
       svelte: `<script>\n  import { SolaSkeleton } from '@sola/ui';\n</script>\n\n<SolaSkeleton variant="card" />\n<SolaSkeleton variant="text" count={3} />`,
       html: `<sola-skeleton variant="card"></sola-skeleton>\n<sola-skeleton variant="text" count="3"></sola-skeleton>`
     }
+  },
+
+  // 34. Select / Combobox
+  {
+    id: 'sola-select',
+    name: 'Select & Combobox',
+    category: 'Forms & Inputs',
+    description: 'Searchable dropdown select with keyboard navigation, clear button, emerald focus ring, and animated dropdown panel.',
+    tagline: 'Single selection, search filtering, and option lists',
+    badge: 'Foundation',
+    componentName: 'SolaSelect',
+    defaultConfig: {
+      options: [
+        { value: 'react', label: 'React' },
+        { value: 'svelte', label: 'Svelte' },
+        { value: 'vue', label: 'Vue' },
+        { value: 'solid', label: 'SolidJS' },
+        { value: 'angular', label: 'Angular' }
+      ],
+      value: 'svelte',
+      placeholder: 'Select a framework...',
+      searchable: true
+    },
+    props: [
+      { name: 'options', type: 'Array<Option>', defaultValue: [], description: 'Array of {value, label} option objects' },
+      { name: 'value', type: 'string', defaultValue: '', description: 'Currently selected value' },
+      { name: 'placeholder', type: 'string', defaultValue: 'Select...', description: 'Placeholder text' },
+      { name: 'searchable', type: 'boolean', defaultValue: true, description: 'Enable type-to-search filtering' }
+    ],
+    codeSnippets: {
+      sola: `<SolaSelect\n  options={[{ value: "react", label: "React" }, { value: "svelte", label: "Svelte" }]}\n  value="svelte"\n  searchable\n  onchange={(v) => selected = v}\n/>`,
+      react: `import { Select } from '@sola/ui';\n\n<Select\n  options={frameworks}\n  value={selected}\n  onChange={setSelected}\n  searchable\n/>`,
+      svelte: `<script>\n  import { SolaSelect } from '@sola/ui';\n  let selected = $state('svelte');\n</script>\n\n<SolaSelect options={frameworks} value={selected} onchange={(v) => selected = v} />`,
+      html: `<sola-select placeholder="Select..." searchable></sola-select>`
+    }
+  },
+
+  // 35. Dropdown Menu
+  {
+    id: 'sola-dropdown',
+    name: 'Dropdown Action Menu',
+    category: 'Overlays & Dialogs',
+    description: 'Click-triggered action menu with dividers, destructive variant, keyboard navigation, and click-outside close.',
+    tagline: 'Row actions, context menus, and overflow menus',
+    badge: 'Foundation',
+    componentName: 'SolaDropdown',
+    defaultConfig: {
+      items: [
+        { label: 'Edit' },
+        { label: 'Duplicate' },
+        { label: 'Move to...' },
+        { divider: true },
+        { label: 'Archive' },
+        { label: 'Delete', variant: 'destructive' }
+      ],
+      position: 'bottom-left'
+    },
+    props: [
+      { name: 'items', type: 'Array<MenuItem>', defaultValue: [], description: 'Menu items with label, action, divider, variant' },
+      { name: 'position', type: 'string', defaultValue: 'bottom-left', description: 'Dropdown anchor position', options: ['bottom-left', 'bottom-right'] }
+    ],
+    codeSnippets: {
+      sola: `<SolaDropdown items={[\n  { label: "Edit", action: () => edit() },\n  { label: "Delete", variant: "destructive", action: () => del() }\n]} />`,
+      react: `import { Dropdown } from '@sola/ui';\n\n<Dropdown items={[\n  { label: "Edit", action: edit },\n  { label: "Delete", variant: "destructive", action: del }\n]} />`,
+      svelte: `<SolaDropdown items={menuItems} position="bottom-right" />`,
+      html: `<sola-dropdown position="bottom-left"></sola-dropdown>`
+    }
+  },
+
+  // 36. Accordion
+  {
+    id: 'sola-accordion',
+    name: 'Accordion & Collapsible',
+    category: 'Navigation',
+    description: 'Expand/collapse content sections with 3 variants (default, bordered, separated), multi-expand support, chevron rotation, and smooth animation.',
+    tagline: 'FAQs, settings groups, and collapsible panels',
+    badge: 'Foundation',
+    componentName: 'SolaAccordion',
+    defaultConfig: {
+      items: [
+        { id: '1', title: 'What is Sola?', content: 'Sola is a zero-VDOM, signal-reactive design system with tactile physics and multi-framework code export.', defaultOpen: true },
+        { id: '2', title: 'How does signal reactivity work?', content: 'Signals establish direct reactive graph bindings to exact DOM nodes. Updates trigger O(1) mutations bypassing virtual DOM diffing entirely.' },
+        { id: '3', title: 'Which frameworks are supported?', content: 'Sola exports to React 19, Svelte 5, Vue 3, SolidJS, and native Web Components from a single component definition.' }
+      ],
+      variant: 'separated',
+      multiple: true
+    },
+    props: [
+      { name: 'items', type: 'Array<AccordionItem>', defaultValue: [], description: 'Items with id, title, content, defaultOpen' },
+      { name: 'variant', type: 'string', defaultValue: 'default', description: 'Visual style', options: ['default', 'bordered', 'separated'] },
+      { name: 'multiple', type: 'boolean', defaultValue: false, description: 'Allow multiple sections open simultaneously' }
+    ],
+    codeSnippets: {
+      sola: `<SolaAccordion\n  variant="separated"\n  multiple\n  items={[\n    { id: "1", title: "Section 1", content: "Content here", defaultOpen: true },\n    { id: "2", title: "Section 2", content: "More content" }\n  ]}\n/>`,
+      react: `import { Accordion } from '@sola/ui';\n\n<Accordion variant="separated" multiple items={sections} />`,
+      svelte: `<SolaAccordion variant="bordered" items={faqItems} multiple />`,
+      html: `<sola-accordion variant="separated" multiple></sola-accordion>`
+    }
+  },
+
+  // 37. Checkbox
+  {
+    id: 'sola-checkbox',
+    name: 'Checkbox',
+    category: 'Forms & Inputs',
+    description: 'Custom styled checkbox with emerald checked state, indeterminate dash mode, SVG check animation, and accessible label.',
+    tagline: 'Multi-select, filters, and boolean toggles',
+    badge: 'Foundation',
+    componentName: 'SolaCheckbox',
+    defaultConfig: { checked: true, label: 'Accept terms and conditions', indeterminate: false, disabled: false },
+    props: [
+      { name: 'checked', type: 'boolean', defaultValue: false, description: 'Checked state' },
+      { name: 'indeterminate', type: 'boolean', defaultValue: false, description: 'Show indeterminate dash' },
+      { name: 'label', type: 'string', defaultValue: '', description: 'Label text' },
+      { name: 'disabled', type: 'boolean', defaultValue: false, description: 'Disable interaction' }
+    ],
+    codeSnippets: {
+      sola: `<SolaCheckbox checked={agreed} label="I agree to the terms" onchange={(v) => agreed = v} />`,
+      react: `<Checkbox checked={agreed} onChange={setAgreed} label="I agree" />`,
+      svelte: `<SolaCheckbox bind:checked={agreed} label="I agree to the terms" />`,
+      html: `<sola-checkbox label="I agree to the terms"></sola-checkbox>`
+    }
+  },
+
+  // 38. Radio Group
+  {
+    id: 'sola-radio-group',
+    name: 'Radio Group',
+    category: 'Forms & Inputs',
+    description: 'Exclusive option selection with default and card variants, emerald selected state, scale-in dot animation, and optional descriptions.',
+    tagline: 'Single selection, plan pickers, and option groups',
+    badge: 'Foundation',
+    componentName: 'SolaRadioGroup',
+    defaultConfig: {
+      options: [
+        { value: 'free', label: 'Free', description: 'Basic features for personal use' },
+        { value: 'pro', label: 'Pro', description: 'Advanced features for teams' },
+        { value: 'enterprise', label: 'Enterprise', description: 'Custom solutions for large orgs' }
+      ],
+      value: 'pro',
+      variant: 'card'
+    },
+    props: [
+      { name: 'options', type: 'Array<RadioOption>', defaultValue: [], description: 'Options with value, label, description' },
+      { name: 'value', type: 'string', defaultValue: '', description: 'Currently selected value' },
+      { name: 'variant', type: 'string', defaultValue: 'default', description: 'Visual style', options: ['default', 'card'] }
+    ],
+    codeSnippets: {
+      sola: `<SolaRadioGroup\n  variant="card"\n  options={plans}\n  value={selected}\n  onchange={(v) => selected = v}\n/>`,
+      react: `<RadioGroup variant="card" options={plans} value={plan} onChange={setPlan} />`,
+      svelte: `<SolaRadioGroup variant="card" options={plans} value={selected} onchange={(v) => selected = v} />`,
+      html: `<sola-radio-group variant="card"></sola-radio-group>`
+    }
+  },
+
+  // 39. Text Input
+  {
+    id: 'sola-input',
+    name: 'Text Input',
+    category: 'Forms & Inputs',
+    description: 'Text input with floating label, emerald focus ring, error/hint states, clear button, and multiple input types.',
+    tagline: 'Text fields, emails, passwords, and number inputs',
+    badge: 'Foundation',
+    componentName: 'SolaInput',
+    defaultConfig: { value: '', label: 'Email Address', placeholder: 'you@example.com', type: 'email', error: '', hint: 'We will never share your email.' },
+    props: [
+      { name: 'value', type: 'string', defaultValue: '', description: 'Input value' },
+      { name: 'label', type: 'string', defaultValue: '', description: 'Floating label text' },
+      { name: 'type', type: 'string', defaultValue: 'text', description: 'Input type', options: ['text', 'email', 'password', 'number', 'url'] },
+      { name: 'error', type: 'string', defaultValue: '', description: 'Error message (shows rose border)' },
+      { name: 'hint', type: 'string', defaultValue: '', description: 'Help text below input' }
+    ],
+    codeSnippets: {
+      sola: `<SolaInput label="Email" type="email" placeholder="you@example.com" hint="We won't share your email." />`,
+      react: `<Input label="Email" type="email" value={email} onChange={setEmail} error={errors.email} />`,
+      svelte: `<SolaInput label="Email" type="email" value={email} oninput={(v) => email = v} />`,
+      html: `<sola-input label="Email" type="email" placeholder="you@example.com"></sola-input>`
+    }
+  },
+
+  // 40. Textarea
+  {
+    id: 'sola-textarea',
+    name: 'Textarea',
+    category: 'Forms & Inputs',
+    description: 'Multi-line text input with character counter, auto-resize, error state, and configurable resize behavior.',
+    tagline: 'Comments, descriptions, notes, and long-form text',
+    badge: 'Foundation',
+    componentName: 'SolaTextarea',
+    defaultConfig: { value: '', label: 'Description', placeholder: 'Enter a description...', rows: 4, maxLength: 500 },
+    props: [
+      { name: 'value', type: 'string', defaultValue: '', description: 'Textarea value' },
+      { name: 'label', type: 'string', defaultValue: '', description: 'Label text' },
+      { name: 'rows', type: 'number', defaultValue: 4, description: 'Visible row count' },
+      { name: 'maxLength', type: 'number', defaultValue: 0, description: 'Character limit (0 = unlimited)' },
+      { name: 'resize', type: 'string', defaultValue: 'vertical', description: 'Resize behavior', options: ['none', 'vertical', 'both'] }
+    ],
+    codeSnippets: {
+      sola: `<SolaTextarea label="Description" maxLength={500} placeholder="Enter details..." />`,
+      react: `<Textarea label="Description" maxLength={500} value={desc} onChange={setDesc} />`,
+      svelte: `<SolaTextarea label="Description" maxLength={500} value={desc} oninput={(v) => desc = v} />`,
+      html: `<sola-textarea label="Description" max-length="500"></sola-textarea>`
+    }
+  },
+
+  // 41. Data Table
+  {
+    id: 'sola-data-table',
+    name: 'Data Table',
+    category: 'Data Display',
+    description: 'Sortable, filterable data table with column sorting, row selection checkboxes, striped rows, search bar, and responsive horizontal scroll.',
+    tagline: 'Lists, records, CRUD interfaces, and tabular data',
+    badge: 'Foundation',
+    componentName: 'SolaDataTable',
+    defaultConfig: {
+      columns: [
+        { key: 'name', label: 'Name', sortable: true },
+        { key: 'role', label: 'Role', sortable: true },
+        { key: 'status', label: 'Status', sortable: true },
+        { key: 'email', label: 'Email' }
+      ],
+      rows: [
+        { name: 'Alice Chen', role: 'Engineer', status: 'Active', email: 'alice@sola.dev' },
+        { name: 'Bob Park', role: 'Designer', status: 'Active', email: 'bob@sola.dev' },
+        { name: 'Carol Wu', role: 'PM', status: 'Away', email: 'carol@sola.dev' },
+        { name: 'Dan Kim', role: 'Engineer', status: 'Offline', email: 'dan@sola.dev' }
+      ],
+      selectable: true,
+      striped: true
+    },
+    props: [
+      { name: 'columns', type: 'Array<Column>', defaultValue: [], description: 'Column definitions with key, label, sortable, width, align' },
+      { name: 'rows', type: 'Array<Object>', defaultValue: [], description: 'Row data array' },
+      { name: 'selectable', type: 'boolean', defaultValue: false, description: 'Enable row selection checkboxes' },
+      { name: 'striped', type: 'boolean', defaultValue: false, description: 'Alternate row striping' },
+      { name: 'compact', type: 'boolean', defaultValue: false, description: 'Reduce row height' }
+    ],
+    codeSnippets: {
+      sola: `<SolaDataTable\n  columns={columns}\n  rows={data}\n  selectable\n  striped\n/>`,
+      react: `<DataTable columns={columns} rows={data} selectable striped onRowClick={handleClick} />`,
+      svelte: `<SolaDataTable columns={columns} rows={data} selectable striped />`,
+      html: `<sola-data-table selectable striped></sola-data-table>`
+    }
+  },
+
+  // 42. Pagination
+  {
+    id: 'sola-pagination',
+    name: 'Pagination',
+    category: 'Navigation',
+    description: 'Page-by-page navigation with previous/next arrows, page number buttons, ellipsis truncation, and active state indicator.',
+    tagline: 'Paginated lists, search results, and data navigation',
+    badge: 'Foundation',
+    componentName: 'SolaPagination',
+    defaultConfig: { currentPage: 3, totalPages: 12, siblingCount: 1 },
+    props: [
+      { name: 'currentPage', type: 'number', defaultValue: 1, description: 'Active page number' },
+      { name: 'totalPages', type: 'number', defaultValue: 10, description: 'Total page count' },
+      { name: 'siblingCount', type: 'number', defaultValue: 1, description: 'Pages shown around current page' }
+    ],
+    codeSnippets: {
+      sola: `<SolaPagination currentPage={page} totalPages={20} onPageChange={(p) => page = p} />`,
+      react: `<Pagination current={page} total={20} onChange={setPage} />`,
+      svelte: `<SolaPagination currentPage={page} totalPages={20} onPageChange={(p) => page = p} />`,
+      html: `<sola-pagination current-page="3" total-pages="12"></sola-pagination>`
+    }
+  },
+
+  // 43. Empty State
+  {
+    id: 'sola-empty-state',
+    name: 'Empty State',
+    category: 'Data Display',
+    description: 'Zero-data placeholder with centered SVG icon, title, description text, and optional action button for first-run or empty search results.',
+    tagline: 'No results, first-run experience, and zero-data fallbacks',
+    badge: 'Foundation',
+    componentName: 'SolaEmptyState',
+    defaultConfig: { title: 'No results found', description: 'Try adjusting your search or filter criteria.', icon: 'search', actionLabel: 'Clear Filters' },
+    props: [
+      { name: 'title', type: 'string', defaultValue: 'No data', description: 'Heading text' },
+      { name: 'description', type: 'string', defaultValue: '', description: 'Body text' },
+      { name: 'icon', type: 'string', defaultValue: 'inbox', description: 'Icon type', options: ['search', 'inbox', 'folder', 'chart', 'users'] },
+      { name: 'actionLabel', type: 'string', defaultValue: '', description: 'Optional action button text' }
+    ],
+    codeSnippets: {
+      sola: `<SolaEmptyState\n  icon="search"\n  title="No results found"\n  description="Try different search terms."\n  actionLabel="Clear Filters"\n  onaction={() => clearFilters()}\n/>`,
+      react: `<EmptyState icon="inbox" title="No messages" description="You're all caught up!" />`,
+      svelte: `<SolaEmptyState icon="search" title="No results" actionLabel="Reset" onaction={reset} />`,
+      html: `<sola-empty-state icon="search" title="No results found"></sola-empty-state>`
+    }
+  },
+
+  // 44. Popover
+  {
+    id: 'sola-popover',
+    name: 'Popover',
+    category: 'Overlays & Dialogs',
+    description: 'Click-triggered floating panel with arrow indicator, click-outside close, Escape key dismiss, and scale+fade animation.',
+    tagline: 'Inline forms, rich tooltips, and floating content panels',
+    badge: 'Foundation',
+    componentName: 'SolaPopover',
+    defaultConfig: { position: 'bottom', align: 'center' },
+    props: [
+      { name: 'position', type: 'string', defaultValue: 'bottom', description: 'Panel position', options: ['top', 'bottom', 'left', 'right'] },
+      { name: 'align', type: 'string', defaultValue: 'center', description: 'Panel alignment', options: ['start', 'center', 'end'] }
+    ],
+    codeSnippets: {
+      sola: `<SolaPopover position="bottom" align="start">\n  {#snippet trigger()}<SolaButton label="Filter" />{/snippet}\n  <div class="p-4">Popover content here</div>\n</SolaPopover>`,
+      react: `<Popover position="bottom" trigger={<Button>Filter</Button>}>\n  <div className="p-4">Content</div>\n</Popover>`,
+      svelte: `<SolaPopover position="bottom">\n  {#snippet trigger()}<button>Open</button>{/snippet}\n  <p>Popover content</p>\n</SolaPopover>`,
+      html: `<sola-popover position="bottom"></sola-popover>`
+    }
+  },
+
+  // ═══════════════════════════════════════════
+  // PHASE 2: HIGH-VALUE COMPONENTS
+  // ═══════════════════════════════════════════
+
+  // 45. Drawer / Sheet
+  {
+    id: 'sola-drawer',
+    name: 'Drawer & Sheet',
+    category: 'Overlays & Dialogs',
+    description: 'Slide-in panel from screen edge (left, right, bottom) with backdrop overlay, close button, Escape key dismiss, and configurable width.',
+    tagline: 'Side panels, mobile nav, detail views, and filter sheets',
+    badge: 'Foundation',
+    componentName: 'SolaDrawer',
+    defaultConfig: { open: true, position: 'right', title: 'Detail View', width: '400px' },
+    props: [
+      { name: 'open', type: 'boolean', defaultValue: false, description: 'Whether the drawer is visible' },
+      { name: 'position', type: 'string', defaultValue: 'right', description: 'Slide-in direction', options: ['left', 'right', 'bottom'] },
+      { name: 'title', type: 'string', defaultValue: '', description: 'Drawer heading' },
+      { name: 'width', type: 'string', defaultValue: '400px', description: 'Drawer width (or height for bottom)' }
+    ],
+    codeSnippets: {
+      sola: `<SolaDrawer open={showPanel} position="right" title="Details" onclose={() => showPanel = false}>\n  <p>Panel content here</p>\n</SolaDrawer>`,
+      react: `<Drawer open={open} position="right" title="Details" onClose={() => setOpen(false)}>\n  <p>Content</p>\n</Drawer>`,
+      svelte: `<SolaDrawer open={show} position="right" title="Details" onclose={() => show = false}>\n  Content\n</SolaDrawer>`,
+      html: `<sola-drawer open position="right" title="Details"></sola-drawer>`
+    }
+  },
+
+  // 46. Breadcrumb
+  {
+    id: 'sola-breadcrumb',
+    name: 'Breadcrumb',
+    category: 'Navigation',
+    description: 'Hierarchical path navigation with chevron separators, current page indicator, and automatic truncation for deep paths.',
+    tagline: 'Page hierarchy, file paths, and navigation trails',
+    badge: 'Foundation',
+    componentName: 'SolaBreadcrumb',
+    defaultConfig: {
+      items: [
+        { label: 'Home', href: '/' },
+        { label: 'Components', href: '/components' },
+        { label: 'Navigation', href: '/components?cat=navigation' },
+        { label: 'Breadcrumb' }
+      ]
+    },
+    props: [
+      { name: 'items', type: 'Array<BreadcrumbItem>', defaultValue: [], description: 'Path items with label and optional href/onclick' }
+    ],
+    codeSnippets: {
+      sola: `<SolaBreadcrumb items={[\n  { label: "Home", href: "/" },\n  { label: "Settings", href: "/settings" },\n  { label: "Profile" }\n]} />`,
+      react: `<Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Profile" }]} />`,
+      svelte: `<SolaBreadcrumb items={breadcrumbs} />`,
+      html: `<sola-breadcrumb></sola-breadcrumb>`
+    }
+  },
+
+  // 47. Command Palette
+  {
+    id: 'sola-command-palette',
+    name: 'Command Palette',
+    category: 'Navigation',
+    description: 'Cmd+K search overlay with grouped commands, keyboard navigation, shortcut badges, match highlighting, and spring-scale entrance.',
+    tagline: 'Quick search, keyboard shortcuts, and power-user navigation',
+    badge: 'Foundation',
+    componentName: 'SolaCommandPalette',
+    defaultConfig: {
+      open: true,
+      placeholder: 'Search commands...',
+      commands: [
+        { id: '1', label: 'Go to Dashboard', shortcut: 'G D', group: 'Navigation' },
+        { id: '2', label: 'Go to Settings', shortcut: 'G S', group: 'Navigation' },
+        { id: '3', label: 'Create New Project', shortcut: 'C P', group: 'Actions' },
+        { id: '4', label: 'Toggle Dark Mode', shortcut: 'T D', group: 'Actions' },
+        { id: '5', label: 'Search Components', shortcut: '/', group: 'Search' }
+      ]
+    },
+    props: [
+      { name: 'open', type: 'boolean', defaultValue: false, description: 'Whether the palette is visible' },
+      { name: 'commands', type: 'Array<Command>', defaultValue: [], description: 'Command items with id, label, shortcut, group, action' },
+      { name: 'placeholder', type: 'string', defaultValue: 'Type a command...', description: 'Search input placeholder' }
+    ],
+    codeSnippets: {
+      sola: `<SolaCommandPalette\n  open={showPalette}\n  commands={commands}\n  onselect={(cmd) => cmd.action?.()}\n  onclose={() => showPalette = false}\n/>`,
+      react: `<CommandPalette open={open} commands={cmds} onSelect={exec} onClose={() => setOpen(false)} />`,
+      svelte: `<SolaCommandPalette open={show} commands={cmds} onclose={() => show = false} />`,
+      html: `<sola-command-palette></sola-command-palette>`
+    }
+  },
+
+  // 48. Code Block
+  {
+    id: 'sola-code-block',
+    name: 'Code Block',
+    category: 'Data Display',
+    description: 'Syntax-highlighted code display with line numbers, copy-to-clipboard, language badge, keyword tokenization, and horizontal scroll.',
+    tagline: 'Code snippets, API payloads, and developer documentation',
+    badge: 'Foundation',
+    componentName: 'SolaCodeBlock',
+    defaultConfig: {
+      language: 'typescript',
+      title: 'signal.ts',
+      showLineNumbers: true,
+      copyable: true,
+      code: 'import { signal } from "@sola/core";\n\nconst count = signal(0);\nconst doubled = derived(() => count.value * 2);\n\n// Direct DOM binding — zero VDOM overhead\ncount.subscribe((value) => {\n  element.textContent = String(value);\n});'
+    },
+    props: [
+      { name: 'code', type: 'string', defaultValue: '', description: 'Code string to display' },
+      { name: 'language', type: 'string', defaultValue: 'javascript', description: 'Language identifier for syntax badge' },
+      { name: 'title', type: 'string', defaultValue: '', description: 'Optional file name or title' },
+      { name: 'showLineNumbers', type: 'boolean', defaultValue: true, description: 'Show line number gutter' },
+      { name: 'copyable', type: 'boolean', defaultValue: true, description: 'Show copy-to-clipboard button' }
+    ],
+    codeSnippets: {
+      sola: `<SolaCodeBlock\n  language="typescript"\n  title="signal.ts"\n  showLineNumbers\n  copyable\n  code={codeString}\n/>`,
+      react: `<CodeBlock language="typescript" title="app.ts" code={src} showLineNumbers copyable />`,
+      svelte: `<SolaCodeBlock language="typescript" code={src} showLineNumbers />`,
+      html: `<sola-code-block language="typescript" show-line-numbers></sola-code-block>`
+    }
   }
 ];

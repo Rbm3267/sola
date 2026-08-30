@@ -18,6 +18,21 @@
   import SolaTooltip from '$lib/components/SolaTooltip.svelte';
   import SolaAvatar from '$lib/components/SolaAvatar.svelte';
   import SolaSkeleton from '$lib/components/SolaSkeleton.svelte';
+  import SolaSelect from '$lib/components/SolaSelect.svelte';
+  import SolaDropdown from '$lib/components/SolaDropdown.svelte';
+  import SolaAccordion from '$lib/components/SolaAccordion.svelte';
+  import SolaCheckbox from '$lib/components/SolaCheckbox.svelte';
+  import SolaRadioGroup from '$lib/components/SolaRadioGroup.svelte';
+  import SolaInput from '$lib/components/SolaInput.svelte';
+  import SolaTextarea from '$lib/components/SolaTextarea.svelte';
+  import SolaDataTable from '$lib/components/SolaDataTable.svelte';
+  import SolaPagination from '$lib/components/SolaPagination.svelte';
+  import SolaEmptyState from '$lib/components/SolaEmptyState.svelte';
+  import SolaPopover from '$lib/components/SolaPopover.svelte';
+  import SolaDrawer from '$lib/components/SolaDrawer.svelte';
+  import SolaBreadcrumb from '$lib/components/SolaBreadcrumb.svelte';
+  import SolaCommandPalette from '$lib/components/SolaCommandPalette.svelte';
+  import SolaCodeBlock from '$lib/components/SolaCodeBlock.svelte';
   import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { fade, fly } from 'svelte/transition';
 
@@ -312,6 +327,85 @@
             {:else if selectedComponent.componentName === 'SolaSkeleton'}
               <div class="w-full max-w-sm space-y-4">
                 <SolaSkeleton variant={liveProps.variant || 'card'} count={liveProps.count || 1} animate={liveProps.animate !== false} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaSelect'}
+              <div class="w-full max-w-xs">
+                <SolaSelect options={liveProps.options || []} value={liveProps.value || ''} placeholder={liveProps.placeholder || 'Select...'} searchable={liveProps.searchable !== false} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaDropdown'}
+              <div class="w-full flex justify-center py-4">
+                <SolaDropdown items={liveProps.items || []} position={liveProps.position || 'bottom-left'} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaAccordion'}
+              <div class="w-full max-w-md">
+                <SolaAccordion items={liveProps.items || []} variant={liveProps.variant || 'separated'} multiple={liveProps.multiple !== false} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaCheckbox'}
+              <div class="w-full flex flex-col gap-3 max-w-xs">
+                <SolaCheckbox checked={liveProps.checked} label={liveProps.label || 'Checkbox'} indeterminate={liveProps.indeterminate} disabled={liveProps.disabled} />
+                <SolaCheckbox checked={true} label="Notifications enabled" />
+                <SolaCheckbox checked={false} label="Marketing emails" />
+                <SolaCheckbox indeterminate={true} label="Select all (indeterminate)" />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaRadioGroup'}
+              <div class="w-full max-w-sm">
+                <SolaRadioGroup options={liveProps.options || []} value={liveProps.value || ''} variant={liveProps.variant || 'card'} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaInput'}
+              <div class="w-full max-w-sm space-y-4">
+                <SolaInput label={liveProps.label || 'Email'} type={liveProps.type || 'text'} placeholder={liveProps.placeholder || ''} hint={liveProps.hint || ''} error={liveProps.error || ''} />
+                <SolaInput label="Password" type="password" placeholder="Enter password" />
+                <SolaInput label="With Error" type="text" value="bad-value" error="This field is invalid" />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaTextarea'}
+              <div class="w-full max-w-sm">
+                <SolaTextarea label={liveProps.label || 'Description'} placeholder={liveProps.placeholder || 'Enter text...'} rows={liveProps.rows || 4} maxLength={liveProps.maxLength || 500} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaDataTable'}
+              <div class="w-full">
+                <SolaDataTable columns={liveProps.columns || []} rows={liveProps.rows || []} selectable={liveProps.selectable} striped={liveProps.striped} compact={liveProps.compact} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaPagination'}
+              <div class="w-full flex justify-center py-4">
+                <SolaPagination currentPage={liveProps.currentPage || 3} totalPages={liveProps.totalPages || 12} siblingCount={liveProps.siblingCount || 1} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaEmptyState'}
+              <div class="w-full max-w-sm">
+                <SolaEmptyState title={liveProps.title || 'No results'} description={liveProps.description || ''} icon={liveProps.icon || 'search'} actionLabel={liveProps.actionLabel || ''} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaPopover'}
+              <div class="w-full flex justify-center py-8">
+                <SolaPopover position={liveProps.position || 'bottom'}>
+                  {#snippet trigger()}<SolaButton variant="secondary" label="Click to open Popover" />{/snippet}
+                  <div class="p-4 text-sm text-slate-600 dark:text-slate-300">
+                    <p class="font-semibold text-slate-900 dark:text-white mb-1">Popover Content</p>
+                    <p>This is a floating panel that appears on click.</p>
+                  </div>
+                </SolaPopover>
+              </div>
+            {:else if selectedComponent.componentName === 'SolaDrawer'}
+              <div class="w-full flex flex-col items-center gap-4">
+                <SolaButton variant="primary" label="Open Drawer" onclick={() => liveProps.open = true} />
+                <SolaDrawer open={liveProps.open} position={liveProps.position || 'right'} title={liveProps.title || 'Detail View'} width={liveProps.width || '400px'} onclose={() => liveProps.open = false}>
+                  <div class="p-4 text-sm text-slate-600 dark:text-slate-300 space-y-3">
+                    <p>Drawer panel content goes here. Supports left, right, and bottom positions.</p>
+                    <SolaInput label="Name" placeholder="Enter name" />
+                    <SolaButton variant="primary" label="Save" />
+                  </div>
+                </SolaDrawer>
+              </div>
+            {:else if selectedComponent.componentName === 'SolaBreadcrumb'}
+              <div class="w-full">
+                <SolaBreadcrumb items={liveProps.items || []} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaCommandPalette'}
+              <div class="w-full flex flex-col items-center gap-4">
+                <SolaButton variant="secondary" label="Open Command Palette (Cmd+K)" onclick={() => liveProps.open = true} />
+                <SolaCommandPalette open={liveProps.open} commands={liveProps.commands || []} placeholder={liveProps.placeholder || 'Search commands...'} onclose={() => liveProps.open = false} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaCodeBlock'}
+              <div class="w-full">
+                <SolaCodeBlock code={liveProps.code || ''} language={liveProps.language || 'typescript'} title={liveProps.title || ''} showLineNumbers={liveProps.showLineNumbers !== false} copyable={liveProps.copyable !== false} />
               </div>
             {:else}
               <!-- New components show schema-driven preview card -->
