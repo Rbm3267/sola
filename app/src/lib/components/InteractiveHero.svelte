@@ -1,158 +1,21 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import DataCard from './DataCard.svelte';
-  import GaugeCard from './GaugeCard.svelte';
-  import DynamicForm from './DynamicForm.svelte';
-  import ListBlock from './ListBlock.svelte';
+  import SolaButton from './SolaButton.svelte';
+  import SolaChart from './SolaChart.svelte';
+  import SolaDatePicker from './SolaDatePicker.svelte';
+  import SolaKbd from './SolaKbd.svelte';
 
-  const scenarios = [
-    {
-      id: 'deployments',
-      tabLabel: 'Active Deployments',
-      prompt: 'Show active deployment cluster in us-east-1 and p99 latency',
-      components: [
-        {
-          type: 'DataCard',
-          config: {
-            title: 'Cluster Status',
-            value: 'Healthy (32 Nodes)',
-            trend: '+4 nodes provisioned',
-            icon: 'check-circle'
-          }
-        },
-        {
-          type: 'GaugeCard',
-          config: {
-            title: 'p99 Ingress Latency',
-            value: '14.2ms',
-            percentage: 86,
-            subtext: 'Global edge median: 18ms',
-            color: 'emerald'
-          }
-        }
-      ]
-    },
-    {
-      id: 'arr',
-      tabLabel: 'Enterprise ARR',
-      prompt: 'Show enterprise monthly recurring revenue and expansion rate',
-      components: [
-        {
-          type: 'DataCard',
-          config: {
-            title: 'Monthly Recurring Revenue',
-            value: '$184,200',
-            trend: '+24.8% vs last month',
-            icon: 'trending-up'
-          }
-        },
-        {
-          type: 'DataCard',
-          config: {
-            title: 'Net Revenue Retention',
-            value: '138%',
-            trend: '+6.2% expansion',
-            icon: 'activity'
-          }
-        }
-      ]
-    },
-    {
-      id: 'telemetry',
-      tabLabel: 'Edge Telemetry',
-      prompt: 'Display real-time memory pressure and active worker threads',
-      components: [
-        {
-          type: 'GaugeCard',
-          config: {
-            title: 'Memory Utilization',
-            value: '78.4%',
-            percentage: 78,
-            subtext: 'Auto-balanced across AZs',
-            color: 'amber'
-          }
-        },
-        {
-          type: 'ListBlock',
-          config: {
-            title: 'Top Ingress Nodes',
-            items: [
-              { label: 'edge-iad-01', description: '2.4 GB/s • 4.1ms p99', status: 'Active' },
-              { label: 'edge-lhr-02', description: '1.8 GB/s • 3.8ms p99', status: 'Active' },
-              { label: 'edge-nrt-01', description: '940 MB/s • Synchronized', status: 'Completed' }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      id: 'postgres',
-      tabLabel: 'PostgreSQL Relay',
-      prompt: 'Connect to live database relay and show active connections',
-      components: [
-        {
-          type: 'DataCard',
-          config: {
-            title: 'Active DB Pool Connections',
-            value: '42 / 100',
-            trend: 'Pool saturation: 42%',
-            icon: 'activity'
-          }
-        },
-        {
-          type: 'DynamicForm',
-          config: {
-            title: 'Scale Connection Pool',
-            endpoint: '/api/pool',
-            fields: [
-              { name: 'maxPool', type: 'number', label: 'Max Connections (e.g. 150)', required: true },
-              { name: 'idleTimeout', type: 'number', label: 'Idle Timeout (ms)', required: true }
-            ]
-          }
-        }
-      ]
-    }
-  ];
-
-  let activeIndex = $state(0);
-  let typedPrompt = $state(scenarios[0].prompt);
-  let isTyping = $state(false);
-  let isResolving = $state(false);
+  let activeTab = $state<'telemetry' | 'primitives' | 'signals'>('telemetry');
   let copied = $state(false);
+  let liveCounter = $state(184200);
+  let dialAngle = $state(64);
+  let isSimulating = $state(false);
 
-  let typingTimeout: any = null;
-  let resolveTimeout: any = null;
-
-  function selectScenario(index: number) {
-    if (activeIndex === index && !isTyping && !isResolving) return;
-
-    if (typingTimeout) clearTimeout(typingTimeout);
-    if (resolveTimeout) clearTimeout(resolveTimeout);
-
-    activeIndex = index;
-    const targetPrompt = scenarios[index].prompt;
-    typedPrompt = '';
-    isTyping = true;
-    isResolving = false;
-
-    let charIdx = 0;
-    const speed = 14;
-
-    function typeNextChar() {
-      if (charIdx < targetPrompt.length) {
-        typedPrompt = targetPrompt.slice(0, charIdx + 1);
-        charIdx++;
-        typingTimeout = setTimeout(typeNextChar, speed);
-      } else {
-        isTyping = false;
-        isResolving = true;
-        resolveTimeout = setTimeout(() => {
-          isResolving = false;
-        }, 650);
-      }
-    }
-
-    typeNextChar();
+  function triggerSignalPulse() {
+    isSimulating = true;
+    liveCounter += Math.floor(Math.random() * 2400) + 600;
+    setTimeout(() => {
+      isSimulating = false;
+    }, 400);
   }
 
   function copyCliCommand() {
@@ -164,184 +27,230 @@
   }
 </script>
 
-<!-- Centered, High-Impact Hero -->
-<div class="flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8 pb-12 relative w-full max-w-full overflow-x-hidden">
-
-  <!-- Floating Announcement Pill -->
-  <a href="https://github.com/Rbm3267/sola" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.04)] mb-8 hover:border-amber-300 dark:border-amber-500/30 hover:shadow-[0_4px_12px_rgba(245,158,11,0.1)] transition-all duration-200 group cursor-pointer text-decoration-none">
+<!-- Ambient Luminous Hero Section -->
+<div class="flex flex-col items-center text-center max-w-5xl mx-auto pt-6 md:pt-12 pb-16 relative w-full">
+  
+  <!-- Floating Luminous Announcement Badge -->
+  <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-50/80 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold mb-6 shadow-2xs">
     <span class="flex h-2 w-2 relative">
-      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-      <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
     </span>
-    <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 tracking-tight">Sola v0.9 • Zero-VDOM Intent Runtime</span>
-    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-600 dark:text-amber-400 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-  </a>
+    <span>Sola 1.0 • Zero-VDOM Intent Engine</span>
+    <span class="text-emerald-400/80">/</span>
+    <span class="text-slate-500 dark:text-slate-400 font-normal">56 Primitives</span>
+  </div>
 
-  <!-- Main Headline -->
-  <h1 class="text-3xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-[-0.04em] leading-[1.08] mb-6 max-w-3xl px-2">
-    UI that builds from <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">intent</span>.
+  <!-- Main Headline (Airy, Crisp, Modern) -->
+  <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.06] mb-6 max-w-4xl">
+    Build beautiful interfaces from <span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 bg-clip-text text-transparent">pure intent</span>.
   </h1>
 
   <!-- Subheadline -->
-  <p class="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal px-2">
-    The zero-VDOM ambient runtime for the agentic web. Single-file declarative components that compile natural language into fine-grained native DOM signals with 0 kB framework bloat.
+  <p class="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
+    A zero-VDOM UI engine and design system that compiles declarative intent into fine-grained reactive DOM signals — zero virtual DOM overhead, multi-framework portability, and 56 handcrafted primitives.
   </p>
 
-  <!-- CTA Buttons -->
-  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 w-full sm:w-auto justify-center px-4">
+  <!-- Clean Action Bar (CTAs + CLI) -->
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10 w-full sm:w-auto justify-center">
+    <!-- Primary CTA -->
     <a 
       href="/studio" 
-      class="px-6 py-2.5 rounded-full font-bold transition-all duration-200 bg-slate-950 dark:bg-white hover:bg-slate-800 text-white shadow-md hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">
-      <span>Launch Studio</span>
-      <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-slate-900 hover:bg-slate-800 text-white dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-slate-950 shadow-md shadow-slate-900/10 dark:shadow-emerald-500/20 hover:-translate-y-0.5 text-center text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+      <span>Launch Studio Canvas</span>
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
 
+    <!-- Secondary CTA -->
     <a 
-      href="/demo" 
-      style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-      class="px-6 py-2.5 rounded-full font-medium transition-all duration-200 shadow-[0_4px_16px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.35)] hover:-translate-y-0.5 text-center text-xs flex items-center justify-center gap-2 cursor-pointer">
-      <span class="text-white">Open Playground</span>
-      <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      href="/components" 
+      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-xs hover:-translate-y-0.5 text-center text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+      <span>Browse 56 Components</span>
     </a>
     
-    <!-- Interactive CLI Copy Box -->
-    <div class="px-5 py-2.5 rounded-full border border-slate-200/90 dark:border-white/[0.04] bg-white/90 dark:bg-white/[0.02] backdrop-blur-md text-slate-800 dark:text-slate-200 font-mono text-xs flex items-center justify-between gap-4 shadow-sm hover:border-slate-300 transition-all">
+    <!-- Inline CLI Pill -->
+    <div class="px-4 py-2.5 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-white/5 backdrop-blur-md text-slate-800 dark:text-slate-200 font-mono text-xs flex items-center justify-between gap-3 shadow-2xs">
       <div class="flex items-center gap-2 select-all">
-        <span class="text-amber-500 font-semibold select-none">$</span>
+        <span class="text-emerald-500 font-bold select-none">$</span>
         <span>npm create sola@latest</span>
       </div>
       <button 
         onclick={copyCliCommand}
         aria-label="Copy CLI command" 
-        class="text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/[0.08] p-1 rounded-full transition-all cursor-pointer flex items-center gap-1 text-[10px] font-sans font-medium">
+        class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/10 transition-all cursor-pointer">
         {#if copied}
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-emerald-600 dark:text-emerald-400 font-mono">Copied!</span>
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         {:else}
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         {/if}
       </button>
     </div>
   </div>
 
-  <!-- Micro Specs Line -->
-  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mb-10 sm:mb-12 px-2">
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 3.2 kB Core</span>
+  <!-- Micro Technical Attributes Line -->
+  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] font-semibold text-slate-400 dark:text-slate-400 mb-12">
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 3.2 kB Core Runtime</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> 0 Dependencies</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> 0 Virtual DOM Diffing</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Native Intent AST</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span> Multi-Framework Export</span>
   </div>
 
-  <!-- The Luxury Interactive Demo Studio -->
-  <div class="w-full max-w-5xl mx-auto relative px-2 sm:px-4 overflow-hidden">
+  <!-- Interactive Live Canvas Stage -->
+  <div class="w-full max-w-4xl mx-auto text-left">
     
-    <!-- Scenario Selection Tabs Bar -->
-    <div class="flex items-center justify-start sm:justify-center gap-2 mb-4 overflow-x-auto sm:overflow-visible no-scrollbar pb-1 px-1 select-none max-w-full">
-      {#each scenarios as sc, i}
-        <button 
-          onclick={() => selectScenario(i)}
-          class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all active:scale-[0.97] cursor-pointer whitespace-nowrap flex items-center gap-2 shrink-0 {activeIndex === i ? 'bg-amber-500/10 text-amber-950 border border-amber-500/30 shadow-xs' : 'bg-white/80 dark:bg-white/[0.02] text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-white/[0.04] hover:bg-white dark:bg-white/[0.02] hover:text-slate-800 dark:text-slate-200'}">
-          <span class="w-1.5 h-1.5 rounded-full {activeIndex === i ? 'bg-amber-500' : 'bg-slate-300'}"></span>
-          <span>{sc.tabLabel}</span>
-        </button>
-      {/each}
-    </div>
-
-    <!-- Main Canvas Card -->
-    <div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden w-full max-w-full">
+    <!-- Stage Window -->
+    <div class="bg-white/95 dark:bg-[#0c1222] border border-slate-200/90 dark:border-white/10 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
       
-      <!-- Window Chrome Bar -->
-      <div class="h-10 sm:h-12 flex items-center px-4 sm:px-5 gap-2 border-b border-slate-100 dark:border-white/[0.04] bg-slate-50/70 dark:bg-white/[0.04]">
-        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-300/80"></div>
-        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-300/80"></div>
-        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-300/80"></div>
-        <div class="flex-1 flex justify-center">
-          <div class="text-[10px] sm:text-[11px] font-mono text-slate-400 tracking-wider font-medium bg-slate-100/80 dark:bg-white/[0.08] px-3 sm:px-4 py-0.5 sm:py-1 rounded-full border border-slate-200/60 dark:border-white/[0.04]">sola-playground</div>
-        </div>
-      </div>
-
-      <!-- Content Area -->
-      <div class="p-4 sm:p-6 md:p-10">
+      <!-- Stage Nav Header -->
+      <div class="px-5 py-3.5 border-b border-slate-100 dark:border-white/5 bg-slate-50/70 dark:bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         
-        <!-- Prompt Input Bar -->
-        <div class="flex items-center gap-2.5 sm:gap-3 bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] rounded-2xl px-3.5 sm:px-5 py-3 sm:py-4 mb-6 sm:mb-8 transition-all duration-300 {isTyping ? 'border-amber-300 dark:border-amber-500/30 shadow-[0_0_0_3px_rgba(245,158,11,0.1)]' : ''}">
-          <div class="shrink-0">
-            {#if isResolving}
-              <div class="w-4 h-4 sm:w-5 sm:h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-            {:else}
-              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            {/if}
+        <!-- Window Indicator & Mode Label -->
+        <div class="flex items-center gap-2.5">
+          <div class="flex items-center gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
           </div>
-          <div class="flex-1 text-left text-xs sm:text-[15px] font-medium text-slate-800 dark:text-slate-200 min-h-[20px] sm:min-h-[24px] truncate">
-            {typedPrompt}
-            {#if isTyping}
-              <span class="inline-block w-[2px] h-4 sm:h-5 bg-amber-500 ml-0.5 align-middle animate-pulse rounded-full"></span>
-            {/if}
-          </div>
-          {#if isResolving}
-            <div class="text-[10px] sm:text-xs font-mono font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-amber-200 dark:border-amber-500/20 shrink-0">
-              Compiling...
-            </div>
-          {/if}
+          <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase ml-1">
+            Live Reactive Canvas Stage
+          </span>
         </div>
 
-        <!-- Rendered Surface Area -->
-        <div class="min-h-[200px] sm:min-h-[220px] relative flex items-center justify-center">
-          {#if isTyping}
-            <!-- Clean Typing State -->
-            <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] p-6 sm:p-8 border border-dashed border-slate-200 dark:border-white/[0.04] rounded-3xl bg-slate-50/40 dark:bg-white/[0.04] text-center">
-              <div class="flex items-center gap-2 text-slate-400 text-xs font-mono">
-                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                <span>Listening to intent stream...</span>
-              </div>
-            </div>
-          {:else if isResolving}
-            <!-- Compiling State -->
-            <div class="w-full flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px] gap-3">
-              <div class="flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-900 text-xs font-mono font-bold shadow-xs">
-                <div class="w-3.5 h-3.5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-                <span>Building zero-VDOM components...</span>
-              </div>
-            </div>
-          {:else}
-            <!-- Rendered Active Scenario Components -->
-            <div class="w-full grid gap-4 {scenarios[activeIndex].components.length > 1 ? 'md:grid-cols-2' : ''}">
-              {#each scenarios[activeIndex].components as comp}
-                <div class="animate-in w-full text-left">
-                  {#if comp.type === 'DataCard'}
-                    <DataCard config={comp.config} />
-                  {:else if comp.type === 'GaugeCard'}
-                    <GaugeCard config={comp.config} />
-                  {:else if comp.type === 'DynamicForm'}
-                    <DynamicForm config={comp.config} onSubmit={() => {}} />
-                  {:else if comp.type === 'ListBlock'}
-                    <ListBlock config={comp.config} />
-                  {/if}
-                </div>
-              {/each}
-            </div>
-          {/if}
+        <!-- Interactive Scenario Switcher Tabs -->
+        <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/5 p-1 rounded-xl">
+          <button
+            onclick={() => (activeTab = 'telemetry')}
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'telemetry' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
+            Telemetry Stream
+          </button>
+          <button
+            onclick={() => (activeTab = 'primitives')}
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'primitives' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
+            Tactile Controls
+          </button>
+          <button
+            onclick={() => (activeTab = 'signals')}
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'signals' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
+            Signal Cascade
+          </button>
         </div>
-
       </div>
+
+      <!-- Stage Body Container -->
+      <div class="p-6 sm:p-8 space-y-6">
+        
+        {#if activeTab === 'telemetry'}
+          <!-- 1. Executive Telemetry Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <!-- Metric Card 1 -->
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-400 text-xs font-mono font-bold">
+                <span>INGESTION STREAM</span>
+                <span class="text-emerald-600 font-bold">+18.4%</span>
+              </div>
+              <div class="my-3">
+                <div class="text-2xl sm:text-3xl font-black font-mono text-slate-900 dark:text-white tracking-tight">
+                  ${liveCounter.toLocaleString()}
+                </div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Real-time throughput</div>
+              </div>
+              <button
+                onclick={triggerSignalPulse}
+                class="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
+                <span>Inject Signal Pulse</span>
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Metric Card 2 (SVG Chart) -->
+            <div class="sm:col-span-2 p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-400 text-xs font-mono font-bold mb-2">
+                <span>1,000Hz SIGNAL RUNTIME</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 text-[10px]">Zero GC</span>
+              </div>
+              <SolaChart
+                type="area"
+                color="emerald"
+                title="Direct Text Node Mutation"
+                subtitle="O(1) DOM patching with zero garbage collection"
+                height={120}
+              />
+            </div>
+          </div>
+
+        {:else if activeTab === 'primitives'}
+          <!-- 2. Tactile Controls & Physics -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Rotary / Slider -->
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 space-y-4">
+              <div class="flex items-center justify-between text-xs font-semibold">
+                <span class="text-slate-700 dark:text-slate-300">Tactile Signal Dial</span>
+                <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">{dialAngle}° / 100%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                bind:value={dialAngle}
+                class="w-full accent-emerald-500 h-2 bg-slate-200 dark:bg-white/10 rounded-lg cursor-pointer"
+              />
+              <div class="flex items-center gap-2">
+                <SolaButton variant="primary" label="Primary Action" />
+                <SolaButton variant="secondary" label="Secondary" />
+                <SolaButton variant="ghost" label="Ghost" />
+              </div>
+            </div>
+
+            <!-- Date Picker & Kbd -->
+            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 space-y-3">
+              <SolaDatePicker label="Calendar Horizon" />
+              <div class="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-200/60 dark:border-white/5">
+                <span>Shortcuts:</span>
+                <div class="flex items-center gap-1.5">
+                  <SolaKbd keys={['⌘', 'K']} size="sm" />
+                  <SolaKbd keys={['ESC']} size="sm" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {:else}
+          <!-- 3. Signal Cascade Code -->
+          <div class="p-6 rounded-2xl bg-slate-950 text-slate-100 font-mono text-xs leading-relaxed space-y-3">
+            <div class="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800">
+              <span>App.sola • Native Single-File Component</span>
+              <span class="text-emerald-400 font-bold">Compiled Zero-VDOM</span>
+            </div>
+            <pre><code>{`<script>
+  let metrics = $state({ count: ${liveCounter}, latency: 14.2 });
+  let status = $derived(metrics.latency < 20 ? "Optimal" : "Degraded");
+<\/script>
+
+<div class="telemetry-hud">
+  <h1>Ingestion: {metrics.count}</h1>
+  <SolaChart type="area" data={metrics} />
+</div>`}</code></pre>
+          </div>
+        {/if}
+      </div>
+
+      <!-- Stage Footer / Multi-Framework Bar -->
+      <div class="px-6 py-3.5 bg-slate-50/90 dark:bg-[#0c1222]/90 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span class="font-medium text-slate-700 dark:text-slate-300">Live signal bus connected</span>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-[11px]">
+          <span>React 19</span>
+          <span>•</span>
+          <span>Svelte 5</span>
+          <span>•</span>
+          <span>Web Components</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
-
-<style>
-  @keyframes animate-in-keyframes {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  .animate-in {
-    animation: animate-in-keyframes 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-</style>
