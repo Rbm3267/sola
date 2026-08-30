@@ -1,6 +1,6 @@
 {
   "name": "@sola-air-ui/ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
@@ -16,6 +16,12 @@
     "./alert": "./src/Alert.sola",
     "./intent-card": "./src/IntentCard.sola",
     "./intent-list": "./src/IntentList.sola"
+  },
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola-air"
   },
   "dependencies": {
     "@sola-air-ui/core": "*"
