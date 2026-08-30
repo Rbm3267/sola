@@ -33,6 +33,14 @@
   import SolaBreadcrumb from '$lib/components/SolaBreadcrumb.svelte';
   import SolaCommandPalette from '$lib/components/SolaCommandPalette.svelte';
   import SolaCodeBlock from '$lib/components/SolaCodeBlock.svelte';
+  import SolaDatePicker from '$lib/components/SolaDatePicker.svelte';
+  import SolaSidebar from '$lib/components/SolaSidebar.svelte';
+  import SolaChart from '$lib/components/SolaChart.svelte';
+  import SolaSplitter from '$lib/components/SolaSplitter.svelte';
+  import SolaContextMenu from '$lib/components/SolaContextMenu.svelte';
+  import SolaFileUpload from '$lib/components/SolaFileUpload.svelte';
+  import SolaKbd from '$lib/components/SolaKbd.svelte';
+  import SolaHoverCard from '$lib/components/SolaHoverCard.svelte';
   import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { fade, fly } from 'svelte/transition';
 
@@ -406,6 +414,56 @@
             {:else if selectedComponent.componentName === 'SolaCodeBlock'}
               <div class="w-full">
                 <SolaCodeBlock code={liveProps.code || ''} language={liveProps.language || 'typescript'} title={liveProps.title || ''} showLineNumbers={liveProps.showLineNumbers !== false} copyable={liveProps.copyable !== false} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaDatePicker'}
+              <div class="w-full flex justify-center py-6">
+                <SolaDatePicker range={liveProps.range} rangeValue={liveProps.rangeValue || { start: '2026-08-01', end: '2026-08-30' }} value={liveProps.value || ''} label={liveProps.label || 'Select Date'} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaSidebar'}
+              <div class="w-full max-w-sm h-96 border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm">
+                <SolaSidebar collapsed={liveProps.collapsed} activeId={liveProps.activeId || 'dashboard'} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaChart'}
+              <div class="w-full">
+                <SolaChart type={liveProps.type || 'area'} color={liveProps.color || 'emerald'} title={liveProps.title || 'Signal Telemetry'} subtitle={liveProps.subtitle || 'Real-time throughput'} height={liveProps.height || 180} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaSplitter'}
+              <div class="w-full">
+                <SolaSplitter direction={liveProps.direction || 'horizontal'} initialSplit={liveProps.initialSplit || 50} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaContextMenu'}
+              <div class="w-full">
+                <SolaContextMenu />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaFileUpload'}
+              <div class="w-full max-w-md">
+                <SolaFileUpload accept={liveProps.accept || '.json, .csv, .ts'} maxSizeMb={liveProps.maxSizeMb || 10} />
+              </div>
+            {:else if selectedComponent.componentName === 'SolaKbd'}
+              <div class="w-full flex flex-wrap items-center justify-center gap-4 py-8">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500">Search:</span>
+                  <SolaKbd keys={['⌘', 'K']} size="md" />
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500">Save:</span>
+                  <SolaKbd keys={['Ctrl', 'S']} size="md" />
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500">Terminal:</span>
+                  <SolaKbd keys={['⌃', '`']} size="sm" />
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-500">Reload:</span>
+                  <SolaKbd keys={['⇧', '⌘', 'R']} size="lg" />
+                </div>
+              </div>
+            {:else if selectedComponent.componentName === 'SolaHoverCard'}
+              <div class="w-full flex flex-col items-center justify-center gap-4 py-12">
+                <p class="text-sm text-slate-600 dark:text-slate-300">
+                  Hover over the handle to preview metadata:
+                  <SolaHoverCard handle="@sola-architecture" title="Sola Architecture" description="Zero-VDOM, direct reactive graph bindings with sub-millisecond patch execution." />
+                </p>
               </div>
             {:else}
               <!-- New components show schema-driven preview card -->

@@ -4,7 +4,7 @@
   // --- 1. Universal Canvas Card Data Model ---
   interface StudioCard {
     id: string;
-    type: 'stat' | 'progress' | 'waterfall' | 'slider' | 'form' | 'feed' | 'status' | 'node_graph' | 'radial_dial';
+    type: 'stat' | 'progress' | 'waterfall' | 'slider' | 'form' | 'feed' | 'status' | 'node_graph' | 'radial_dial' | 'chart' | 'table' | 'datepicker' | 'code';
     title: string;
     subtitle?: string;
     cols: 1 | 2 | 3;
@@ -19,6 +19,37 @@
   let activeCardId = $state<string | null>(null);
   let exportModalOpen = $state(false);
   let exportTab = $state<'react' | 'svelte' | 'webcomponent'>('react');
+
+  // Component Panel State
+  let componentPanelOpen = $state(true);
+  let componentSearch = $state('');
+  let componentCategory = $state('All');
+
+  const studioComponents = [
+    { type: 'stat' as const, name: 'Metric Tile', category: 'Metrics', desc: 'KPI with real-time trend delta', icon: 'metric' },
+    { type: 'progress' as const, name: 'Progress Ring', category: 'Metrics', desc: 'Circular completion gauge', icon: 'progress' },
+    { type: 'waterfall' as const, name: 'Step Breakdown', category: 'Metrics', desc: 'Value distribution bridge', icon: 'waterfall' },
+    { type: 'chart' as const, name: 'Telemetry Chart', category: 'Metrics', desc: 'Area / line signal stream', icon: 'chart' },
+    { type: 'status' as const, name: 'System Health HUD', category: 'Status & NOC', desc: 'Operational status beacon', icon: 'status' },
+    { type: 'slider' as const, name: 'Control Slider', category: 'Controls', desc: 'Tactile range input', icon: 'slider' },
+    { type: 'radial_dial' as const, name: 'Radial Dial', category: 'Controls', desc: 'Hardware-grade rotary dial', icon: 'dial' },
+    { type: 'form' as const, name: 'Input Form', category: 'Controls', desc: 'Schema-driven inputs', icon: 'form' },
+    { type: 'datepicker' as const, name: 'Date Range Picker', category: 'Controls', desc: 'Calendar date picker', icon: 'calendar' },
+    { type: 'table' as const, name: 'Data Table', category: 'Data & Feeds', desc: 'Sortable structured records', icon: 'table' },
+    { type: 'feed' as const, name: 'Activity Stream', category: 'Data & Feeds', desc: 'Real-time event feed', icon: 'feed' },
+    { type: 'node_graph' as const, name: 'Node Graph', category: 'Data & Feeds', desc: 'Auto-clustering nodes', icon: 'graph' },
+    { type: 'code' as const, name: 'Code Block', category: 'Status & NOC', desc: 'Syntax-highlighted viewer', icon: 'code' },
+  ];
+
+  const studioCategories = ['All', 'Metrics', 'Controls', 'Data & Feeds', 'Status & NOC'];
+
+  const filteredComponents = $derived(
+    studioComponents.filter(c => {
+      const matchCat = componentCategory === 'All' || c.category === componentCategory;
+      const matchSearch = !componentSearch || c.name.toLowerCase().includes(componentSearch.toLowerCase()) || c.desc.toLowerCase().includes(componentSearch.toLowerCase());
+      return matchCat && matchSearch;
+    })
+  );
   let copyNotification = $state(false);
 
   // Drag-and-Drop & Snap-to-Grid State
@@ -33,7 +64,7 @@
         { id: 'c1', type: 'stat', title: 'Primary Metric', subtitle: 'Live aggregated total', cols: 1, value: '$48,500', delta: '+14.2%', accentColor: 'emerald' },
         { id: 'c2', type: 'progress', title: 'Goal Completion', subtitle: 'Target milestone progress', cols: 1, value: 78, delta: '78%', accentColor: 'emerald' },
         { id: 'c3', type: 'slider', title: 'Adjustment Range', subtitle: 'Tactile input controller', cols: 1, value: 65, accentColor: 'emerald' },
-        { id: 'c4', type: 'waterfall', title: 'Step Distribution Flow', subtitle: 'Sequential progression breakdown', cols: 2, value: '$120k', accentColor: 'emerald', config: { bars: [{ name: 'Initial', val: 80, d: '+80' }, { name: 'Additions', val: 40, d: '+40' }, { name: 'Deductions', val: -20, d: '-20' }, { name: 'Total', val: 100, d: '100' }] } },
+        { id: 'c4', type: 'chart', title: 'Signal Throughput', subtitle: 'Real-time 1,000Hz mesh', cols: 2, value: '95 req/s', accentColor: 'emerald' },
         { id: 'c5', type: 'feed', title: 'Activity & Updates', subtitle: 'Recent events log', cols: 1, value: 'Active', accentColor: 'slate' }
       ]
     },
@@ -43,7 +74,8 @@
         { id: 'p1', type: 'stat', title: 'Sprint Velocity', subtitle: 'Story points completed', cols: 1, value: '94 pts', delta: '+8.2%', accentColor: 'indigo' },
         { id: 'p2', type: 'progress', title: 'Sprint 24 Progress', subtitle: 'Target: 100 points', cols: 1, value: 86, delta: '86%', accentColor: 'indigo' },
         { id: 'p3', type: 'status', title: 'Deployment Health', subtitle: 'All integration tests passing', cols: 1, value: 'Passing', accentColor: 'emerald' },
-        { id: 'p4', type: 'form', title: 'Create Work Item', subtitle: 'Quick task assigner', cols: 2, value: 'Form', accentColor: 'slate' }
+        { id: 'p4', type: 'table', title: 'Sprint Backlog Items', subtitle: 'Assigned engineering tasks', cols: 2, value: 'Backlog', accentColor: 'slate' },
+        { id: 'p5', type: 'datepicker', title: 'Sprint Horizon', subtitle: 'Sprint 24 timeline', cols: 1, value: '2026-08-30', accentColor: 'emerald' }
       ]
     },
     ecommerce: {
@@ -145,16 +177,24 @@
         accentColor: 'emerald',
         config: { bars: [{ name: 'Stage 1', val: 70, d: '+70' }, { name: 'Stage 2', val: 35, d: '+35' }, { name: 'Deductions', val: -15, d: '-15' }, { name: 'Total', val: 90, d: '90' }] }
       };
+    } else if (type === 'chart') {
+      newCard = { id: newId, type: 'chart', title: 'Telemetry Stream', subtitle: 'Signal ingestion rate', cols: 2, value: '88 req/s', accentColor: 'emerald' };
     } else if (type === 'slider') {
       newCard = { id: newId, type: 'slider', title: 'Control Slider', subtitle: 'Tactile adjustment input', cols: 1, value: 50, accentColor: 'emerald' };
+    } else if (type === 'radial_dial') {
+      newCard = { id: newId, type: 'radial_dial', title: 'Haptic Radial Dial', subtitle: 'Magnetic rotation control', cols: 1, value: 50, accentColor: 'emerald' };
+    } else if (type === 'table') {
+      newCard = { id: newId, type: 'table', title: 'Records Table', subtitle: 'Structured schema records', cols: 2, value: 'Records', accentColor: 'slate' };
+    } else if (type === 'datepicker') {
+      newCard = { id: newId, type: 'datepicker', title: 'Target Horizon', subtitle: 'Calendar date filter', cols: 1, value: '2026-08-30', accentColor: 'emerald' };
+    } else if (type === 'code') {
+      newCard = { id: newId, type: 'code', title: 'Signal Pipeline Code', subtitle: 'Zero-VDOM reactive binding', cols: 2, value: 'TypeScript', accentColor: 'slate' };
     } else if (type === 'form') {
       newCard = { id: newId, type: 'form', title: 'Interactive Form', subtitle: 'Dynamic input schema', cols: 2, value: 'Form', accentColor: 'slate' };
     } else if (type === 'feed') {
       newCard = { id: newId, type: 'feed', title: 'Activity Stream', subtitle: 'Real-time event feed', cols: 1, value: 'Active', accentColor: 'slate' };
     } else if (type === 'node_graph') {
       newCard = { id: newId, type: 'node_graph', title: 'Kinetic Node Graph', subtitle: 'Auto-clustering data nodes', cols: 2, value: 'Graph', accentColor: 'emerald' };
-    } else if (type === 'radial_dial') {
-      newCard = { id: newId, type: 'radial_dial', title: 'Haptic Radial Dial', subtitle: 'Magnetic rotation control', cols: 1, value: 50, accentColor: 'emerald' };
     } else {
       newCard = { id: newId, type: 'status', title: 'Status & State Card', subtitle: 'Operational condition banner', cols: 1, value: 'Optimal', accentColor: 'emerald' };
     }
@@ -313,11 +353,22 @@ export default function SolaCustomCanvas() {
         </div>
       </div>
 
-      <!-- Right: Export Action -->
+      <!-- Right: Palette Toggle & Export Action -->
       <div class="flex items-center gap-2">
         <button
+          onclick={() => (componentPanelOpen = !componentPanelOpen)}
+          class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer shadow-xs {componentPanelOpen ? 'bg-emerald-500 text-slate-950 border-emerald-500 shadow-emerald-500/20' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/10'}">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+          <span>Component Palette</span>
+          <span class="px-1.5 py-0.2 bg-slate-900/10 dark:bg-white/15 rounded-md text-[10px] font-mono">{filteredComponents.length}</span>
+        </button>
+
+        <button
           onclick={() => (exportModalOpen = true)}
-          class="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-slate-950 rounded-xl text-xs font-bold shadow-sm hover:shadow-md transition-all cursor-pointer">
+          class="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border border-transparent dark:border-white/10 rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
@@ -327,81 +378,96 @@ export default function SolaCustomCanvas() {
     </div>
   </header>
 
-  <!-- 2. Universal Horizontal Component Shelf (Figma Style) -->
-  <div class="bg-white/50 dark:bg-[#090d19]/50 backdrop-blur-md border-b border-slate-900/[0.02] dark:border-white/[0.03] px-4 sm:px-6 lg:px-8 py-2.5">
-    <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-3 py-0.5 no-scrollbar">
-      <div class="flex items-center gap-2 text-xs font-medium whitespace-nowrap w-full">
-        <span class="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] pl-1">Insert to Canvas:</span>
-        
-        <button
-          onclick={() => addComponent('stat')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          <span>+ Metric Tile</span>
-        </button>
+  <!-- 2. Searchable, Categorized Component Shelf -->
+  {#if componentPanelOpen}
+    <div class="bg-white dark:bg-[#0c1222] border-b border-slate-200/80 dark:border-white/10 px-4 sm:px-6 lg:px-8 py-4 shadow-sm animate-[fadeSlide_150ms_ease-out]">
+      <div class="max-w-7xl mx-auto space-y-3">
+        <!-- Search & Filter Controls -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <!-- Search Input -->
+          <div class="relative flex-1 max-w-md">
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+            </div>
+            <input
+              type="text"
+              bind:value={componentSearch}
+              placeholder="Search components (e.g., metric, chart, dial, form)..."
+              class="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-sans"
+            />
+            {#if componentSearch}
+              <button
+                onclick={() => (componentSearch = '')}
+                class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs">
+                &times;
+              </button>
+            {/if}
+          </div>
 
-        <button
-          onclick={() => addComponent('progress')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          <span>+ Progress Ring</span>
-        </button>
+          <!-- Category Filter Pills -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
+            {#each studioCategories as cat}
+              <button
+                onclick={() => (componentCategory = cat)}
+                class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
+                {cat}
+              </button>
+            {/each}
+          </div>
+        </div>
 
-        <button
-          onclick={() => addComponent('waterfall')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          <span>+ Step Breakdown</span>
-        </button>
-
-        <button
-          onclick={() => addComponent('slider')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/></svg>
-          <span>+ Control Slider</span>
-        </button>
-
-        <button
-          onclick={() => addComponent('form')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span>+ Input Form</span>
-        </button>
-
-        <button
-          onclick={() => addComponent('feed')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          <span>+ Activity Feed</span>
-        </button>
-
-        <button
-          onclick={() => addComponent('status')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>+ Status Card</span>
-        </button>
-        
-        <button
-          onclick={() => addComponent('node_graph')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          <span>+ Kinetic Graph</span>
-        </button>
-
-        <button
-          onclick={() => addComponent('radial_dial')}
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 rounded-xl transition-all cursor-pointer shadow-2xs font-medium text-xs">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
-          <span>+ Haptic Dial</span>
-        </button>
-      </div>
-
-      <div class="text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium whitespace-nowrap">
-        {cards.length} {cards.length === 1 ? 'card' : 'cards'}
+        <!-- Component Cards Grid -->
+        {#if filteredComponents.length === 0}
+          <div class="py-6 text-center text-xs text-slate-400">
+            No components match "{componentSearch}". Try searching for "metric", "chart", or "dial".
+          </div>
+        {:else}
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 pt-1">
+            {#each filteredComponents as comp}
+              <button
+                onclick={() => addComponent(comp.type)}
+                class="group flex flex-col items-start p-3 bg-slate-50 dark:bg-white/[0.03] hover:bg-emerald-50/60 dark:hover:bg-emerald-500/10 border border-slate-200/70 dark:border-white/5 hover:border-emerald-500/40 rounded-2xl text-left transition-all cursor-pointer shadow-2xs hover:shadow-xs hover:-translate-y-0.5">
+                <div class="w-full flex items-center justify-between mb-2">
+                  <div class="w-7 h-7 rounded-lg bg-white dark:bg-white/10 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      {#if comp.type === 'stat'}
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                      {:else if comp.type === 'progress'}
+                        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                      {:else if comp.type === 'chart'}
+                        <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+                      {:else if comp.type === 'slider' || comp.type === 'radial_dial'}
+                        <circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/>
+                      {:else if comp.type === 'table'}
+                        <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/>
+                      {:else if comp.type === 'datepicker'}
+                        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                      {:else if comp.type === 'code'}
+                        <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                      {:else if comp.type === 'feed'}
+                        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                      {:else}
+                        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/>
+                      {/if}
+                    </svg>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">+ Add</span>
+                </div>
+                <div class="font-bold text-xs text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate w-full">
+                  {comp.name}
+                </div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400 truncate w-full mt-0.5 leading-tight">
+                  {comp.desc}
+                </div>
+              </button>
+            {/each}
+          </div>
+        {/if}
       </div>
     </div>
-  </div>
+  {/if}
 
   <!-- 3. Main Live Canvas (Drag-and-Drop & Snap-to-Grid) -->
   <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6 items-start">
@@ -637,23 +703,99 @@ export default function SolaCustomCanvas() {
                     </div>
                   </div>
 
-                <!-- TYPE: FEED LIST -->
-                {:else if card.type === 'feed'}
-                  <div class="space-y-3 text-xs">
-                    <div class="flex items-start gap-2.5">
-                      <div class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] flex items-center justify-center shrink-0">1</div>
-                      <div>
-                        <p class="text-slate-800 dark:text-slate-200 font-medium text-[11px]">Primary event registered</p>
-                        <span class="text-[10px] text-slate-500 dark:text-slate-400">Just now</span>
-                      </div>
+                <!-- TYPE: TELEMETRY CHART -->
+                {:else if card.type === 'chart'}
+                  <div class="space-y-2 py-1">
+                    <div class="flex items-center justify-between">
+                      <span class="text-2xl font-extrabold font-mono text-slate-900 dark:text-white">{card.value}</span>
+                      <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-500/20 font-mono">1,000Hz Direct</span>
                     </div>
-                    <div class="flex items-start gap-2.5">
-                      <div class="w-5 h-5 rounded-full bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-400 font-bold text-[10px] flex items-center justify-center shrink-0">2</div>
-                      <div>
-                        <p class="text-slate-800 dark:text-slate-200 font-medium text-[11px]">State update acknowledged</p>
-                        <span class="text-[10px] text-slate-500 dark:text-slate-400">3 min ago</span>
-                      </div>
+                    <div class="h-20 flex items-end gap-1.5 pt-2">
+                      {#each [40, 65, 30, 85, 45, 95, 75, 60, 90, 100, 70, 88] as val, i}
+                        <div class="flex-1 bg-emerald-500/20 dark:bg-emerald-500/10 rounded-t-md hover:bg-emerald-500 transition-all cursor-pointer group relative" style="height: {val}%">
+                          <div class="absolute -top-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-slate-900 text-white text-[9px] font-mono px-1 py-0.5 rounded">{val}</div>
+                        </div>
+                      {/each}
                     </div>
+                  </div>
+
+                <!-- TYPE: DATA TABLE -->
+                {:else if card.type === 'table'}
+                  <div class="overflow-x-auto text-xs py-1">
+                    <table class="w-full text-left">
+                      <thead>
+                        <tr class="border-b border-slate-100 dark:border-white/5 text-[10px] text-slate-400 font-mono">
+                          <th class="pb-1.5 font-bold">Node</th>
+                          <th class="pb-1.5 font-bold">Signal</th>
+                          <th class="pb-1.5 font-bold">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+                        <tr>
+                          <td class="py-2 font-mono font-bold text-slate-800 dark:text-slate-200">alpha-west</td>
+                          <td class="py-2 text-slate-500">1,240 msg/s</td>
+                          <td class="py-2"><span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600">Active</span></td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 font-mono font-bold text-slate-800 dark:text-slate-200">delta-east</td>
+                          <td class="py-2 text-slate-500">890 msg/s</td>
+                          <td class="py-2"><span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600">Active</span></td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 font-mono font-bold text-slate-800 dark:text-slate-200">gamma-eu</td>
+                          <td class="py-2 text-slate-500">410 msg/s</td>
+                          <td class="py-2"><span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-slate-100 dark:bg-white/10 text-slate-400">Idle</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                <!-- TYPE: DATE PICKER -->
+                {:else if card.type === 'datepicker'}
+                  <div class="space-y-3 py-1 text-xs">
+                    <div class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200/80 dark:border-white/10">
+                      <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span class="font-mono font-bold text-slate-900 dark:text-white">{card.value}</span>
+                      </div>
+                      <span class="text-[10px] font-bold text-emerald-600">Active Range</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-mono text-slate-400">
+                      <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                      {#each [25, 26, 27, 28, 29, 30, 31] as d}
+                        <span class="p-1 rounded {d === 30 ? 'bg-emerald-500 text-slate-950 font-bold' : ''}">{d}</span>
+                      {/each}
+                    </div>
+                  </div>
+
+                <!-- TYPE: CODE BLOCK -->
+                {:else if card.type === 'code'}
+                  <div class="bg-slate-950 rounded-xl p-3 font-mono text-[11px] text-slate-200 border border-slate-800 space-y-1">
+                    <div class="text-slate-500">// Direct Signal Binding</div>
+                    <div><span class="text-violet-400">const</span> <span class="text-emerald-400">mesh</span> = <span class="text-sky-400">createSignal</span>(0);</div>
+                    <div><span class="text-emerald-400">mesh</span>.<span class="text-amber-400">subscribe</span>((val) =&gt; patch(val));</div>
+                  </div>
+
+                <!-- TYPE: HAPTIC RADIAL DIAL -->
+                {:else if card.type === 'radial_dial'}
+                  <div class="py-2 flex flex-col items-center text-center">
+                    <svg width="80" height="80" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" class="text-slate-100 dark:text-white/10" stroke-width="8"/>
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="8" stroke-dasharray="180 70" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                      <circle cx="50" cy="50" r="5" fill="#10b981"/>
+                      <line x1="50" y1="50" x2="50" y2="20" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" transform="rotate(70 50 50)"/>
+                    </svg>
+                    <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">{card.value}%</div>
+                  </div>
+
+                <!-- TYPE: NODE GRAPH -->
+                {:else if card.type === 'node_graph'}
+                  <div class="h-24 flex items-center justify-around py-1">
+                    <div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-500 flex items-center justify-center font-mono font-bold text-xs text-emerald-600">N1</div>
+                    <div class="h-0.5 flex-1 bg-emerald-500/30"></div>
+                    <div class="w-12 h-12 rounded-full bg-sky-50 dark:bg-sky-500/10 border-2 border-sky-500 flex items-center justify-center font-mono font-bold text-xs text-sky-600">Hub</div>
+                    <div class="h-0.5 flex-1 bg-sky-500/30"></div>
+                    <div class="w-10 h-10 rounded-full bg-violet-50 dark:bg-violet-500/10 border-2 border-violet-500 flex items-center justify-center font-mono font-bold text-xs text-violet-600">N2</div>
                   </div>
                 {/if}
               </div>

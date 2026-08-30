@@ -1521,5 +1521,198 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
       svelte: `<SolaCodeBlock language="typescript" code={src} showLineNumbers />`,
       html: `<sola-code-block language="typescript" show-line-numbers></sola-code-block>`
     }
+  },
+
+  // 49. Date & Date-Range Picker
+  {
+    id: 'sola-date-picker',
+    name: 'Date & Range Picker',
+    category: 'Forms & Inputs',
+    description: 'Calendar date and date-range picker with month navigation, quick preset chips (Today, Last 7d, Last 30d), and emerald highlight selection.',
+    tagline: 'Single date picking, date ranges, and time horizons',
+    badge: 'Foundation',
+    componentName: 'SolaDatePicker',
+    defaultConfig: { range: true, label: 'Select Horizon', rangeValue: { start: '2026-08-01', end: '2026-08-30' } },
+    props: [
+      { name: 'value', type: 'string', defaultValue: '', description: 'Single selected date (YYYY-MM-DD)' },
+      { name: 'range', type: 'boolean', defaultValue: false, description: 'Enable start/end date range picking' },
+      { name: 'label', type: 'string', defaultValue: 'Select Date', description: 'Label text above input' }
+    ],
+    codeSnippets: {
+      sola: `<SolaDatePicker range rangeValue={{ start: "2026-08-01", end: "2026-08-30" }} onchange={handleRange} />`,
+      react: `<DatePicker range value={range} onChange={setRange} />`,
+      svelte: `<SolaDatePicker range bind:rangeValue={range} />`,
+      html: `<sola-date-picker range></sola-date-picker>`
+    }
+  },
+
+  // 50. Sidebar Shell & Navigation Rail
+  {
+    id: 'sola-sidebar',
+    name: 'Sidebar Shell & Nav Rail',
+    category: 'Navigation',
+    description: 'Collapsible application sidebar shell and icon navigation rail with active route states, badge counters, and profile footer.',
+    tagline: 'App layout scaffold, multi-tier navigation, and collapsible rail',
+    badge: 'Layout',
+    componentName: 'SolaSidebar',
+    defaultConfig: { collapsed: false, activeId: 'dashboard' },
+    props: [
+      { name: 'collapsed', type: 'boolean', defaultValue: false, description: 'Collapse sidebar to narrow icon rail' },
+      { name: 'activeId', type: 'string', defaultValue: 'dashboard', description: 'Active item identifier' }
+    ],
+    codeSnippets: {
+      sola: `<SolaSidebar collapsed={isCollapsed} activeId="dashboard" onselect={(item) => navigate(item.href)} />`,
+      react: `<Sidebar collapsed={collapsed} activeId="dashboard" onSelect={handleNav} />`,
+      svelte: `<SolaSidebar bind:collapsed activeId="dashboard" />`,
+      html: `<sola-sidebar active-id="dashboard"></sola-sidebar>`
+    }
+  },
+
+  // 51. Signal Area / Bar / Line Chart
+  {
+    id: 'sola-chart',
+    name: 'Signal Telemetry Chart',
+    category: 'Metrics & KPIs',
+    description: 'Zero-VDOM pure SVG Area, Line, and Bar charts with interactive hover crosshairs, smooth gradient fills, and sub-millisecond signal tick handling.',
+    tagline: 'High-frequency telemetry, performance metrics, and financial charts',
+    badge: 'Zero-VDOM',
+    componentName: 'SolaChart',
+    defaultConfig: {
+      type: 'area',
+      title: 'Signal Telemetry',
+      subtitle: 'Real-time throughput metrics',
+      color: 'emerald',
+      height: 180,
+      showGrid: true,
+      showPoints: true
+    },
+    props: [
+      { name: 'type', type: 'string', defaultValue: 'area', description: 'Chart visualization type', options: ['area', 'line', 'bar'] },
+      { name: 'title', type: 'string', defaultValue: 'Chart', description: 'Heading label' },
+      { name: 'color', type: 'string', defaultValue: 'emerald', description: 'Color theme', options: ['emerald', 'sky', 'indigo', 'amber', 'rose'] },
+      { name: 'height', type: 'number', defaultValue: 200, description: 'Chart viewport height in pixels' }
+    ],
+    codeSnippets: {
+      sola: `<SolaChart type="area" color="emerald" data={metricsStream} height={200} />`,
+      react: `<Chart type="area" color="emerald" data={stream} height={200} />`,
+      svelte: `<SolaChart type="area" color="emerald" data={stream} />`,
+      html: `<sola-chart type="area" color="emerald"></sola-chart>`
+    }
+  },
+
+  // 52. Resizable Multi-Pane Splitter
+  {
+    id: 'sola-splitter',
+    name: 'Resizable Pane Splitter',
+    category: 'Data Display',
+    description: 'Multi-pane tiling layout with tactile draggable divider, horizontal/vertical split orientation, and percentage bounds.',
+    tagline: 'IDE tiling, NOC dashboards, and multi-view layouts',
+    badge: 'Layout',
+    componentName: 'SolaSplitter',
+    defaultConfig: { direction: 'horizontal', initialSplit: 50 },
+    props: [
+      { name: 'direction', type: 'string', defaultValue: 'horizontal', description: 'Split direction', options: ['horizontal', 'vertical'] },
+      { name: 'initialSplit', type: 'number', defaultValue: 50, description: 'Starting percentage for first pane' }
+    ],
+    codeSnippets: {
+      sola: `<SolaSplitter direction="horizontal" initialSplit={50} />`,
+      react: `<Splitter direction="horizontal" initialSplit={50} />`,
+      svelte: `<SolaSplitter direction="horizontal" initialSplit={50} />`,
+      html: `<sola-splitter direction="horizontal"></sola-splitter>`
+    }
+  },
+
+  // 53. Context Menu
+  {
+    id: 'sola-context-menu',
+    name: 'Right-Click Context Menu',
+    category: 'Overlays & Dialogs',
+    description: 'Custom desktop-grade right-click menu with keyboard shortcut indicators, group dividers, and destructive action styling.',
+    tagline: 'Canvas actions, topology node menus, and context triggers',
+    badge: 'Foundation',
+    componentName: 'SolaContextMenu',
+    defaultConfig: {},
+    props: [
+      { name: 'items', type: 'Array<ContextMenuItem>', defaultValue: [], description: 'Menu items with label, shortcut, action, variant' }
+    ],
+    codeSnippets: {
+      sola: `<SolaContextMenu items={menuItems} />`,
+      react: `<ContextMenu items={menuItems} />`,
+      svelte: `<SolaContextMenu items={menuItems} />`,
+      html: `<sola-context-menu></sola-context-menu>`
+    }
+  },
+
+  // 54. File Upload Dropzone
+  {
+    id: 'sola-file-upload',
+    name: 'File Upload Dropzone',
+    category: 'Forms & Inputs',
+    description: 'Drag-and-drop file upload zone with file type filter, size badges, progress indicators, and individual file removal.',
+    tagline: 'File attachments, dataset imports, and schema upload',
+    badge: 'Foundation',
+    componentName: 'SolaFileUpload',
+    defaultConfig: { accept: '.json, .csv, .ts, .svg', maxSizeMb: 10 },
+    props: [
+      { name: 'accept', type: 'string', defaultValue: '*', description: 'Accepted file extensions' },
+      { name: 'maxSizeMb', type: 'number', defaultValue: 10, description: 'Maximum file size in megabytes' }
+    ],
+    codeSnippets: {
+      sola: `<SolaFileUpload accept=".json, .csv" maxSizeMb={10} onupload={handleUpload} />`,
+      react: `<FileUpload accept=".json,.csv" onUpload={handleUpload} />`,
+      svelte: `<SolaFileUpload accept=".json, .csv" onupload={handleUpload} />`,
+      html: `<sola-file-upload accept=".json, .csv"></sola-file-upload>`
+    }
+  },
+
+  // 55. Keyboard Shortcut Badge
+  {
+    id: 'sola-kbd',
+    name: 'Keyboard Shortcut (Kbd)',
+    category: 'Data Display',
+    description: 'Tactile keyboard key cap indicator with optical bottom shadow, border bevel, and multi-key chord combinations.',
+    tagline: 'Command shortcuts, hotkeys, and keyboard cues',
+    badge: 'Foundation',
+    componentName: 'SolaKbd',
+    defaultConfig: { keys: ['⌘', 'K'], size: 'md' },
+    props: [
+      { name: 'keys', type: 'Array<string>', defaultValue: ['⌘', 'K'], description: 'Key labels or symbols in the chord' },
+      { name: 'size', type: 'string', defaultValue: 'md', description: 'Badge size', options: ['sm', 'md', 'lg'] }
+    ],
+    codeSnippets: {
+      sola: `<SolaKbd keys={["⌘", "K"]} size="md" />`,
+      react: `<Kbd keys={["⌘", "K"]} size="md" />`,
+      svelte: `<SolaKbd keys={['⌘', 'K']} size="md" />`,
+      html: `<sola-kbd keys='["⌘","K"]'></sola-kbd>`
+    }
+  },
+
+  // 56. Hover Card Preview
+  {
+    id: 'sola-hover-card',
+    name: 'Hover Card Preview',
+    category: 'Overlays & Dialogs',
+    description: 'Rich preview popover triggered on link or badge hover with grace period delay, avatar badge, and metadata cards.',
+    tagline: 'User previews, link summaries, and telemetry inspectors',
+    badge: 'Foundation',
+    componentName: 'SolaHoverCard',
+    defaultConfig: {
+      title: 'Sola Architecture',
+      description: 'Zero-VDOM, direct reactive graph bindings with sub-millisecond patch execution.',
+      handle: '@sola-engine',
+      avatarText: 'SO'
+    },
+    props: [
+      { name: 'title', type: 'string', defaultValue: '', description: 'Card title' },
+      { name: 'description', type: 'string', defaultValue: '', description: 'Card description' },
+      { name: 'handle', type: 'string', defaultValue: '', description: 'Interactive trigger text' }
+    ],
+    codeSnippets: {
+      sola: `<SolaHoverCard handle="@sola-engine" title="Sola Architecture" description="Zero-VDOM signals" />`,
+      react: `<HoverCard handle="@sola-engine" title="Sola" description="Zero-VDOM" />`,
+      svelte: `<SolaHoverCard handle="@sola-engine" title="Sola" />`,
+      html: `<sola-hover-card handle="@sola-engine"></sola-hover-card>`
+    }
   }
 ];
+
