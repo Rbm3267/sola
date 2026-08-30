@@ -90,6 +90,10 @@
     }
   };
 
+  import { onMount } from 'svelte';
+  import { page } from '$app/state';
+  import { COMMUNITY_TEMPLATES } from '$lib/data/communityTemplates';
+
   let cards = $state<StudioCard[]>([...samplePresets.general.cards]);
   let selectedPresetKey = $state('general');
 
@@ -101,8 +105,21 @@
     if (samplePresets[key]) {
       cards = JSON.parse(JSON.stringify(samplePresets[key].cards));
       activeCardId = null;
+    } else {
+      const communityTemplate = COMMUNITY_TEMPLATES.find(t => t.id === key);
+      if (communityTemplate) {
+        cards = JSON.parse(JSON.stringify(communityTemplate.cards));
+        activeCardId = null;
+      }
     }
   }
+
+  onMount(() => {
+    const presetParam = page.url.searchParams.get('preset') || page.url.searchParams.get('template');
+    if (presetParam) {
+      loadSample(presetParam);
+    }
+  });
 
   function clearCanvas() {
     cards = [];
