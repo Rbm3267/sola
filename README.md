@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="brand/logo/sola-logo-transparent.png" alt="Sola Logo" width="120" height="120" />
+  <img src="brand/logo/sola-logo-transparent.png" alt="Sola AIR Logo" width="120" height="120" />
 </p>
 
-<h1 align="center">Sola</h1>
+<h1 align="center">Sola AIR</h1>
 
 <p align="center">
-  <b>The Ambient Intent Framework</b><br>
+  <b>Ambient · Intent · Runtime</b><br>
   Compile <code>.sola</code> components into zero-dependency vanilla DOM with native <code>$intent</code> signals that resolve AI state at the framework level.
 </p>
 
@@ -14,15 +14,26 @@
   <a href="https://sola-air.vercel.app"><b>sola-air.vercel.app →</b></a>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/sola-air"><img src="https://img.shields.io/npm/v/sola-air?label=sola-air&color=10b981&style=flat-square" alt="npm sola-air" /></a>
+  <a href="https://www.npmjs.com/package/@sola-air-ui/core"><img src="https://img.shields.io/npm/v/@sola-air-ui/core?label=%40sola-air-ui%2Fcore&color=10b981&style=flat-square" alt="npm @sola-air-ui/core" /></a>
+  <a href="https://www.npmjs.com/package/@sola-air-ui/compiler"><img src="https://img.shields.io/npm/v/@sola-air-ui/compiler?label=%40sola-air-ui%2Fcompiler&color=10b981&style=flat-square" alt="npm @sola-air-ui/compiler" /></a>
+  <a href="https://github.com/rbm3267/sola/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License" /></a>
+</p>
+
 ```bash
-npm create sola@latest
+# Install everything at once
+npm install sola-air
+
+# Or install individual packages
+npm install @sola-air-ui/core @sola-air-ui/compiler @sola-air-ui/vite-plugin-sola
 ```
 
 ---
 
-## What is Sola?
+## What is Sola AIR?
 
-Sola is a compiler-first JavaScript framework where AI isn't bolted on — it's a first-class reactive primitive. Write `.sola` files with familiar syntax, and the custom AST compiler outputs hyper-optimized vanilla DOM instructions. No virtual DOM. No heavy runtime framework. Just raw performance.
+Sola AIR is a compiler-first JavaScript framework where AI isn't bolted on — it's a first-class reactive primitive. Write `.sola` files with familiar syntax, and the custom AST compiler outputs hyper-optimized vanilla DOM instructions. No virtual DOM. No heavy runtime framework. Just raw performance.
 
 ```html
 <script>
@@ -55,9 +66,9 @@ The compiler transforms this into a self-contained ES module with:
 
 ---
 
-## Why Sola?
+## Why Sola AIR?
 
-| Feature | Sola | React | Svelte | Vue |
+| Feature | Sola AIR | React | Svelte | Vue |
 |---|---|---|---|---|
 | **Bundle size** (hello world) | **~3.2 KB** | ~45 KB | ~4 KB | ~33 KB |
 | **Virtual DOM Overhead** | **None (Direct DOM)** | Yes | No | Yes |
@@ -78,38 +89,56 @@ The compiler transforms this into a self-contained ES module with:
 
 ---
 
+## Packages
+
+| Package | npm | Description |
+|---|---|---|
+| `sola-air` | [![npm](https://img.shields.io/npm/v/sola-air)](https://www.npmjs.com/package/sola-air) | Meta-package — install everything at once |
+| `@sola-air-ui/core` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/core)](https://www.npmjs.com/package/@sola-air-ui/core) | Reactive runtime engine (signals, effects, $intent, $data) |
+| `@sola-air-ui/compiler` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/compiler)](https://www.npmjs.com/package/@sola-air-ui/compiler) | Custom Acorn AST compiler (.sola → JS + CSS) |
+| `@sola-air-ui/vite-plugin-sola` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/vite-plugin-sola)](https://www.npmjs.com/package/@sola-air-ui/vite-plugin-sola) | Vite plugin for .sola single-file components |
+| `@sola-air-ui/ui` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/ui)](https://www.npmjs.com/package/@sola-air-ui/ui) | Standard component library |
+| `@sola-air-ui/relay` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/relay)](https://www.npmjs.com/package/@sola-air-ui/relay) | Zero-knowledge local data proxy (PostgreSQL, MySQL) |
+| `@sola-air-ui/mcp` | [![npm](https://img.shields.io/npm/v/@sola-air-ui/mcp)](https://www.npmjs.com/package/@sola-air-ui/mcp) | MCP server for AI-driven component generation |
+
+---
+
 ## Monorepo Architecture
 
 ```
 sola/
 ├── packages/
-│   ├── compiler/    # Custom Acorn AST compiler (.sola -> JS + CSS)
-│   ├── core/        # Reactive runtime engine (signals, effects, $intent, $data)
-│   ├── ui/          # Standard component library (.sola files)
-│   └── relay/       # Zero-knowledge local data proxy (PostgreSQL, MySQL)
-├── brand/           # Official brand kit, logos, and favicons
-└── app/             # Marketing site & interactive playground
+│   ├── compiler/          # Custom Acorn AST compiler (.sola -> JS + CSS)
+│   ├── core/              # Reactive runtime engine (signals, effects, $intent, $data)
+│   ├── ui/                # Standard component library (.sola files)
+│   ├── relay/             # Zero-knowledge local data proxy (PostgreSQL, MySQL)
+│   ├── sola-mcp/          # MCP server for AI-driven component generation
+│   ├── sola-air/          # Meta-package (installs the full Sola AIR stack)
+│   ├── vite-plugin-sola/  # Vite plugin for .sola SFC compilation
+│   └── create-sola/       # Project scaffolding CLI
+├── brand/                 # Official brand kit, logos, and favicons
+└── app/                   # Marketing site & interactive playground
 ```
 
 ---
 
 ## Operational Guide (By Role)
 
-### 💻 Application Developers
+### Application Developers
 *   **Workflow**: Build frontends using `.sola` files. Use `$state` and `$derived` for local state, and `$intent` to bind AI capability.
 *   **Data Binding**: Connect components to backend databases or APIs using `$data("sheet://...")` or `$data("postgres://...")`.
 *   **Security Caret**: Never commit credentials in code; pass only resource identifiers to `$data`.
 
-### ⚙️ System Administrators
+### System Administrators
 *   **Deployment**: Deploy the Sola Relay server on-premises or close to the databases.
     ```bash
-    npm install -g @sola/relay
+    npm install -g @sola-air-ui/relay
     sola-relay --config ./relay.json
     ```
 *   **Access Provisioning**: Configure connection strings and table filters in `relay.json`.
 *   **Monitoring**: Check the relay logs for latency targets and query performance (default target is sub-1ms signal propagation).
 
-### 🔒 Security Engineers
+### Security Engineers
 *   **Credential Isolation**: Ensure that connection credentials (passwords, certificates) are set via local environment variables on the Sola Relay server. They never leave the private network.
 *   **Query Sanitation**: Define read-only schema mappings and query rate-limits in Sola Relay config to prevent injections.
 *   **Write-Back Gates**: Assign `TransactionCapability` parameters and security levels (Tiers 1 & 2) to control which mutations require confirmation overlays.
@@ -118,5 +147,4 @@ sola/
 
 ## License
 
-MIT © 2026 Sola Contributors
-
+MIT © 2026 Sola AIR Contributors
