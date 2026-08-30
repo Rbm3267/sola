@@ -130,6 +130,20 @@
     }
   }
 
+  // Color Accent Themes
+  const COLOR_OPTIONS = [
+    { id: 'emerald', name: 'Emerald', hex: '#10b981', bg: 'bg-emerald-500', text: 'text-emerald-500', textDark: 'text-emerald-600 dark:text-emerald-400', badgeBg: 'bg-emerald-50 dark:bg-emerald-500/10', badgeBorder: 'border-emerald-200/60 dark:border-emerald-500/20', accent: 'accent-emerald-500', ring: 'ring-emerald-500/20', border: 'border-emerald-500' },
+    { id: 'sky', name: 'Sky Blue', hex: '#0ea5e9', bg: 'bg-sky-500', text: 'text-sky-500', textDark: 'text-sky-600 dark:text-sky-400', badgeBg: 'bg-sky-50 dark:bg-sky-500/10', badgeBorder: 'border-sky-200/60 dark:border-sky-500/20', accent: 'accent-sky-500', ring: 'ring-sky-500/20', border: 'border-sky-500' },
+    { id: 'violet', name: 'Violet', hex: '#8b5cf6', bg: 'bg-violet-500', text: 'text-violet-500', textDark: 'text-violet-600 dark:text-violet-400', badgeBg: 'bg-violet-50 dark:bg-violet-500/10', badgeBorder: 'border-violet-200/60 dark:border-violet-500/20', accent: 'accent-violet-500', ring: 'ring-violet-500/20', border: 'border-violet-500' },
+    { id: 'amber', name: 'Amber', hex: '#f59e0b', bg: 'bg-amber-500', text: 'text-amber-500', textDark: 'text-amber-600 dark:text-amber-400', badgeBg: 'bg-amber-50 dark:bg-amber-500/10', badgeBorder: 'border-amber-200/60 dark:border-amber-500/20', accent: 'accent-amber-500', ring: 'ring-amber-500/20', border: 'border-amber-500' },
+    { id: 'rose', name: 'Rose', hex: '#f43f5e', bg: 'bg-rose-500', text: 'text-rose-500', textDark: 'text-rose-600 dark:text-rose-400', badgeBg: 'bg-rose-50 dark:bg-rose-500/10', badgeBorder: 'border-rose-200/60 dark:border-rose-500/20', accent: 'accent-rose-500', ring: 'ring-rose-500/20', border: 'border-rose-500' },
+    { id: 'indigo', name: 'Indigo', hex: '#6366f1', bg: 'bg-indigo-500', text: 'text-indigo-500', textDark: 'text-indigo-600 dark:text-indigo-400', badgeBg: 'bg-indigo-50 dark:bg-indigo-500/10', badgeBorder: 'border-indigo-200/60 dark:border-indigo-500/20', accent: 'accent-indigo-500', ring: 'ring-indigo-500/20', border: 'border-indigo-500' }
+  ];
+
+  function getColor(colorId?: string) {
+    return COLOR_OPTIONS.find(c => c.id === colorId) || COLOR_OPTIONS[0];
+  }
+
   // Undo History Stack (Max 30 snapshots)
   let undoStack = $state<StudioCard[][]>([]);
 
@@ -676,6 +690,7 @@ export default function SolaDashboard() {
         <!-- Responsive Drag-and-Drop Snap Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
           {#each cards as card (card.id)}
+            {@const c = getColor(card.accentColor)}
             <div
               draggable="true"
               role="button"
@@ -687,14 +702,14 @@ export default function SolaDashboard() {
               ondragend={onDragEnd}
               onclick={() => (activeCardId = card.id)}
               onkeydown={(e) => e.key === 'Enter' && (activeCardId = card.id)}
-              class="{card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a]/90 backdrop-blur-xl rounded-2xl border transition-all duration-150 p-5 shadow-xs relative group flex flex-col justify-between select-none cursor-pointer {activeCardId === card.id ? 'border-emerald-500 ring-2 ring-emerald-500/20 shadow-md' : 'border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:shadow-sm'} {dragOverCardId === card.id ? 'scale-[1.01] border-emerald-500 ring-2 ring-emerald-400/40 bg-emerald-50/20 dark:bg-emerald-500/5' : ''}">
+              class="{card.cols === 3 ? 'lg:col-span-3 md:col-span-2' : card.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a]/90 backdrop-blur-xl rounded-2xl border transition-all duration-150 p-5 shadow-xs relative group flex flex-col justify-between select-none cursor-pointer {activeCardId === card.id ? `${c.border} ring-2 ${c.ring} shadow-md` : 'border-slate-200/90 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:shadow-sm'} {dragOverCardId === card.id ? `scale-[1.01] ${c.border} ring-2 ${c.ring} bg-slate-50/50 dark:bg-white/5` : ''}">
               
               <!-- Card Controls Bar (Header) -->
               <div class="flex items-center justify-between gap-2 mb-3">
                 
                 <!-- Left Title & Drag Grip -->
                 <div class="flex items-center gap-2 min-w-0">
-                  <div class="cursor-grab active:cursor-grabbing text-slate-300 dark:text-slate-600 hover:text-emerald-500 p-0.5 rounded transition-colors" title="Drag to snap position">
+                  <div class="cursor-grab active:cursor-grabbing text-slate-300 dark:text-slate-600 hover:text-slate-900 dark:hover:text-white p-0.5 rounded transition-colors" title="Drag to snap position">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
                   </div>
                   <div class="min-w-0">
@@ -711,13 +726,13 @@ export default function SolaDashboard() {
                   <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-lg border border-slate-200/60 dark:border-white/10 text-[9px] font-mono font-bold">
                     <button
                       onclick={(e) => setCols(card, 1, e)}
-                      class="px-1.5 py-0.5 rounded {card.cols === 1 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1x</button>
+                      class="px-1.5 py-0.5 rounded {card.cols === 1 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1x</button>
                     <button
                       onclick={(e) => setCols(card, 2, e)}
-                      class="px-1.5 py-0.5 rounded {card.cols === 2 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">2x</button>
+                      class="px-1.5 py-0.5 rounded {card.cols === 2 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">2x</button>
                     <button
                       onclick={(e) => setCols(card, 3, e)}
-                      class="px-1.5 py-0.5 rounded {card.cols === 3 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">3x</button>
+                      class="px-1.5 py-0.5 rounded {card.cols === 3 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">3x</button>
                   </div>
 
                   <!-- Duplicate -->
@@ -744,12 +759,12 @@ export default function SolaDashboard() {
                   <div class="flex items-baseline justify-between">
                     <span class="text-3xl font-black font-mono tracking-tight text-slate-900 dark:text-white">{card.value}</span>
                     {#if card.delta}
-                      <span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-500/20">{card.delta}</span>
+                      <span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold {c.badgeBg} {c.textDark} {c.badgeBorder}">{card.delta}</span>
                     {/if}
                   </div>
                   <div class="mt-3 text-[11px] text-slate-400 flex items-center justify-between font-mono">
                     <span>Direct editable value</span>
-                    <span class="text-emerald-600 dark:text-emerald-400 font-bold">Zero-VDOM</span>
+                    <span class="{c.textDark} font-bold">Zero-VDOM</span>
                   </div>
 
                 {:else if card.type === 'progress'}
@@ -757,21 +772,21 @@ export default function SolaDashboard() {
                     <div class="relative w-16 h-16 shrink-0">
                       <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
                         <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" class="text-slate-100 dark:text-white/5"/>
-                        <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="{Number(card.value)}, 100" stroke-linecap="round" class="text-emerald-500"/>
+                        <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="{Number(card.value)}, 100" stroke-linecap="round" class="{c.text}"/>
                       </svg>
                       <span class="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold">{card.value}%</span>
                     </div>
                     <div class="space-y-1.5 flex-1">
                       <div class="flex justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
                         <span>Completion</span>
-                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">> 70%</span>
+                        <span class="{c.textDark} font-bold">> 70%</span>
                       </div>
                       <input
                         type="range"
                         min="0"
                         max="100"
                         bind:value={card.value}
-                        class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
+                        class="w-full {c.accent} cursor-pointer h-1.5 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
                     </div>
                   </div>
 
@@ -779,14 +794,14 @@ export default function SolaDashboard() {
                   <div class="space-y-3 py-2">
                     <div class="flex justify-between items-center font-mono">
                       <span class="text-2xl font-black text-slate-900 dark:text-white">{card.value}%</span>
-                      <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold">Live Signal</span>
+                      <span class="text-xs {c.textDark} font-bold">Live Signal</span>
                     </div>
                     <input
                       type="range"
                       min="0"
                       max="100"
                       bind:value={card.value}
-                      class="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
+                      class="w-full {c.accent} cursor-pointer h-2 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
                     <div class="flex justify-between text-[10px] font-mono text-slate-400">
                       <span>0% (Min)</span>
                       <span>50% (Mid)</span>
@@ -799,7 +814,7 @@ export default function SolaDashboard() {
                     <div class="relative w-24 h-24 flex items-center justify-center">
                       <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="6" class="text-slate-100 dark:text-white/5" />
-                        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="{(Number(card.value) / 100) * 251.2} 251.2" class="text-emerald-500 transition-all duration-75" />
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="{(Number(card.value) / 100) * 251.2} 251.2" class="{c.text} transition-all duration-75" />
                       </svg>
                       <div class="absolute inset-0 flex flex-col items-center justify-center font-mono">
                         <span class="text-lg font-black text-slate-900 dark:text-white">{card.value}</span>
@@ -811,7 +826,7 @@ export default function SolaDashboard() {
                       min="0"
                       max="100"
                       bind:value={card.value}
-                      class="w-32 accent-emerald-500 cursor-pointer h-1.5 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
+                      class="w-32 {c.accent} cursor-pointer h-1.5 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
                   </div>
 
                 {:else if card.type === 'waterfall'}
@@ -821,9 +836,9 @@ export default function SolaDashboard() {
                         <div class="flex items-center gap-2 text-xs font-mono">
                           <span class="w-24 truncate text-slate-500 dark:text-slate-400">{bar.name}</span>
                           <div class="flex-1 h-3 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden flex">
-                            <div class="bg-emerald-500 rounded-full h-full" style="width: {Math.min(100, Math.max(10, bar.val))}%"></div>
+                            <div class="{c.bg} rounded-full h-full" style="width: {Math.min(100, Math.max(10, bar.val))}%"></div>
                           </div>
-                          <span class="w-12 text-right font-bold {bar.val >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}">{bar.d}</span>
+                          <span class="w-12 text-right font-bold {bar.val >= 0 ? c.textDark : 'text-rose-500'}">{bar.d}</span>
                         </div>
                       {/each}
                     {/if}
@@ -833,11 +848,11 @@ export default function SolaDashboard() {
                   <div class="space-y-2 py-1">
                     <div class="flex items-baseline justify-between font-mono">
                       <span class="text-2xl font-black text-slate-900 dark:text-white">{card.value}</span>
-                      <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10">1,000Hz Direct</span>
+                      <span class="text-[10px] font-bold {c.textDark} px-2 py-0.5 rounded {c.badgeBg}">1,000Hz Direct</span>
                     </div>
                     <div class="h-16 flex items-end gap-1.5 pt-2">
                       {#each [40, 25, 60, 45, 80, 55, 90, 70, 85, 65, 95, 75] as height, idx}
-                        <div class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/50 rounded-t transition-all" style="height: {height}%;"></div>
+                        <div class="flex-1 {c.barBg} rounded-t transition-all" style="height: {height}%;"></div>
                       {/each}
                     </div>
                   </div>
@@ -846,18 +861,18 @@ export default function SolaDashboard() {
                   <div class="space-y-1.5 py-1 text-xs">
                     <div class="p-2 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5 flex items-center justify-between">
                       <span class="font-semibold text-slate-800 dark:text-slate-200">Cluster Sync</span>
-                      <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">12ms ago</span>
+                      <span class="text-[10px] font-mono {c.textDark}">12ms ago</span>
                     </div>
                     <div class="p-2 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5 flex items-center justify-between">
                       <span class="font-semibold text-slate-800 dark:text-slate-200">Edge Ingress P99</span>
-                      <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">Nominal</span>
+                      <span class="text-[10px] font-mono {c.textDark}">Nominal</span>
                     </div>
                   </div>
 
                 {:else}
                   <div class="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-white/5">
                     <div class="flex items-center gap-2">
-                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span class="w-2 h-2 rounded-full {c.bg}"></span>
                       <span class="font-bold text-xs text-slate-900 dark:text-white">{card.title}</span>
                     </div>
                     <p class="text-[10px] text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
@@ -921,19 +936,42 @@ export default function SolaDashboard() {
               class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none font-mono" />
           </div>
 
+          <!-- Color Accent -->
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Color Accent</label>
+            <div class="grid grid-cols-6 gap-1.5 p-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
+              {#each COLOR_OPTIONS as color}
+                <button
+                  onclick={() => {
+                    if (activeCard) {
+                      pushHistory();
+                      activeCard.accentColor = color.id;
+                      cards = [...cards];
+                    }
+                  }}
+                  class="h-7 rounded-lg {color.bg} transition-all flex items-center justify-center cursor-pointer {activeCard.accentColor === color.id ? 'ring-2 ring-slate-900 dark:ring-white scale-105 shadow-xs' : 'opacity-70 hover:opacity-100 hover:scale-105'}"
+                  title={color.name}>
+                  {#if activeCard.accentColor === color.id}
+                    <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  {/if}
+                </button>
+              {/each}
+            </div>
+          </div>
+
           <!-- Column Span -->
           <div>
             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Column Width</label>
             <div class="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-white/5 p-1 rounded-xl border border-slate-200/60 dark:border-white/10 font-mono text-xs">
               <button
                 onclick={() => activeCard && (activeCard.cols = 1)}
-                class="py-1.5 rounded-lg transition-all {activeCard.cols === 1 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1 Col</button>
+                class="py-1.5 rounded-lg transition-all {activeCard.cols === 1 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1 Col</button>
               <button
                 onclick={() => activeCard && (activeCard.cols = 2)}
-                class="py-1.5 rounded-lg transition-all {activeCard.cols === 2 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">2 Col</button>
+                class="py-1.5 rounded-lg transition-all {activeCard.cols === 2 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">2 Col</button>
               <button
                 onclick={() => activeCard && (activeCard.cols = 3)}
-                class="py-1.5 rounded-lg transition-all {activeCard.cols === 3 ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">3 Col</button>
+                class="py-1.5 rounded-lg transition-all {activeCard.cols === 3 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">3 Col</button>
             </div>
           </div>
 
