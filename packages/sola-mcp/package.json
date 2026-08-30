@@ -1,0 +1,21 @@
+{
+  "name": "@sola/mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MCP server for the Sola zero-VDOM intent runtime",
+  "bin": {
+    "sola-mcp": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@sola/compiler": "*",
+    "zod": "^3.23.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
