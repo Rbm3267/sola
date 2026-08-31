@@ -42,9 +42,11 @@ function extractScriptAndStyle(source) {
   let style = '';
   let template = source;
 
-  const scriptMatch = template.match(/<script(?:\s+lang=["'](?:ts|js)["'])?>([\s\S]*?)<\/script>/);
+  let isTypeScript = false;
+  const scriptMatch = template.match(/<script(?:\s+lang=["'](ts|js)["'])?>([\s\S]*?)<\/script>/);
   if (scriptMatch) {
-    script = scriptMatch[1];
+    isTypeScript = scriptMatch[1] === 'ts';
+    script = scriptMatch[2];
     template = template.replace(scriptMatch[0], '');
   }
 
@@ -54,7 +56,7 @@ function extractScriptAndStyle(source) {
     template = template.replace(styleMatch[0], '');
   }
 
-  return { script, style, template };
+  return { script, style, template, isTypeScript };
 }
 
 // Returns the index of the closing } that matches the { at openPos,
@@ -104,7 +106,7 @@ function preprocessTemplate(template, dynAttrs) {
           if (closeIdx !== -1) {
             const expr = template.slice(i + 1, closeIdx).trim();
             if (!expr.startsWith('#') && !expr.startsWith('/') && !expr.startsWith(':')) {
-              if (/^on:[\w]+$/.test(attrName) || /^bind:[\w]+$/.test(attrName)) {
+              if (/^on:?[\w]+$/.test(attrName) || /^bind:[\w]+$/.test(attrName)) {
                 result += `${attrName}="${expr}"`;
               } else {
                 dynAttrs.push(expr);
@@ -193,7 +195,7 @@ function stripTypeScript(code) {
 
 export function compile(source, options = {}) {
   const target = options.target || 'esm'; // 'esm' | 'iife'
-  const { script: scriptContent, style: styleContent, template: rawTemplateSource } = extractScriptAndStyle(source);
+  const { script: scriptContent, style: styleContent, template: rawTemplateSource, isTypeScript } = extractScriptAndStyle(source);
   const scopeHash = hashString(styleContent || rawTemplateSource);
   const hasStyles = styleContent.trim().length > 0;
   const scopedCss = hasStyles ? scopeStyles(styleContent, scopeHash) : '';
@@ -238,14 +240,18 @@ export function compile(source, options = {}) {
         templateNodes.pop();
       }
     }
-  }, { recognizeSelfClosing: true });
+  }, { recognizeSelfClosing: true, lowerCaseTags: false });
 
   parser.write(rawTemplate.trim() || '<div></div>');
   parser.end();
 
   // Parse JS AST with Acorn
-  // Strip TS first — AST positions and all slice() calls operate on the stripped source
-  const strippedScript = scriptContent.trim() ? stripTypeScript(scriptContent) : scriptContent;
+  // Strip TS first — AST positions and all slice() calls operate on the stripped source.
+  // Only run on <script lang="ts"> — the strip regex can't reliably distinguish a type
+  // annotation's `:` from a ternary's `: falsyBranch` or an object literal's `key: value`,
+  // so applying it to plain JS risks corrupting valid code. Scripts that don't opt into TS
+  // are left untouched.
+  const strippedScript = scriptContent.trim() && isTypeScript ? stripTypeScript(scriptContent) : scriptContent;
   let jsOutput = strippedScript;
   const stateVars = new Set();
   const exportedProps = [];
@@ -439,11 +445,34 @@ export function compile(source, options = {}) {
       domCode += `  const ${cid}_target = document.createElement('div');\n`;
       domCode += `  ${cid}_target.className = 'sola-component-root';\n`;
       domCode += `  ${parentVar}.appendChild(${cid}_target);\n`;
-      const propsObj = {};
+
+      // Dynamically-bound props (rows={items}) arrive here as __soladyn_N__ placeholders —
+      // resolve them back to the real expression from dynAttrs and pass it as a raw
+      // (unquoted) property so the child receives live data, not the placeholder text.
+      const propEntries = [];
       for (const [key, val] of Object.entries(node.attribs || {})) {
-        propsObj[key] = val;
+        const dynMatch = /^__soladyn_(\d+)__$/.exec(val);
+        const propValue = dynMatch ? `(${dynAttrs[parseInt(dynMatch[1], 10)]})` : JSON.stringify(val);
+        propEntries.push(`${JSON.stringify(key)}: ${propValue}`);
       }
-      domCode += `  ${node.name}(${cid}_target, ${JSON.stringify(propsObj)});\n`;
+
+      // Slot content: compile the tag's children into a function the child component can
+      // call to project them wherever it renders a <slot> in its own template.
+      if (node.children && node.children.length > 0) {
+        const slotVar = `${cid}_slot`;
+        domCode += `  const ${slotVar} = (__slot_target) => {\n`;
+        node.children.forEach(child => emitNode(child, '__slot_target'));
+        domCode += `  };\n`;
+        propEntries.push(`children: ${slotVar}`);
+      }
+
+      domCode += `  ${node.name}(${cid}_target, { ${propEntries.join(', ')} });\n`;
+      return;
+    }
+
+    // Slot placeholder: projects the children passed by a parent component, if any.
+    if (node.name === 'slot') {
+      domCode += `  if (typeof props.children === 'function') { props.children(${parentVar}); }\n`;
       return;
     }
 

@@ -12,6 +12,9 @@
     "build": "node build.js",
     "prepare": "node build.js"
   },
+  "dependencies": {
+    "esbuild": "^0.21.5"
+  },
   "keywords": [
     "sola",
     "reactivity",
