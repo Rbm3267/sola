@@ -12,6 +12,10 @@
     "build": "node build.js",
     "prepare": "node build.js"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "dependencies": {
     "esbuild": "^0.21.5"
   },
