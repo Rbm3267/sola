@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { compile } from './index.js';
 
+const { version } = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+
 const args = process.argv.slice(2);
 
 if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
@@ -30,7 +32,7 @@ if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
 }
 
 if (args.includes('-v') || args.includes('--version')) {
-  console.log('Sola Compiler v1.0.3');
+  console.log(`Sola Compiler v${version}`);
   process.exit(0);
 }
 

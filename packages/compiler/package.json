@@ -1,11 +1,11 @@
 {
   "name": "@sola-air-ui/compiler",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Compiler for Sola single-file components (.sola) — transforms template + script + style to ES modules",
   "type": "module",
   "main": "./src/index.js",
   "bin": {
-    "sola": "./src/cli.js"
+    "sola": "src/cli.js"
   },
   "exports": {
     ".": "./src/index.js"
@@ -25,7 +25,7 @@
   "homepage": "https://sola-air.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rbm3267/sola-air"
+    "url": "git+https://github.com/rbm3267/sola-air.git"
   },
   "dependencies": {
     "acorn": "^8.10.0",

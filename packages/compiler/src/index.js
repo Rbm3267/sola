@@ -1,5 +1,10 @@
 import * as acorn from 'acorn';
 import * as htmlparser2 from 'htmlparser2';
+import { readFileSync } from 'node:fs';
+
+const { version: COMPILER_VERSION } = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8')
+);
 
 const VOID_ELEMENTS = new Set([
   'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
@@ -617,7 +622,7 @@ export function compile(source, options = {}) {
   // Assemble final output module
   const CORE_EXPORTS = 'createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys';
   let output = '';
-  output += `// Compiled by @sola-air-ui/compiler v1.0.3\n`;
+  output += `// Compiled by @sola-air-ui/compiler v${COMPILER_VERSION}\n`;
 
   if (target === 'iife') {
     // ServiceNow / no-bundler mode: pull from window.SolaCore global
