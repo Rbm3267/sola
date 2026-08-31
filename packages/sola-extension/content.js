@@ -4,359 +4,798 @@
   if (window.__SOLA_INITIALIZED__) return;
   window.__SOLA_INITIALIZED__ = true;
 
-  let currentPreview = null;
   let hostDiv = null;
   let isTargetMode = false;
-  let targetElement = null;
   let targetOverlay = null;
+  let elementHighlight = null;
+  let currentPreview = null;
 
-  // Component preview definitions — each renders a self-contained HTML preview
-  const COMPONENTS = {
-    datacard: {
-      title: 'DataCard',
-      code: `import { DataCard } from '@sola/ui';`,
-      render: () => `
-        <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:280px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);">
-          <div style="font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Monthly Revenue</div>
-          <div style="font-size:28px;font-weight:800;color:#fff;margin:8px 0 4px;font-family:monospace;">$84,230</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:11px;">
-            <span style="color:#10b981;font-weight:700;">+12.4%</span>
-            <span style="color:#64748b;">vs last month</span>
-          </div>
-          <div style="margin-top:12px;height:32px;display:flex;align-items:end;gap:2px;">
-            ${[30,45,35,55,40,65,50,70,60,80,75,90].map(h => `<div style="flex:1;background:rgba(16,185,129,0.35);height:${h}%;border-radius:2px;"></div>`).join('')}
-          </div>
-        </div>`
-    },
-    gauge: {
-      title: 'GaugeCard',
-      code: `import { GaugeCard } from '@sola/ui';`,
-      render: () => `
-        <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:220px;text-align:center;box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);">
-          <svg width="120" height="70" viewBox="0 0 120 70">
-            <path d="M 10 65 A 50 50 0 0 1 110 65" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8" stroke-linecap="round"/>
-            <path d="M 10 65 A 50 50 0 0 1 92 25" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
-          </svg>
-          <div style="font-size:24px;font-weight:800;color:#fff;margin-top:4px;font-family:monospace;">78%</div>
-          <div style="font-size:11px;color:#94a3b8;margin-top:2px;">System Capacity</div>
-        </div>`
-    },
-    waterfall: {
-      title: 'FlowWaterfall',
-      code: `import { FlowWaterfall } from '@sola/ui';`,
-      render: () => `
-        <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:300px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);">
-          <div style="font-size:11px;color:#94a3b8;font-weight:600;margin-bottom:12px;">REVENUE SETTLEMENT</div>
-          <div style="display:flex;align-items:end;gap:4px;height:100px;">
-            <div style="flex:1;text-align:center;">
-              <div style="background:#0ea5e9;height:80px;border-radius:4px;"></div>
-              <div style="font-size:9px;color:#64748b;margin-top:4px;">Gross</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="background:#10b981;height:30px;border-radius:4px;margin-top:50px;"></div>
-              <div style="font-size:9px;color:#64748b;margin-top:4px;">Upsell</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="background:#f43f5e;height:15px;border-radius:4px;margin-top:65px;"></div>
-              <div style="font-size:9px;color:#64748b;margin-top:4px;">Fee</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="background:#8b5cf6;height:95px;border-radius:4px;"></div>
-              <div style="font-size:9px;color:#64748b;margin-top:4px;">Net</div>
-            </div>
-          </div>
-        </div>`
-    },
-    dial: {
-      title: 'TactileDial',
-      code: `import { TactileDialCard } from '@sola/ui';`,
-      render: () => `
-        <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:220px;text-align:center;box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);">
-          <div style="font-size:11px;color:#94a3b8;font-weight:600;margin-bottom:10px;">RATE THROTTLE</div>
-          <svg width="100" height="100" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
-            <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="6" stroke-dasharray="188 63" stroke-linecap="round" transform="rotate(-90 50 50)"/>
-            <circle cx="50" cy="50" r="4" fill="#10b981"/>
-            <line x1="50" y1="50" x2="50" y2="18" stroke="#10b981" stroke-width="2" stroke-linecap="round" transform="rotate(110 50 50)"/>
-          </svg>
-          <div style="font-size:20px;font-weight:800;color:#fff;margin-top:6px;font-family:monospace;">74%</div>
-        </div>`
+  // Walk shadow roots recursively
+  function walkShadows(root, depth, collect) {
+    if (depth > 8) return;
+    const els = root.querySelectorAll('*');
+    for (const el of els) {
+      collect(el);
+      if (el.shadowRoot) walkShadows(el.shadowRoot, depth + 1, collect);
     }
-  };
+  }
 
-  function createHost() {
-    if (hostDiv) return;
+  // Scrape a specific element's subtree for label+value pairs
+  function scrapeElement(root) {
+    const metrics = [];
+    const seenLabels = new Set();
+    const seenValues = new Set();
+
+    function addMetric(label, value, variant) {
+      label = label.replace(/[:\-]+$/, '').trim();
+      value = value.trim();
+      if (!label || !value || label.length < 2 || label.length > 50) return;
+      if (seenLabels.has(label.toLowerCase()) || seenValues.has(value)) return;
+      seenLabels.add(label.toLowerCase());
+      seenValues.add(value);
+      metrics.push({ label, value, variant: variant || 'neutral' });
+    }
+
+    // Strategy 1: find heading + big-number sibling pairs within the element
+    // Covers plain HTML structures like ServiceNow task status cards
+    const allText = [];
+    walkShadows(root, 0, (el) => {
+      const tag = el.tagName || '';
+      const text = (el.shadowRoot?.textContent || el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!text || text.length > 200 || el.children.length > 4) return;
+
+      // Pure number leaf node — pair with nearest label sibling
+      if (/^\d[\d,\.]*[KMBk%]?$/.test(text) && el.children.length === 0) {
+        // Look for a label in siblings or parent's first child
+        const parent = el.parentElement;
+        if (parent) {
+          const siblings = [...parent.children].filter(c => c !== el);
+          const labelEl = siblings.find(s => s.textContent && !/^\d/.test(s.textContent.trim()) && s.textContent.trim().length > 1);
+          if (labelEl) {
+            const label = labelEl.textContent.trim();
+            const numVal = parseFloat(text.replace(/[,KMBk%]/g, ''));
+            const variant = numVal > 10000 ? 'warn' : numVal > 0 ? 'ok' : 'neutral';
+            addMetric(label, text, variant);
+            return;
+          }
+        }
+        allText.push({ type: 'value', text });
+      } else if (el.children.length === 0 && text.length > 1 && !/^\d/.test(text) && !/^\s*$/.test(text)) {
+        allText.push({ type: 'label', text });
+      }
+    });
+
+    // Strategy 2: consecutive label/value pairs from the collected text list
+    for (let i = 0; i < allText.length - 1; i++) {
+      if (allText[i].type === 'label' && allText[i + 1].type === 'value') {
+        const numVal = parseFloat(allText[i + 1].text.replace(/[,KMBk%]/g, ''));
+        const variant = numVal > 10000 ? 'warn' : numVal > 0 ? 'ok' : 'neutral';
+        addMetric(allText[i].text, allText[i + 1].text, variant);
+      }
+    }
+
+    // Strategy 3: NOW-CARD-HEADER style "Label123 description"
+    walkShadows(root, 0, (el) => {
+      if (!(el.tagName || '').includes('CARD-HEADER')) return;
+      const text = (el.shadowRoot?.textContent || el.textContent || '').replace(/\s+/g, ' ').trim();
+      const m = text.match(/^([A-Za-z][A-Za-z\s\-\/]+?)\s*([\d,]+(?:\.\d+)?[KMBk]?)\s/);
+      if (!m) return;
+      const numVal = parseFloat(m[2].replace(/[,KMBk]/g, ''));
+      addMetric(m[1], m[2], numVal > 10000 ? 'warn' : 'ok');
+    });
+
+    // Strategy 4: NOW-LABEL-VALUE-STACKED style "LabelValue" concatenated
+    walkShadows(root, 0, (el) => {
+      if (!(el.tagName || '').includes('LABEL') && !(el.tagName || '').includes('VALUE')) return;
+      const text = (el.shadowRoot?.textContent || el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (text.length > 80) return;
+      const m = text.match(/^([A-Za-z][A-Za-z\s]+?)\s*([\d,]+(?:\.\d+)?[KMBk%]?)$/);
+      if (!m) return;
+      const numVal = parseFloat(m[2].replace(/[,KMBk%]/g, ''));
+      addMetric(m[1], m[2], numVal > 10000 ? 'warn' : numVal > 0 ? 'ok' : 'neutral');
+    });
+
+    return metrics.slice(0, 8);
+  }
+
+  // Scrape the full page (used when no target element selected)
+  function scrapePageData() {
+    return scrapeElement(document);
+  }
+
+  function getPageSummary() {
+    return {
+      title: document.title.replace(/\s*[|\-–]\s*.+$/, '').trim() || 'Page Overview',
+      host: location.hostname.replace('www.', '')
+    };
+  }
+
+  function generateCode(componentId, metrics, contextLabel) {
+    const page = getPageSummary();
+    const title = contextLabel || page.title;
+    const imp = `import { ${COMPONENTS[componentId]?.name || 'DataCard'} } from '@sola/ui';`;
+
+    if (metrics.length === 0) return imp;
+
+    if (metrics.length === 1) {
+      const m = metrics[0];
+      const val = /^[\d,]+$/.test(m.value) ? m.value.replace(/,/g, '') : `"${m.value}"`;
+      return [
+        imp,
+        '',
+        `<DataCard`,
+        `  title="${m.label}"`,
+        `  value={${val}}`,
+        `  variant="${m.variant}"`,
+        `/>`
+      ].join('\n');
+    }
+
+    const metricsLines = metrics.map(m => {
+      const val = /^[\d,]+$/.test(m.value) ? m.value.replace(/,/g, '') : `"${m.value}"`;
+      return `    { label: "${m.label}", value: ${val}, variant: "${m.variant}" },`;
+    }).join('\n');
+
+    return [
+      imp,
+      '',
+      `<DataCard`,
+      `  title="${title}"`,
+      `  metrics={[`,
+      metricsLines,
+      `  ]}`,
+      `/>`
+    ].join('\n');
+  }
+
+  function buildCardHTML(metrics, contextLabel) {
+    const page = getPageSummary();
+    const heading = contextLabel || page.title;
+
+    if (metrics.length === 0) {
+      return `
+        <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:290px;">
+          <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">${page.host}</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">${heading}</div>
+          <div style="font-size:11px;color:#475569;">No structured metrics detected in this element.</div>
+        </div>`;
+    }
+
+    if (metrics.length === 1) {
+      const m = metrics[0];
+      const color = m.variant === 'warn' ? '#f59e0b' : m.variant === 'ok' ? '#10b981' : '#94a3b8';
+      return `
+        <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:200px;text-align:center;">
+          <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">${m.label}</div>
+          <div style="font-size:40px;font-weight:800;font-family:monospace;color:${color};line-height:1;">${m.value}</div>
+          <div style="font-size:10px;color:#475569;margin-top:6px;">${page.host}</div>
+        </div>`;
+    }
+
+    const rows = metrics.map(m => {
+      const color = m.variant === 'warn' ? '#f59e0b' : m.variant === 'ok' ? '#10b981' : '#94a3b8';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-top:1px solid rgba(255,255,255,0.05);">
+        <span style="font-size:11px;color:#94a3b8;max-width:185px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.label}</span>
+        <span style="font-size:12px;font-weight:700;font-family:monospace;color:${color};">${m.value}</span>
+      </div>`;
+    }).join('');
+
+    return `
+      <div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:18px;width:290px;">
+        <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">${page.host}</div>
+        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:10px;">${heading}</div>
+        ${rows}
+      </div>`;
+  }
+
+  function createHost(x, y) {
+    if (hostDiv) { hostDiv.remove(); hostDiv = null; }
     hostDiv = document.createElement('div');
     hostDiv.id = 'sola-preview-root';
     Object.assign(hostDiv.style, {
       position: 'fixed',
-      bottom: '24px',
-      right: '24px',
       zIndex: '2147483647',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      left: x != null ? `${x}px` : 'auto',
+      top: y != null ? `${y}px` : 'auto',
+      right: x != null ? 'auto' : '24px',
+      bottom: x != null ? 'auto' : '24px',
     });
     document.documentElement.appendChild(hostDiv);
   }
 
-  function showComponent(componentId) {
-    createHost();
+  // Position card next to a target element (right side, then below if no room)
+  function positionNextTo(targetRect) {
+    const CARD_W = 310;
+    const CARD_H = 260;
+    const PAD = 16;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-    const comp = COMPONENTS[componentId] || COMPONENTS.datacard;
+    let x, y;
 
-    removePreview();
+    if (targetRect.right + PAD + CARD_W < vw) {
+      // Right side fits
+      x = targetRect.right + PAD;
+      y = Math.max(PAD, Math.min(targetRect.top, vh - CARD_H - PAD));
+    } else if (targetRect.left - PAD - CARD_W > 0) {
+      // Left side fits
+      x = targetRect.left - PAD - CARD_W;
+      y = Math.max(PAD, Math.min(targetRect.top, vh - CARD_H - PAD));
+    } else {
+      // Below
+      x = Math.max(PAD, Math.min(targetRect.left, vw - CARD_W - PAD));
+      y = Math.min(targetRect.bottom + PAD, vh - CARD_H - PAD);
+    }
+
+    return { x, y };
+  }
+
+  function highlightTarget(el) {
+    clearHighlight();
+    elementHighlight = document.createElement('div');
+    const rect = el.getBoundingClientRect();
+    Object.assign(elementHighlight.style, {
+      position: 'fixed',
+      left: `${rect.left - 3}px`,
+      top: `${rect.top - 3}px`,
+      width: `${rect.width + 6}px`,
+      height: `${rect.height + 6}px`,
+      border: '2px solid #10b981',
+      borderRadius: '10px',
+      pointerEvents: 'none',
+      zIndex: '2147483646',
+      boxShadow: '0 0 0 4px rgba(16,185,129,0.12)',
+      transition: 'all 0.15s ease-out'
+    });
+    document.documentElement.appendChild(elementHighlight);
+  }
+
+  function clearHighlight() {
+    if (elementHighlight) { elementHighlight.remove(); elementHighlight = null; }
+  }
+
+  const DATA_COMPONENTS = new Set(['datacard','gauge','waterfall','dial']);
+
+  function showComponent(componentId, targetEl) {
+    const isStatic = !DATA_COMPONENTS.has(componentId) && !!STATIC_RENDERS[componentId];
+
+    let metrics = [], contextLabel = null, cardHTML;
+
+    if (isStatic) {
+      cardHTML = STATIC_RENDERS[componentId]();
+    } else {
+      metrics = targetEl ? scrapeElement(targetEl) : scrapePageData();
+      contextLabel = targetEl
+        ? (targetEl.querySelector('h1,h2,h3,[class*="title"],[class*="heading"]')?.textContent?.trim()
+           || targetEl.getAttribute('aria-label')
+           || targetEl.textContent?.trim().split('\n')[0].trim().slice(0, 40))
+        : null;
+      cardHTML = buildCardHTML(metrics, contextLabel);
+    }
+
+    let x = null, y = null;
+    if (targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      highlightTarget(targetEl);
+      const pos = positionNextTo(rect);
+      x = pos.x;
+      y = pos.y;
+    }
+
+    createHost(x, y);
 
     const shadow = hostDiv.attachShadow({ mode: 'open' });
 
     const style = document.createElement('style');
     style.textContent = `
       * { box-sizing: border-box; margin: 0; padding: 0; }
-      @keyframes slideIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-      .preview-wrapper {
-        animation: slideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: default;
+      @keyframes slideIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+      .wrap { animation: slideIn 0.2s cubic-bezier(0.16,1,0.3,1); }
+      .header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 10px; margin-bottom: 8px;
+        background: #090d19; border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px; cursor: grab; user-select: none;
       }
-      .preview-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 8px;
-        padding: 6px 10px;
-        background: #090d19;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 12px;
-        cursor: grab;
-        user-select: none;
-      }
-      .preview-header:active { cursor: grabbing; }
-      .preview-label {
-        font-size: 10px;
-        font-weight: 700;
-        color: #10b981;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .preview-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #10b981;
-      }
-      .controls-row {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-      .ctrl-btn {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: #94a3b8;
-        cursor: pointer;
-        padding: 3px 6px;
-        border-radius: 6px;
-        font-size: 10px;
-        display: flex;
-        align-items: center;
-        transition: all 0.15s;
-      }
-      .ctrl-btn:hover { color: #fff; background: rgba(255,255,255,0.15); }
-      .close-btn {
-        background: none;
-        border: none;
-        color: #64748b;
-        cursor: pointer;
-        padding: 3px 5px;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-      .close-btn:hover { color: #f43f5e; background: rgba(244,63,94,0.1); }
-      .code-bar {
-        margin-top: 8px;
-        background: #030712;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 10px;
-        padding: 8px 10px;
-        font-family: monospace;
-        font-size: 10px;
-        color: #38bdf8;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .copy-btn {
-        background: rgba(16,185,129,0.15);
-        color: #10b981;
-        border: 1px solid rgba(16,185,129,0.3);
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 9px;
-        font-weight: 700;
-        cursor: pointer;
-        font-family: monospace;
-      }
-      .copy-btn:hover { background: rgba(16,185,129,0.25); }
+      .header:active { cursor: grabbing; }
+      .label { font-size: 10px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; }
+      .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+      .controls { display: flex; align-items: center; gap: 4px; }
+      .btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; cursor: pointer; padding: 3px 6px; border-radius: 6px; font-size: 10px; transition: all 0.15s; }
+      .btn:hover { color: #fff; background: rgba(255,255,255,0.15); }
+      .close { background: none; border: none; color: #64748b; cursor: pointer; padding: 3px 5px; border-radius: 4px; font-size: 12px; }
+      .close:hover { color: #f43f5e; }
+      .code-bar { margin-top: 8px; background: #030712; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 8px 10px; font-family: monospace; font-size: 10px; color: #38bdf8; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+      .copy { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); padding: 3px 8px; border-radius: 6px; font-size: 9px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+      .copy:hover { background: rgba(16,185,129,0.25); }
     `;
     shadow.appendChild(style);
 
+    const fullCode = generateCode(componentId, metrics, contextLabel);
+    const escape = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const codeSummary = metrics.length <= 1
+      ? escape(fullCode.split('\n')[0])
+      : escape(`<DataCard title="${contextLabel || getPageSummary().title}" metrics={[…]} />`);
+
     const wrapper = document.createElement('div');
-    wrapper.className = 'preview-wrapper';
+    wrapper.className = 'wrap';
     wrapper.innerHTML = `
-      <div class="preview-header" id="sola-drag-header">
-        <span class="preview-label"><span class="preview-dot"></span>Sola Shadow DOM</span>
-        <div class="controls-row">
-          <button class="ctrl-btn" id="sola-target-btn" title="Click to mount inside a specific page element">🎯 Target Element</button>
-          <button class="ctrl-btn" id="sola-snap-btn" title="Cycle corner placement">📍 Snap</button>
-          <button class="close-btn" id="sola-close" title="Close Preview">✕</button>
+      <div class="header" id="drag-hdr">
+        <span class="label"><span class="dot"></span>Sola Shadow DOM</span>
+        <div class="controls">
+          <button class="btn" id="target-btn">🎯 Target Element</button>
+          <button class="btn" id="snap-btn">📍 Snap</button>
+          <button class="close" id="close-btn">✕</button>
         </div>
       </div>
-      ${comp.render()}
+      ${cardHTML}
       <div class="code-bar">
-        <span>${comp.code}</span>
-        <button class="copy-btn" id="sola-copy">Copy Code</button>
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#38bdf8;">${codeSummary}</span>
+        <button class="copy" id="copy-btn">Copy</button>
       </div>
     `;
     shadow.appendChild(wrapper);
 
-    // Make Draggable
-    let isDragging = false;
-    let startX = 0, startY = 0, initialLeft = 0, initialTop = 0;
-    const header = shadow.getElementById('sola-drag-header');
-
-    header.addEventListener('mousedown', (e) => {
+    // Drag
+    let dragging = false, sx = 0, sy = 0, il = 0, it = 0;
+    shadow.getElementById('drag-hdr').addEventListener('mousedown', e => {
       if (e.target.tagName === 'BUTTON') return;
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      const rect = hostDiv.getBoundingClientRect();
-      initialLeft = rect.left;
-      initialTop = rect.top;
-      hostDiv.style.bottom = 'auto';
-      hostDiv.style.right = 'auto';
-      hostDiv.style.left = `${initialLeft}px`;
-      hostDiv.style.top = `${initialTop}px`;
+      dragging = true; sx = e.clientX; sy = e.clientY;
+      const r = hostDiv.getBoundingClientRect();
+      il = r.left; it = r.top;
+      Object.assign(hostDiv.style, { bottom: 'auto', right: 'auto', left: il + 'px', top: it + 'px' });
     });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      hostDiv.style.left = `${initialLeft + dx}px`;
-      hostDiv.style.top = `${initialTop + dy}px`;
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      hostDiv.style.left = (il + e.clientX - sx) + 'px';
+      hostDiv.style.top = (it + e.clientY - sy) + 'px';
     });
+    window.addEventListener('mouseup', () => dragging = false);
 
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    // Snap positions (Cycle: Bottom-Right -> Bottom-Left -> Top-Right -> Top-Left)
+    // Snap
     let snapIdx = 0;
-    const snapPositions = [
-      { bottom: '24px', right: '24px', top: 'auto', left: 'auto' },
-      { bottom: '24px', left: '24px', top: 'auto', right: 'auto' },
-      { top: '24px', right: '24px', bottom: 'auto', left: 'auto' },
-      { top: '24px', left: '24px', bottom: 'auto', right: 'auto' }
+    const snaps = [
+      { bottom:'24px', right:'24px', top:'auto', left:'auto' },
+      { bottom:'24px', left:'24px', top:'auto', right:'auto' },
+      { top:'24px', right:'24px', bottom:'auto', left:'auto' },
+      { top:'24px', left:'24px', bottom:'auto', right:'auto' }
     ];
-
-    const snapBtn = shadow.getElementById('sola-snap-btn');
-    snapBtn.addEventListener('click', () => {
-      snapIdx = (snapIdx + 1) % snapPositions.length;
-      const pos = snapPositions[snapIdx];
-      Object.assign(hostDiv.style, pos);
+    shadow.getElementById('snap-btn').addEventListener('click', () => {
+      clearHighlight();
+      snapIdx = (snapIdx + 1) % snaps.length;
+      Object.assign(hostDiv.style, snaps[snapIdx]);
     });
 
-    // Target Element Mode
-    const targetBtn = shadow.getElementById('sola-target-btn');
-    targetBtn.addEventListener('click', () => {
-      startTargetPicker(componentId);
-    });
+    shadow.getElementById('target-btn').addEventListener('click', () => startTargetPicker(componentId));
 
-    // Close button
-    const closeBtn = shadow.getElementById('sola-close');
-    closeBtn.addEventListener('click', removePreview);
+    // Close
+    shadow.getElementById('close-btn').addEventListener('click', removePreview);
 
-    // Copy Code button
-    const copyBtn = shadow.getElementById('sola-copy');
+    // Copy
+    const copyBtn = shadow.getElementById('copy-btn');
     copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(comp.code);
+      navigator.clipboard.writeText(fullCode);
       copyBtn.textContent = 'Copied!';
-      setTimeout(() => copyBtn.textContent = 'Copy Code', 1500);
+      setTimeout(() => copyBtn.textContent = 'Copy', 1500);
     });
 
     currentPreview = componentId;
   }
 
+  // Static renders for UI primitive components (no page data to scrape)
+  function staticRender(html, label) {
+    return `<div style="background:#0c1222;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;width:290px;">
+      <div style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">${label}</div>
+      ${html}
+    </div>`;
+  }
+
+  const STATIC_RENDERS = {
+    toggle: () => staticRender(`
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:12px;color:#94a3b8;">Notifications</span>
+          <div style="width:40px;height:22px;background:#3b82f6;border-radius:11px;position:relative;cursor:pointer;">
+            <div style="width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:12px;color:#94a3b8;">Dark mode</span>
+          <div style="width:40px;height:22px;background:rgba(255,255,255,0.1);border-radius:11px;position:relative;cursor:pointer;">
+            <div style="width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;left:2px;top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:12px;color:#94a3b8;">Auto-sync</span>
+          <div style="width:40px;height:22px;background:#3b82f6;border-radius:11px;position:relative;cursor:pointer;">
+            <div style="width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>
+          </div>
+        </div>
+      </div>`, 'Toggle Switch'),
+
+    slider: () => staticRender(`
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:11px;color:#94a3b8;">Threshold</span>
+            <span style="font-size:11px;font-weight:700;color:#3b82f6;font-family:monospace;">74%</span>
+          </div>
+          <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;position:relative;">
+            <div style="width:74%;height:100%;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:3px;"></div>
+            <div style="width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;left:74%;top:-4px;transform:translateX(-50%);box-shadow:0 1px 4px rgba(0,0,0,0.4);cursor:pointer;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:11px;color:#94a3b8;">Range</span>
+            <span style="font-size:11px;font-weight:700;color:#8b5cf6;font-family:monospace;">20 – 80</span>
+          </div>
+          <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;position:relative;">
+            <div style="position:absolute;left:20%;width:60%;height:100%;background:linear-gradient(90deg,#8b5cf6,#6366f1);border-radius:3px;"></div>
+            <div style="width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;left:20%;top:-4px;transform:translateX(-50%);box-shadow:0 1px 4px rgba(0,0,0,0.4);cursor:pointer;"></div>
+            <div style="width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;left:80%;top:-4px;transform:translateX(-50%);box-shadow:0 1px 4px rgba(0,0,0,0.4);cursor:pointer;"></div>
+          </div>
+        </div>
+      </div>`, 'Range Slider'),
+
+    button: () => staticRender(`
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <button style="padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Primary</button>
+        <button style="padding:8px 16px;background:rgba(255,255,255,0.05);color:#e2e8f0;border:1px solid rgba(255,255,255,0.1);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Secondary</button>
+        <button style="padding:8px 16px;background:transparent;color:#94a3b8;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Ghost</button>
+        <button style="padding:8px 16px;background:#f43f5e;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Danger</button>
+        <button style="padding:8px 16px;background:rgba(255,255,255,0.05);color:#64748b;border:1px solid rgba(255,255,255,0.05);border-radius:8px;font-size:12px;font-weight:600;cursor:not-allowed;opacity:0.5;" disabled>Disabled</button>
+      </div>`, 'Button · 5 Variants'),
+
+    tabs: () => staticRender(`
+      <div>
+        <div style="display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:14px;">
+          <div style="padding:8px 14px;font-size:12px;font-weight:700;color:#3b82f6;border-bottom:2px solid #3b82f6;margin-bottom:-1px;cursor:pointer;">Overview</div>
+          <div style="padding:8px 14px;font-size:12px;color:#64748b;cursor:pointer;">Activity</div>
+          <div style="padding:8px 14px;font-size:12px;color:#64748b;cursor:pointer;">Settings</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <div style="padding:5px 12px;background:#3b82f6;color:#fff;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">All</div>
+          <div style="padding:5px 12px;background:rgba(255,255,255,0.05);color:#64748b;border-radius:20px;font-size:11px;cursor:pointer;">Active</div>
+          <div style="padding:5px 12px;background:rgba(255,255,255,0.05);color:#64748b;border-radius:20px;font-size:11px;cursor:pointer;">Archived</div>
+        </div>
+      </div>`, 'Tabs · Underline & Pill'),
+
+    avatar: () => staticRender(`
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="position:relative;display:inline-block;">
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;">BM</div>
+          <div style="width:10px;height:10px;background:#10b981;border-radius:50%;border:2px solid #0c1222;position:absolute;bottom:1px;right:1px;"></div>
+        </div>
+        <div style="position:relative;display:inline-block;">
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#f43f5e);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;">SA</div>
+          <div style="width:10px;height:10px;background:#f59e0b;border-radius:50%;border:2px solid #0c1222;position:absolute;bottom:1px;right:1px;"></div>
+        </div>
+        <div style="position:relative;display:inline-block;">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#64748b;">+4</div>
+        </div>
+        <div style="margin-left:4px;">
+          <div style="font-size:12px;font-weight:600;color:#e2e8f0;">Bennett M.</div>
+          <div style="font-size:10px;color:#10b981;margin-top:1px;">● Online</div>
+        </div>
+      </div>`, 'Avatar · Status Ring'),
+
+    listblock: () => staticRender(`
+      <div style="display:flex;flex-direction:column;gap:0;">
+        ${[
+          { label: 'CMDBTASK0001001', status: 'Open', color: '#f59e0b' },
+          { label: 'CMDBTASK0001012', status: 'In Progress', color: '#3b82f6' },
+          { label: 'CMDBTASK0001023', status: 'Open', color: '#f59e0b' },
+          { label: 'CMDBTASK0001034', status: 'Closed', color: '#10b981' },
+        ].map(r => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <span style="font-size:11px;color:#94a3b8;font-family:monospace;">${r.label}</span>
+          <span style="font-size:10px;font-weight:700;color:${r.color};">${r.status}</span>
+        </div>`).join('')}
+      </div>`, 'ListBlock · Data Feed'),
+
+    stream: () => staticRender(`
+      <div style="display:flex;flex-direction:column;gap:6px;font-family:monospace;font-size:10px;">
+        <div style="color:#10b981;">→ CMDB sync complete <span style="color:#475569;">09:51:02</span></div>
+        <div style="color:#3b82f6;">→ Task assigned to CW Group <span style="color:#475569;">09:50:47</span></div>
+        <div style="color:#f59e0b;">⚠ 139 duplicates flagged <span style="color:#475569;">09:49:33</span></div>
+        <div style="color:#94a3b8;">→ Health check passed <span style="color:#475569;">09:48:11</span></div>
+        <div style="color:#f43f5e;">✕ Stale CI threshold exceeded <span style="color:#475569;">09:47:58</span></div>
+      </div>`, 'StreamView · Live Log'),
+
+    sentinel: () => staticRender(`
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        ${[
+          { label: 'CMDB Sync', ok: true },
+          { label: 'Health Score', ok: true },
+          { label: 'Duplicate Check', ok: false },
+          { label: 'Stale CI Monitor', ok: false },
+        ].map(s => `<div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:11px;color:#94a3b8;">${s.label}</span>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:${s.ok ? '#10b981' : '#f43f5e'};${s.ok ? '' : 'animation:pulse 1.5s infinite;'}"></div>
+            <span style="font-size:10px;font-weight:700;color:${s.ok ? '#10b981' : '#f43f5e'};">${s.ok ? 'OK' : 'ALERT'}</span>
+          </div>
+        </div>`).join('')}
+      </div>`, 'SentinelCapsule · Health HUD'),
+  };
+
+  const COMPONENTS = {
+    datacard:  { name: 'DataCard',        code: `import { DataCard } from '@sola/ui';` },
+    gauge:     { name: 'GaugeCard',       code: `import { GaugeCard } from '@sola/ui';` },
+    waterfall: { name: 'FlowWaterfall',   code: `import { FlowWaterfall } from '@sola/ui';` },
+    dial:      { name: 'TactileDialCard', code: `import { TactileDialCard } from '@sola/ui';` },
+    toggle:    { name: 'Toggle',          code: `import { Toggle } from '@sola/ui';` },
+    slider:    { name: 'RangeSlider',     code: `import { RangeSlider } from '@sola/ui';` },
+    button:    { name: 'Button',          code: `import { Button } from '@sola/ui';` },
+    tabs:      { name: 'Tabs',            code: `import { Tabs } from '@sola/ui';` },
+    avatar:    { name: 'Avatar',          code: `import { Avatar } from '@sola/ui';` },
+    listblock: { name: 'ListBlock',       code: `import { ListBlock } from '@sola/ui';` },
+    stream:    { name: 'StreamView',      code: `import { StreamView } from '@sola/ui';` },
+    sentinel:  { name: 'SentinelCapsule',code: `import { SentinelCapsule } from '@sola/ui';` },
+  };
+
   function startTargetPicker(componentId) {
     if (isTargetMode) return;
     isTargetMode = true;
 
-    // Create high-contrast hover target indicator
-    targetOverlay = document.createElement('div');
-    Object.assign(targetOverlay.style, {
-      position: 'fixed',
-      pointerEvents: 'none',
-      border: '2px dashed #10b981',
-      background: 'rgba(16,185,129,0.08)',
-      borderRadius: '8px',
-      zIndex: '2147483646',
-      transition: 'all 0.1s ease-out',
-      display: 'none'
+    // Full-screen drag-to-select overlay
+    const screen = document.createElement('div');
+    Object.assign(screen.style, {
+      position: 'fixed', inset: '0', zIndex: '2147483646',
+      cursor: 'crosshair'
     });
-    document.body.appendChild(targetOverlay);
 
-    function onMouseOver(e) {
-      if (!isTargetMode) return;
-      if (hostDiv && hostDiv.contains(e.target)) return;
-      const target = e.target;
-      const rect = target.getBoundingClientRect();
-      Object.assign(targetOverlay.style, {
+    // Instruction badge
+    const badge = document.createElement('div');
+    Object.assign(badge.style, {
+      position: 'fixed', top: '16px', left: '50%', transform: 'translateX(-50%)',
+      background: '#090d19', border: '1px solid #10b981', borderRadius: '8px',
+      color: '#10b981', fontSize: '11px', fontWeight: '700', fontFamily: 'monospace',
+      padding: '6px 14px', pointerEvents: 'none', zIndex: '2147483647',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
+    });
+    badge.textContent = 'Drag to select a region  •  Esc to cancel';
+    screen.appendChild(badge);
+
+    // Selection rectangle
+    const selBox = document.createElement('div');
+    Object.assign(selBox.style, {
+      position: 'fixed', border: '2px solid #10b981',
+      background: 'rgba(16,185,129,0.08)', borderRadius: '4px',
+      pointerEvents: 'none', display: 'none'
+    });
+    screen.appendChild(selBox);
+
+    document.documentElement.appendChild(screen);
+
+    let startX = 0, startY = 0, dragging = false;
+
+    function updateBox(x1, y1, x2, y2) {
+      const left = Math.min(x1, x2), top = Math.min(y1, y2);
+      const width = Math.abs(x2 - x1), height = Math.abs(y2 - y1);
+      Object.assign(selBox.style, {
         display: 'block',
-        left: `${rect.left}px`,
-        top: `${rect.top}px`,
-        width: `${rect.width}px`,
-        height: `${rect.height}px`
+        left: left + 'px', top: top + 'px',
+        width: width + 'px', height: height + 'px'
       });
     }
 
-    function onClick(e) {
-      if (!isTargetMode) return;
-      if (hostDiv && hostDiv.contains(e.target)) return;
-      e.preventDefault();
-      e.stopPropagation();
+    // Collect all text nodes within a viewport rect, walking shadow roots
+    function scrapeRegion(x1, y1, x2, y2) {
+      const left = Math.min(x1, x2), top = Math.min(y1, y2);
+      const right = Math.max(x1, x2), bottom = Math.max(y1, y2);
 
-      const clickedElem = e.target;
+      const metrics = [];
+      const seenLabels = new Set(), seenValues = new Set();
+
+      function addMetric(label, value, variant) {
+        label = label.replace(/[:\-]+$/, '').trim();
+        value = value.trim();
+        if (!label || !value || label.length < 2 || label.length > 50) return;
+        if (seenLabels.has(label.toLowerCase())) return; // dedupe by label only — same value can appear on different metrics
+        seenLabels.add(label.toLowerCase());
+        seenValues.add(value);
+        metrics.push({ label, value, variant: variant || 'neutral' });
+      }
+
+      const collected = []; // { type: 'label'|'value', text }
+
+      walkShadows(document, 0, (el) => {
+        if (el.children?.length > 0) return; // leaf nodes only
+        const rect = el.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+        // Check if this element's center is within the drag region
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        if (cx < left || cx > right || cy < top || cy > bottom) return;
+
+        const text = el.textContent?.trim().replace(/\s+/g, ' ');
+        if (!text || text.length === 0 || text.length > 80) return;
+
+        if (/^\d[\d,\.]*[KMBk%]?$/.test(text)) {
+          collected.push({ type: 'value', text });
+        } else if (!/^\d/.test(text) && text.length > 1) {
+          collected.push({ type: 'label', text });
+        }
+      });
+
+      // Pair consecutive label → value
+      for (let i = 0; i < collected.length - 1; i++) {
+        if (collected[i].type === 'label' && collected[i + 1].type === 'value') {
+          const numVal = parseFloat(collected[i + 1].text.replace(/[,KMBk%]/g, ''));
+          const variant = numVal > 10000 ? 'warn' : numVal > 0 ? 'ok' : 'neutral';
+          addMetric(collected[i].text, collected[i + 1].text, variant);
+          i++; // skip the value we just consumed
+        }
+      }
+
+      // Also try unpaired values with labels from nearby text
+      for (let i = 0; i < collected.length; i++) {
+        if (collected[i].type === 'value' && !seenValues.has(collected[i].text)) {
+          // look backwards for nearest unused label
+          for (let j = i - 1; j >= 0; j--) {
+            if (collected[j].type === 'label' && !seenLabels.has(collected[j].text.toLowerCase())) {
+              const numVal = parseFloat(collected[i].text.replace(/[,KMBk%]/g, ''));
+              addMetric(collected[j].text, collected[i].text, numVal > 10000 ? 'warn' : 'ok');
+              break;
+            }
+          }
+        }
+      }
+
+      return metrics.slice(0, 8);
+    }
+
+    screen.addEventListener('mousedown', e => {
+      startX = e.clientX; startY = e.clientY;
+      dragging = true;
+    });
+
+    screen.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      updateBox(startX, startY, e.clientX, e.clientY);
+    });
+
+    screen.addEventListener('mouseup', e => {
+      if (!dragging) return;
+      dragging = false;
       isTargetMode = false;
-      if (targetOverlay) targetOverlay.remove();
-      window.removeEventListener('mouseover', onMouseOver, true);
-      window.removeEventListener('click', onClick, true);
+      screen.remove();
 
-      // Dock Sola preview directly relative to the targeted element
-      const rect = clickedElem.getBoundingClientRect();
-      Object.assign(hostDiv.style, {
-        position: 'absolute',
-        left: `${window.scrollX + rect.left}px`,
-        top: `${window.scrollY + rect.bottom + 8}px`,
-        bottom: 'auto',
-        right: 'auto'
-      });
-    }
+      const endX = e.clientX, endY = e.clientY;
+      // If it was just a click (tiny drag), expand to a reasonable hit area
+      const minSize = 20;
+      const x1 = Math.abs(endX - startX) < minSize ? startX - 40 : Math.min(startX, endX);
+      const y1 = Math.abs(endY - startY) < minSize ? startY - 30 : Math.min(startY, endY);
+      const x2 = Math.abs(endX - startX) < minSize ? startX + 40 : Math.max(startX, endX);
+      const y2 = Math.abs(endY - startY) < minSize ? startY + 30 : Math.max(startY, endY);
 
-    window.addEventListener('mouseover', onMouseOver, true);
-    window.addEventListener('click', onClick, true);
+      const metrics = scrapeRegion(x1, y1, x2, y2);
+      showComponentFromRegion(componentId, metrics, { x: x2, y: (y1 + y2) / 2 }, { x1, y1, x2, y2 });
+    });
+
+    document.addEventListener('keydown', function onEsc(e) {
+      if (e.key === 'Escape') {
+        isTargetMode = false;
+        screen.remove();
+        document.removeEventListener('keydown', onEsc);
+      }
+    });
+  }
+
+  function showComponentFromRegion(componentId, metrics, anchor, region) {
+    // Highlight the selected region
+    clearHighlight();
+    elementHighlight = document.createElement('div');
+    Object.assign(elementHighlight.style, {
+      position: 'fixed',
+      left: `${region.x1}px`, top: `${region.y1}px`,
+      width: `${region.x2 - region.x1}px`, height: `${region.y2 - region.y1}px`,
+      border: '2px solid #10b981', borderRadius: '6px',
+      boxShadow: '0 0 0 4px rgba(16,185,129,0.1)',
+      pointerEvents: 'none', zIndex: '2147483645'
+    });
+    document.documentElement.appendChild(elementHighlight);
+
+    const pos = positionNextTo({
+      left: region.x1, top: region.y1,
+      right: region.x2, bottom: region.y2
+    });
+    createHost(pos.x, pos.y);
+
+    const shadow = hostDiv.attachShadow({ mode: 'open' });
+    const fullCode = generateCode(componentId, metrics, null);
+    const escape = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const codeSummary = metrics.length <= 1
+      ? escape(fullCode.split('\n')[0])
+      : escape(`<DataCard metrics={[…${metrics.length}]} />`);
+
+    const style = document.createElement('style');
+    style.textContent = `
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      @keyframes slideIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+      .wrap { animation: slideIn 0.2s cubic-bezier(0.16,1,0.3,1); }
+      .header { display:flex; align-items:center; justify-content:space-between; padding:6px 10px; margin-bottom:8px; background:#090d19; border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:grab; user-select:none; }
+      .header:active { cursor:grabbing; }
+      .label { font-size:10px; font-weight:700; color:#10b981; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:6px; }
+      .dot { width:6px; height:6px; border-radius:50%; background:#10b981; }
+      .controls { display:flex; align-items:center; gap:4px; }
+      .btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; cursor:pointer; padding:3px 6px; border-radius:6px; font-size:10px; transition:all 0.15s; }
+      .btn:hover { color:#fff; background:rgba(255,255,255,0.15); }
+      .close { background:none; border:none; color:#64748b; cursor:pointer; padding:3px 5px; border-radius:4px; font-size:12px; }
+      .close:hover { color:#f43f5e; }
+      .code-bar { margin-top:8px; background:#030712; border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:8px 10px; font-family:monospace; font-size:10px; color:#38bdf8; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+      .copy { background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); padding:3px 8px; border-radius:6px; font-size:9px; font-weight:700; cursor:pointer; white-space:nowrap; }
+      .copy:hover { background:rgba(16,185,129,0.25); }
+    `;
+    shadow.appendChild(style);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'wrap';
+    wrapper.innerHTML = `
+      <div class="header" id="drag-hdr">
+        <span class="label"><span class="dot"></span>Sola Shadow DOM</span>
+        <div class="controls">
+          <button class="btn" id="target-btn">🎯 Target</button>
+          <button class="btn" id="snap-btn">📍 Snap</button>
+          <button class="close" id="close-btn">✕</button>
+        </div>
+      </div>
+      ${buildCardHTML(metrics, null)}
+      <div class="code-bar">
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${codeSummary}</span>
+        <button class="copy" id="copy-btn">Copy</button>
+      </div>
+    `;
+    shadow.appendChild(wrapper);
+
+    // Drag
+    let drag = false, sx = 0, sy = 0, il = 0, it = 0;
+    shadow.getElementById('drag-hdr').addEventListener('mousedown', e => {
+      if (e.target.tagName === 'BUTTON') return;
+      drag = true; sx = e.clientX; sy = e.clientY;
+      const r = hostDiv.getBoundingClientRect(); il = r.left; it = r.top;
+      Object.assign(hostDiv.style, { bottom:'auto', right:'auto', left:il+'px', top:it+'px' });
+    });
+    window.addEventListener('mousemove', e => { if (drag) { hostDiv.style.left=(il+e.clientX-sx)+'px'; hostDiv.style.top=(it+e.clientY-sy)+'px'; } });
+    window.addEventListener('mouseup', () => drag = false);
+
+    // Snap
+    let snapIdx = 0;
+    const snaps = [
+      {bottom:'24px',right:'24px',top:'auto',left:'auto'},
+      {bottom:'24px',left:'24px',top:'auto',right:'auto'},
+      {top:'24px',right:'24px',bottom:'auto',left:'auto'},
+      {top:'24px',left:'24px',bottom:'auto',right:'auto'}
+    ];
+    shadow.getElementById('snap-btn').addEventListener('click', () => {
+      clearHighlight();
+      snapIdx = (snapIdx + 1) % snaps.length;
+      Object.assign(hostDiv.style, snaps[snapIdx]);
+    });
+
+    shadow.getElementById('target-btn').addEventListener('click', () => startTargetPicker(componentId));
+    shadow.getElementById('close-btn').addEventListener('click', removePreview);
+
+    const copyBtn = shadow.getElementById('copy-btn');
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(fullCode);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+    });
+
+    currentPreview = componentId;
   }
 
   function removePreview() {
-    if (hostDiv && hostDiv.shadowRoot) {
-      hostDiv.remove();
-      hostDiv = null;
-    }
-    hostDiv = null;
+    if (hostDiv) { hostDiv.remove(); hostDiv = null; }
+    clearHighlight();
     currentPreview = null;
   }
 
-  // Listen for messages from extension sidepanel
-  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+  // Extension message listener
+  if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type === 'SOLA_SHOW_COMPONENT') {
         showComponent(message.component);
@@ -369,7 +808,7 @@
     });
   }
 
-  // Listen for postMessage from Sola web pages — restrict to safe origins
+  // postMessage from Sola web pages
   const SOLA_ALLOWED_ORIGINS = [
     'https://sola-air.dev',
     'http://localhost:5173',
@@ -378,7 +817,7 @@
   ];
   window.addEventListener('message', (event) => {
     if (!SOLA_ALLOWED_ORIGINS.includes(event.origin)) return;
-    if (event.data && event.data.type === 'SOLA_MOUNT_IN_SITU' && event.data.component) {
+    if (event.data?.type === 'SOLA_MOUNT_IN_SITU' && event.data.component) {
       showComponent(event.data.component);
     }
   });

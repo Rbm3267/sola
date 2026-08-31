@@ -25,11 +25,8 @@ document.querySelectorAll('.dock-btn').forEach((btn) => {
     if (activeComponent === componentId) {
       activeComponent = null;
       btn.classList.remove('active');
-      // Send remove message
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0]?.id) {
-          chrome.tabs.sendMessage(tabs[0].id, { type: 'SOLA_REMOVE_PREVIEW' });
-        }
+      chrome.storage.session.get('solaTabId', ({ solaTabId }) => {
+        if (solaTabId) chrome.tabs.sendMessage(solaTabId, { type: 'SOLA_REMOVE_PREVIEW' });
       });
       return;
     }
@@ -39,19 +36,25 @@ document.querySelectorAll('.dock-btn').forEach((btn) => {
     btn.classList.add('active');
     activeComponent = componentId;
 
-    // Inject content script and send component info
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.id) {
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id },
-          files: ['content.js']
-        }, () => {
-          chrome.tabs.sendMessage(tabs[0].id, {
-            type: 'SOLA_SHOW_COMPONENT',
-            component: componentId
-          });
-        });
+    // Inject content script into the tab that opened the side panel
+    chrome.storage.session.get('solaTabId', ({ solaTabId }) => {
+      if (!solaTabId) {
+        console.error('[Sola] No target tab — click the extension icon on the page you want to inject into.');
+        return;
       }
+      chrome.scripting.executeScript({
+        target: { tabId: solaTabId },
+        files: ['content.js']
+      }, () => {
+        if (chrome.runtime.lastError) {
+          console.error('[Sola] inject failed:', chrome.runtime.lastError.message);
+          return;
+        }
+        chrome.tabs.sendMessage(solaTabId, {
+          type: 'SOLA_SHOW_COMPONENT',
+          component: componentId
+        });
+      });
     });
   });
 });
