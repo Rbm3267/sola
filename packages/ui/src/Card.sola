@@ -1,5 +1,5 @@
 <script>
-  let title = "";
+  export let title = "";
 </script>
 
 <div class="sola-card">
@@ -10,7 +10,7 @@
     </div>
   {/if}
   <div class="card-body">
-    <!-- Slot content mounts here -->
+    <slot />
   </div>
 </div>
 

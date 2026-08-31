@@ -66,6 +66,15 @@ test('text interpolation with object literal {fn({key: val})}', () => {
   assert(code.includes('JSON.stringify({a: 1, b: 2})'), 'nested object in text expr');
 });
 
+test('text interpolation with {a || b} does not produce invalid ?? mixing', () => {
+  // JS forbids `x || y ?? ''` without explicit grouping — a naive `String(expr ?? '')`
+  // wrapper breaks the extremely common {a || b} fallback pattern used throughout
+  // this framework's own component library (e.g. Table.sola: {col.label || col}).
+  const { code } = compile(`<div>{col.label || col}</div>`);
+  assert(code.includes("String((col.label || col) ?? '')"), 'expr parenthesized before ??');
+  new Function(code.replace(/^import.*\n/gm, '').replace('export default ', 'globalThis.__t = '));
+});
+
 test('attribute {expr} with nested object literal', () => {
   const { code } = compile(`<div class={getClass({active: true})}></div>`);
   assert(code.includes('getClass({active: true})'), 'nested object in attr expr');

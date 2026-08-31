@@ -440,7 +440,11 @@ export function compile(source, options = {}) {
       const id = `e${uid++}`;
       domCode += `  const ${id} = document.createTextNode('');\n`;
       domCode += `  ${parentVar}.appendChild(${id});\n`;
-      domCode += `  createEffect(() => { ${id}.textContent = String(${expr} ?? ''); });\n`;
+      // Parenthesize expr before `?? ''`: JS forbids mixing ?? with || or && at the
+      // same level without explicit grouping (e.g. `col.label || col ?? ''` is a
+      // SyntaxError), and any {a || b}-style fallback expression — an extremely
+      // common pattern — would otherwise produce invalid generated code.
+      domCode += `  createEffect(() => { ${id}.textContent = String((${expr}) ?? ''); });\n`;
       return;
     }
 
