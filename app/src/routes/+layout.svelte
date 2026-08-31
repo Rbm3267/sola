@@ -3,13 +3,15 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme.svelte';
-	import { Analytics } from '@vercel/analytics/sveltekit';
-	import { SpeedInsights } from '@vercel/speed-insights/sveltekit';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
 	let { children } = $props();
 
 	onMount(() => {
 		theme.init();
+		injectAnalytics();
+		injectSpeedInsights();
 	});
 </script>
 
@@ -28,5 +30,3 @@
 	{@render children()}
 </div>
 
-<Analytics />
-<SpeedInsights />
