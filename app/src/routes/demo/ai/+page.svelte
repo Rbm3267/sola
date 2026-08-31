@@ -167,8 +167,8 @@
     </h1>
     <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
       ConversationThread, ActionStrip, ConfidenceBadge, and IntentSheet —
-      Sola AIR's open response to ServiceNow Horizon's AI &amp; Conversational Interfaces
-      patterns, not locked to any platform or LLM provider.
+      primitives for building AI-native UIs that work in any JavaScript stack,
+      connected to any LLM provider, with no platform lock-in.
     </p>
   </section>
 
@@ -572,26 +572,26 @@
       </div>
     </section>
 
-    <!-- ── Horizon comparison callout ──────────────────────────────────── -->
+    <!-- ── What Sola AIR is ─────────────────────────────────────────────── -->
     <section class="bg-gradient-to-r from-emerald-50 to-slate-50 dark:from-emerald-950/20 dark:to-slate-900 rounded-2xl border border-emerald-200/60 dark:border-emerald-800/30 p-8">
-      <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Why Sola AIR vs. Horizon</h2>
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">What Sola AIR gives you</h2>
       <div class="grid md:grid-cols-2 gap-6 text-sm">
         <div>
-          <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">ServiceNow Horizon</p>
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">The runtime</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="text-amber-500">◈</span> Locked to Now Platform runtime</li>
-            <li class="flex items-center gap-2"><span class="text-amber-500">◈</span> Components ship inside UI Builder</li>
-            <li class="flex items-center gap-2"><span class="text-amber-500">◈</span> AI tied to ServiceNow's NLU stack</li>
-            <li class="flex items-center gap-2"><span class="text-amber-500">◈</span> Figma files only (415 users for AI kit)</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Zero-VDOM — changes go straight to the DOM</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> <code class="font-mono text-xs">$state</code>, <code class="font-mono text-xs">$derived</code>, <code class="font-mono text-xs">$intent</code> as first-class primitives</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> <code class="font-mono text-xs">.sola</code> single-file components, compiled to plain JS</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Works alongside React, Svelte, or vanilla — no framework swap needed</li>
           </ul>
         </div>
         <div>
-          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">Sola AIR</p>
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">The AI layer</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Runs on any JS stack — no platform lock-in</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> npm-installable, open-source components</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Provider-agnostic <code class="font-mono">$intent</code> — Anthropic / OpenAI / Gemini / Ollama</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Token parity with Horizon's published scales</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Provider-agnostic <code class="font-mono text-xs">$intent</code> — your server, your model</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Anthropic · OpenAI · Gemini · Ollama adapters included</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Streaming SSE built into the core primitive</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> AI component suite ships as npm — use it in any project</li>
           </ul>
         </div>
       </div>
