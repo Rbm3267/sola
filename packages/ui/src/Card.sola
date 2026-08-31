@@ -1,8 +1,9 @@
 <script>
   export let title = "";
+  export let accentColor = "";
 </script>
 
-<div class="sola-card">
+<div class="sola-card" style="border-top: 3px solid {accentColor || 'transparent'};">
   <div class="card-glow"></div>
   {#if title}
     <div class="card-header">
