@@ -1,11 +1,11 @@
 /**
- * @sola-air-ui/tokens — Design token system
+ * @sola-air-ui/tokens — Sola AIR design token system
  *
- * Spacing and type scale are derived from ServiceNow Horizon's published token values
- * (horizon.servicenow.com/workspace/foundations). Color palette, radius extensions,
- * and semantic roles are Sola AIR's open adaptation using an emerald/slate palette.
+ * An 8px-base spacing grid, a 5-step type scale, and a 7-role semantic
+ * alert palette. These are Sola AIR's own choices, grounded in the same
+ * principles common across modern design systems: pixel-grid alignment,
+ * typographic hierarchy, and purposeful semantic color.
  *
- * Token naming:
  *   --sola-space-*         spacing scale (2–40px, 8 steps)
  *   --sola-radius-*        corner-radius scale (2–9999px)
  *   --sola-font-size-*     type scale (12–32px, 5 steps)
@@ -16,13 +16,13 @@
  *   --sola-text-*          semantic text roles (primary/secondary/tertiary)
  *   --sola-surface-*       surface backgrounds
  *   --sola-border-*        border roles
- *   --sola-alert-*         semantic alert severity (low→critical, matching Horizon's 7 roles)
+ *   --sola-alert-*         semantic severity scale (low→critical, 7 roles)
  */
 
 :root {
   /* ─── Spacing ───────────────────────────────────────────────────────────────
-   * Direct mirror of Horizon's $now-global-space--* modular scale.
-   * All components snap to these increments.
+   * 8px-base grid with a 2px micro step for tight contexts.
+   * All components snap to these increments for visual rhythm.
    */
   --sola-space-xxs:  2px;
   --sola-space-xs:   4px;
@@ -34,28 +34,32 @@
   --sola-space-3xl:  40px;
 
   /* ─── Corner radius ─────────────────────────────────────────────────────────
-   * sm/md/lg mirror Horizon's now-global-border-radius--* values.
-   * xl/2xl/full are Sola AIR extensions for cards, panels, and pill shapes.
+   * sm: tight elements like status chips and badges
+   * md: interactive controls — buttons, inputs
+   * lg: dialog-level containers
+   * xl / 2xl: cards and panels with a softer feel
+   * full: pill shapes, avatars, tags
    */
-  --sola-radius-sm:   2px;    /* badges, status chips */
-  --sola-radius-md:   6px;    /* buttons, inputs */
-  --sola-radius-lg:   8px;    /* modals, dialogs */
-  --sola-radius-xl:   12px;   /* cards */
-  --sola-radius-2xl:  16px;   /* panels, sheets */
-  --sola-radius-full: 9999px; /* pills, avatars, tags */
+  --sola-radius-sm:   2px;
+  --sola-radius-md:   6px;
+  --sola-radius-lg:   8px;
+  --sola-radius-xl:   12px;
+  --sola-radius-2xl:  16px;
+  --sola-radius-full: 9999px;
 
   /* ─── Type scale ────────────────────────────────────────────────────────────
-   * Mirror of Horizon's 5-step type scale. md (16px) is the component default.
+   * 5-step modular scale. md (16px) is the component default.
+   * sm is for labels and metadata only — not primary reading content.
+   * 2xl is a page-title step; use at most once per view.
    */
-  --sola-font-size-sm:  12px;  /* labels, metadata — not for primary content */
-  --sola-font-size-md:  16px;  /* body copy, component content */
-  --sola-font-size-lg:  20px;  /* form headers, subsection headers */
-  --sola-font-size-xl:  24px;  /* subtitles, section headers */
-  --sola-font-size-2xl: 32px;  /* page titles — use once per page */
+  --sola-font-size-sm:  12px;
+  --sola-font-size-md:  16px;
+  --sola-font-size-lg:  20px;
+  --sola-font-size-xl:  24px;
+  --sola-font-size-2xl: 32px;
 
   /* ─── Font weight ───────────────────────────────────────────────────────────
-   * Use semibold for titles; bold only for strong attention after careful
-   * consideration. Prefer color + size over bold for hierarchy.
+   * Semibold for titles; bold sparingly — prefer color + size for hierarchy.
    */
   --sola-font-weight-normal:   400;
   --sola-font-weight-medium:   500;
@@ -68,8 +72,8 @@
   --sola-leading-relaxed: 1.75;
 
   /* ─── Primary palette (Emerald) ─────────────────────────────────────────────
-   * Primary color scale: most important interactive actions.
-   * Use -500 as the base; -600/-700 for hover/active states.
+   * The Sola AIR brand color. Use -500 as the base; -600/-700 for
+   * hover/active states; -50 through -200 for tinted backgrounds.
    */
   --sola-color-primary-50:  #ecfdf5;
   --sola-color-primary-100: #d1fae5;
@@ -83,8 +87,7 @@
   --sola-color-primary-900: #064e3b;
 
   /* ─── Neutral palette (Slate) ───────────────────────────────────────────────
-   * Full neutral range for UI elements and typography.
-   * The slight blue-grey bias makes neutrals feel chosen, not defaulted.
+   * A full neutral range with a subtle blue-grey bias — chosen, not defaulted.
    */
   --sola-color-neutral-0:   #ffffff;
   --sola-color-neutral-50:  #f8fafc;
@@ -100,10 +103,10 @@
   --sola-color-neutral-950: #020617;
 
   /* ─── Semantic text roles ───────────────────────────────────────────────────
-   * Mirror of Horizon's $now-color--text-{primary,secondary,tertiary}.
-   * primary: essential workflow content
-   * secondary: complementary content, input labels — downplays to emphasize primary
-   * tertiary: metadata, supplemental data
+   * Three levels of visual weight for reading hierarchy:
+   * primary: essential content — body copy, component labels
+   * secondary: supporting content — input labels, captions
+   * tertiary: metadata — timestamps, supplemental data
    */
   --sola-text-primary:   #0f172a;
   --sola-text-secondary: #475569;
@@ -120,11 +123,18 @@
   --sola-border-default: #cbd5e1;
   --sola-border-strong:  #94a3b8;
 
-  /* ─── Semantic alert severity ───────────────────────────────────────────────
-   * Mirror of Horizon's 7 Alert palette roles: low → positive → info →
-   * moderate → warning → high → critical.
-   * Each role has a foreground (--sola-alert-*) and a tinted background
-   * (--sola-alert-*-bg) for containing surfaces.
+  /* ─── Semantic severity scale ───────────────────────────────────────────────
+   * 7 roles from informational to critical. Designed for AI interfaces where
+   * you need to communicate output certainty and action urgency clearly.
+   * Each role: foreground (text/icon) + tinted background for containing surfaces.
+   *
+   * low      — neutral informational, no urgency
+   * positive — success / confirmed / safe
+   * info     — informational, passive awareness
+   * moderate — soft caution, worth noting
+   * warning  — action recommended
+   * high     — action required soon
+   * critical — immediate action required
    */
   --sola-alert-low:          #64748b;
   --sola-alert-low-bg:       #f8fafc;
@@ -152,8 +162,8 @@
 }
 
 /* ─── Dark mode — system default ─────────────────────────────────────────────
- * Redefines only token values; all component styles use the tokens above.
- * Guard prevents this from overriding an explicit data-theme="light".
+ * Redefines only token values; component styles consume tokens only,
+ * never direct colors. Guard prevents overriding an explicit data-theme="light".
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {

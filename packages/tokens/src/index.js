@@ -2,40 +2,39 @@
  * @sola-air-ui/tokens
  *
  * JavaScript representation of the Sola AIR design token system.
- * Import the CSS for actual browser use; use this for tooling, tests,
- * or generating platform-specific token files.
+ * Import the CSS for actual browser use; use this object for tooling,
+ * tests, or generating platform-specific token files.
  *
- * Usage:
- *   import '@sola-air-ui/tokens/css';           // CSS custom properties
+ *   import '@sola-air-ui/tokens/css';             // CSS custom properties
  *   import { tokens } from '@sola-air-ui/tokens'; // JS values
  */
 
 export const tokens = {
   space: {
-    xxs: '2px',
-    xs:  '4px',
-    sm:  '8px',
-    md:  '12px',
-    lg:  '16px',
-    xl:  '24px',
+    xxs:  '2px',
+    xs:   '4px',
+    sm:   '8px',
+    md:   '12px',
+    lg:   '16px',
+    xl:   '24px',
     '2xl': '32px',
     '3xl': '40px',
   },
 
   radius: {
-    sm:   '2px',
-    md:   '6px',
-    lg:   '8px',
-    xl:   '12px',
+    sm:    '2px',
+    md:    '6px',
+    lg:    '8px',
+    xl:    '12px',
     '2xl': '16px',
-    full: '9999px',
+    full:  '9999px',
   },
 
   fontSize: {
-    sm:   '12px',
-    md:   '16px',
-    lg:   '20px',
-    xl:   '24px',
+    sm:    '12px',
+    md:    '16px',
+    lg:    '20px',
+    xl:    '24px',
     '2xl': '32px',
   },
 
@@ -82,9 +81,9 @@ export const tokens = {
   },
 
   /**
-   * Semantic alert severity scale.
-   * Mirrors Horizon's 7 Alert palette roles: low → positive → info →
-   * moderate → warning → high → critical.
+   * Semantic severity scale — 7 roles from informational to critical.
+   * Useful for AI interfaces where output certainty and action urgency
+   * need clear, consistent visual encoding.
    */
   alert: {
     low:      { fg: '#64748b', bg: '#f8fafc' },
