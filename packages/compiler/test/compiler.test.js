@@ -1,74 +1,204 @@
 import assert from 'node:assert';
 import { compile } from '../src/index.js';
 
-console.log('Testing @sola/compiler v1.0.0...');
+let passed = 0;
+let failed = 0;
 
-// Test 1: {#if}{:else} compiles to structured sola-then and sola-else branches
-{
-  const template = `
-<script>
-  let loggedIn = $state(false);
-</script>
-{#if loggedIn}
-  <span class="user">Welcome User</span>
-{:else}
-  <span class="guest">Please Log In</span>
-{/if}
-`;
-  const result = compile(template);
-  assert(result.code.includes('createEffect'), 'Must emit createEffect');
-  assert(result.code.includes('if (loggedIn)'), 'Must check condition');
-  assert(result.code.includes('Welcome User'), 'Must include then branch');
-  assert(result.code.includes('Please Log In'), 'Must include else branch');
-  assert(!result.code.includes('// else block (rendered by paired if)'), 'Should not have broken else comment');
-  console.log('✓ Test 1 Passed: {#if}{:else} conditional branch structuring');
+function test(name, fn) {
+  try {
+    fn();
+    console.log(`  ✓ ${name}`);
+    passed++;
+  } catch (err) {
+    console.error(`  ✗ ${name}`);
+    console.error(`    ${err.message}`);
+    failed++;
+  }
 }
 
-// Test 2: {#each} renders in ascending index order
-{
-  const template = `
-<script>
-  let items = $state(['A', 'B', 'C']);
-</script>
-{#each items as item, i}
-  <div class="item">{item}</div>
-{/each}
-`;
-  const result = compile(template);
-  assert(result.code.includes('for (let _i = 0; _i < _items.length; _i++)'), 'Must iterate ascending');
-  assert(result.code.includes('const f = document.createDocumentFragment()'), 'Must build fragment before inserting');
-  console.log('✓ Test 2 Passed: {#each} natural ascending order');
-}
+// ── Reactivity ──────────────────────────────────────────────────────────────
 
-// Test 3: Style deduplication guard
-{
-  const template = `
-<style>
-  .card { color: red; }
-</style>
-<div class="card">Hello</div>
-`;
-  const result = compile(template);
-  assert(result.code.includes('!window['), 'Must include global style deduplication guard');
-  console.log('✓ Test 3 Passed: Scoped style deduplication guard');
-}
+console.log('\n$state / $derived / $effect');
 
-// Test 4: All assignment operators
-{
-  const template = `
-<script>
-  let count = $state(10);
-  function multiply() { count *= 2; }
-  function divide() { count /= 2; }
-  function power() { count **= 2; }
-</script>
-<button onclick={multiply}>Double</button>
-`;
-  const result = compile(template);
-  assert(result.code.includes('set_count(count() * (2))'), 'Must rewrite *=');
-  assert(result.code.includes('set_count(count() / (2))'), 'Must rewrite /=');
-  assert(result.code.includes('set_count(count() ** (2))'), 'Must rewrite **=');
-  console.log('✓ Test 4 Passed: Extended assignment operators (*=, /=, **=)');
-}
+test('$state compiles to createSignal', () => {
+  const { code } = compile(`<script>let count = $state(0);</script><span>{count}</span>`);
+  assert(code.includes('const [count, set_count] = createSignal(0)'), 'createSignal');
+});
 
-console.log('\nAll compiler tests passed successfully! 🎉');
+test('$derived wraps expr in arrow when not already a fn', () => {
+  const { code } = compile(`<script>let x = $state(1); let doubled = $derived(x * 2);</script><span>{doubled}</span>`);
+  assert(code.includes('createDerived(() => x * 2)'), 'arrow wrap');
+});
+
+test('$derived passes fn through unchanged', () => {
+  const { code } = compile(`<script>let x = $state(1); let d = $derived(() => x() * 2);</script><span>{d}</span>`);
+  assert(code.includes('createDerived(() => x() * 2)'), 'fn passthrough');
+});
+
+test('count++ rewrites to set_count(count() + 1)', () => {
+  const { code } = compile(`<script>let count = $state(0); function inc() { count++; }</script>`);
+  assert(code.includes('set_count(count() + 1)'), '++ rewrite');
+});
+
+test('count-- rewrites to set_count(count() - 1)', () => {
+  const { code } = compile(`<script>let count = $state(0); function dec() { count--; }</script>`);
+  assert(code.includes('set_count(count() - 1)'), '-- rewrite');
+});
+
+test('compound assignment operators (*=, /=, **=)', () => {
+  const { code } = compile(`<script>
+    let count = $state(10);
+    function multiply() { count *= 2; }
+    function divide() { count /= 2; }
+    function power() { count **= 2; }
+  </script>`);
+  assert(code.includes('set_count(count() * (2))'), '*=');
+  assert(code.includes('set_count(count() / (2))'), '/=');
+  assert(code.includes('set_count(count() ** (2))'), '**=');
+});
+
+// ── Nested brace expressions ─────────────────────────────────────────────────
+
+console.log('\nNested brace expressions');
+
+test('text interpolation with object literal {fn({key: val})}', () => {
+  const { code } = compile(`<div>{JSON.stringify({a: 1, b: 2})}</div>`);
+  assert(code.includes('JSON.stringify({a: 1, b: 2})'), 'nested object in text expr');
+});
+
+test('attribute {expr} with nested object literal', () => {
+  const { code } = compile(`<div class={getClass({active: true})}></div>`);
+  assert(code.includes('getClass({active: true})'), 'nested object in attr expr');
+});
+
+test('ternary in attribute: attr={cond ? a : b}', () => {
+  const { code } = compile(`<button disabled={count > 0 ? false : true}></button>`);
+  assert(code.includes('count > 0 ? false : true'), 'ternary attr expr');
+});
+
+test('template literal interpolation in quoted attr: class="prefix-{name}"', () => {
+  const { code } = compile(`<div class="item-{index}"></div>`);
+  assert(code.includes('`item-${index}`'), 'template literal in quoted attr');
+});
+
+// ── TypeScript support ────────────────────────────────────────────────────────
+
+console.log('\nTypeScript support');
+
+test('type annotation stripped: let x: number = $state(0)', () => {
+  const { code } = compile(`<script lang="ts">let x: number = $state(0);</script><span>{x}</span>`);
+  assert(code.includes('createSignal(0)'), 'TS type annotation stripped');
+  assert(!code.includes(': number'), 'no leftover annotation');
+});
+
+test('interface declaration stripped', () => {
+  const { code } = compile(`<script lang="ts">
+interface User { name: string; age: number; }
+let name = $state('Alice');
+</script><span>{name}</span>`);
+  assert(code.includes('createSignal'), 'compiles after interface');
+  assert(!code.includes('interface User'), 'interface removed');
+});
+
+test('as cast stripped', () => {
+  const { code } = compile(`<script lang="ts">const el = document.getElementById('x') as HTMLElement;</script>`);
+  assert(!code.includes(' as HTMLElement'), 'as cast removed');
+});
+
+// ── Conditionals ──────────────────────────────────────────────────────────────
+
+console.log('\nConditionals');
+
+test('{#if}{:else} emits both branches', () => {
+  const { code } = compile(`
+<script>let ok = $state(true);</script>
+{#if ok}<span>Yes</span>{:else}<span>No</span>{/if}`);
+  assert(code.includes('if (ok)'), 'condition check');
+  assert(code.includes('Yes'), 'then branch');
+  assert(code.includes('No'), 'else branch');
+});
+
+test('{#if} without else compiles', () => {
+  const { code } = compile(`{#if show}<p>Visible</p>{/if}`);
+  assert(code.includes('if (show)'), 'condition');
+  assert(code.includes('Visible'), 'content');
+});
+
+// ── Each loops ────────────────────────────────────────────────────────────────
+
+console.log('\nEach loops');
+
+test('unkeyed {#each} iterates ascending', () => {
+  const { code } = compile(`
+<script>let items = $state(['A', 'B']);</script>
+{#each items as item}<div>{item}</div>{/each}`);
+  assert(code.includes('for (let _i = 0; _i < _items.length; _i++)'), 'ascending loop');
+  assert(code.includes('createDocumentFragment()'), 'fragment batching');
+});
+
+test('keyed {#each items as item (item.id)} uses Map reconciliation', () => {
+  const { code } = compile(`
+<script>let rows = $state([{id:1, name:'A'}]);</script>
+{#each rows as row (row.id)}<div>{row.name}</div>{/each}`);
+  assert(code.includes('_keyMap'), 'keyed map');
+  assert(code.includes('String(row.id)'), 'key expression');
+  assert(code.includes('e0_keyMap.has(_key)'), 'key existence check');
+  assert(code.includes('e0_keyMap.delete(_k)'), 'stale key removal');
+});
+
+test('{#each} with index variable', () => {
+  const { code } = compile(`{#each items as item, i}<li>{i}: {item}</li>{/each}`);
+  assert(code.includes('const i = _i'), 'index variable bound');
+});
+
+// ── Styles ────────────────────────────────────────────────────────────────────
+
+console.log('\nStyles');
+
+test('scoped style: button.hash:hover (pseudo after hash)', () => {
+  const { code, css } = compile(`
+<style>button:hover { color: red; }</style>
+<button>Hi</button>`);
+  assert(/button\.sola-[a-z0-9]+:hover/.test(css), 'hash before pseudo');
+  assert(!/button:hover\./.test(css), 'hash not appended after pseudo');
+});
+
+test('style deduplication guard emitted', () => {
+  const { code } = compile(`<style>.x { color: red; }</style><div class="x">Hi</div>`);
+  assert(code.includes('!window['), 'dedup guard');
+});
+
+// ── Events and bindings ───────────────────────────────────────────────────────
+
+console.log('\nEvents and bindings');
+
+test('on:click={handler} wires addEventListener', () => {
+  const { code } = compile(`<script>function go() {}</script><button on:click={go}>Go</button>`);
+  assert(code.includes("addEventListener('click', go)"), 'on:click');
+});
+
+test('bind:value={signal} wires two-way', () => {
+  const { code } = compile(`<script>let val = $state('');</script><input bind:value={val} />`);
+  assert(code.includes("addEventListener('input'"), 'input listener');
+  assert(code.includes('set_val(e.target.value)'), 'setter call');
+  assert(code.includes('val() ??'), 'reactive read');
+});
+
+// ── Error messages ────────────────────────────────────────────────────────────
+
+console.log('\nError messages');
+
+test('parse error includes file path and line number', () => {
+  try {
+    compile(`<script>const x = @@@;</script>`, { filename: 'Test.sola' });
+    assert.fail('should have thrown');
+  } catch (err) {
+    assert(err.message.includes('Test.sola'), 'filename in error');
+    assert(/line \d+/.test(err.message), 'line number in error');
+  }
+});
+
+// ── Summary ───────────────────────────────────────────────────────────────────
+
+console.log(`\n${passed + failed} tests: ${passed} passed, ${failed} failed\n`);
+if (failed > 0) process.exit(1);

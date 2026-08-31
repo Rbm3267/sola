@@ -6,7 +6,14 @@
   "bin": {
     "sola-mcp": "./src/index.js"
   },
-  "keywords": ["sola", "mcp", "claude", "compiler", "model-context-protocol", "zero-vdom"],
+  "keywords": [
+    "sola",
+    "mcp",
+    "claude",
+    "compiler",
+    "model-context-protocol",
+    "zero-vdom"
+  ],
   "license": "MIT",
   "homepage": "https://sola-air.dev",
   "repository": {

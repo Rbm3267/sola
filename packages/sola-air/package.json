@@ -1,13 +1,22 @@
 {
   "name": "sola-air",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Zero-VDOM intent runtime — install everything you need to build with Sola",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
   },
-  "keywords": ["sola", "zero-vdom", "signals", "reactivity", "intent", "ui", "frontend", "compiler"],
+  "keywords": [
+    "sola",
+    "zero-vdom",
+    "signals",
+    "reactivity",
+    "intent",
+    "ui",
+    "frontend",
+    "compiler"
+  ],
   "license": "MIT",
   "homepage": "https://sola-air.dev",
   "repository": {
@@ -16,10 +25,11 @@
   },
   "dependencies": {
     "@sola-air-ui/core": "^1.0.1",
-    "@sola-air-ui/compiler": "^1.0.1",
-    "@sola-air-ui/vite-plugin-sola": "^1.0.1",
+    "@sola-air-ui/compiler": "^1.0.2",
+    "@sola-air-ui/vite-plugin-sola": "^1.0.2",
     "@sola-air-ui/relay": "^1.0.1",
     "@sola-air-ui/mcp": "^1.0.1",
+    "@sola-air-ui/ui": "^1.0.1",
     "@sola-air-ui/providers": "^1.0.1",
     "@sola-air-ui/tokens": "^1.0.1"
   },

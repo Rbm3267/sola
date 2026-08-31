@@ -57,14 +57,138 @@ function extractScriptAndStyle(source) {
   return { script, style, template };
 }
 
-function extractExpressions(text) {
-  return text.replace(/{([^{}]+)}/g, (match, expr) => {
-    const trimmed = expr.trim();
-    if (trimmed.startsWith('#') || trimmed.startsWith('/') || trimmed.startsWith(':')) {
-      return match;
+// Returns the index of the closing } that matches the { at openPos,
+// respecting string literals and nested braces. Returns -1 if unbalanced.
+function matchBrace(text, openPos) {
+  let depth = 0;
+  let inStr = null;
+  for (let i = openPos; i < text.length; i++) {
+    const ch = text[i];
+    if (inStr) {
+      if (ch === '\\') { i++; continue; }
+      if (ch === inStr) inStr = null;
+      continue;
     }
-    return `<sola-expr expr="${trimmed.replace(/"/g, '&quot;')}"></sola-expr>`;
-  });
+    if (ch === '"' || ch === "'" || ch === '`') { inStr = ch; continue; }
+    if (ch === '{') depth++;
+    else if (ch === '}') { if (--depth === 0) return i; }
+  }
+  return -1;
+}
+
+// Walk the template and resolve {expr} in attribute values using balanced-brace
+// matching, storing dynamic expressions in dynAttrs. Event/bind handlers are
+// stored as plain strings; other expressions become __soladyn_N__ markers.
+function preprocessTemplate(template, dynAttrs) {
+  let result = '';
+  let i = 0;
+  while (i < template.length) {
+    // Opening tag (not closing, not comment)
+    if (template[i] === '<' && template[i + 1] !== '/' && template[i + 1] !== '!') {
+      result += '<';
+      i++;
+      // Tag name
+      while (i < template.length && /[^\s>\/]/.test(template[i])) result += template[i++];
+      // Attributes
+      while (i < template.length && template[i] !== '>' && !(template[i] === '/' && template[i + 1] === '>')) {
+        if (/\s/.test(template[i])) { result += template[i++]; continue; }
+        // Attribute name
+        let attrName = '';
+        while (i < template.length && /[^\s=\/>]/.test(template[i])) attrName += template[i++];
+        if (!attrName) { result += template[i++]; continue; }
+        if (template[i] !== '=') { result += attrName; continue; }
+        i++; // skip =
+        if (template[i] === '{') {
+          // Unquoted brace expression: attr={expr}
+          const closeIdx = matchBrace(template, i);
+          if (closeIdx !== -1) {
+            const expr = template.slice(i + 1, closeIdx).trim();
+            if (!expr.startsWith('#') && !expr.startsWith('/') && !expr.startsWith(':')) {
+              if (/^on:[\w]+$/.test(attrName) || /^bind:[\w]+$/.test(attrName)) {
+                result += `${attrName}="${expr}"`;
+              } else {
+                dynAttrs.push(expr);
+                result += `${attrName}="__soladyn_${dynAttrs.length - 1}__"`;
+              }
+              i = closeIdx + 1;
+              continue;
+            }
+          }
+          result += `${attrName}={`; i++;
+        } else if (template[i] === '"' || template[i] === "'") {
+          // Quoted attribute value — scan for {expr} interpolations
+          const quote = template[i++];
+          let inner = ''; let hasDyn = false;
+          while (i < template.length && template[i] !== quote) {
+            if (template[i] === '{') {
+              const closeIdx = matchBrace(template, i);
+              if (closeIdx !== -1) {
+                const expr = template.slice(i + 1, closeIdx).trim();
+                if (!expr.startsWith('#') && !expr.startsWith('/') && !expr.startsWith(':')) {
+                  hasDyn = true;
+                  inner += `\${${expr}}`; i = closeIdx + 1; continue;
+                }
+              }
+            }
+            inner += template[i++];
+          }
+          if (i < template.length) i++; // skip closing quote
+          if (hasDyn) {
+            dynAttrs.push('`' + inner + '`');
+            result += `${attrName}="__soladyn_${dynAttrs.length - 1}__"`;
+          } else {
+            result += `${attrName}="${inner}"`;
+          }
+        } else {
+          result += `${attrName}=`;
+        }
+        continue;
+      }
+      if (i < template.length && template[i] === '/') { result += '/'; i++; }
+      if (i < template.length && template[i] === '>') { result += '>'; i++; }
+      continue;
+    }
+    result += template[i++];
+  }
+  return result;
+}
+
+// Replace {expr} in text content with <sola-expr> tags, using balanced-brace
+// matching so expressions like {fn({key: val})} work correctly.
+function extractExpressions(text) {
+  let result = '';
+  let i = 0;
+  while (i < text.length) {
+    if (text[i] === '{') {
+      const closeIdx = matchBrace(text, i);
+      if (closeIdx === -1) { result += text[i++]; continue; }
+      const inner = text.slice(i + 1, closeIdx).trim();
+      if (inner.startsWith('#') || inner.startsWith('/') || inner.startsWith(':')) {
+        result += text.slice(i, closeIdx + 1); i = closeIdx + 1;
+      } else {
+        result += `<sola-expr expr="${inner.replace(/"/g, '&quot;')}"></sola-expr>`;
+        i = closeIdx + 1;
+      }
+    } else {
+      result += text[i++];
+    }
+  }
+  return result;
+}
+
+// Strip TypeScript type annotations so Acorn (plain JS parser) can handle
+// script blocks written in TS. Covers the common patterns: type annotations,
+// interface/type declarations, angle-bracket generics, and `as` casts.
+function stripTypeScript(code) {
+  // Remove interface and type alias declarations
+  code = code.replace(/^\s*(export\s+)?(interface|type)\s+\w[\s\S]*?(?=\n(?:export|const|let|var|function|class|\/\/|$))/gm, '');
+  // Remove inline type annotations: `: Type` before = , ) , ; , , or end of line
+  code = code.replace(/:\s*[\w<>\[\]|&{},\s.?]+(?=[=,);{}\n])/g, '');
+  // Remove `as Type` casts
+  code = code.replace(/\s+as\s+[\w<>\[\]|&{}.?]+/g, '');
+  // Remove generic type parameters from function/class declarations
+  code = code.replace(/<[^>()=]+>(?=\s*\()/g, '');
+  return code;
 }
 
 export function compile(source, options = {}) {
@@ -75,34 +199,10 @@ export function compile(source, options = {}) {
 
   let rawTemplate = rawTemplateSource;
 
-  // Pre-process attribute-bound expressions BEFORE extractExpressions.
-  // extractExpressions replaces {expr} with <sola-expr> HTML tags, which breaks
-  // htmlparser2 when those tags land inside attribute values.
-  const dynAttrs = []; // expressions for __soladyn_N__ markers
-
-  // Event handlers: on:event={expr} → on:event="expr"
-  rawTemplate = rawTemplate.replace(/\bon:([\w]+)=\{([^}]+)\}/g, 'on:$1="$2"');
-  // Bind: bind:prop={expr} → bind:prop="expr"
-  rawTemplate = rawTemplate.replace(/\bbind:([\w]+)=\{([^}]+)\}/g, 'bind:$1="$2"');
-  // Quoted string interpolation: attr="text {expr} text" → attr="__soladyn_N__"
-  // Run iteratively to handle multiple {expr} per value.
-  let _prev;
-  do {
-    _prev = rawTemplate;
-    rawTemplate = rawTemplate.replace(/([\w:-]+)="([^"]*\{[^{}]+\}[^"]*)"/g, (_, attr, val) => {
-      const jsExpr = '`' + val.replace(/\{([^{}]+)\}/g, (__, e) => `\${${e.trim()}}`) + '`';
-      const i = dynAttrs.length;
-      dynAttrs.push(jsExpr);
-      return `${attr}="__soladyn_${i}__"`;
-    });
-  } while (rawTemplate !== _prev);
-  // Unquoted attr expressions: attr={expr} → attr="__soladyn_N__"
-  rawTemplate = rawTemplate.replace(/([\w:-]+)=\{([^{}]+)\}/g, (_, attr, expr) => {
-    const i = dynAttrs.length;
-    dynAttrs.push(expr.trim());
-    return `${attr}="__soladyn_${i}__"`;
-  });
-
+  // Pre-process attribute-bound expressions BEFORE extractExpressions using
+  // balanced-brace matching (handles nested object literals, ternaries, etc.)
+  const dynAttrs = [];
+  rawTemplate = preprocessTemplate(rawTemplate, dynAttrs);
   rawTemplate = extractExpressions(rawTemplate);
 
   // Pre-process logic blocks: structured if-then-else
@@ -110,8 +210,8 @@ export function compile(source, options = {}) {
   rawTemplate = rawTemplate
     .replace(/{#if\s+([\s\S]*?)}([\s\S]*?){:else}([\s\S]*?){\/if}/g, '<sola-if condition="$1"><sola-then>$2</sola-then><sola-else>$3</sola-else></sola-if>')
     .replace(/{#if\s+([\s\S]*?)}([\s\S]*?){\/if}/g, '<sola-if condition="$1"><sola-then>$2</sola-then></sola-if>')
-    .replace(/{#each\s+([\s\S]*?)\s+as\s+([\w]+)(?:\s*,\s*([\w]+))?}/g,
-      (_, arr, item, index) => `<sola-each array="${arr}" item="${item}"${index ? ` index="${index}"` : ''}>`)
+    .replace(/{#each\s+([\s\S]*?)\s+as\s+([\w]+)(?:\s*,\s*([\w]+))?(?:\s*\(([^)]+)\))?}/g,
+      (_, arr, item, index, key) => `<sola-each array="${arr}" item="${item}"${index ? ` index="${index}"` : ''}${key ? ` key="${key.trim()}"` : ''}>`)
     .replace(/{\/each}/g, '</sola-each>');
 
   // Parse HTML AST
@@ -143,14 +243,16 @@ export function compile(source, options = {}) {
   parser.end();
 
   // Parse JS AST with Acorn
-  let jsOutput = scriptContent;
+  // Strip TS first — AST positions and all slice() calls operate on the stripped source
+  const strippedScript = scriptContent.trim() ? stripTypeScript(scriptContent) : scriptContent;
+  let jsOutput = strippedScript;
   const stateVars = new Set();
   const exportedProps = [];
   const componentImports = [];
 
-  if (scriptContent.trim()) {
+  if (strippedScript.trim()) {
     try {
-      const ast = acorn.parse(scriptContent, { ecmaVersion: 'latest', sourceType: 'module' });
+      const ast = acorn.parse(strippedScript, { ecmaVersion: 'latest', sourceType: 'module' });
       const edits = [];
 
       function walkAST(node, parent) {
@@ -177,7 +279,7 @@ export function compile(source, options = {}) {
           node.declaration.declarations.forEach(decl => {
             const name = decl.id.name;
             const defaultVal = decl.init
-              ? scriptContent.slice(decl.init.start, decl.init.end)
+              ? strippedScript.slice(decl.init.start, decl.init.end)
               : 'undefined';
             exportedProps.push({ name, default: defaultVal });
             edits.push({
@@ -197,7 +299,7 @@ export function compile(source, options = {}) {
                 const varName = decl.id.name;
                 stateVars.add(varName);
                 const initArg = decl.init.arguments[0];
-                const initVal = initArg ? scriptContent.slice(initArg.start, initArg.end) : 'undefined';
+                const initVal = initArg ? strippedScript.slice(initArg.start, initArg.end) : 'undefined';
                 edits.push({
                   start: node.start,
                   end: node.end,
@@ -206,7 +308,7 @@ export function compile(source, options = {}) {
               } else if (callee.type === 'Identifier' && callee.name === '$derived') {
                 const varName = decl.id.name;
                 const expr = decl.init.arguments[0];
-                const exprSrc = expr ? scriptContent.slice(expr.start, expr.end) : 'undefined';
+                const exprSrc = expr ? strippedScript.slice(expr.start, expr.end) : 'undefined';
                 const isFn = expr && (expr.type === 'ArrowFunctionExpression' || expr.type === 'FunctionExpression');
                 edits.push({
                   start: node.start,
@@ -217,7 +319,7 @@ export function compile(source, options = {}) {
                 });
               } else if (callee.type === 'Identifier' && callee.name === '$effect') {
                 const body = decl.init.arguments[0];
-                const bodySrc = body ? scriptContent.slice(body.start, body.end) : '() => {}';
+                const bodySrc = body ? strippedScript.slice(body.start, body.end) : '() => {}';
                 edits.push({
                   start: node.start,
                   end: node.end,
@@ -225,10 +327,10 @@ export function compile(source, options = {}) {
                 });
               } else if (callee.type === 'Identifier' && callee.name === '$intent') {
                 const promptArg = decl.init.arguments[0]
-                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
+                  ? strippedScript.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
                   : "''";
                 const fallbackArg = decl.init.arguments[1]
-                  ? scriptContent.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
+                  ? strippedScript.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
                   : 'null';
                 edits.push({
                   start: node.start,
@@ -237,10 +339,10 @@ export function compile(source, options = {}) {
                 });
               } else if (callee.type === 'Identifier' && callee.name === '$data') {
                 const sourceArg = decl.init.arguments[0]
-                  ? scriptContent.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
+                  ? strippedScript.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
                   : "''";
                 const optsArg = decl.init.arguments[1]
-                  ? ', ' + scriptContent.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
+                  ? ', ' + strippedScript.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
                   : '';
                 edits.push({
                   start: node.start,
@@ -257,7 +359,7 @@ export function compile(source, options = {}) {
             node.left.type === 'Identifier' &&
             stateVars.has(node.left.name)) {
           const name = node.left.name;
-          const rightSource = scriptContent.slice(node.right.start, node.right.end);
+          const rightSource = strippedScript.slice(node.right.start, node.right.end);
           if (node.operator === '=') {
             edits.push({ start: node.start, end: node.end, replacement: `set_${name}(${rightSource})` });
           } else {
@@ -297,7 +399,9 @@ export function compile(source, options = {}) {
         jsOutput = jsOutput.slice(0, edit.start) + edit.replacement + jsOutput.slice(edit.end);
       }
     } catch (err) {
-      console.warn('[sola compiler] Acorn parse warning:', err.message);
+      const loc = err.loc ? ` (line ${err.loc.line}, col ${err.loc.column})` : '';
+      const filePath = typeof options === 'string' ? options : (options.filename || '<script>');
+      throw new Error(`[sola compiler] Parse error in ${filePath}${loc}:\n  ${err.message}`);
     }
   }
 
@@ -373,26 +477,53 @@ export function compile(source, options = {}) {
       return;
     }
 
-    // {#each} (Rendering in correct ascending order)
+    // {#each} with optional keyed diffing: {#each items as item (item.id)}
     if (node.name === 'sola-each') {
       const eid = `e${uid++}`;
+      const keyExpr = node.attribs.key || null;
       domCode += `  const ${eid}_a = document.createComment('each');\n`;
       domCode += `  ${parentVar}.appendChild(${eid}_a);\n`;
-      domCode += `  let ${eid}_els = [];\n`;
-      domCode += `  createEffect(() => {\n`;
-      domCode += `    ${eid}_els.forEach(e => e.remove()); ${eid}_els = [];\n`;
-      domCode += `    const _items = ${node.attribs.array} || [];\n`;
-      domCode += `    const f = document.createDocumentFragment();\n`;
-      domCode += `    for (let _i = 0; _i < _items.length; _i++) {\n`;
-      domCode += `      const ${node.attribs.item} = _items[_i];\n`;
-      if (node.attribs.index) {
-        domCode += `      const ${node.attribs.index} = _i;\n`;
+      if (keyExpr) {
+        // Keyed: maintain a Map<key, Node[]> and reconcile on each run
+        domCode += `  let ${eid}_keyMap = new Map();\n`;
+        domCode += `  createEffect(() => {\n`;
+        domCode += `    const _items = ${node.attribs.array} || [];\n`;
+        domCode += `    const _nextKeys = _items.map((${node.attribs.item}, _i) => String(${keyExpr}));\n`;
+        domCode += `    // Remove stale keys\n`;
+        domCode += `    for (const [_k, _nodes] of ${eid}_keyMap) {\n`;
+        domCode += `      if (!_nextKeys.includes(_k)) { _nodes.forEach(n => n.remove()); ${eid}_keyMap.delete(_k); }\n`;
+        domCode += `    }\n`;
+        domCode += `    // Insert/reorder items\n`;
+        domCode += `    let _anchor = ${eid}_a.nextSibling;\n`;
+        domCode += `    for (let _i = 0; _i < _items.length; _i++) {\n`;
+        domCode += `      const ${node.attribs.item} = _items[_i];\n`;
+        if (node.attribs.index) domCode += `      const ${node.attribs.index} = _i;\n`;
+        domCode += `      const _key = String(${keyExpr});\n`;
+        domCode += `      if (!${eid}_keyMap.has(_key)) {\n`;
+        domCode += `        const f = document.createDocumentFragment();\n`;
+        node.children.forEach(child => emitNode(child, 'f'));
+        domCode += `        const _nodes = Array.from(f.childNodes);\n`;
+        domCode += `        ${eid}_keyMap.set(_key, _nodes);\n`;
+        domCode += `        ${eid}_a.parentNode.insertBefore(f, _anchor);\n`;
+        domCode += `      }\n`;
+        domCode += `    }\n`;
+        domCode += `  });\n`;
+      } else {
+        // Unkeyed: full teardown + rebuild
+        domCode += `  let ${eid}_els = [];\n`;
+        domCode += `  createEffect(() => {\n`;
+        domCode += `    ${eid}_els.forEach(e => e.remove()); ${eid}_els = [];\n`;
+        domCode += `    const _items = ${node.attribs.array} || [];\n`;
+        domCode += `    const f = document.createDocumentFragment();\n`;
+        domCode += `    for (let _i = 0; _i < _items.length; _i++) {\n`;
+        domCode += `      const ${node.attribs.item} = _items[_i];\n`;
+        if (node.attribs.index) domCode += `      const ${node.attribs.index} = _i;\n`;
+        node.children.forEach(child => emitNode(child, 'f'));
+        domCode += `    }\n`;
+        domCode += `    Array.from(f.childNodes).forEach(n => ${eid}_els.push(n));\n`;
+        domCode += `    ${eid}_a.parentNode.insertBefore(f, ${eid}_a.nextSibling);\n`;
+        domCode += `  });\n`;
       }
-      node.children.forEach(child => emitNode(child, 'f'));
-      domCode += `    }\n`;
-      domCode += `    Array.from(f.childNodes).forEach(n => ${eid}_els.push(n));\n`;
-      domCode += `    ${eid}_a.parentNode.insertBefore(f, ${eid}_a.nextSibling);\n`;
-      domCode += `  });\n`;
       return;
     }
 
@@ -455,7 +586,7 @@ export function compile(source, options = {}) {
 
   // Assemble final output module
   let output = '';
-  output += `// Compiled by @sola-air-ui/compiler v1.0.1\n`;
+  output += `// Compiled by @sola-air-ui/compiler v1.0.2\n`;
   output += `import { createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } from '@sola-air-ui/core';\n`;
 
   for (const imp of componentImports) {
