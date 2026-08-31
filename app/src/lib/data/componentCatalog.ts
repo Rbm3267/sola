@@ -1529,10 +1529,10 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
     name: 'Date & Range Picker',
     category: 'Forms & Inputs',
     description: 'Calendar date and date-range picker with month navigation, quick preset chips (Today, Last 7d, Last 30d), and emerald highlight selection.',
-    tagline: 'Single date picking, date ranges, and time horizons',
+    tagline: 'Single date picking, date ranges, and range presets',
     badge: 'Foundation',
     componentName: 'SolaDatePicker',
-    defaultConfig: { range: true, label: 'Select Horizon', rangeValue: { start: '2026-08-01', end: '2026-08-30' } },
+    defaultConfig: { range: true, label: 'Select Range', rangeValue: { start: '2026-08-01', end: '2026-08-30' } },
     props: [
       { name: 'value', type: 'string', defaultValue: '', description: 'Single selected date (YYYY-MM-DD)' },
       { name: 'range', type: 'boolean', defaultValue: false, description: 'Enable start/end date range picking' },

@@ -358,10 +358,10 @@
 
                   <!-- Item 3 -->
                   <button
-                    onclick={() => { selectedComponent = 'Date Range Horizon'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
-                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Date Range Horizon' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
+                    onclick={() => { selectedComponent = 'Date Range Picker'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
+                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Date Range Picker' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
                     <div class="flex items-center justify-between">
-                      <span class="text-xs">Date Range Horizon</span>
+                      <span class="text-xs">Date Range Picker</span>
                       <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Calendar matrix range filter</p>

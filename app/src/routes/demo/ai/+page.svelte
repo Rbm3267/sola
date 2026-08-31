@@ -22,7 +22,7 @@
     "Sola AIR is a zero-VDOM, compiler-first framework where reactivity is ambient — signals propagate changes directly to the DOM without diffing. Components are `.sola` single-file units with typed props, `$state()`, and `$derived()` primitives.",
     "The `$intent()` primitive posts a prompt to any LLM endpoint you configure. It returns a reactive signal with `.loading` and `.error` accessors, plus optional streaming via SSE. Your server controls the model — Anthropic, OpenAI, Gemini, Ollama, or any custom endpoint.",
     "Provider adapters in `@sola-air-ui/providers` expose a Web Fetch API-compatible `.handler` that works in Next.js App Router, SvelteKit, Cloudflare Workers, and Deno — and a `.express` wrapper for Node.js. No SDK dependencies; pure `fetch` throughout.",
-    "The design token system mirrors Horizon's spacing (2–40px, 8 steps), type scale (12–32px, 5 steps), and semantic alert palette (low→positive→info→moderate→warning→high→critical). Tokens ship as CSS custom properties and a JS object for tooling.",
+    "The design token system ships spacing (2–40px, 8 steps), type scale (12–32px, 5 steps), and a semantic alert palette (low→positive→info→moderate→warning→high→critical). Tokens ship as CSS custom properties and a JS object for tooling.",
   ];
   let responseIdx = 0;
 
@@ -246,7 +246,7 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">ActionStrip</h2>
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/ui/ai/action-strip</code>
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Contextual action chips surfaced after an AI response. Maps to Horizon's AI action bar pattern.</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Contextual action chips surfaced after an AI response. Surfaces the most relevant follow-up actions inline.</p>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
@@ -488,7 +488,7 @@
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/tokens</code>
         </div>
         <p class="text-sm text-slate-500 dark:text-slate-400">
-          CSS custom properties derived from Horizon's spacing, type, and semantic alert scales —
+          CSS custom properties covering spacing, type scale, and semantic alert levels —
           open, platform-agnostic, ships as <code class="font-mono">--sola-*</code> variables.
         </p>
       </div>

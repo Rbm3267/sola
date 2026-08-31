@@ -205,7 +205,7 @@
 
             <!-- Date Picker & Kbd -->
             <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 space-y-3">
-              <SolaDatePicker label="Calendar Horizon" />
+              <SolaDatePicker label="Calendar" />
               <div class="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-200/60 dark:border-white/5">
                 <span>Shortcuts:</span>
                 <div class="flex items-center gap-1.5">

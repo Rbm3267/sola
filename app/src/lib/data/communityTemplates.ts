@@ -314,8 +314,8 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
   // --- Category: Productivity & Tasks ---
   // ==========================================
   {
-    id: 'sprint-velocity-horizon',
-    name: 'Engineering Sprint Velocity & Task Horizon',
+    id: 'sprint-velocity-tracker',
+    name: 'Engineering Sprint Velocity & Task Tracker',
     category: 'Productivity & Tasks',
     tagline: 'Tactile sprint tracking board with calendar date filters and burndown charts',
     description: 'Sprint planning and velocity workspace tracking story points, pull request turnaround time, and release milestones.',
@@ -323,7 +323,7 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
     signals: ['sprint/velocity', 'sprint/completed_points', 'pr/review_latency'],
     cards: [
       { id: 'sp1', type: 'stat', title: 'Sprint Velocity', subtitle: 'Completed story points', cols: 1, value: '64 pts', delta: '+12 pts', accentColor: 'emerald' },
-      { id: 'sp2', type: 'datepicker', title: 'Sprint Milestone Horizon', subtitle: 'Target ship deadline', cols: 1, value: '2026-09-15', accentColor: 'emerald' },
+      { id: 'sp2', type: 'datepicker', title: 'Sprint Milestone', subtitle: 'Target ship deadline', cols: 1, value: '2026-09-15', accentColor: 'emerald' },
       { id: 'sp3', type: 'table', title: 'Active Pull Requests', subtitle: 'Pending code review queue', cols: 2, value: 'PR Queue', accentColor: 'slate' },
       { id: 'sp4', type: 'chart', title: 'Burndown Progression', subtitle: 'Points remaining vs ideal trajectory', cols: 2, value: 'Burndown', accentColor: 'emerald' }
     ],
