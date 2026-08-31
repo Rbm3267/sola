@@ -55,8 +55,8 @@
     
     <!-- Page Header -->
     <div class="text-center max-w-3xl mx-auto space-y-3">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold shadow-2xs">
-        <svg class="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold shadow-2xs">
+        <svg class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
         <span>Community Presets & Starter Kits</span>
       </div>
       <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
@@ -78,7 +78,7 @@
             type="text"
             bind:value={searchQuery}
             placeholder="Search templates (e.g. revenue, funnel, dial, sprint, telemetry)..."
-            class="w-full pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-slate-50/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 font-sans shadow-2xs"
+            class="w-full pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-slate-50/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 font-sans shadow-2xs"
           />
           {#if searchQuery}
             <button
@@ -90,7 +90,7 @@
         <!-- Submit Template CTA -->
         <a
           href="/studio"
-          class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-slate-950 text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer">
+          class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           <span>Build Custom in Studio</span>
         </a>
@@ -101,7 +101,7 @@
         {#each categories as cat}
           <button
             onclick={() => (selectedCategory = cat)}
-            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {selectedCategory === cat ? 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 font-bold shadow-xs' : 'bg-slate-100/80 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {selectedCategory === cat ? 'bg-slate-900 text-white dark:bg-blue-500 dark:text-white font-bold shadow-xs' : 'bg-slate-100/80 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
             {cat}
           </button>
         {/each}
@@ -114,7 +114,7 @@
         <p class="text-sm text-slate-500 font-medium">No templates match "{searchQuery}" in category "{selectedCategory}".</p>
         <button
           onclick={() => { searchQuery = ''; selectedCategory = 'All'; }}
-          class="px-4 py-2 bg-emerald-500 text-slate-950 rounded-xl text-xs font-bold cursor-pointer">
+          class="px-4 py-2 bg-blue-500 text-white rounded-xl text-xs font-bold cursor-pointer">
           Reset Filters
         </button>
       </div>
@@ -122,12 +122,12 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {#each filteredTemplates as item}
           <div
-            class="group p-6 sm:p-7 bg-white dark:bg-[#0c1222] border border-slate-200/80 dark:border-white/10 rounded-3xl shadow-xs hover:shadow-xl hover:border-emerald-500/40 transition-all duration-200 flex flex-col justify-between gap-5 relative">
+            class="group p-6 sm:p-7 bg-white dark:bg-[#0c1222] border border-slate-200/80 dark:border-white/10 rounded-3xl shadow-xs hover:shadow-xl hover:border-blue-500/40 transition-all duration-200 flex flex-col justify-between gap-5 relative">
             
             <!-- Top Card Header -->
             <div>
               <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200/80 dark:border-blue-500/20">
                   {item.badge}
                 </span>
                 <span class="text-[11px] font-mono text-slate-400">
@@ -135,7 +135,7 @@
                 </span>
               </div>
 
-              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {item.name}
               </h3>
               <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
@@ -173,8 +173,8 @@
                   onclick={(e) => copySolaCode(item, e)}
                   class="px-3 py-1.5 rounded-xl text-xs font-mono font-medium border border-slate-200/80 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs">
                   {#if copiedId === item.id}
-                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-emerald-600 dark:text-emerald-400 font-bold">Copied!</span>
+                    <svg class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span class="text-blue-600 dark:text-blue-400 font-bold">Copied!</span>
                   {:else}
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                     <span>.sola Code</span>
@@ -192,7 +192,7 @@
               <!-- Open in Studio -->
               <a
                 href="/studio?preset={item.id}"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-xs shadow-emerald-500/20 cursor-pointer">
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-bold text-xs transition-all shadow-xs shadow-blue-500/20 cursor-pointer">
                 <span>Open in Studio</span>
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
@@ -218,7 +218,7 @@
         
         <div class="flex items-start justify-between gap-4">
           <div>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20">
               {activeTemplateModal.category}
             </span>
             <h2 class="text-2xl font-black text-slate-900 dark:text-white mt-2">{activeTemplateModal.name}</h2>
@@ -237,7 +237,7 @@
             <span>Template .sola Source</span>
             <button
               onclick={() => copySolaCode(activeTemplateModal!)}
-              class="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 cursor-pointer">
+              class="text-blue-600 hover:text-blue-700 dark:text-blue-400 cursor-pointer">
               {copiedId === activeTemplateModal.id ? 'Copied!' : 'Copy Code'}
             </button>
           </div>
@@ -253,7 +253,7 @@
           </button>
           <a
             href="/studio?preset={activeTemplateModal.id}"
-            class="px-5 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs transition-all shadow-xs cursor-pointer">
+            class="px-5 py-2 rounded-xl bg-blue-500 text-white font-bold text-xs transition-all shadow-xs cursor-pointer">
             Open in Studio Canvas
           </a>
         </div>

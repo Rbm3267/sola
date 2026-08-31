@@ -126,7 +126,7 @@
     <header class="flex flex-col gap-4 border-b border-slate-900/[0.03] dark:border-white/[0.04] pb-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-xs font-mono font-bold mb-2 shadow-2xs">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-400 text-xs font-mono font-bold mb-2 shadow-2xs">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Sola Component Catalog</span>
           </div>
@@ -147,7 +147,7 @@
             type="text" 
             bind:value={searchQuery}
             placeholder="Search component catalog..."
-            class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 shadow-2xs transition-all"
+            class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500 shadow-2xs transition-all"
           />
         </div>
       </div>
@@ -157,7 +157,7 @@
         {#each categories as category}
           <button 
             onclick={() => activeCategory = category}
-            class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
+            class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-blue-500 text-white font-bold shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
             {category}
           </button>
         {/each}
@@ -178,12 +178,12 @@
           {#each filteredComponents as comp (comp.id)}
             <button 
               onclick={() => selectComponent(comp)}
-              class="w-full text-left p-4 rounded-2xl border transition-all duration-200 flex flex-col gap-2 cursor-pointer shadow-2xs group {selectedComponent.id === comp.id ? 'bg-white dark:bg-emerald-500/10 border-emerald-500 ring-2 ring-emerald-500/20 shadow-md' : 'bg-white dark:bg-white/5 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.08]' }">
+              class="w-full text-left p-4 rounded-2xl border transition-all duration-200 flex flex-col gap-2 cursor-pointer shadow-2xs group {selectedComponent.id === comp.id ? 'bg-white dark:bg-blue-500/10 border-blue-500 ring-2 ring-blue-500/20 shadow-md' : 'bg-white dark:bg-white/5 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.08]' }">
               
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full {selectedComponent.id === comp.id ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-700'}"></span>
-                  <span class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <span class="w-2 h-2 rounded-full {selectedComponent.id === comp.id ? 'bg-blue-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-700'}"></span>
+                  <span class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {comp.name}
                   </span>
                 </div>
@@ -199,7 +199,7 @@
               </p>
 
               <div class="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-400">
-                <span class="text-emerald-600 dark:text-emerald-400 font-bold">{comp.category}</span>
+                <span class="text-blue-600 dark:text-blue-400 font-bold">{comp.category}</span>
                 <span>.{comp.componentName}</span>
               </div>
             </button>
@@ -213,7 +213,7 @@
         <!-- Component Header & Actions -->
         <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <div class="flex items-center gap-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 mb-1">
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-blue-600 dark:text-blue-400 mb-1">
               <span>{selectedComponent.category}</span>
               <span>•</span>
               <span class="text-slate-400">{selectedComponent.componentName}.sola</span>
@@ -229,7 +229,7 @@
           <!-- Open in Studio Action Button -->
           <a 
             href="/studio?add={selectedComponent.id}" 
-            class="px-5 py-2.5 rounded-xl bg-slate-950 dark:bg-emerald-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-emerald-400 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer shrink-0">
+            class="px-5 py-2.5 rounded-xl bg-slate-950 dark:bg-blue-500 text-white dark:text-white hover:bg-slate-800 dark:hover:bg-blue-400 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer shrink-0">
             <span>Drop in Studio</span>
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
@@ -239,12 +239,12 @@
         <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
               <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
                 Live Interactive Stage
               </h3>
             </div>
-            <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-200 dark:border-emerald-500/20">
+            <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border border-blue-200 dark:border-blue-500/20">
               Compiled DOM
             </span>
           </div>
@@ -443,7 +443,7 @@
               </div>
             {:else if selectedComponent.componentName === 'SolaChart'}
               <div class="w-full">
-                <SolaChart type={liveProps.type || 'area'} color={liveProps.color || 'emerald'} title={liveProps.title || 'Signal Telemetry'} subtitle={liveProps.subtitle || 'Real-time throughput'} height={liveProps.height || 180} />
+                <SolaChart type={liveProps.type || 'area'} color={liveProps.color || 'indigo'} title={liveProps.title || 'Signal Telemetry'} subtitle={liveProps.subtitle || 'Real-time throughput'} height={liveProps.height || 180} />
               </div>
             {:else if selectedComponent.componentName === 'SolaSplitter'}
               <div class="w-full">
@@ -486,8 +486,8 @@
             {:else}
               <!-- New components show schema-driven preview card -->
               <div class="w-full max-w-md flex flex-col items-center gap-5 py-6">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center">
-                  <svg class="w-7 h-7 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <div class="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center">
+                  <svg class="w-7 h-7 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                 </div>
                 <div class="text-center">
                   <h4 class="font-bold text-sm text-slate-900 dark:text-white">{selectedComponent.name}</h4>
@@ -521,7 +521,7 @@
                   <input 
                     type="text" 
                     bind:value={liveProps.title} 
-                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-blue-500"
                   />
                 </div>
               {/if}
@@ -532,7 +532,7 @@
                   <input 
                     type="text" 
                     bind:value={liveProps.value} 
-                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-blue-500"
                   />
                 </div>
               {/if}
@@ -543,7 +543,7 @@
                   <input 
                     type="text" 
                     bind:value={liveProps.trend} 
-                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500"
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-blue-500"
                   />
                 </div>
               {/if}
@@ -558,7 +558,7 @@
                     min="0" 
                     max="100" 
                     bind:value={liveProps.percentage} 
-                    class="w-full accent-emerald-500 cursor-pointer"
+                    class="w-full accent-blue-500 cursor-pointer"
                   />
                 </div>
               {/if}
@@ -568,7 +568,7 @@
                   <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Accent Theme</label>
                   <select 
                     bind:value={liveProps.color}
-                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-emerald-500">
+                    class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-blue-500">
                     <option value="emerald">Emerald</option>
                     <option value="sky">Sky Blue</option>
                     <option value="amber">Amber</option>
@@ -592,22 +592,22 @@
             <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-xl text-xs font-mono">
               <button 
                 onclick={() => codeTab = 'sola'} 
-                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'sola' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'sola' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
                 .sola
               </button>
               <button 
                 onclick={() => codeTab = 'react'} 
-                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'react' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'react' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
                 React 19
               </button>
               <button 
                 onclick={() => codeTab = 'svelte'} 
-                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'svelte' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'svelte' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
                 Svelte 5
               </button>
               <button 
                 onclick={() => codeTab = 'html'} 
-                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'html' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
+                class="px-3 py-1 rounded-lg transition-all cursor-pointer font-bold {codeTab === 'html' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white shadow-2xs' : 'text-slate-500 dark:text-slate-400'}">
                 Web Component
               </button>
             </div>
@@ -620,8 +620,8 @@
               onclick={() => copyCode(activeCodeSnippet)}
               class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
               {#if copied}
-                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span class="text-emerald-400">Copied!</span>
+                <svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span class="text-blue-400">Copied!</span>
               {:else}
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 <span>Copy</span>

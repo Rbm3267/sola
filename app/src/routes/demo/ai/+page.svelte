@@ -158,8 +158,8 @@
 
   <!-- ── Page header ──────────────────────────────────────────────────────── -->
   <section class="max-w-5xl mx-auto px-6 pt-16 pb-10">
-    <div class="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800/60 mb-5">
-      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+    <div class="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800/60 mb-5">
+      <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
       AI Component Suite · @sola-air-ui/ui
     </div>
     <h1 class="text-4xl font-bold text-slate-900 dark:text-white tracking-tight mb-3">
@@ -188,11 +188,11 @@
         <!-- Chat header -->
         <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-slate-800">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold">AI</div>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold">AI</div>
             <div>
               <div class="text-sm font-semibold text-slate-900 dark:text-white">Sola Assistant</div>
-              <div class="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 {chatStreaming ? 'animate-pulse' : ''}"></span>
+              <div class="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 {chatStreaming ? 'animate-pulse' : ''}"></span>
                 {chatStreaming ? 'Streaming response…' : 'Ready'}
               </div>
             </div>
@@ -205,13 +205,13 @@
           {#each messages as msg}
             <div class="flex {msg.role === 'user' ? 'justify-end' : 'justify-start'} gap-2.5">
               {#if msg.role === 'assistant'}
-                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex-shrink-0 mt-1 flex items-center justify-center text-white" style="font-size:9px;font-weight:700">AI</div>
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 mt-1 flex items-center justify-center text-white" style="font-size:9px;font-weight:700">AI</div>
               {/if}
               <div class="max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed
                 {msg.role === 'user'
-                  ? 'bg-emerald-600 text-white rounded-br-sm'
+                  ? 'bg-blue-600 text-white rounded-br-sm'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-sm'}">
-                {msg.content}{#if msg.streaming}<span class="inline-block w-1.5 h-4 ml-0.5 bg-emerald-500 animate-pulse rounded-sm align-middle"></span>{/if}
+                {msg.content}{#if msg.streaming}<span class="inline-block w-1.5 h-4 ml-0.5 bg-blue-500 animate-pulse rounded-sm align-middle"></span>{/if}
               </div>
             </div>
           {/each}
@@ -226,12 +226,12 @@
             onkeydown={onChatKey}
             placeholder="Ask about Sola AIR…"
             disabled={chatStreaming}
-            class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 disabled:opacity-50 transition-colors"
+            class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 disabled:opacity-50 transition-colors"
           />
           <button
             onclick={sendMessage}
             disabled={chatStreaming || !chatInput.trim()}
-            class="bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white font-medium text-sm px-5 py-2.5 rounded-xl transition-colors disabled:cursor-not-allowed"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white font-medium text-sm px-5 py-2.5 rounded-xl transition-colors disabled:cursor-not-allowed"
           >
             Send
           </button>
@@ -259,7 +259,7 @@
                 onclick={() => lastAction = action.label}
                 class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium border transition-all
                   {action.variant === 'primary'
-                    ? 'bg-emerald-600 border-emerald-600 text-white hover:bg-emerald-700'
+                    ? 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700'
                     : action.variant === 'danger'
                     ? 'bg-white dark:bg-slate-800 border-red-300 dark:border-red-700/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30'
                     : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700/50'}"
@@ -283,7 +283,7 @@
                 onclick={() => lastAction = action.label}
                 class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border transition-all
                   {action.variant === 'primary'
-                    ? 'bg-emerald-600 border-emerald-600 text-white hover:bg-emerald-700'
+                    ? 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700'
                     : action.variant === 'danger'
                     ? 'bg-white dark:bg-slate-800 border-red-300 dark:border-red-700/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30'
                     : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}"
@@ -297,7 +297,7 @@
 
         {#if lastAction}
           <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">
-            <span class="text-emerald-600 dark:text-emerald-400">onaction</span> → "{lastAction}"
+            <span class="text-blue-600 dark:text-blue-400">onaction</span> → "{lastAction}"
           </p>
         {/if}
       </div>
@@ -323,7 +323,7 @@
           <input
             type="range" min="0" max="1" step="0.01"
             bind:value={badgeScore}
-            class="w-full accent-emerald-500 cursor-pointer"
+            class="w-full accent-blue-500 cursor-pointer"
           />
           <div class="mt-4 flex items-center gap-3">
             <span
@@ -392,7 +392,7 @@
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
         <button
           onclick={openSheet}
-          class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors"
         >
           Analyze incident INC0042 →
         </button>
@@ -440,8 +440,8 @@
               </div>
             {:else if sheetContent}
               <div>
-                <div class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800/60 mb-4">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <div class="inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800/60 mb-4">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                   Intent resolved
                 </div>
                 <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">{sheetContent.title}</h3>
@@ -450,7 +450,7 @@
                 <ol class="space-y-2">
                   {#each sheetContent.items as item, i}
                     <li class="flex items-start gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3">
-                      <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                      <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                       <span class="text-sm text-slate-700 dark:text-slate-300 leading-snug">{item}</span>
                     </li>
                   {/each}
@@ -463,7 +463,7 @@
           {#if sheetContent && !sheetLoading}
             <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
               <button
-                class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
+                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
                 onclick={() => { sheetOpen = false; sheetContent = null; }}
               >
                 Apply all actions
@@ -501,7 +501,7 @@
             {#each spaceSteps as step}
               <div class="flex items-center gap-3">
                 <div class="w-20 text-xs font-mono text-slate-400 text-right flex-shrink-0">{step.name}</div>
-                <div class="bg-emerald-500 rounded-sm flex-shrink-0" style="width: {step.px * 2}px; height: 10px;"></div>
+                <div class="bg-blue-500 rounded-sm flex-shrink-0" style="width: {step.px * 2}px; height: 10px;"></div>
                 <div class="text-xs text-slate-400 font-mono">{step.px}px</div>
               </div>
             {/each}
@@ -560,7 +560,7 @@
             ] as step}
               <div class="flex flex-col items-center gap-1.5">
                 <div
-                  class="bg-emerald-100 dark:bg-emerald-950/40 border-2 border-emerald-400 dark:border-emerald-600"
+                  class="bg-blue-100 dark:bg-blue-950/40 border-2 border-blue-400 dark:border-blue-600"
                   style="width:{step.size}px;height:{step.size}px;border-radius:{step.r}px;"
                 ></div>
                 <span class="text-xs font-mono text-slate-400">{step.name}</span>
@@ -573,25 +573,25 @@
     </section>
 
     <!-- ── What Sola AIR is ─────────────────────────────────────────────── -->
-    <section class="bg-gradient-to-r from-emerald-50 to-slate-50 dark:from-emerald-950/20 dark:to-slate-900 rounded-2xl border border-emerald-200/60 dark:border-emerald-800/30 p-8">
+    <section class="bg-gradient-to-r from-blue-50 to-slate-50 dark:from-blue-950/20 dark:to-slate-900 rounded-2xl border border-blue-200/60 dark:border-blue-800/30 p-8">
       <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">What Sola AIR gives you</h2>
       <div class="grid md:grid-cols-2 gap-6 text-sm">
         <div>
-          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">The runtime</p>
+          <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The runtime</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Zero-VDOM — changes go straight to the DOM</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> <code class="font-mono text-xs">$state</code>, <code class="font-mono text-xs">$derived</code>, <code class="font-mono text-xs">$intent</code> as first-class primitives</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> <code class="font-mono text-xs">.sola</code> single-file components, compiled to plain JS</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Works alongside React, Svelte, or vanilla — no framework swap needed</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Zero-VDOM — changes go straight to the DOM</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> <code class="font-mono text-xs">$state</code>, <code class="font-mono text-xs">$derived</code>, <code class="font-mono text-xs">$intent</code> as first-class primitives</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> <code class="font-mono text-xs">.sola</code> single-file components, compiled to plain JS</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Works alongside React, Svelte, or vanilla — no framework swap needed</li>
           </ul>
         </div>
         <div>
-          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">The AI layer</p>
+          <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The AI layer</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Provider-agnostic <code class="font-mono text-xs">$intent</code> — your server, your model</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Anthropic · OpenAI · Gemini · Ollama adapters included</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Streaming SSE built into the core primitive</li>
-            <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> AI component suite ships as npm — use it in any project</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Provider-agnostic <code class="font-mono text-xs">$intent</code> — your server, your model</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Anthropic · OpenAI · Gemini · Ollama adapters included</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Streaming SSE built into the core primitive</li>
+            <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> AI component suite ships as npm — use it in any project</li>
           </ul>
         </div>
       </div>

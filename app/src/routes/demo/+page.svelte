@@ -5,6 +5,8 @@
   import Navbar from '$lib/components/Navbar.svelte';
   import SignalMeshConsole from '$lib/components/SignalMeshConsole.svelte';
   import BehavioralIntentConsole from '$lib/components/BehavioralIntentConsole.svelte';
+  import SolaHost from '$lib/components/SolaHost.svelte';
+  import NativeDashboard from '@sola/ui/Dashboard.sola';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { onMount } from 'svelte';
@@ -16,7 +18,7 @@
     config: any;
   }
   
-  let viewMode = $state<'mesh' | 'behavior' | 'custom'>('behavior');
+  let viewMode = $state<'native' | 'behavior' | 'mesh' | 'custom'>('native');
   let intentQuery = $state('');
   let isLoading = $state(false);
   let errorMsg = $state('');
@@ -36,7 +38,7 @@
       id: 'w-2',
       component: 'GaugeCard',
       colSpan: 1,
-      config: { title: 'p99 Latency SLA', value: '18.4 ms', percentage: 94, subtext: 'Optimal Edge Routing', color: 'emerald' }
+      config: { title: 'p99 Latency SLA', value: '18.4 ms', percentage: 94, subtext: 'Optimal Edge Routing', color: 'indigo' }
     },
     {
       id: 'w-3',
@@ -216,7 +218,7 @@
     if (type === 'finance') {
       widgets = [
         { id: 'fn-1', component: 'DataCard', colSpan: 1, config: { title: 'Monthly Recurring Revenue', value: '$184,200', trend: '+$14,800 this month', icon: 'trending-up' } },
-        { id: 'fn-2', component: 'GaugeCard', colSpan: 1, config: { title: 'Gross Margin Rate', value: '88%', percentage: 88, subtext: 'LTV/CAC Ratio: 4.8x', color: 'emerald' } },
+        { id: 'fn-2', component: 'GaugeCard', colSpan: 1, config: { title: 'Gross Margin Rate', value: '88%', percentage: 88, subtext: 'LTV/CAC Ratio: 4.8x', color: 'indigo' } },
         { id: 'fn-3', component: 'DataCard', colSpan: 1, config: { title: 'Cash Runway', value: '24 Months', trend: 'Net Burn: $18.5k/mo', icon: 'activity' } },
         { id: 'fn-4', component: 'ListBlock', colSpan: 3, config: { title: 'Google Sheet Live Transactions (sheet://finance-ops)', items: [
           { label: 'Enterprise Contract Renewal • Acme Corp', description: '+$48,000 ARR • Net-30 Invoiced', status: 'Completed' },
@@ -248,7 +250,7 @@
           window: 'Tonight 02:00 – 04:00 UTC'
         } },
         { id: 'sn-3', component: 'DataCard', colSpan: 1, config: { title: 'P1 Critical Incidents', value: '1 Active', trend: '-4 resolved today', icon: 'activity' } },
-        { id: 'sn-4', component: 'GaugeCard', colSpan: 1, config: { title: 'SLA Compliance Rate', value: '98.4%', percentage: 98, subtext: 'MTTR: 14.2 mins (Target: <30m)', color: 'emerald' } },
+        { id: 'sn-4', component: 'GaugeCard', colSpan: 1, config: { title: 'SLA Compliance Rate', value: '98.4%', percentage: 98, subtext: 'MTTR: 14.2 mins (Target: <30m)', color: 'indigo' } },
         { id: 'sn-5', component: 'DataCard', colSpan: 1, config: { title: 'Pending CAB Changes', value: '3 Awaiting', trend: 'Release Window 02:00 UTC', icon: 'check' } }
       ];
     } else if (type === 'cloud') {
@@ -384,22 +386,28 @@
         <!-- Studio View Mode Switcher -->
         <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/[0.08] p-1 rounded-full border border-slate-200 dark:border-white/[0.04] select-none overflow-x-auto no-scrollbar">
           <button 
+            onclick={() => viewMode = 'native'}
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'native' ? 'bg-blue-500 text-white font-bold shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+            <span>Native .sola Zero-VDOM</span>
+          </button>
+          <button 
             onclick={() => viewMode = 'behavior'}
             class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'behavior' ? 'bg-white dark:bg-white/[0.02] text-slate-950 dark:text-white shadow-sm border border-slate-200 dark:border-white/[0.04]' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
             <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span>Behavioral Intent (Adaptive)</span>
+            <span>Behavioral Intent</span>
           </button>
           <button 
             onclick={() => viewMode = 'mesh'}
             class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'mesh' ? 'bg-white dark:bg-white/[0.02] text-slate-950 dark:text-white shadow-sm border border-slate-200 dark:border-white/[0.04]' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
             <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            <span>Signal Mesh (Connected)</span>
+            <span>Signal Mesh</span>
           </button>
           <button 
             onclick={() => viewMode = 'custom'}
             class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'custom' ? 'bg-white dark:bg-white/[0.02] text-slate-950 dark:text-white shadow-sm border border-slate-200 dark:border-white/[0.04]' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
             <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            <span>Custom Studio Grid ({widgets.length})</span>
+            <span>Custom Grid ({widgets.length})</span>
           </button>
         </div>
 
@@ -448,7 +456,12 @@
       {/if}
     </div>
 
-    {#if viewMode === 'behavior'}
+    {#if viewMode === 'native'}
+      <!-- LIVE NATIVE ZERO-VDOM .SOLA COMPILED ENGINE -->
+      <div class="w-full bg-white/70 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/80 dark:border-white/[0.06] rounded-3xl p-6 sm:p-8 shadow-sm">
+        <SolaHost component={NativeDashboard} class="w-full" />
+      </div>
+    {:else if viewMode === 'behavior'}
       <!-- LIVE BEHAVIORAL INTENT & ADAPTIVE PERSONA CONSOLE -->
       <BehavioralIntentConsole />
     {:else if viewMode === 'mesh'}

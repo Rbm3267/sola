@@ -30,7 +30,7 @@
     <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
       <a
         href="/"
-        class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-slate-950 text-xs font-bold transition-all shadow-xs cursor-pointer">
+        class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white text-xs font-bold transition-all shadow-xs cursor-pointer">
         ← Return Home
       </a>
       <a
