@@ -1,0 +1,319 @@
+<script>
+  export let open = false;
+  export let title = 'AI Response';
+  export let intent = null;        // $intent signal or plain value
+  export let actions = [];
+  export let onclose = null;
+  export let onaction = null;
+  export let side = 'right';       // 'right' | 'bottom'
+
+  let resolved = $derived(() => {
+    if (!intent) return null;
+    const val = typeof intent === 'function' ? intent() : intent;
+    if (!val || val === 'Resolving...') return null;
+    return val;
+  });
+
+  let isLoading = $derived(() => {
+    if (!intent) return false;
+    if (typeof intent?.loading === 'function') return intent.loading();
+    const val = typeof intent === 'function' ? intent() : intent;
+    return !val || val === 'Resolving...';
+  });
+
+  function close() {
+    open(false);
+    if (onclose) onclose();
+  }
+
+  function handleAction(action) {
+    if (onaction) onaction(action);
+    if (action.onclick) action.onclick();
+  }
+
+  function handleBackdrop(e) {
+    if (e.target === e.currentTarget) close();
+  }
+</script>
+
+{#if open()}
+  <div class="sola-sheet-backdrop" onclick={handleBackdrop}>
+    <div class="sola-sheet side-{side}">
+      <!-- Header -->
+      <div class="sheet-header">
+        <div class="header-left">
+          <div class="ai-dot"></div>
+          <h2 class="sheet-title">{title}</h2>
+        </div>
+        <button class="close-btn" onclick={close}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="sheet-body">
+        {#if isLoading()}
+          <div class="sheet-loading">
+            <div class="shimmer"></div>
+            <div class="shimmer short"></div>
+            <div class="shimmer"></div>
+            <div class="shimmer xshort"></div>
+          </div>
+        {:else if resolved()}
+          <div class="sheet-content">
+            {#if typeof resolved() === 'string'}
+              <p class="prose">{resolved()}</p>
+            {:else if resolved().title}
+              <h3 class="content-title">{resolved().title}</h3>
+              {#if resolved().body}
+                <p class="prose">{resolved().body}</p>
+              {/if}
+              {#if resolved().items}
+                <ul class="content-list">
+                  {#each resolved().items as item}
+                    <li>{item}</li>
+                  {/each}
+                </ul>
+              {/if}
+            {:else}
+              <pre class="json-view">{JSON.stringify(resolved(), null, 2)}</pre>
+            {/if}
+          </div>
+        {:else}
+          <div class="sheet-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9" stroke-dasharray="4 3"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <p>Waiting for intent…</p>
+          </div>
+        {/if}
+      </div>
+
+      <!-- Footer actions -->
+      {#if actions.length}
+        <div class="sheet-footer">
+          {#each actions as action}
+            <button
+              class="footer-btn {action.variant || 'default'}"
+              onclick={() => handleAction(action)}
+              disabled={action.disabled}
+            >
+              {action.label}
+            </button>
+          {/each}
+        </div>
+      {/if}
+    </div>
+  </div>
+{/if}
+
+<style>
+  .sola-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+
+  .sola-sheet {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.12);
+    animation: slideIn 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .side-right {
+    width: min(480px, 95vw);
+    height: 100%;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .side-bottom {
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 20px 20px 0 0;
+    align-self: flex-end;
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
+    animation: slideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ai-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .sheet-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    border: none;
+    background: #f1f5f9;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: background 0.15s;
+  }
+  .close-btn:hover { background: #e2e8f0; color: #0f172a; }
+  .close-btn svg { width: 14px; height: 14px; }
+
+  .sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  .sheet-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .shimmer {
+    height: 14px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  .shimmer.short { width: 70%; }
+  .shimmer.xshort { width: 40%; }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .sheet-content { display: flex; flex-direction: column; gap: 12px; }
+
+  .content-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .prose {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #334155;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .content-list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .content-list li { font-size: 14px; color: #334155; line-height: 1.5; }
+
+  .json-view {
+    font-size: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px;
+    overflow-x: auto;
+    color: #475569;
+    font-family: ui-monospace, monospace;
+  }
+
+  .sheet-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: #94a3b8;
+    padding: 40px 0;
+  }
+  .sheet-empty svg { width: 40px; height: 40px; }
+  .sheet-empty p { font-size: 14px; margin: 0; }
+
+  .sheet-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .footer-btn {
+    padding: 9px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .footer-btn.default {
+    background: #f1f5f9;
+    color: #334155;
+    border-color: #e2e8f0;
+  }
+  .footer-btn.default:hover { background: #e2e8f0; }
+
+  .footer-btn.primary {
+    background: #10b981;
+    color: #fff;
+  }
+  .footer-btn.primary:hover { background: #059669; }
+
+  .footer-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+</style>

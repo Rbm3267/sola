@@ -1,4 +1,4 @@
-// @sola/ui — Official Component Primitives
+// @sola-air-ui/ui — Official Component Primitives
 export { default as Canvas } from './Canvas.sola';
 export { default as Card } from './Card.sola';
 export { default as Stack } from './Stack.sola';
@@ -16,3 +16,9 @@ export { default as Toast } from './Toast.sola';
 export { default as StreamView } from './StreamView.sola';
 export { default as IntentCard } from './IntentCard.sola';
 export { default as IntentList } from './IntentList.sola';
+
+// AI Interaction Primitives
+export { default as ConversationThread } from './ai/ConversationThread.sola';
+export { default as ActionStrip } from './ai/ActionStrip.sola';
+export { default as ConfidenceBadge } from './ai/ConfidenceBadge.sola';
+export { default as IntentSheet } from './ai/IntentSheet.sola';

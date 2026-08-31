@@ -201,11 +201,12 @@ export function __flush_destroys() {
 }
 
 // ─── createIntent ───
-// Configurable ambient intent resolver.
+// Configurable ambient intent resolver with streaming support.
 const defaultIntentConfig = {
   provider: 'local',
   endpoint: '/api/intent',
-  model: 'gemini-2.5-flash'
+  model: 'gemini-2.5-flash',
+  stream: false
 };
 
 let globalIntentConfig = { ...defaultIntentConfig };
@@ -214,9 +215,44 @@ export function configureIntent(config) {
   globalIntentConfig = { ...globalIntentConfig, ...config };
 }
 
+async function _consumeSSE(response, onToken, onDone, onError) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+
+      const lines = buf.split('\n');
+      buf = lines.pop(); // keep incomplete last line
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const payload = line.slice(6).trim();
+        if (payload === '[DONE]') { onDone(); return; }
+        try {
+          const parsed = JSON.parse(payload);
+          const token = parsed.token ?? parsed.delta ?? parsed.content ?? '';
+          if (token) onToken(token);
+        } catch {
+          if (payload) onToken(payload);
+        }
+      }
+    }
+    onDone();
+  } catch (err) {
+    if (err.name !== 'AbortError') onError(err);
+  }
+}
+
 export function createIntent(promptFn, options = {}) {
   const config = { ...globalIntentConfig, ...options };
-  const [read, write] = createSignal(options.initial || 'Resolving...');
+  const [read, write] = createSignal(options.initial ?? null);
+  const [loading, setLoading] = createSignal(false);
+  const [error, setError] = createSignal(null);
   let abortController = null;
 
   onDestroy(() => {
@@ -224,49 +260,60 @@ export function createIntent(promptFn, options = {}) {
   });
 
   createEffect(() => {
-    const currentPrompt = typeof promptFn === 'function' ? promptFn() : promptFn;
-    if (!currentPrompt) return;
+    const prompt = typeof promptFn === 'function' ? promptFn() : promptFn;
+    if (!prompt) return;
 
-    if (abortController) {
-      abortController.abort();
-    }
+    if (abortController) abortController.abort();
     abortController = new AbortController();
 
-    const url = config.endpoint;
-    write('Resolving...');
+    write(null);
+    setError(null);
+    setLoading(true);
 
-    fetch(url, {
+    const body = JSON.stringify({
+      messages: [{ role: 'user', content: prompt }],
+      model: config.model,
+      provider: config.provider,
+      stream: config.stream
+    });
+
+    fetch(config.endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: currentPrompt }],
-        model: config.model,
-        provider: config.provider
-      }),
+      body,
       signal: abortController.signal
-    })
-    .then(res => {
+    }).then(res => {
       if (!res.ok) throw new Error(`Intent failed: ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      if (data && data.components && data.components.length > 0) {
-        write(data.components[0]);
-      } else if (data && data.result) {
-        write(data.result);
-      } else {
-        write(data);
+
+      if (config.stream) {
+        let accumulated = '';
+        return _consumeSSE(
+          res,
+          token => { accumulated += token; write(accumulated); },
+          () => setLoading(false),
+          err => { setError(err.message); setLoading(false); }
+        );
       }
-    })
-    .catch(err => {
+
+      return res.json().then(data => {
+        if (data?.components?.length > 0) write(data.components[0]);
+        else if (data?.result != null) write(data.result);
+        else write(data);
+        setLoading(false);
+      });
+    }).catch(err => {
       if (err.name !== 'AbortError') {
         console.error('[Sola Intent Error]', err);
-        write({ error: err.message });
+        setError(err.message);
+        setLoading(false);
       }
     });
   });
 
-  return read;
+  const accessor = read;
+  accessor.loading = loading;
+  accessor.error = error;
+  return accessor;
 }
 
 // ─── createData ───

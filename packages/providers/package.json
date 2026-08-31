@@ -1,0 +1,24 @@
+{
+  "name": "@sola-air-ui/providers",
+  "version": "1.0.1",
+  "description": "Server-side LLM provider adapters for Sola AIR — Anthropic, OpenAI, Gemini, Ollama",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./anthropic": "./src/anthropic.js",
+    "./openai": "./src/openai.js",
+    "./gemini": "./src/gemini.js",
+    "./ollama": "./src/ollama.js"
+  },
+  "keywords": ["sola", "ai", "llm", "provider", "anthropic", "openai", "gemini", "ollama", "streaming"],
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola-air"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

@@ -15,7 +15,17 @@
     "./spinner": "./src/Spinner.sola",
     "./alert": "./src/Alert.sola",
     "./intent-card": "./src/IntentCard.sola",
-    "./intent-list": "./src/IntentList.sola"
+    "./intent-list": "./src/IntentList.sola",
+    "./ai/conversation-thread": "./src/ai/ConversationThread.sola",
+    "./ai/action-strip": "./src/ai/ActionStrip.sola",
+    "./ai/confidence-badge": "./src/ai/ConfidenceBadge.sola",
+    "./ai/intent-sheet": "./src/ai/IntentSheet.sola"
+  },
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola-air"
   },
   "dependencies": {
     "@sola-air-ui/core": "^1.0.1"

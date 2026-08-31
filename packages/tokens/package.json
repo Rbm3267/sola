@@ -1,20 +1,14 @@
 {
-  "name": "@sola-air-ui/core",
+  "name": "@sola-air-ui/tokens",
   "version": "1.0.1",
-  "description": "Zero-VDOM reactivity engine — signals, effects, lifecycle, and intent primitives",
+  "description": "Design tokens for Sola AIR — spacing, radius, type scale, color, and semantic palette",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./css": "./src/tokens.css"
   },
-  "keywords": [
-    "sola",
-    "reactivity",
-    "signals",
-    "zero-vdom",
-    "ui",
-    "frontend"
-  ],
+  "keywords": ["sola", "design-tokens", "css-variables", "design-system", "tokens"],
   "license": "MIT",
   "homepage": "https://sola-air.dev",
   "repository": {
