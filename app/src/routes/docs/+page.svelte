@@ -281,7 +281,7 @@ createEffect(() => {
   // Without a bundler (IIFE path)
   const noBundlerEmbedCode = `// --- Step 1: load sola-core globally ---
 // Serve sola-core.iife.min.js and include it before your component script:
-// <script src="/scripts/sola-core.iife.min.js"></script>
+// <script src="/scripts/sola-core.iife.min.js"><` + `/script>
 // This makes window.SolaCore available on the page.
 
 // --- Step 2: pre-compile your .sola component to an IIFE ---

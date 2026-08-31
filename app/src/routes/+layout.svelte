@@ -3,6 +3,8 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme.svelte';
+	import { Analytics } from '@vercel/analytics/svelte';
+	import { SpeedInsights } from '@vercel/speed-insights/svelte';
 
 	let { children } = $props();
 
@@ -25,3 +27,6 @@
 <div class="min-h-screen flex flex-col w-full transition-colors duration-200">
 	{@render children()}
 </div>
+
+<Analytics />
+<SpeedInsights />

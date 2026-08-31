@@ -4,6 +4,8 @@
   import SolaDatePicker from './SolaDatePicker.svelte';
   import SolaKbd from './SolaKbd.svelte';
 
+  const version = __SOLA_VERSION__;
+
   let activeTab = $state<'telemetry' | 'primitives' | 'signals'>('telemetry');
   let copied = $state(false);
   let liveCounter = $state(184200);
@@ -36,7 +38,7 @@
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
     </span>
-    <span>Sola AIR v1.0.1 • Zero-VDOM Intent Engine</span>
+    <span>Sola AIR v{version} • Zero-VDOM Intent Engine</span>
     <span class="text-blue-400/80">/</span>
     <span class="text-slate-500 dark:text-slate-400 font-normal">56 Primitives</span>
   </div>

@@ -10,6 +10,8 @@ declare global {
 	}
 }
 
+declare const __SOLA_VERSION__: string;
+
 declare module '*.sola' {
 	const mount: (target: HTMLElement, props?: Record<string, any>) => (() => void) | void;
 	export default mount;

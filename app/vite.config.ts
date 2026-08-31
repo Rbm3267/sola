@@ -5,6 +5,10 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { compile } from '../packages/compiler/src/index.js';
 
+const solaVersion = JSON.parse(
+	readFileSync(path.resolve(__dirname, '../packages/sola-air/package.json'), 'utf-8')
+).version;
+
 function sola() {
 	return {
 		name: 'vite-plugin-sola',
@@ -20,7 +24,7 @@ function sola() {
 			setTimeout(() => {
 				console.log('');
 				console.log(`   ${c1} ✧ ${r}`);
-				console.log(`  ${c1}✧${r} ${c2}◯${r} ${c3}✧${r}    ${b}Sola${r} ${d}v1.0.0${r}`);
+				console.log(`  ${c1}✧${r} ${c2}◯${r} ${c3}✧${r}    ${b}Sola${r} ${d}v${solaVersion}${r}`);
 				console.log(`   ${c3} ✧ ${r}      ${c2}Ambient Zero-VDOM Intent Runtime${r}`);
 				console.log(`            ${d}Compiler ready in ${Math.round(performance.now())}ms${r}`);
 				console.log('');
@@ -36,6 +40,9 @@ function sola() {
 }
 
 export default defineConfig({
+	define: {
+		__SOLA_VERSION__: JSON.stringify(solaVersion)
+	},
 	resolve: {
 		alias: {
 			'@sola/core': path.resolve(__dirname, '../packages/core/src/index.js'),

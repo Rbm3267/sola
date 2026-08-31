@@ -4,6 +4,8 @@
   import SolaLogo from './SolaLogo.svelte';
   import AiAssistantModal from './AiAssistantModal.svelte';
 
+  const version = __SOLA_VERSION__;
+
   let isAiModalOpen = $state(false);
   let isMobileMenuOpen = $state(false);
 
@@ -27,7 +29,7 @@
         <div class="flex flex-col gap-0.5">
           <div class="flex items-center gap-2">
             <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white font-sans leading-none">Sola <span class="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">AIR</span></span>
-            <span class="text-[10px] font-mono font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 px-2 py-0.5 rounded-full">v1.0.1</span>
+            <span class="text-[10px] font-mono font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 px-2 py-0.5 rounded-full">v{version}</span>
           </div>
           <span class="text-[9px] font-mono tracking-widest text-slate-400 dark:text-slate-500 leading-none uppercase"><span class="text-blue-500 dark:text-blue-400 font-bold">A</span>mbient · <span class="text-indigo-500 dark:text-indigo-400 font-bold">I</span>ntent · <span class="text-violet-500 dark:text-violet-400 font-bold">R</span>untime</span>
         </div>
