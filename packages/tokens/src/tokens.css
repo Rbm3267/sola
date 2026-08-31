@@ -1,0 +1,205 @@
+/**
+ * @sola-air-ui/tokens — Design token system
+ *
+ * Spacing and type scale are derived from ServiceNow Horizon's published token values
+ * (horizon.servicenow.com/workspace/foundations). Color palette, radius extensions,
+ * and semantic roles are Sola AIR's open adaptation using an emerald/slate palette.
+ *
+ * Token naming:
+ *   --sola-space-*         spacing scale (2–40px, 8 steps)
+ *   --sola-radius-*        corner-radius scale (2–9999px)
+ *   --sola-font-size-*     type scale (12–32px, 5 steps)
+ *   --sola-font-weight-*   weight scale
+ *   --sola-leading-*       line-height scale
+ *   --sola-color-primary-* emerald primary palette (50–900)
+ *   --sola-color-neutral-* slate neutral palette (0–950)
+ *   --sola-text-*          semantic text roles (primary/secondary/tertiary)
+ *   --sola-surface-*       surface backgrounds
+ *   --sola-border-*        border roles
+ *   --sola-alert-*         semantic alert severity (low→critical, matching Horizon's 7 roles)
+ */
+
+:root {
+  /* ─── Spacing ───────────────────────────────────────────────────────────────
+   * Direct mirror of Horizon's $now-global-space--* modular scale.
+   * All components snap to these increments.
+   */
+  --sola-space-xxs:  2px;
+  --sola-space-xs:   4px;
+  --sola-space-sm:   8px;
+  --sola-space-md:   12px;
+  --sola-space-lg:   16px;
+  --sola-space-xl:   24px;
+  --sola-space-2xl:  32px;
+  --sola-space-3xl:  40px;
+
+  /* ─── Corner radius ─────────────────────────────────────────────────────────
+   * sm/md/lg mirror Horizon's now-global-border-radius--* values.
+   * xl/2xl/full are Sola AIR extensions for cards, panels, and pill shapes.
+   */
+  --sola-radius-sm:   2px;    /* badges, status chips */
+  --sola-radius-md:   6px;    /* buttons, inputs */
+  --sola-radius-lg:   8px;    /* modals, dialogs */
+  --sola-radius-xl:   12px;   /* cards */
+  --sola-radius-2xl:  16px;   /* panels, sheets */
+  --sola-radius-full: 9999px; /* pills, avatars, tags */
+
+  /* ─── Type scale ────────────────────────────────────────────────────────────
+   * Mirror of Horizon's 5-step type scale. md (16px) is the component default.
+   */
+  --sola-font-size-sm:  12px;  /* labels, metadata — not for primary content */
+  --sola-font-size-md:  16px;  /* body copy, component content */
+  --sola-font-size-lg:  20px;  /* form headers, subsection headers */
+  --sola-font-size-xl:  24px;  /* subtitles, section headers */
+  --sola-font-size-2xl: 32px;  /* page titles — use once per page */
+
+  /* ─── Font weight ───────────────────────────────────────────────────────────
+   * Use semibold for titles; bold only for strong attention after careful
+   * consideration. Prefer color + size over bold for hierarchy.
+   */
+  --sola-font-weight-normal:   400;
+  --sola-font-weight-medium:   500;
+  --sola-font-weight-semibold: 600;
+  --sola-font-weight-bold:     700;
+
+  /* ─── Line height ───────────────────────────────────────────────────────────*/
+  --sola-leading-tight:   1.25;
+  --sola-leading-normal:  1.5;
+  --sola-leading-relaxed: 1.75;
+
+  /* ─── Primary palette (Emerald) ─────────────────────────────────────────────
+   * Primary color scale: most important interactive actions.
+   * Use -500 as the base; -600/-700 for hover/active states.
+   */
+  --sola-color-primary-50:  #ecfdf5;
+  --sola-color-primary-100: #d1fae5;
+  --sola-color-primary-200: #a7f3d0;
+  --sola-color-primary-300: #6ee7b7;
+  --sola-color-primary-400: #34d399;
+  --sola-color-primary-500: #10b981;
+  --sola-color-primary-600: #059669;
+  --sola-color-primary-700: #047857;
+  --sola-color-primary-800: #065f46;
+  --sola-color-primary-900: #064e3b;
+
+  /* ─── Neutral palette (Slate) ───────────────────────────────────────────────
+   * Full neutral range for UI elements and typography.
+   * The slight blue-grey bias makes neutrals feel chosen, not defaulted.
+   */
+  --sola-color-neutral-0:   #ffffff;
+  --sola-color-neutral-50:  #f8fafc;
+  --sola-color-neutral-100: #f1f5f9;
+  --sola-color-neutral-200: #e2e8f0;
+  --sola-color-neutral-300: #cbd5e1;
+  --sola-color-neutral-400: #94a3b8;
+  --sola-color-neutral-500: #64748b;
+  --sola-color-neutral-600: #475569;
+  --sola-color-neutral-700: #334155;
+  --sola-color-neutral-800: #1e293b;
+  --sola-color-neutral-900: #0f172a;
+  --sola-color-neutral-950: #020617;
+
+  /* ─── Semantic text roles ───────────────────────────────────────────────────
+   * Mirror of Horizon's $now-color--text-{primary,secondary,tertiary}.
+   * primary: essential workflow content
+   * secondary: complementary content, input labels — downplays to emphasize primary
+   * tertiary: metadata, supplemental data
+   */
+  --sola-text-primary:   #0f172a;
+  --sola-text-secondary: #475569;
+  --sola-text-tertiary:  #94a3b8;
+
+  /* ─── Surface roles ─────────────────────────────────────────────────────────*/
+  --sola-surface-0:       #ffffff;
+  --sola-surface-1:       #f8fafc;
+  --sola-surface-2:       #f1f5f9;
+  --sola-surface-overlay: rgba(15, 23, 42, 0.6);
+
+  /* ─── Border roles ──────────────────────────────────────────────────────────*/
+  --sola-border-subtle:  #e2e8f0;
+  --sola-border-default: #cbd5e1;
+  --sola-border-strong:  #94a3b8;
+
+  /* ─── Semantic alert severity ───────────────────────────────────────────────
+   * Mirror of Horizon's 7 Alert palette roles: low → positive → info →
+   * moderate → warning → high → critical.
+   * Each role has a foreground (--sola-alert-*) and a tinted background
+   * (--sola-alert-*-bg) for containing surfaces.
+   */
+  --sola-alert-low:          #64748b;
+  --sola-alert-low-bg:       #f8fafc;
+
+  --sola-alert-positive:     #059669;
+  --sola-alert-positive-bg:  #ecfdf5;
+
+  --sola-alert-info:         #0284c7;
+  --sola-alert-info-bg:      #f0f9ff;
+
+  --sola-alert-moderate:     #ca8a04;
+  --sola-alert-moderate-bg:  #fefce8;
+
+  --sola-alert-warning:      #ea580c;
+  --sola-alert-warning-bg:   #fff7ed;
+
+  --sola-alert-high:         #dc2626;
+  --sola-alert-high-bg:      #fef2f2;
+
+  --sola-alert-critical:     #9333ea;
+  --sola-alert-critical-bg:  #faf5ff;
+
+  /* ─── Focus ring ────────────────────────────────────────────────────────────*/
+  --sola-focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.4);
+}
+
+/* ─── Dark mode — system default ─────────────────────────────────────────────
+ * Redefines only token values; all component styles use the tokens above.
+ * Guard prevents this from overriding an explicit data-theme="light".
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sola-text-primary:   #f8fafc;
+    --sola-text-secondary: #94a3b8;
+    --sola-text-tertiary:  #64748b;
+
+    --sola-surface-0:       #0f172a;
+    --sola-surface-1:       #1e293b;
+    --sola-surface-2:       #334155;
+    --sola-surface-overlay: rgba(2, 6, 23, 0.75);
+
+    --sola-border-subtle:  #1e293b;
+    --sola-border-default: #334155;
+    --sola-border-strong:  #475569;
+
+    --sola-alert-low-bg:       #1e293b;
+    --sola-alert-positive-bg:  #022c22;
+    --sola-alert-info-bg:      #082f49;
+    --sola-alert-moderate-bg:  #1c1400;
+    --sola-alert-warning-bg:   #1c0c00;
+    --sola-alert-high-bg:      #1c0000;
+    --sola-alert-critical-bg:  #1a0030;
+  }
+}
+
+/* ─── Dark mode — explicit toggle ────────────────────────────────────────────*/
+:root[data-theme="dark"] {
+  --sola-text-primary:   #f8fafc;
+  --sola-text-secondary: #94a3b8;
+  --sola-text-tertiary:  #64748b;
+
+  --sola-surface-0:       #0f172a;
+  --sola-surface-1:       #1e293b;
+  --sola-surface-2:       #334155;
+  --sola-surface-overlay: rgba(2, 6, 23, 0.75);
+
+  --sola-border-subtle:  #1e293b;
+  --sola-border-default: #334155;
+  --sola-border-strong:  #475569;
+
+  --sola-alert-low-bg:       #1e293b;
+  --sola-alert-positive-bg:  #022c22;
+  --sola-alert-info-bg:      #082f49;
+  --sola-alert-moderate-bg:  #1c1400;
+  --sola-alert-warning-bg:   #1c0c00;
+  --sola-alert-high-bg:      #1c0000;
+  --sola-alert-critical-bg:  #1a0030;
+}
