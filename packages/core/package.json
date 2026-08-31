@@ -7,7 +7,14 @@
   "exports": {
     ".": "./src/index.js"
   },
-  "keywords": ["sola", "reactivity", "signals", "zero-vdom", "ui", "frontend"],
+  "keywords": [
+    "sola",
+    "reactivity",
+    "signals",
+    "zero-vdom",
+    "ui",
+    "frontend"
+  ],
   "license": "MIT",
   "homepage": "https://sola-air.dev",
   "repository": {
