@@ -125,7 +125,9 @@ function preprocessTemplate(template, dynAttrs) {
         } else if (template[i] === '"' || template[i] === "'") {
           // Quoted attribute value — scan for {expr} interpolations
           const quote = template[i++];
-          let inner = ''; let hasDyn = false;
+          const parts = [];
+          let currentText = '';
+          let hasDyn = false;
           while (i < template.length && template[i] !== quote) {
             if (template[i] === '{') {
               const closeIdx = matchBrace(template, i);
@@ -133,18 +135,35 @@ function preprocessTemplate(template, dynAttrs) {
                 const expr = template.slice(i + 1, closeIdx).trim();
                 if (!expr.startsWith('#') && !expr.startsWith('/') && !expr.startsWith(':')) {
                   hasDyn = true;
-                  inner += `\${${expr}}`; i = closeIdx + 1; continue;
+                  parts.push({ text: currentText });
+                  currentText = '';
+                  parts.push({ expr });
+                  i = closeIdx + 1; continue;
                 }
               }
             }
-            inner += template[i++];
+            currentText += template[i++];
           }
+          parts.push({ text: currentText });
           if (i < template.length) i++; // skip closing quote
           if (hasDyn) {
-            dynAttrs.push('`' + inner + '`');
+            // Build a string-concatenation expression instead of a runtime backtick
+            // template literal. Confirmed by driving a real browser against a live
+            // ServiceNow Service Portal instance: its widget-script delivery pipeline
+            // silently mangles `${expr}` interpolation inside a template literal down
+            // to bare, unevaluated expression text (e.g. `background: ${x}` becomes
+            // the literal string "background: x" — the function reference itself,
+            // never called). Every prior "the reactive binding doesn't do anything"
+            // report came from this exact code path. Concatenation is semantically
+            // identical and isn't affected by whatever that pipeline does to backticks.
+            const combined = parts
+              .filter((p) => p.expr !== undefined || p.text !== '')
+              .map((p) => (p.expr !== undefined ? `(${p.expr})` : JSON.stringify(p.text)))
+              .join(' + ');
+            dynAttrs.push(combined || `''`);
             result += `${attrName}="__soladyn_${dynAttrs.length - 1}__"`;
           } else {
-            result += `${attrName}="${inner}"`;
+            result += `${attrName}="${currentText}"`;
           }
         } else {
           result += `${attrName}=`;

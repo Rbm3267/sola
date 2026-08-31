@@ -91,9 +91,18 @@ test('ternary in attribute: attr={cond ? a : b}', () => {
   assert(code.includes('count > 0 ? false : true'), 'ternary attr expr');
 });
 
-test('template literal interpolation in quoted attr: class="prefix-{name}"', () => {
+test('quoted attr with embedded {expr} compiles to string concatenation, not a template literal', () => {
+  // Deliberately not a backtick template literal: confirmed via a real browser against a
+  // live ServiceNow Service Portal instance that its widget-script delivery pipeline
+  // mangles `${expr}` down to bare unevaluated expression text. Concatenation is immune.
   const { code } = compile(`<div class="item-{index}"></div>`);
-  assert(code.includes('`item-${index}`'), 'template literal in quoted attr');
+  assert(code.includes('"item-" + (index)'), 'compiles to concatenation');
+  assert(!code.includes('`item-${index}`'), 'does not use a backtick template literal');
+});
+
+test('quoted attr with multiple {expr} segments concatenates all of them', () => {
+  const { code } = compile(`<div style="background: {bg}; color: {fg};"></div>`);
+  assert(code.includes('"background: " + (bg) + "; color: " + (fg) + ";"'), 'all segments concatenated in order');
 });
 
 // ── TypeScript support ────────────────────────────────────────────────────────
