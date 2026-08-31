@@ -3,7 +3,7 @@
   export let accentColor = "";
 </script>
 
-<div class="sola-card" style="border-top: 3px solid {accentColor || 'transparent'};">
+<div class="sola-card" style={accentColor ? 'border-top: 3px solid ' + accentColor + ';' : ''}>
   <div class="card-glow"></div>
   {#if title}
     <div class="card-header">
