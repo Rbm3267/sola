@@ -3,8 +3,8 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme.svelte';
-	import { Analytics } from '@vercel/analytics/svelte';
-	import { SpeedInsights } from '@vercel/speed-insights/svelte';
+	import { Analytics } from '@vercel/analytics/sveltekit';
+	import { SpeedInsights } from '@vercel/speed-insights/sveltekit';
 
 	let { children } = $props();
 
