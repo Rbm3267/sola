@@ -23,7 +23,7 @@ server.tool(
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ ok: true, js: result.js, css: result.css ?? null })
+          text: JSON.stringify({ ok: true, js: result.code, css: result.css ?? null })
         }]
       };
     } catch (err) {

@@ -46,6 +46,7 @@
       items: [
         { id: 'host-embedding', title: 'React & Portal Embeds' },
         { id: 'relay-saas', title: 'Sola Relay SaaS' },
+        { id: 'mcp', title: 'MCP Server' },
         { id: 'llm-spec', title: 'AI Prompting Spec' }
       ]
     }
@@ -249,19 +250,108 @@ Sola components compile single-file markup into pure zero-VDOM native DOM nodes.
 - Use $intent("...") for ambient generative nodes
 - Use $data("uri://...") for live signal bindings`;
 
-  const serviceNowEmbedCode = `// ServiceNow UI Script / Widget Client Controller
+  // ServiceNow: Service Portal (no bundler — IIFE path)
+  const servicePortalCode = `// 1. Upload sola-core.iife.min.js as a UI Script (sys_ui_script) in ServiceNow.
+//    Set "Global" = true so window.SolaCore is available on every portal page.
+
+// 2. Pre-compile your .sola component to an IIFE using the Sola compiler CLI:
+//
+//    sola compile MyWidget.sola --target iife --export-name MyWidget --out my-widget.js
+//
+//    Upload my-widget.js as a second UI Script. It expects window.SolaCore to
+//    already be present and registers itself as window['MyWidget'].
+
+// 3. In your Service Portal Widget Client Controller (client_script field):
 function(spUtil) {
   var c = this;
-  var container = document.getElementById('sola-matrix-root');
-  
-  // Mount zero-VDOM Sola Incident Matrix directly into Service Portal DOM
-  window.SolaIncidentMatrix(container, {
-    incidentId: c.data.sys_id,
-    onResolve: function(incident) {
-      spUtil.addInfoMessage('Resolved via Sola Ambient Action');
-    }
+  var container = document.getElementById('sola-widget-root');
+
+  // Mount the compiled Sola component into the widget DOM.
+  // Props map directly to the component's exported let declarations.
+  var cleanup = window.MyWidget(container, {
+    recordId: c.data.sys_id,
+    state:     c.data.state
   });
+
+  // Optional: tear down reactivity when the widget is destroyed
+  c.$onDestroy = function() { if (cleanup) cleanup(); };
 }`;
+
+  // ServiceNow: Fluent SDK (github.com/ServiceNow/sdk) — has a build step, use ESM
+  const fluentSdkCode = `// The ServiceNow Fluent SDK (github.com/ServiceNow/sdk) uses a pnpm build
+// pipeline that supports standard npm packages and ES modules.
+// No IIFE needed — import @sola-air-ui/core directly.
+
+// --- Step 1: install in your SDK project ---
+// pnpm add @sola-air-ui/core @sola-air-ui/compiler
+
+// --- Step 2: pre-compile your .sola file to JS using the CLI ---
+// (Run this in your SDK project's build script or as a prebuild step)
+// npx sola compile src/components/IncidentCard.sola --out src/components/IncidentCard.js
+
+// --- Step 3: import and mount inside a Fluent TypeScript source file ---
+// src/components/my-page.ts
+import { createSignal, createEffect } from '@sola-air-ui/core';
+import mountIncidentCard from './IncidentCard.js'; // compiled Sola component
+
+// Mount into any DOM element — e.g. inside a connectedCallback or render hook
+const container = document.getElementById('sola-root');
+const cleanup = mountIncidentCard(container, {
+  recordId: currentRecord.sys_id,
+  priority: currentRecord.priority
+});
+
+// Tear down when the component unmounts
+export function onDestroy() { cleanup(); }
+
+// --- Reactive state outside a component (shared signals) ---
+export const [ticketCount, setTicketCount] = createSignal(0);
+createEffect(() => {
+  document.title = \`(\${ticketCount()}) Open Tickets\`;
+});`;
+
+  const serviceNowEmbedCode = servicePortalCode;
+
+  const mcpInstallCode = `# Add to your Claude Code MCP config (~/.claude/claude_desktop_config.json
+# or via: claude mcp add sola-mcp)
+
+{
+  "mcpServers": {
+    "sola": {
+      "command": "npx",
+      "args": ["-y", "@sola-air-ui/mcp"]
+    }
+  }
+}`;
+
+  const mcpToolsCode = `// Tools exposed to the AI agent:
+
+// 1. compile_component — compile a .sola source string to JS + CSS
+//    Input:  { source: string, filename?: string }
+//    Output: { ok: true, js: string, css: string | null }
+//         or { ok: false, error: string }
+
+// 2. validate_component — check a .sola source for errors without full output
+//    Input:  { source: string }
+//    Output: { valid: boolean, errors: string[] }
+
+// 3. sola://docs resource — full Sola API reference as plain text
+//    Read by the agent automatically to understand .sola syntax,
+//    runes ($state, $derived, $intent), template directives, and compiler output.`;
+
+  const mcpAgentCode = `// When an AI agent (Claude Code, Cursor, Copilot) has the Sola MCP active,
+// it can author and compile .sola components inline without leaving the editor.
+
+// Example agent workflow:
+// 1. Agent reads sola://docs to learn the syntax
+// 2. Agent writes a .sola component based on the task
+// 3. Agent calls compile_component({ source, filename: 'Widget.sola' })
+// 4. Agent writes the returned JS to disk or wires it into the build
+// 5. If compilation fails, error message includes file + line:col
+
+// The MCP server runs as a local stdio process — no network, no auth.
+// It uses the same @sola-air-ui/compiler under the hood, so output is
+// identical to running: sola compile Widget.sola`;
 
   const reactEmbedCode = `import React, { useEffect, useRef } from 'react';
 import mountSolaComponent from '@sola-air-ui/ui/IncidentTriageMatrix';
@@ -719,10 +809,10 @@ export function SolaIncidentCard({ incidentId }) {
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
             <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              React & Portal Embeds
+              Host Embedding
             </h1>
             <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
-              Embedding Sola zero-VDOM components into React applications and enterprise portals.
+              Sola components are plain functions — mount them into any DOM container from any host framework or enterprise platform.
             </p>
           </header>
 
@@ -733,10 +823,21 @@ export function SolaIncidentCard({ incidentId }) {
             </div>
           </section>
 
-          <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Enterprise Service Portal Controller</h3>
+          <section class="space-y-6">
+            <div class="space-y-1">
+              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">ServiceNow — Fluent SDK</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">The <a href="https://github.com/ServiceNow/sdk" class="text-emerald-600 dark:text-emerald-400 underline underline-offset-2">ServiceNow Fluent SDK</a> has a pnpm build pipeline that resolves npm packages and ES modules. Use the standard ESM path — no IIFE needed. Pre-compile <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">.sola</code> files to JS with the CLI, then import and mount normally inside TypeScript source files.</p>
+            </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
-              <pre><code>{serviceNowEmbedCode}</code></pre>
+              <pre><code>{fluentSdkCode}</code></pre>
+            </div>
+
+            <div class="space-y-1">
+              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">ServiceNow — Service Portal (no bundler)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Service Portal widgets run without a bundler. Use the IIFE build: load <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola-core.iife.min.js</code> as a global UI Script, compile your component with <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">--target iife</code>, then mount via <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">window.ComponentName(container, props)</code> from the widget Client Controller.</p>
+            </div>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{servicePortalCode}</code></pre>
             </div>
           </section>
         </article>
@@ -769,7 +870,60 @@ export function SolaIncidentCard({ incidentId }) {
           </section>
         </article>
 
-      <!-- ================= 8. LLM SPEC ================= -->
+      <!-- ================= 8. MCP SERVER ================= -->
+      {:else if activeSection === 'mcp'}
+        <article class="space-y-8">
+          <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
+            <p class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">AI Tooling</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              MCP Server
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+              Give any MCP-compatible AI agent (Claude Code, Cursor, Copilot) direct access to the Sola compiler and API reference — no context window stuffing required.
+            </p>
+          </header>
+
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Installation</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Add <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/mcp</code> to your Claude Code or editor MCP config. The server runs locally as a stdio process — no API keys, no network calls.</p>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{mcpInstallCode}</code></pre>
+            </div>
+          </section>
+
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Exposed Tools & Resources</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">The MCP server exposes two tools and one resource. An agent reads <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola://docs</code> to learn the syntax, then calls <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">compile_component</code> to produce runnable JS.</p>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{mcpToolsCode}</code></pre>
+            </div>
+          </section>
+
+          <section class="space-y-3">
+            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Agent Workflow</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">How a coding agent uses the MCP end-to-end — from reading the spec to writing compiled output to disk.</p>
+            <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+              <pre><code>{mcpAgentCode}</code></pre>
+            </div>
+          </section>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">compile_component</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Compile any .sola source to a JS ES module + scoped CSS. Returns structured JSON with line-level error details on failure.</p>
+            </div>
+            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">validate_component</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Check a .sola source for errors without emitting the full compiled output. Useful for pre-flight checks before writing files.</p>
+            </div>
+            <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">sola://docs</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Full Sola API reference as plain text — template syntax, runes, compiler output format. Read once at session start.</p>
+            </div>
+          </div>
+        </article>
+
+      <!-- ================= 9. LLM SPEC ================= -->
       {:else if activeSection === 'llm-spec'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">

@@ -12,30 +12,42 @@ if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
     sola compile <file.sola> [options]
 
   Options:
-    -o, --out <file>    Write compiled output to a file (default: stdout)
-    -v, --version       Print compiler version
-    -h, --help          Show this help message
+    -o, --out <file>          Write compiled output to a file (default: stdout)
+    --target <esm|iife>       Output format (default: esm)
+                                esm  — ES module with import/export (default, for bundlers)
+                                iife — Self-contained IIFE for no-bundler environments
+                                       (ServiceNow Service Portal, plain <script> tags)
+    --export-name <Name>      Global name for IIFE target (default: SolaComponent)
+                              The compiled component mounts as window['Name'](el, props)
+    -v, --version             Print compiler version
+    -h, --help                Show this help message
 
   Examples:
     sola compile App.sola -o dist/App.js
-    sola compile Component.sola
+    sola compile Widget.sola --target iife --export-name MyWidget -o dist/my-widget.js
   `);
   process.exit(0);
 }
 
 if (args.includes('-v') || args.includes('--version')) {
-  console.log('Sola Compiler v1.0.0');
+  console.log('Sola Compiler v1.0.3');
   process.exit(0);
 }
 
 let inputFile = null;
 let outputFile = null;
+let target = 'esm';
+let exportName = 'SolaComponent';
 
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
   if (arg === 'compile') continue;
   if (arg === '-o' || arg === '--out') {
     outputFile = args[++i];
+  } else if (arg === '--target') {
+    target = args[++i];
+  } else if (arg === '--export-name') {
+    exportName = args[++i];
   } else if (!inputFile && !arg.startsWith('-')) {
     inputFile = arg;
   }
@@ -43,6 +55,11 @@ for (let i = 0; i < args.length; i++) {
 
 if (!inputFile) {
   console.error('Error: No input .sola file specified.');
+  process.exit(1);
+}
+
+if (target !== 'esm' && target !== 'iife') {
+  console.error(`Error: --target must be "esm" or "iife", got "${target}"`);
   process.exit(1);
 }
 
@@ -54,14 +71,14 @@ if (!fs.existsSync(inputPath)) {
 
 try {
   const source = fs.readFileSync(inputPath, 'utf8');
-  const result = compile(source, inputFile);
+  const result = compile(source, { filename: inputFile, target, exportName });
   const code = result.code || result;
 
   if (outputFile) {
     const outPath = path.resolve(process.cwd(), outputFile);
     fs.mkdirSync(path.dirname(outPath), { recursive: true });
     fs.writeFileSync(outPath, code, 'utf8');
-    console.log(`✓ Compiled ${inputFile} -> ${outputFile} (${code.length} bytes)`);
+    console.log(`✓ Compiled ${inputFile} -> ${outputFile} [${target}] (${code.length} bytes)`);
   } else {
     console.log(code);
   }
