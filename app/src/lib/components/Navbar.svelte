@@ -18,7 +18,7 @@
 }} />
 
 <header class="sticky top-0 z-40 w-full bg-white/70 dark:bg-[#090d19]/75 backdrop-blur-2xl border-b border-slate-900/[0.03] dark:border-white/[0.04] shadow-[0_4px_20px_-6px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4)] transition-all duration-300">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
     
     <!-- Logo & Version -->
     <div class="flex items-center gap-6">
@@ -26,10 +26,10 @@
         <SolaLogo size="sm" />
         <div class="flex flex-col gap-0.5">
           <div class="flex items-center gap-2">
-            <span class="text-lg font-black tracking-tight text-slate-900 dark:text-white font-sans leading-none">Sola <span class="text-emerald-600 dark:text-emerald-400">AIR</span></span>
-            <span class="text-[10px] font-mono font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 px-2 py-0.5 rounded-full">v1.0.1</span>
+            <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white font-sans leading-none">Sola <span class="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">AIR</span></span>
+            <span class="text-[10px] font-mono font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 px-2 py-0.5 rounded-full">v1.0.1</span>
           </div>
-          <span class="text-[9px] font-mono tracking-widest text-slate-400 dark:text-slate-500 leading-none uppercase"><span class="text-emerald-500 dark:text-emerald-400 font-bold">A</span>mbient · <span class="text-emerald-500 dark:text-emerald-400 font-bold">I</span>ntent · <span class="text-emerald-500 dark:text-emerald-400 font-bold">R</span>untime</span>
+          <span class="text-[9px] font-mono tracking-widest text-slate-400 dark:text-slate-500 leading-none uppercase"><span class="text-blue-500 dark:text-blue-400 font-bold">A</span>mbient · <span class="text-indigo-500 dark:text-indigo-400 font-bold">I</span>ntent · <span class="text-violet-500 dark:text-violet-400 font-bold">R</span>untime</span>
         </div>
       </a>
 
@@ -42,7 +42,7 @@
         </a>
         <a 
           href="/studio" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/studio') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/studio') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Studio
         </a>
         <a 
@@ -52,7 +52,7 @@
         </a>
         <a
           href="/demo/ai"
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           AI Demo
         </a>
         <a
@@ -67,7 +67,7 @@
         </a>
         <a 
           href="/docs" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/docs') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/docs') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Docs
         </a>
       </nav>
@@ -81,7 +81,7 @@
         onclick={() => isAiModalOpen = true}
         class="flex items-center justify-between w-auto sm:w-56 h-9 px-3 rounded-xl bg-slate-100/70 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-2xs group">
         <div class="flex items-center gap-2">
-          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+          <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
           <span class="font-medium text-slate-700 dark:text-slate-300 hidden sm:inline">Ask Sola AIR...</span>
           <span class="font-medium text-slate-700 dark:text-slate-300 sm:hidden">AIR</span>
         </div>
@@ -138,7 +138,7 @@
       <a 
         href="/studio" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/studio') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/studio') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Studio</span>
       </a>
       <a
@@ -150,7 +150,7 @@
       <a
         href="/demo/ai"
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>AI Demo</span>
       </a>
       <a
@@ -168,7 +168,7 @@
       <a 
         href="/docs" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/docs') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/docs') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Documentation</span>
       </a>
     </div>
