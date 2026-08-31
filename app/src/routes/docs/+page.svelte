@@ -250,67 +250,56 @@ Sola components compile single-file markup into pure zero-VDOM native DOM nodes.
 - Use $intent("...") for ambient generative nodes
 - Use $data("uri://...") for live signal bindings`;
 
-  // ServiceNow: Service Portal (no bundler — IIFE path)
-  const servicePortalCode = `// 1. Upload sola-core.iife.min.js as a UI Script (sys_ui_script) in ServiceNow.
-//    Set "Global" = true so window.SolaCore is available on every portal page.
+  // With a bundler (ESM path)
+  const bundlerEmbedCode = `// --- Step 1: install packages ---
+// npm install @sola-air-ui/core @sola-air-ui/compiler
 
-// 2. Pre-compile your .sola component to an IIFE using the Sola compiler CLI:
-//
-//    sola compile MyWidget.sola --target iife --export-name MyWidget --out my-widget.js
-//
-//    Upload my-widget.js as a second UI Script. It expects window.SolaCore to
-//    already be present and registers itself as window['MyWidget'].
+// --- Step 2: pre-compile your .sola component to JS with the CLI ---
+// (run in your build script or as a prebuild step)
+// npx sola compile src/components/MyWidget.sola --out src/components/MyWidget.js
 
-// 3. In your Service Portal Widget Client Controller (client_script field):
-function(spUtil) {
-  var c = this;
-  var container = document.getElementById('sola-widget-root');
-
-  // Mount the compiled Sola component into the widget DOM.
-  // Props map directly to the component's exported let declarations.
-  var cleanup = window.MyWidget(container, {
-    recordId: c.data.sys_id,
-    state:     c.data.state
-  });
-
-  // Optional: tear down reactivity when the widget is destroyed
-  c.$onDestroy = function() { if (cleanup) cleanup(); };
-}`;
-
-  // ServiceNow: Fluent SDK (github.com/ServiceNow/sdk) — has a build step, use ESM
-  const fluentSdkCode = `// The ServiceNow Fluent SDK (github.com/ServiceNow/sdk) uses a pnpm build
-// pipeline that supports standard npm packages and ES modules.
-// No IIFE needed — import @sola-air-ui/core directly.
-
-// --- Step 1: install in your SDK project ---
-// pnpm add @sola-air-ui/core @sola-air-ui/compiler
-
-// --- Step 2: pre-compile your .sola file to JS using the CLI ---
-// (Run this in your SDK project's build script or as a prebuild step)
-// npx sola compile src/components/IncidentCard.sola --out src/components/IncidentCard.js
-
-// --- Step 3: import and mount inside a Fluent TypeScript source file ---
-// src/components/my-page.ts
+// --- Step 3: import and mount inside any TypeScript/JS source file ---
 import { createSignal, createEffect } from '@sola-air-ui/core';
-import mountIncidentCard from './IncidentCard.js'; // compiled Sola component
+import mountMyWidget from './MyWidget.js'; // compiled Sola component
 
-// Mount into any DOM element — e.g. inside a connectedCallback or render hook
+// Mount into any DOM container
 const container = document.getElementById('sola-root');
-const cleanup = mountIncidentCard(container, {
-  recordId: currentRecord.sys_id,
-  priority: currentRecord.priority
+const cleanup = mountMyWidget(container, {
+  title: 'My Widget',
+  value: 42
 });
 
 // Tear down when the component unmounts
 export function onDestroy() { cleanup(); }
 
-// --- Reactive state outside a component (shared signals) ---
-export const [ticketCount, setTicketCount] = createSignal(0);
+// --- Shared reactive state (outside a component) ---
+export const [count, setCount] = createSignal(0);
 createEffect(() => {
-  document.title = \`(\${ticketCount()}) Open Tickets\`;
+  console.log('count changed:', count());
 });`;
 
-  const serviceNowEmbedCode = servicePortalCode;
+  // Without a bundler (IIFE path)
+  const noBundlerEmbedCode = `// --- Step 1: load sola-core globally ---
+// Serve sola-core.iife.min.js and include it before your component script:
+// <script src="/scripts/sola-core.iife.min.js"></script>
+// This makes window.SolaCore available on the page.
+
+// --- Step 2: pre-compile your .sola component to an IIFE ---
+// sola compile MyWidget.sola --target iife --export-name MyWidget --out my-widget.js
+// Serve my-widget.js. It expects window.SolaCore to already be present
+// and registers itself as window['MyWidget'].
+
+// --- Step 3: mount from any page script or controller ---
+var container = document.getElementById('sola-widget-root');
+
+// Props map directly to the component's exported let declarations.
+var cleanup = window.MyWidget(container, {
+  title: 'My Widget',
+  value: 42
+});
+
+// Optional: tear down reactivity when the container is removed
+// cleanup();`;
 
   const mcpInstallCode = `# Add to your Claude Code MCP config (~/.claude/claude_desktop_config.json
 # or via: claude mcp add sola-mcp)
@@ -354,18 +343,18 @@ createEffect(() => {
 // identical to running: sola compile Widget.sola`;
 
   const reactEmbedCode = `import React, { useEffect, useRef } from 'react';
-import mountSolaComponent from '@sola-air-ui/ui/IncidentTriageMatrix';
+import mountMyWidget from './MyWidget.js'; // pre-compiled .sola component
 
-export function SolaIncidentCard({ incidentId }) {
+export function SolaWidget({ title, value }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
-    
+
     // Mount Sola component directly into React DOM container
-    const unmount = mountSolaComponent(containerRef.current, { incidentId });
+    const unmount = mountMyWidget(containerRef.current, { title, value });
     return () => unmount();
-  }, [incidentId]);
+  }, [title, value]);
 
   return <div ref={containerRef} className="sola-container" />;
 }`;
@@ -825,19 +814,19 @@ export function SolaIncidentCard({ incidentId }) {
 
           <section class="space-y-6">
             <div class="space-y-1">
-              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">ServiceNow — Fluent SDK</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">The <a href="https://github.com/ServiceNow/sdk" class="text-emerald-600 dark:text-emerald-400 underline underline-offset-2">ServiceNow Fluent SDK</a> has a pnpm build pipeline that resolves npm packages and ES modules. Use the standard ESM path — no IIFE needed. Pre-compile <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">.sola</code> files to JS with the CLI, then import and mount normally inside TypeScript source files.</p>
+              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">With a Bundler (ESM)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">For environments with a build step — Vite, webpack, Rollup, esbuild, or any bundler that resolves npm packages. Install <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/core</code>, pre-compile <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">.sola</code> files to JS with the CLI, then import and mount normally inside any TypeScript or JavaScript source file.</p>
             </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
-              <pre><code>{fluentSdkCode}</code></pre>
+              <pre><code>{bundlerEmbedCode}</code></pre>
             </div>
 
             <div class="space-y-1">
-              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">ServiceNow — Service Portal (no bundler)</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Service Portal widgets run without a bundler. Use the IIFE build: load <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola-core.iife.min.js</code> as a global UI Script, compile your component with <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">--target iife</code>, then mount via <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">window.ComponentName(container, props)</code> from the widget Client Controller.</p>
+              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Without a Bundler (IIFE)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">For environments with no build step — plain <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">&lt;script&gt;</code> tags, CMS platforms, portals. Load <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola-core.iife.min.js</code> as a global script, compile your component with <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">--target iife</code>, then mount via <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">window.ComponentName(container, props)</code>.</p>
             </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
-              <pre><code>{servicePortalCode}</code></pre>
+              <pre><code>{noBundlerEmbedCode}</code></pre>
             </div>
           </section>
         </article>
