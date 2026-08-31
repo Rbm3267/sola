@@ -184,6 +184,26 @@ test('bind:value={signal} wires two-way', () => {
   assert(code.includes('val() ??'), 'reactive read');
 });
 
+// ── IIFE target (ServiceNow / no-bundler) ────────────────────────────────────
+
+console.log('\nIIFE target');
+
+test('iife target wraps output in IIFE and uses window.SolaCore', () => {
+  const src = '<script>let n = $state(0);</script><span>{n}</span>';
+  const { code } = compile(src, { target: 'iife', exportName: 'MyWidget' });
+  assert(code.includes('(function()'), 'IIFE wrapper');
+  assert(code.includes('window.SolaCore'), 'pulls from global');
+  assert(code.includes("window['MyWidget']"), 'exports named global');
+  assert(code.includes('createSignal(0)'), '$state compiled inside IIFE');
+  assert(!code.includes("import {"), 'no ESM import');
+  assert(!code.includes('export default'), 'no ESM export');
+});
+
+test('iife target closes IIFE correctly', () => {
+  const { code } = compile('<div>Hello</div>', { target: 'iife' });
+  assert(code.trimEnd().endsWith('})();'), 'IIFE closes');
+});
+
 // ── Error messages ────────────────────────────────────────────────────────────
 
 console.log('\nError messages');

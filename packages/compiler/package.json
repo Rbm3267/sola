@@ -1,6 +1,6 @@
 {
   "name": "@sola-air-ui/compiler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Compiler for Sola single-file components (.sola) — transforms template + script + style to ES modules",
   "type": "module",
   "main": "./src/index.js",
@@ -13,7 +13,14 @@
   "scripts": {
     "test": "node test/compiler.test.js"
   },
-  "keywords": ["sola", "compiler", "sfc", "single-file-component", "zero-vdom", "build-tool"],
+  "keywords": [
+    "sola",
+    "compiler",
+    "sfc",
+    "single-file-component",
+    "zero-vdom",
+    "build-tool"
+  ],
   "license": "MIT",
   "homepage": "https://sola-air.dev",
   "repository": {

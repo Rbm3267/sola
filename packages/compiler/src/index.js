@@ -192,6 +192,7 @@ function stripTypeScript(code) {
 }
 
 export function compile(source, options = {}) {
+  const target = options.target || 'esm'; // 'esm' | 'iife'
   const { script: scriptContent, style: styleContent, template: rawTemplateSource } = extractScriptAndStyle(source);
   const scopeHash = hashString(styleContent || rawTemplateSource);
   const hasStyles = styleContent.trim().length > 0;
@@ -585,16 +586,27 @@ export function compile(source, options = {}) {
   root.children.forEach(child => emitNode(child, '__target'));
 
   // Assemble final output module
+  const CORE_EXPORTS = 'createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys';
   let output = '';
-  output += `// Compiled by @sola-air-ui/compiler v1.0.2\n`;
-  output += `import { createSignal, createDerived, createEffect, createIntent, createData, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } from '@sola-air-ui/core';\n`;
+  output += `// Compiled by @sola-air-ui/compiler v1.0.3\n`;
 
-  for (const imp of componentImports) {
-    output += `import ${imp.localName} from '${imp.path}';\n`;
+  if (target === 'iife') {
+    // ServiceNow / no-bundler mode: pull from window.SolaCore global
+    output += `(function() {\n`;
+    output += `const { ${CORE_EXPORTS} } = window.SolaCore;\n`;
+    for (const imp of componentImports) {
+      output += `// Note: sub-component ${imp.localName} must be pre-loaded before this script\n`;
+    }
+    output += `\n`;
+    output += `window['${options.exportName || 'SolaComponent'}'] = function mount(__target, props = {}) {\n`;
+  } else {
+    output += `import { ${CORE_EXPORTS} } from '@sola-air-ui/core';\n`;
+    for (const imp of componentImports) {
+      output += `import ${imp.localName} from '${imp.path}';\n`;
+    }
+    output += `\n`;
+    output += `export default function mount(__target, props = {}) {\n`;
   }
-
-  output += `\n`;
-  output += `export default function mount(__target, props = {}) {\n`;
   output += `  const __ctx = pushContext();\n\n`;
 
   if (hasStyles) {
@@ -618,12 +630,14 @@ export function compile(source, options = {}) {
 
   output += `\n  __flush_mounts();\n`;
   output += `\n  return () => {\n`;
-  output += `    // Cleanup\n`;
   output += `    __flush_destroys();\n`;
   output += `    popContext(__ctx);\n`;
   output += `    __target.innerHTML = '';\n`;
   output += `  };\n`;
-  output += `}\n`;
+  output += `};\n`;
+  if (target === 'iife') {
+    output += `})();\n`;
+  }
 
   return {
     code: output,
