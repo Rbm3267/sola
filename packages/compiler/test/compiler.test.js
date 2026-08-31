@@ -193,6 +193,19 @@ test('bind:value={signal} wires two-way', () => {
   assert(code.includes('val() ??'), 'reactive read');
 });
 
+test('onXxx-named callback prop on a component passes the real function, not a string', () => {
+  // htmlparser2 lowercases attribute names by default (onChange -> onchange), and the
+  // on:/bare-on exception meant for real DOM event handlers (onclick, on:click) can't yet
+  // tell a <button onclick> apart from a <Toggle onChange> at preprocessing time — both bugs
+  // combined to silently turn a callback prop into the literal string "handleChange".
+  const { code } = compile(
+    `<script>import Toggle from './Toggle.sola'; function handleChange(v) {}</script><Toggle onChange={handleChange} />`
+  );
+  assert(code.includes('"onChange": (handleChange)'), 'onChange prop passed as a raw reference, correct case');
+  assert(!code.includes('"onchange"'), 'attribute name not lowercased');
+  assert(!code.includes('"onChange": "handleChange"'), 'value not passed as a literal string');
+});
+
 // ── IIFE target (ServiceNow / no-bundler) ────────────────────────────────────
 
 console.log('\nIIFE target');

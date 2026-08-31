@@ -245,7 +245,7 @@ export function compile(source, options = {}) {
         templateNodes.pop();
       }
     }
-  }, { recognizeSelfClosing: true, lowerCaseTags: false });
+  }, { recognizeSelfClosing: true, lowerCaseTags: false, lowerCaseAttributeNames: false });
 
   parser.write(rawTemplate.trim() || '<div></div>');
   parser.end();
@@ -458,10 +458,23 @@ export function compile(source, options = {}) {
       // Dynamically-bound props (rows={items}) arrive here as __soladyn_N__ placeholders —
       // resolve them back to the real expression from dynAttrs and pass it as a raw
       // (unquoted) property so the child receives live data, not the placeholder text.
+      //
+      // `onXxx`-named props (e.g. onChange={handler}) are a special case: preprocessTemplate
+      // strips their {expr} down to raw identifier text before this code ever sees them
+      // (the same exception that makes real onclick/on:click DOM handlers work), so they
+      // never arrive as a __soladyn_N__ placeholder at all. Since preprocessTemplate can't
+      // yet tell a component apart from a native element, that exception can't distinguish
+      // "this is a DOM event on <button>" from "this is a callback prop on <Toggle>" — so
+      // treat any on-prefixed key here as a raw expression too, same as a real dynAttr.
       const propEntries = [];
       for (const [key, val] of Object.entries(node.attribs || {})) {
         const dynMatch = /^__soladyn_(\d+)__$/.exec(val);
-        const propValue = dynMatch ? `(${dynAttrs[parseInt(dynMatch[1], 10)]})` : JSON.stringify(val);
+        const isEventLikeProp = /^on:?[\w]+$/.test(key);
+        const propValue = dynMatch
+          ? `(${dynAttrs[parseInt(dynMatch[1], 10)]})`
+          : isEventLikeProp
+            ? `(${val})`
+            : JSON.stringify(val);
         propEntries.push(`${JSON.stringify(key)}: ${propValue}`);
       }
 
