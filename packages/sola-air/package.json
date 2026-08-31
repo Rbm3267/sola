@@ -20,7 +20,8 @@
     "@sola-air-ui/vite-plugin-sola": "^1.0.1",
     "@sola-air-ui/relay": "^1.0.1",
     "@sola-air-ui/mcp": "^1.0.1",
-    "@sola-air-ui/providers": "^1.0.1"
+    "@sola-air-ui/providers": "^1.0.1",
+    "@sola-air-ui/tokens": "^1.0.1"
   },
   "publishConfig": {
     "access": "public",

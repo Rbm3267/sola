@@ -46,11 +46,16 @@
           Studio
         </a>
         <a 
-          href="/community" 
+          href="/community"
           class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/community') ? 'bg-violet-500/10 text-violet-900 dark:text-violet-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Community
         </a>
-        <a 
+        <a
+          href="/demo/ai"
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          AI Demo
+        </a>
+        <a
           href="/components" 
           class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/components') ? 'bg-amber-500/10 text-amber-900 dark:text-amber-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Components
@@ -136,13 +141,19 @@
         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/studio') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Studio</span>
       </a>
-      <a 
-        href="/community" 
+      <a
+        href="/community"
         onclick={() => isMobileMenuOpen = false}
         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/community') ? 'bg-violet-500/10 text-violet-900 dark:text-violet-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Community</span>
       </a>
-      <a 
+      <a
+        href="/demo/ai"
+        onclick={() => isMobileMenuOpen = false}
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        <span>AI Demo</span>
+      </a>
+      <a
         href="/components" 
         onclick={() => isMobileMenuOpen = false}
         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/components') ? 'bg-amber-500/10 text-amber-900 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
