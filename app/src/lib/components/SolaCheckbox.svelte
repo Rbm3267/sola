@@ -27,9 +27,9 @@
     role="checkbox"
     aria-checked={indeterminate ? 'mixed' : checked}
     class="relative w-[18px] h-[18px] rounded-md border-2 transition-all duration-150 flex items-center justify-center shrink-0
-      focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:ring-offset-1 outline-none
+      focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-1 outline-none
       {checked || indeterminate
-        ? 'bg-emerald-500 border-emerald-500'
+        ? 'bg-blue-500 border-blue-500'
         : 'border-slate-300 dark:border-white/20 bg-white dark:bg-white/5 group-hover:border-slate-400 dark:group-hover:border-white/30'}"
     onclick={toggle}
     {disabled}

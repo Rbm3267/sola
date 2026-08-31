@@ -128,7 +128,7 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-white/[0.04]">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
         <span class="text-xs font-mono font-bold text-slate-400 uppercase">On-Demand Technical Report Generator</span>
       </div>
       <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -145,10 +145,10 @@
       disabled={isGenerating}
       class="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold flex items-center gap-2 transition-all active:scale-[0.97] cursor-pointer shadow-md disabled:opacity-60 shrink-0">
       {#if isGenerating}
-        <svg class="w-4 h-4 animate-spin text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+        <svg class="w-4 h-4 animate-spin text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
         <span>Generating ({progress}%)...</span>
       {:else}
-        <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         <span>Generate Technical Report</span>
       {/if}
     </button>
@@ -161,7 +161,7 @@
       <select 
         id="report-template-select"
         bind:value={reportType}
-        class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+        class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
         <option value="sre_postmortem">SRE Postmortem (Database Connection Pool Saturation)</option>
         <option value="finops_audit">Cloud FinOps Audit (Monthly Compute & SaaS Allocation)</option>
         <option value="security_audit">Zero-Trust & Data Enclave Compliance Architecture Brief</option>
@@ -173,7 +173,7 @@
       <select 
         id="target-env-select"
         bind:value={environment}
-        class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+        class="bg-white dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.04] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
         <option value="production_us_east">Production Cluster (us-east-1 / High-Availability)</option>
         <option value="staging_eu_central">Staging Verification (eu-central-1)</option>
         <option value="edge_cloudflare">Global Edge Workers (Edge CDN)</option>
@@ -184,7 +184,7 @@
   <!-- Progress Bar when generating -->
   {#if isGenerating}
     <div class="w-full bg-slate-100 dark:bg-white/[0.08] rounded-full h-2 overflow-hidden">
-      <div class="bg-emerald-500 h-2 transition-all duration-200" style="width: {progress}%"></div>
+      <div class="bg-blue-500 h-2 transition-all duration-200" style="width: {progress}%"></div>
     </div>
   {/if}
 

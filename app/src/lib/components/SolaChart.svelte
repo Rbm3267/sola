@@ -33,7 +33,7 @@
   let hoveredIndex = $state<number | null>(null);
 
   const colorMap = {
-    emerald: { stroke: '#10b981', fill: 'rgba(16, 185, 129, 0.2)', bg: 'bg-emerald-500' },
+    emerald: { stroke: '#10b981', fill: 'rgba(16, 185, 129, 0.2)', bg: 'bg-blue-500' },
     sky: { stroke: '#0ea5e9', fill: 'rgba(14, 165, 233, 0.2)', bg: 'bg-sky-500' },
     indigo: { stroke: '#6366f1', fill: 'rgba(99, 102, 241, 0.2)', bg: 'bg-indigo-500' },
     amber: { stroke: '#f59e0b', fill: 'rgba(245, 158, 11, 0.2)', bg: 'bg-amber-500' },
@@ -186,7 +186,7 @@
   <!-- X-Axis Labels -->
   <div class="flex justify-between items-center px-4 pt-2 text-[10px] font-mono text-slate-400">
     {#each data as d, i}
-      <span class={hoveredIndex === i ? 'text-emerald-500 font-bold' : ''}>{d.label}</span>
+      <span class={hoveredIndex === i ? 'text-blue-500 font-bold' : ''}>{d.label}</span>
     {/each}
   </div>
 </div>

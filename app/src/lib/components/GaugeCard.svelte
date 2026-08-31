@@ -20,7 +20,7 @@
   const strokeDashoffset = $derived(circumference - (pct / 100) * circumference);
 
   const colorMap = {
-    emerald: { stroke: '#10b981', glow: 'rgba(16,185,129,0.15)', text: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500' },
+    emerald: { stroke: '#10b981', glow: 'rgba(16,185,129,0.15)', text: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500' },
     sky: { stroke: '#0ea5e9', glow: 'rgba(14,165,233,0.15)', text: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500' },
     violet: { stroke: '#8b5cf6', glow: 'rgba(139,92,246,0.15)', text: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500' },
     amber: { stroke: '#f59e0b', glow: 'rgba(245,158,11,0.15)', text: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500' }
@@ -87,7 +87,7 @@
   <!-- Bottom Telemetry Bar -->
   <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-400 relative z-10">
     <span class="flex items-center gap-1.5">
-      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
       <span>Telemetry Synchronized</span>
     </span>
     <span class="text-slate-500 dark:text-slate-400 font-bold">zero-vdom</span>

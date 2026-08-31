@@ -66,8 +66,8 @@
           <h3 class="text-base sm:text-lg font-black text-slate-950 dark:text-slate-50 font-sans tracking-tight">
             Ambient Signal Telemetry Mesh
           </h3>
-          <span class="text-[10px] font-mono font-bold uppercase bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-[10px] font-mono font-bold uppercase bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
             <span>4 Linked Widgets</span>
           </span>
         </div>
@@ -161,7 +161,7 @@
         <!-- Subscriber Gauge -->
         <div class="relative group">
           <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
             <span>Signal Subscriber 1</span>
           </div>
 
@@ -185,7 +185,7 @@
             <div>
               <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
                 <span class="text-xs font-mono font-bold text-slate-300">telemetry://signal-bus</span>
-                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">0.2ms Subtask</span>
+                <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/30">0.2ms Subtask</span>
               </div>
               
               <div class="flex flex-col gap-2 max-h-[140px] overflow-y-auto no-scrollbar font-mono text-[11px]">
@@ -193,7 +193,7 @@
                   <div class="flex items-center justify-between text-slate-400 bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800/80">
                     <span class="text-amber-400 truncate max-w-[140px]">{sig.topic}</span>
                     <span class="text-slate-200 font-bold">{sig.value}</span>
-                    <span class="text-emerald-400 text-[10px]">{sig.latencyMs}ms</span>
+                    <span class="text-blue-400 text-[10px]">{sig.latencyMs}ms</span>
                   </div>
                 {/each}
               </div>
@@ -201,7 +201,7 @@
 
             <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400 border-t border-slate-800/80 pt-2 flex justify-between mt-3">
               <span>Bus Throughput: 4,200 msg/s</span>
-              <span class="text-emerald-400 font-bold">100% Synced</span>
+              <span class="text-blue-400 font-bold">100% Synced</span>
             </div>
           </div>
         </div>

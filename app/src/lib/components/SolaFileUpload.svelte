@@ -51,7 +51,7 @@
     ondragover={(e) => { e.preventDefault(); isDragging = true; }}
     ondragleave={() => (isDragging = false)}
     ondrop={handleFileDrop}
-    class="relative rounded-3xl border-2 border-dashed p-8 text-center transition-all cursor-pointer select-none {isDragging ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10 scale-[1.01]' : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 bg-slate-50/50 dark:bg-white/[0.02]'}"
+    class="relative rounded-3xl border-2 border-dashed p-8 text-center transition-all cursor-pointer select-none {isDragging ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-500/10 scale-[1.01]' : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 bg-slate-50/50 dark:bg-white/[0.02]'}"
   >
     <input
       type="file"
@@ -72,7 +72,7 @@
       }}
     />
 
-    <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
+    <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-3">
       <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
         <polyline points="17 8 12 3 7 8"/>
@@ -108,7 +108,7 @@
 
           <div class="flex items-center gap-3">
             <div class="w-16 bg-slate-100 dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
-              <div class="bg-emerald-500 h-full rounded-full" style="width: {file.progress}%"></div>
+              <div class="bg-blue-500 h-full rounded-full" style="width: {file.progress}%"></div>
             </div>
             <button
               type="button"

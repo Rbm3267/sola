@@ -34,9 +34,9 @@
 
   const colorMaps = {
     emerald: {
-      solid: "bg-emerald-500 text-white dark:bg-emerald-600",
-      soft: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20",
-      outline: "bg-transparent text-emerald-600 border-emerald-300 dark:text-emerald-400 dark:border-emerald-500/40"
+      solid: "bg-blue-500 text-white dark:bg-blue-600",
+      soft: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20",
+      outline: "bg-transparent text-blue-600 border-blue-300 dark:text-blue-400 dark:border-blue-500/40"
     },
     sky: {
       solid: "bg-sky-500 text-white dark:bg-sky-600",

@@ -137,7 +137,7 @@
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div>
         <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full {isCircuitBreakerActive ? 'bg-amber-400' : 'bg-emerald-400'}"></span>
+          <span class="w-2 h-2 rounded-full {isCircuitBreakerActive ? 'bg-amber-400' : 'bg-blue-400'}"></span>
           <span>Sentinel Friction &amp; Self-Healing Simulator</span>
         </h3>
         <p class="text-xs text-slate-400 mt-0.5">
@@ -157,10 +157,10 @@
       <button 
         type="button"
         onclick={handleTestClick}
-        class="p-4 rounded-2xl bg-slate-950 dark:bg-white border border-slate-800 hover:border-emerald-500/50 text-left transition-all active:scale-[0.98] cursor-pointer group flex flex-col justify-between gap-2">
+        class="p-4 rounded-2xl bg-slate-950 dark:bg-white border border-slate-800 hover:border-blue-500/50 text-left transition-all active:scale-[0.98] cursor-pointer group flex flex-col justify-between gap-2">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-white group-hover:text-emerald-400 font-mono">1. User Action Tap</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="text-xs font-bold text-white group-hover:text-blue-400 font-mono">1. User Action Tap</span>
+          <span class="w-2 h-2 rounded-full bg-blue-400"></span>
         </div>
         <p class="text-[11px] text-slate-400">
           Click 1x for normal flow. Click 3x rapidly to simulate a <strong>Rage-Click Burst</strong>.
@@ -200,7 +200,7 @@
     <!-- Active Component State Box -->
     <div class="p-4 rounded-2xl bg-slate-950 dark:bg-white border {isCircuitBreakerActive ? 'border-amber-500/40 bg-amber-500/5' : 'border-slate-800/80'} flex items-center justify-between flex-wrap gap-3">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">
           {#if isCircuitBreakerActive}
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
           {:else}
@@ -219,7 +219,7 @@
 
       <div class="text-right font-mono text-xs">
         <span class="text-slate-500 dark:text-slate-400">Latency:</span>
-        <span class="font-bold {isCircuitBreakerActive ? 'text-amber-400' : 'text-emerald-400'} ml-1">
+        <span class="font-bold {isCircuitBreakerActive ? 'text-amber-400' : 'text-blue-400'} ml-1">
           {isCircuitBreakerActive ? '1,240ms (Healed)' : '0.14ms'}
         </span>
       </div>
@@ -233,7 +233,7 @@
       <span class="text-xs font-bold font-mono text-slate-300 uppercase tracking-wider">
         Live Telemetry &amp; Intent Dispatch Feed
       </span>
-      <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+      <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
         Streaming (&lt; 0.05ms)
       </span>
     </div>
@@ -242,7 +242,7 @@
       {#each events as ev (ev.id)}
         <div transition:slide={{ duration: 150 }} class="p-3 rounded-xl bg-slate-950 dark:bg-white border border-slate-850 flex items-center justify-between text-xs font-mono">
           <div class="flex items-center gap-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {ev.status === 'nominal' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : (ev.status === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20')}">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {ev.status === 'nominal' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : (ev.status === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20')}">
               {ev.type}
             </span>
             <span class="text-slate-300">{ev.message}</span>

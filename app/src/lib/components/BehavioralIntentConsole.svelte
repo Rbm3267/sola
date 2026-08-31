@@ -79,16 +79,16 @@
   <div class="bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 sm:p-6 shadow-sm text-slate-900 dark:text-white flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
     
     <!-- Ambient Persona Subtle Glow -->
-    <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl opacity-15 pointer-events-none {metrics.persona === 'sre_commander' ? 'bg-rose-500' : metrics.persona === 'finops_auditor' ? 'bg-violet-500' : 'bg-emerald-500'}"></div>
+    <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl opacity-15 pointer-events-none {metrics.persona === 'sre_commander' ? 'bg-rose-500' : metrics.persona === 'finops_auditor' ? 'bg-violet-500' : 'bg-blue-500'}"></div>
 
     <div class="flex items-center gap-4 relative z-10">
-      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-sm {metrics.persona === 'sre_commander' ? 'bg-gradient-to-br from-rose-500 to-amber-600' : metrics.persona === 'finops_auditor' ? 'bg-gradient-to-br from-violet-600 to-indigo-600' : 'bg-gradient-to-br from-emerald-500 to-teal-600'}">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-sm {metrics.persona === 'sre_commander' ? 'bg-gradient-to-br from-rose-500 to-amber-600' : metrics.persona === 'finops_auditor' ? 'bg-gradient-to-br from-violet-600 to-indigo-600' : 'bg-gradient-to-br from-blue-500 to-cyan-600'}">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </div>
       <div>
         <div class="flex items-center gap-2">
           <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Dual-Driver Persona:</span>
-          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-500/20' : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'}">
+          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-500/20' : 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'}">
             {metrics.persona === 'sre_commander' ? 'SRE Incident Commander' : metrics.persona === 'finops_auditor' ? 'FinOps Cloud Auditor' : 'Visual Explorer'}
           </span>
         </div>
@@ -142,8 +142,8 @@
   {#if actionLog.length > 0}
     <div 
       transition:fly={{ y: -8, duration: 200 }}
-      class="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 font-mono text-xs flex flex-col gap-1 shadow-sm">
-      <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Playbook Execution Audit Log:</span>
+      class="p-4 rounded-2xl bg-blue-950/80 border border-blue-800/80 text-blue-300 font-mono text-xs flex flex-col gap-1 shadow-sm">
+      <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400">Playbook Execution Audit Log:</span>
       {#each actionLog as log}
         <div>{log}</div>
       {/each}

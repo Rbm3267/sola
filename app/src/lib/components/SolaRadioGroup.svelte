@@ -32,7 +32,7 @@
         class="w-full text-left p-3.5 rounded-xl border-2 transition-all duration-150 cursor-pointer
           {disabled ? 'opacity-50 pointer-events-none' : ''}
           {value === opt.value
-            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10'
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10'
             : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 bg-white dark:bg-white/5'}"
         onclick={() => select(opt.value)}
         role="radio"
@@ -40,9 +40,9 @@
       >
         <div class="flex items-start gap-3">
           <div class="mt-0.5 w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center shrink-0 transition-colors
-            {value === opt.value ? 'border-emerald-500' : 'border-slate-300 dark:border-white/20'}">
+            {value === opt.value ? 'border-blue-500' : 'border-slate-300 dark:border-white/20'}">
             {#if value === opt.value}
-              <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
             {/if}
           </div>
           <div>
@@ -60,13 +60,13 @@
           role="radio"
           aria-checked={value === opt.value}
           class="w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-150 outline-none
-            focus-visible:ring-2 focus-visible:ring-emerald-500/30
-            {value === opt.value ? 'border-emerald-500' : 'border-slate-300 dark:border-white/20 hover:border-slate-400 dark:hover:border-white/30'}"
+            focus-visible:ring-2 focus-visible:ring-blue-500/30
+            {value === opt.value ? 'border-blue-500' : 'border-slate-300 dark:border-white/20 hover:border-slate-400 dark:hover:border-white/30'}"
           onclick={() => select(opt.value)}
           {disabled}
         >
           {#if value === opt.value}
-            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-[scaleIn_100ms_ease-out]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-[scaleIn_100ms_ease-out]"></div>
           {/if}
         </button>
         <div>

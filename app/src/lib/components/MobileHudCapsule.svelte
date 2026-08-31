@@ -85,15 +85,15 @@
         <!-- Pulsing Quantum Signal Dot -->
         <div class="flex items-center gap-2.5">
           <div class="relative flex items-center justify-center">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping absolute opacity-75"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative shadow-sm"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-ping absolute opacity-75"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500 relative shadow-sm"></span>
           </div>
           <span class="text-xs font-mono font-black text-slate-100 tracking-tight">Mobile Command Surface</span>
         </div>
 
         <!-- Latency Micro-Badge -->
         <div class="flex items-center gap-2">
-          <span class="text-[10px] font-mono bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold">
+          <span class="text-[10px] font-mono bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30 font-bold">
             0.2ms Signal Bus
           </span>
           <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
@@ -126,7 +126,7 @@
         <!-- Active Preset Title -->
         <div>
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
             <span class="text-xs font-bold text-white font-mono uppercase tracking-wider">
               {intents.find(i => i.id === selectedIntentKey)?.label}
             </span>
@@ -193,7 +193,7 @@
           <a 
             href="/studio" 
             onclick={closeAll}
-            class="w-full py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 dark:text-slate-50 font-mono font-bold text-xs text-center transition-all">
+            class="w-full py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 dark:text-slate-50 font-mono font-bold text-xs text-center transition-all">
             Open in Studio Editor →
           </a>
         </div>
@@ -207,7 +207,7 @@
         <!-- Top Title Bar & Close Button -->
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
             <span class="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">Mobile Command Surface</span>
           </div>
           <button 
@@ -230,20 +230,20 @@
             <button 
               type="button"
               onclick={() => handleTriggerIntent(intent.id)}
-              class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-850 text-left transition-all cursor-pointer group flex flex-col justify-between">
+              class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-850 text-left transition-all cursor-pointer group flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400 font-bold border border-slate-700">
+                  <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-blue-400 font-bold border border-slate-700">
                     {intent.badge}
                   </span>
                 </div>
-                <span class="text-xs font-mono font-bold text-slate-100 group-hover:text-emerald-400 block truncate">
+                <span class="text-xs font-mono font-bold text-slate-100 group-hover:text-blue-400 block truncate">
                   {intent.label}
                 </span>
               </div>
               <span class="text-[10px] font-mono text-slate-400 flex items-center gap-1 mt-2">
                 <span>Preview</span>
-                <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <svg class="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </span>
             </button>
           {/each}
@@ -254,7 +254,7 @@
           href="/studio"
           onclick={closeAll}
           class="w-full py-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white font-mono text-xs text-center transition-all flex items-center justify-center gap-2">
-          <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           <span>Launch Full Design Studio</span>
         </a>
 

@@ -124,7 +124,7 @@
   <button
     type="button"
     onclick={() => !disabled && (isOpen = !isOpen)}
-    class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-white hover:border-slate-300 dark:hover:border-white/20 transition-all cursor-pointer shadow-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 {disabled ? 'opacity-50 pointer-events-none' : ''}"
+    class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-white hover:border-slate-300 dark:hover:border-white/20 transition-all cursor-pointer shadow-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 {disabled ? 'opacity-50 pointer-events-none' : ''}"
   >
     <div class="flex items-center gap-2.5 truncate">
       <svg class="w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -150,10 +150,10 @@
     <div class="absolute z-50 mt-2 p-4 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl w-72 animate-[fadeSlide_150ms_ease-out]">
       <!-- Quick Presets -->
       <div class="flex items-center gap-1 mb-3 pb-3 border-b border-slate-100 dark:border-white/5">
-        <button onclick={() => quickSelect('today')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors">Today</button>
+        <button onclick={() => quickSelect('today')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Today</button>
         {#if range}
-          <button onclick={() => quickSelect('7days')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors">Last 7d</button>
-          <button onclick={() => quickSelect('30days')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors">Last 30d</button>
+          <button onclick={() => quickSelect('7days')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Last 7d</button>
+          <button onclick={() => quickSelect('30days')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Last 30d</button>
         {/if}
       </div>
 
@@ -188,8 +188,8 @@
             type="button"
             onclick={() => selectDate(dayNum)}
             class="h-8 rounded-lg text-xs font-medium transition-colors cursor-pointer
-              {selected ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : ''}
-              {inRange ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' : ''}
+              {selected ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : ''}
+              {inRange ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : ''}
               {!selected && !inRange ? 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5' : ''}"
           >
             {dayNum}

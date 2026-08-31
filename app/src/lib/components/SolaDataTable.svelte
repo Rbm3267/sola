@@ -176,7 +176,7 @@
           type="text"
           bind:value={filterQuery}
           placeholder={searchPlaceholder}
-          class="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-slate-400 dark:focus:border-emerald-500 focus:ring-2 focus:ring-slate-900/5 dark:focus:ring-emerald-500/20 transition-all"
+          class="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-slate-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-slate-900/5 dark:focus:ring-blue-500/20 transition-all"
         />
         {#if filterQuery}
           <button
@@ -193,8 +193,8 @@
       </div>
 
       {#if selectable && selectedRows.length > 0}
-        <div class="flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 animate-[fadeIn_150ms_ease-out]">
-          <span class="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
+        <div class="flex items-center gap-2 text-xs font-semibold text-blue-600 dark:text-blue-400 animate-[fadeIn_150ms_ease-out]">
+          <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">
             {selectedRows.length} selected
           </span>
         </div>
@@ -217,7 +217,7 @@
                   indeterminate={isSomeVisibleSelected}
                   onchange={toggleSelectAll}
                   aria-label="Select all rows"
-                  class="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-emerald-600 focus:ring-emerald-500 dark:bg-white/5 cursor-pointer accent-emerald-500"
+                  class="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-blue-600 focus:ring-blue-500 dark:bg-white/5 cursor-pointer accent-blue-500"
                 />
               </th>
             {/if}
@@ -234,11 +234,11 @@
                     <span class="inline-flex flex-col items-center justify-center shrink-0 w-3 h-3 text-slate-300 dark:text-slate-600">
                       {#if sortKey === col.key}
                         {#if sortDirection === 'asc'}
-                          <svg class="w-3 h-3 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <svg class="w-3 h-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="18 15 12 9 6 15"/>
                           </svg>
                         {:else if sortDirection === 'desc'}
-                          <svg class="w-3 h-3 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <svg class="w-3 h-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"/>
                           </svg>
                         {/if}
@@ -278,7 +278,7 @@
                 class="transition-colors duration-100 cursor-pointer
                   {striped && i % 2 === 1 ? 'bg-slate-50/50 dark:bg-white/[0.015]' : ''}
                   {selected
-                    ? 'bg-emerald-500/10 dark:bg-emerald-500/15'
+                    ? 'bg-blue-500/10 dark:bg-blue-500/15'
                     : 'hover:bg-slate-50/80 dark:hover:bg-white/[0.03]'}"
               >
                 {#if selectable}
@@ -288,7 +288,7 @@
                       checked={selected}
                       onchange={(e) => toggleRowSelection(row, e as unknown as MouseEvent)}
                       aria-label="Select row"
-                      class="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-emerald-600 focus:ring-emerald-500 dark:bg-white/5 cursor-pointer accent-emerald-500"
+                      class="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-blue-600 focus:ring-blue-500 dark:bg-white/5 cursor-pointer accent-blue-500"
                     />
                   </td>
                 {/if}
@@ -301,14 +301,14 @@
                       <span
                         class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold
                           {st.toLowerCase() === 'active'
-                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-500/20'
+                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20'
                             : st.toLowerCase() === 'auditing' || st.toLowerCase() === 'in review'
                               ? 'bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400 border border-amber-200/60 dark:border-amber-500/20'
                               : 'bg-slate-100 text-slate-600 dark:bg-white/5 dark:text-slate-400 border border-slate-200 dark:border-white/10'}"
                       >
                         <span
                           class="w-1.5 h-1.5 rounded-full {st.toLowerCase() === 'active'
-                            ? 'bg-emerald-500'
+                            ? 'bg-blue-500'
                             : st.toLowerCase() === 'auditing' || st.toLowerCase() === 'in review'
                               ? 'bg-amber-500'
                               : 'bg-slate-400'}"

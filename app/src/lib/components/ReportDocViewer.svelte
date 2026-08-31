@@ -169,8 +169,8 @@
         onclick={copyMarkdown}
         class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all active:scale-[0.97] cursor-pointer">
         {#if copied}
-          <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-emerald-400">Copied MD!</span>
+          <svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="text-blue-400">Copied MD!</span>
         {:else}
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           <span>Copy MD</span>
@@ -199,8 +199,8 @@
             <span class="leading-relaxed"><strong>System Note:</strong> Direct-DOM rendering preserves sub-millisecond document repaint speed without layout shifts.</span>
           </div>
         {:else if s.alertType === 'tip'}
-          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10/80 border border-emerald-200 dark:border-emerald-500/20/80 text-emerald-900 text-xs font-mono flex items-start gap-2.5">
-            <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+          <div class="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-500/10/80 border border-blue-200 dark:border-blue-500/20/80 text-blue-900 text-xs font-mono flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
             <span class="leading-relaxed"><strong>Automation Recommendation:</strong> Provision Moveworks ActionContract triggers for proactive database failover.</span>
           </div>
         {/if}

@@ -28,8 +28,8 @@
           <span class="w-3 h-3 rounded-full bg-amber-400 animate-ping absolute opacity-75"></span>
           <span class="w-3 h-3 rounded-full bg-amber-500 relative shadow-xs"></span>
         {:else}
-          <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping absolute opacity-75"></span>
-          <span class="w-3 h-3 rounded-full bg-emerald-500 relative shadow-xs"></span>
+          <span class="w-3 h-3 rounded-full bg-blue-400 animate-ping absolute opacity-75"></span>
+          <span class="w-3 h-3 rounded-full bg-blue-500 relative shadow-xs"></span>
         {/if}
       </div>
 
@@ -38,7 +38,7 @@
           <span class="text-xs font-mono font-bold tracking-tight text-slate-200">
             {isCircuitBreakerActive ? 'Sentinel Friction Triggered' : 'Sola Intent Sentinel'}
           </span>
-          <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'}">
+          <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/15 text-blue-400 border border-blue-500/30'}">
             {flowIndex}% Flow Index
           </span>
         </div>
@@ -77,7 +77,7 @@
       <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono">
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
           <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Paint Overhead</div>
-          <div class="font-bold text-emerald-400 mt-0.5">&lt; 0.02ms</div>
+          <div class="font-bold text-blue-400 mt-0.5">&lt; 0.02ms</div>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
           <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Rage Clicks</div>

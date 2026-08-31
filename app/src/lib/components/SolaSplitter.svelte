@@ -52,7 +52,7 @@
     style="{direction === 'horizontal' ? `width: ${splitPercent}%` : `height: ${splitPercent}%`}"
   >
     <div class="flex items-center gap-2 mb-3">
-      <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+      <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
       <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">Pane A (Telemetry)</h4>
     </div>
     <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -67,7 +67,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     onmousedown={startDrag}
-    class="relative z-10 flex items-center justify-center transition-colors {direction === 'horizontal' ? 'w-2 hover:w-2 cursor-col-resize' : 'h-2 hover:h-2 cursor-row-resize'} {isDragging ? 'bg-emerald-500 ring-2 ring-emerald-500/40' : 'bg-slate-200 dark:bg-white/10 hover:bg-emerald-400'}"
+    class="relative z-10 flex items-center justify-center transition-colors {direction === 'horizontal' ? 'w-2 hover:w-2 cursor-col-resize' : 'h-2 hover:h-2 cursor-row-resize'} {isDragging ? 'bg-blue-500 ring-2 ring-blue-500/40' : 'bg-slate-200 dark:bg-white/10 hover:bg-blue-400'}"
   >
     <div class="w-1 h-8 rounded-full bg-slate-400 dark:bg-white/30 {direction === 'vertical' ? 'rotate-90' : ''}"></div>
   </div>

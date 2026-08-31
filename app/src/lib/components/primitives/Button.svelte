@@ -50,11 +50,11 @@
   // Explicit mappings for UnoCSS static extraction
   const colorMaps = {
     emerald: {
-      primary: "bg-emerald-500 hover:bg-emerald-400 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500",
-      secondary: "bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 dark:text-emerald-300",
-      outline: "bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30",
-      ghost: "bg-transparent hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-transparent",
-      ring: "focus:ring-emerald-500/50"
+      primary: "bg-blue-500 hover:bg-blue-400 text-white dark:bg-blue-600 dark:hover:bg-blue-500",
+      secondary: "bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 dark:text-blue-300",
+      outline: "bg-transparent hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/30",
+      ghost: "bg-transparent hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-transparent",
+      ring: "focus:ring-blue-500/50"
     },
     sky: {
       primary: "bg-sky-500 hover:bg-sky-400 text-white dark:bg-sky-600 dark:hover:bg-sky-500",

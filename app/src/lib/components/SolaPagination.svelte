@@ -106,7 +106,7 @@
           aria-label="Page {item.value}"
           class="h-8 min-w-[2rem] px-2 text-xs font-semibold rounded-xl inline-flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer
             {isActive
-              ? 'bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-950 shadow-sm'
+              ? 'bg-slate-900 dark:bg-blue-500 text-white dark:text-slate-950 shadow-sm'
               : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}"
         >
           {item.value}

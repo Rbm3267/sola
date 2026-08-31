@@ -55,7 +55,7 @@
         result += `<span class="text-amber-600 dark:text-amber-300">${escapeHtml(match[0])}</span>`;
       } else if (match[3]) {
         // Keywords -> emerald-400
-        result += `<span class="text-emerald-600 dark:text-emerald-400 font-medium">${escapeHtml(match[0])}</span>`;
+        result += `<span class="text-blue-600 dark:text-blue-400 font-medium">${escapeHtml(match[0])}</span>`;
       } else if (match[4]) {
         // Types/Literals -> violet-400
         result += `<span class="text-violet-600 dark:text-violet-400">${escapeHtml(match[0])}</span>`;
@@ -112,10 +112,10 @@
         aria-label="Copy code to clipboard"
       >
         {#if copied}
-          <svg class="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 6 9 17l-5-5" />
           </svg>
-          <span class="text-emerald-600 dark:text-emerald-400">Copied!</span>
+          <span class="text-blue-600 dark:text-blue-400">Copied!</span>
         {:else}
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />

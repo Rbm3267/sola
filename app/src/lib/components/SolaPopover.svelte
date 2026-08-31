@@ -112,7 +112,7 @@
     aria-expanded={open}
     onclick={toggle}
     onkeydown={handleTriggerKeydown}
-    class="inline-flex cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 rounded-xl"
+    class="inline-flex cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 rounded-xl"
   >
     {#if trigger}
       {@render trigger()}

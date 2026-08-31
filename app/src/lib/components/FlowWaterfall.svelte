@@ -100,7 +100,7 @@
   <div class="flex items-start justify-between gap-4 mb-6">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
         <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">{displayTitle}</h3>
       </div>
       <p class="text-xs text-slate-500 dark:text-slate-400">{displaySubtitle}</p>
@@ -109,7 +109,7 @@
     <!-- Final Value Highlight -->
     <div class="text-right">
       <span class="text-[10px] font-mono text-slate-400 block uppercase">Net Realized</span>
-      <span class="text-lg font-black text-slate-950 dark:text-slate-50 font-mono tracking-tight text-emerald-600 dark:text-emerald-400">
+      <span class="text-lg font-black text-slate-950 dark:text-slate-50 font-mono tracking-tight text-blue-600 dark:text-blue-400">
         {steps[steps.length - 1]?.formattedValue || '$191,040'}
       </span>
     </div>
@@ -126,21 +126,21 @@
         class="w-full text-left p-2.5 rounded-2xl transition-all cursor-pointer group flex items-center justify-between gap-4 border {activeStep?.id === step.id ? 'bg-slate-100/90 dark:bg-white/[0.08] border-slate-300' : 'bg-slate-50/70 dark:bg-white/[0.04] border-slate-100 dark:border-white/[0.04] hover:bg-slate-100/60 dark:bg-white/[0.08]'}">
         
         <div class="flex items-center gap-2.5 min-w-[140px] sm:min-w-[180px]">
-          <span class="w-2 h-2 rounded-full {step.type === 'total' || step.type === 'subtotal' ? 'bg-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+          <span class="w-2 h-2 rounded-full {step.type === 'total' || step.type === 'subtotal' ? 'bg-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'bg-blue-500' : 'bg-rose-500'}"></span>
           <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 truncate">{step.name || step.label || step.title || 'Deduction Item'}</span>
         </div>
 
         <!-- Relative Bar -->
         <div class="flex-1 max-w-xs h-3.5 bg-slate-200/80 rounded-full overflow-hidden flex items-center p-0.5">
           <div 
-            class="h-full rounded-full transition-all duration-500 {step.type === 'total' || step.type === 'subtotal' ? 'bg-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'bg-emerald-500' : 'bg-rose-500'}"
+            class="h-full rounded-full transition-all duration-500 {step.type === 'total' || step.type === 'subtotal' ? 'bg-indigo-600' : (step.delta >= 0 || step.type === 'positive') ? 'bg-blue-500' : 'bg-rose-500'}"
             style="width: {pct}%;">
           </div>
         </div>
 
         <!-- Value Metric -->
         <div class="text-right min-w-[80px] sm:min-w-[90px]">
-          <span class="text-xs font-mono font-black {step.type === 'total' || step.type === 'subtotal' ? 'text-indigo-600 dark:text-indigo-400' : (step.delta >= 0 || step.type === 'positive') ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">
+          <span class="text-xs font-mono font-black {step.type === 'total' || step.type === 'subtotal' ? 'text-indigo-600 dark:text-indigo-400' : (step.delta >= 0 || step.type === 'positive') ? 'text-blue-600 dark:text-blue-400' : 'text-rose-600 dark:text-rose-400'}">
             {step.formattedValue || step.amount || step.value || (step.delta ? (step.delta >= 0 ? `+$${step.delta.toLocaleString()}` : `-$${Math.abs(step.delta).toLocaleString()}`) : '$0')}
           </span>
         </div>

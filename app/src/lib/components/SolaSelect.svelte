@@ -63,7 +63,7 @@
     class="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-sm rounded-xl border transition-all cursor-pointer
       {disabled ? 'opacity-50 pointer-events-none' : ''}
       {isOpen
-        ? 'border-emerald-500 dark:border-emerald-500 ring-2 ring-emerald-500/20'
+        ? 'border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/20'
         : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'}
       bg-white dark:bg-white/5 text-slate-900 dark:text-white"
     onclick={toggle}
@@ -93,7 +93,7 @@
             type="text"
             bind:value={search}
             placeholder="Search..."
-            class="w-full px-2.5 py-1.5 text-sm bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+            class="w-full px-2.5 py-1.5 text-sm bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
         </div>
       {/if}
@@ -102,7 +102,7 @@
           <button
             type="button"
             class="w-full text-left px-3 py-2 text-sm transition-colors cursor-pointer
-              {opt.value === value ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-medium' :
+              {opt.value === value ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-medium' :
                i === focusIndex ? 'bg-slate-50 dark:bg-white/5 text-slate-900 dark:text-white' :
                'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5'}"
             onclick={() => select(opt)}
@@ -112,7 +112,7 @@
             <span class="flex items-center justify-between">
               {opt.label}
               {#if opt.value === value}
-                <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                <svg class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
               {/if}
             </span>
           </button>

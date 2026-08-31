@@ -8,7 +8,7 @@
     if (!status) return null;
     const lower = status.toLowerCase();
     if (lower.includes('active') || lower.includes('healthy') || lower.includes('online')) {
-      return { bg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20', dot: 'bg-emerald-500' };
+      return { bg: 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20', dot: 'bg-blue-500' };
     }
     if (lower.includes('degraded') || lower.includes('warn') || lower.includes('maint')) {
       return { bg: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20', dot: 'bg-amber-500' };

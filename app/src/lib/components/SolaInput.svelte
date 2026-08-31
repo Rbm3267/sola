@@ -37,7 +37,7 @@
         {focused || hasValue
           ? '-top-2 text-[10px] font-semibold px-1 bg-white dark:bg-[#0f172a] z-10'
           : 'top-2.5 text-sm'}
-        {error ? 'text-rose-500' : focused ? 'text-emerald-500' : 'text-slate-400 dark:text-slate-500'}">
+        {error ? 'text-rose-500' : focused ? 'text-blue-500' : 'text-slate-400 dark:text-slate-500'}">
         {label}
       </label>
     {/if}
@@ -55,7 +55,7 @@
         {error
           ? 'border-rose-400 dark:border-rose-500 focus:ring-2 focus:ring-rose-500/20'
           : focused
-            ? 'border-emerald-500 dark:border-emerald-500 ring-2 ring-emerald-500/20'
+            ? 'border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/20'
             : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'}
         {label ? 'pt-3' : ''}"
     />

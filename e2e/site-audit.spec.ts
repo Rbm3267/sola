@@ -47,7 +47,7 @@ test.describe('Sola AIR Site & Product Audit', () => {
     await page.goto('/demo');
 
     // Verify Speech & Text Input elements
-    await expect(page.locator('h1')).toContainText('Ambient Intent Playground');
+    await expect(page.getByRole('heading', { name: 'Ambient Intent Playground' })).toBeVisible();
     const input = page.locator('input[placeholder*="Speak or type intent"]');
     await expect(input).toBeVisible();
 

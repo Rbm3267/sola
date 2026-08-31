@@ -42,7 +42,7 @@
 
   function getStatusColor(status: ClusterNode['status']) {
     switch (status) {
-      case 'nominal': return 'bg-emerald-500 shadow-emerald-500/30';
+      case 'nominal': return 'bg-blue-500 shadow-blue-500/30';
       case 'warning': return 'bg-amber-500 shadow-amber-500/30 animate-pulse';
       case 'critical': return 'bg-rose-500 shadow-rose-500/40 animate-ping';
       case 'draining': return 'bg-indigo-500 shadow-indigo-500/20';
@@ -52,7 +52,7 @@
 
   function getBorderColor(status: ClusterNode['status']) {
     switch (status) {
-      case 'nominal': return 'border-emerald-500/30 hover:border-emerald-500';
+      case 'nominal': return 'border-blue-500/30 hover:border-blue-500';
       case 'warning': return 'border-amber-500/40 hover:border-amber-500';
       case 'critical': return 'border-rose-500/50 hover:border-rose-500';
       case 'draining': return 'border-indigo-500/30 hover:border-indigo-500';
@@ -67,7 +67,7 @@
   <div class="flex items-start justify-between gap-4 mb-6">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
         <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">{config.title || 'Cluster Topology Matrix'}</h3>
       </div>
       <p class="text-xs text-slate-500 dark:text-slate-400">{config.subtitle || `${nodes.length} Nodes Distributed Across 6 Global Regions`}</p>
@@ -75,8 +75,8 @@
 
     <!-- Aggregate Status Pills -->
     <div class="flex items-center gap-1.5 flex-wrap justify-end">
-      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20/80 text-emerald-800 dark:text-emerald-300 text-[11px] font-mono font-bold">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20/80 text-blue-800 dark:text-blue-300 text-[11px] font-mono font-bold">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
         {nominalCount} Nominal
       </span>
       {#if warningCount > 0}
@@ -133,7 +133,7 @@
         {#if hoveredNode.load !== undefined}
           <div>
             <span class="text-[10px] font-mono text-slate-400 block uppercase">CPU Load</span>
-            <span class="text-xs font-mono font-bold {hoveredNode.load > 80 ? 'text-rose-400' : 'text-emerald-400'}">{hoveredNode.load}%</span>
+            <span class="text-xs font-mono font-bold {hoveredNode.load > 80 ? 'text-rose-400' : 'text-blue-400'}">{hoveredNode.load}%</span>
           </div>
         {/if}
         {#if hoveredNode.latency}

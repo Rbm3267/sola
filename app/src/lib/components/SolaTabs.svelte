@@ -28,7 +28,7 @@
       <button
         class="relative px-4 py-2 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer
           {current === tab.id
-            ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-sm'
+            ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-sm'
             : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white'}"
         onclick={() => select(tab.id)}
         aria-selected={current === tab.id}
@@ -50,7 +50,7 @@
       <button
         class="px-4 py-2 text-xs font-semibold rounded-full transition-all duration-200 cursor-pointer
           {current === tab.id
-            ? 'bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-950 shadow-sm'
+            ? 'bg-slate-900 dark:bg-blue-500 text-white dark:text-slate-950 shadow-sm'
             : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'}"
         onclick={() => select(tab.id)}
         aria-selected={current === tab.id}
@@ -88,7 +88,7 @@
           {/if}
         </span>
         {#if current === tab.id}
-          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900 dark:bg-emerald-500 rounded-full"></span>
+          <span class="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900 dark:bg-blue-500 rounded-full"></span>
         {/if}
       </button>
     {/each}

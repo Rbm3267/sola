@@ -73,7 +73,7 @@
       <button
         type="button"
         onclick={onaction}
-        class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-emerald-400 shadow-sm active:scale-95 transition-all duration-150 cursor-pointer"
+        class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-slate-900 dark:bg-blue-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-blue-400 shadow-sm active:scale-95 transition-all duration-150 cursor-pointer"
       >
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="5" x2="12" y2="19"/>

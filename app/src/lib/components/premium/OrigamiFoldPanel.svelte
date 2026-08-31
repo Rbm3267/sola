@@ -14,7 +14,7 @@
 <div class="w-full flex flex-col perspective-1000 items-center justify-center p-8">
   <button 
     onclick={() => isOpen = !isOpen}
-    class="mb-4 bg-slate-900 text-white px-6 py-2 rounded-xl font-mono text-xs uppercase tracking-wider hover:bg-emerald-600 transition-colors"
+    class="mb-4 bg-slate-900 text-white px-6 py-2 rounded-xl font-mono text-xs uppercase tracking-wider hover:bg-blue-600 transition-colors"
   >
     Toggle Origami Fold
   </button>
@@ -34,7 +34,7 @@
       class="absolute bottom-0 left-0 w-full h-1/2 bg-slate-50 dark:bg-white/[0.04] border border-slate-300 rounded-b-2xl shadow-sm origin-top overflow-hidden flex flex-col justify-start p-4"
       style="transform: rotateX(-{$foldAngle}deg); backface-visibility: hidden; filter: brightness({1 - ($foldAngle / 90) * 0.5});"
     >
-      <div class="w-full h-2 bg-emerald-500 rounded-full mb-2"></div>
+      <div class="w-full h-2 bg-blue-500 rounded-full mb-2"></div>
       <div class="w-2/3 h-2 bg-slate-300 rounded-full mb-2"></div>
       <div class="w-1/2 h-2 bg-slate-300 rounded-full"></div>
     </div>

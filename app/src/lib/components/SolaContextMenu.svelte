@@ -43,9 +43,9 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   oncontextmenu={handleContextMenu}
-  class="w-full h-44 rounded-3xl border-2 border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center p-6 text-center cursor-context-menu hover:border-emerald-500/50 transition-colors select-none bg-slate-50/50 dark:bg-white/[0.02]"
+  class="w-full h-44 rounded-3xl border-2 border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center p-6 text-center cursor-context-menu hover:border-blue-500/50 transition-colors select-none bg-slate-50/50 dark:bg-white/[0.02]"
 >
-  <div class="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-2">
+  <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2">
     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M15 3h6v6"/>
       <path d="M10 14 21 3"/>

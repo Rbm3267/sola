@@ -30,7 +30,7 @@
   };
 
   const variantClasses: Record<ButtonVariant, string> = {
-    primary: 'bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-emerald-400 shadow-sm',
+    primary: 'bg-slate-900 dark:bg-blue-500 text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-blue-400 shadow-sm',
     secondary: 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/15 border border-slate-200 dark:border-white/10',
     ghost: 'bg-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5',
     destructive: 'bg-rose-500 text-white hover:bg-rose-600 shadow-sm',

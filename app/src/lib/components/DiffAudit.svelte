@@ -29,7 +29,7 @@
 
   function getRiskBadge(risk: string = 'Moderate') {
     switch (risk.toLowerCase()) {
-      case 'low': return 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/20';
+      case 'low': return 'bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-500/20';
       case 'moderate': return 'bg-amber-50 dark:bg-amber-500/10 text-amber-900 border-amber-200 dark:border-amber-500/20';
       case 'high': return 'bg-orange-50 dark:bg-orange-500/10 text-orange-900 border-orange-200 dark:border-orange-500/20';
       case 'destructive': return 'bg-rose-50 dark:bg-rose-500/10 text-rose-900 border-rose-200 dark:border-rose-500/20';
@@ -88,7 +88,7 @@
     </div>
     <div class="col-span-2 sm:col-span-1">
       <span class="text-[10px] text-slate-400 block uppercase">CAB Status</span>
-      <span class="font-bold {approvalState === 'approved' ? 'text-emerald-600 dark:text-emerald-400' : approvalState === 'rejected' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'}">
+      <span class="font-bold {approvalState === 'approved' ? 'text-blue-600 dark:text-blue-400' : approvalState === 'rejected' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'}">
         {approvalState === 'approved' ? 'Approved for Release' : approvalState === 'rejected' ? 'Changes Rejected' : 'Pending 1 Signoff'}
       </span>
     </div>
@@ -102,7 +102,7 @@
     </div>
     <div class="space-y-1">
       {#each diff as line}
-        <div class="flex items-center gap-2 {line.type === 'add' ? 'text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded' : line.type === 'remove' ? 'text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded' : 'text-slate-400'}">
+        <div class="flex items-center gap-2 {line.type === 'add' ? 'text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded' : line.type === 'remove' ? 'text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded' : 'text-slate-400'}">
           <span class="select-none font-bold w-3">{line.type === 'add' ? '+' : line.type === 'remove' ? '-' : ' '}</span>
           <span class="whitespace-pre">{line.content}</span>
         </div>
@@ -125,19 +125,19 @@
         </button>
         <button 
           onclick={handleApprove}
-          style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff !important;"
+          style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff !important;"
           class="px-5 py-2 rounded-xl text-xs font-mono font-bold text-white shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span>Approve Change</span>
         </button>
       {:else if approvalState === 'approving'}
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold border border-emerald-200 dark:border-emerald-500/20">
-          <div class="w-3.5 h-3.5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold border border-blue-200 dark:border-blue-500/20">
+          <div class="w-3.5 h-3.5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
           <span>Dispatching Enterprise ACL Mutator...</span>
         </div>
       {:else if approvalState === 'approved'}
-        <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold border border-emerald-200 dark:border-emerald-500/20">
-          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold border border-blue-200 dark:border-blue-500/20">
+          <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span>Change Request Approved</span>
         </div>
       {:else}

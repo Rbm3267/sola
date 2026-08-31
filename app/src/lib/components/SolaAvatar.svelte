@@ -26,7 +26,7 @@
   };
 
   const statusColors: Record<string, string> = {
-    online: 'bg-emerald-500',
+    online: 'bg-blue-500',
     offline: 'bg-slate-400',
     busy: 'bg-rose-500',
     away: 'bg-amber-500',
@@ -41,7 +41,7 @@
     xl: 'w-3.5 h-3.5 border-2'
   };
 
-  const bgColors = ['bg-sky-500', 'bg-emerald-500', 'bg-violet-500', 'bg-amber-500', 'bg-rose-500', 'bg-indigo-500'];
+  const bgColors = ['bg-sky-500', 'bg-blue-500', 'bg-violet-500', 'bg-amber-500', 'bg-rose-500', 'bg-indigo-500'];
 
   function hashColor(str: string): string {
     let hash = 0;

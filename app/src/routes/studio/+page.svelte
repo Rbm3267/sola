@@ -132,7 +132,7 @@
 
   // Color Accent Themes
   const COLOR_OPTIONS = [
-    { id: 'emerald', name: 'Emerald', hex: '#10b981', bg: 'bg-emerald-500', text: 'text-emerald-500', textDark: 'text-emerald-600 dark:text-emerald-400', badgeBg: 'bg-emerald-50 dark:bg-emerald-500/10', badgeBorder: 'border-emerald-200/60 dark:border-emerald-500/20', accent: 'accent-emerald-500', ring: 'ring-emerald-500/20', border: 'border-emerald-500' },
+    { id: 'emerald', name: 'Emerald', hex: '#10b981', bg: 'bg-blue-500', text: 'text-blue-500', textDark: 'text-blue-600 dark:text-blue-400', badgeBg: 'bg-blue-50 dark:bg-blue-500/10', badgeBorder: 'border-blue-200/60 dark:border-blue-500/20', accent: 'accent-blue-500', ring: 'ring-blue-500/20', border: 'border-blue-500' },
     { id: 'sky', name: 'Sky Blue', hex: '#0ea5e9', bg: 'bg-sky-500', text: 'text-sky-500', textDark: 'text-sky-600 dark:text-sky-400', badgeBg: 'bg-sky-50 dark:bg-sky-500/10', badgeBorder: 'border-sky-200/60 dark:border-sky-500/20', accent: 'accent-sky-500', ring: 'ring-sky-500/20', border: 'border-sky-500' },
     { id: 'violet', name: 'Violet', hex: '#8b5cf6', bg: 'bg-violet-500', text: 'text-violet-500', textDark: 'text-violet-600 dark:text-violet-400', badgeBg: 'bg-violet-50 dark:bg-violet-500/10', badgeBorder: 'border-violet-200/60 dark:border-violet-500/20', accent: 'accent-violet-500', ring: 'ring-violet-500/20', border: 'border-violet-500' },
     { id: 'amber', name: 'Amber', hex: '#f59e0b', bg: 'bg-amber-500', text: 'text-amber-500', textDark: 'text-amber-600 dark:text-amber-400', badgeBg: 'bg-amber-50 dark:bg-amber-500/10', badgeBorder: 'border-amber-200/60 dark:border-amber-500/20', accent: 'accent-amber-500', ring: 'ring-amber-500/20', border: 'border-amber-500' },
@@ -464,7 +464,7 @@ export default function SolaDashboard() {
       <div class="flex items-center gap-3">
         <button
           onclick={() => (paletteOpen = !paletteOpen)}
-          class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {paletteOpen ? 'bg-emerald-500 text-slate-950 shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}"
+          class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {paletteOpen ? 'bg-blue-500 text-slate-950 shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}"
           title={paletteOpen ? 'Hide Component Palette' : 'Show Component Palette'}>
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
           <span class="hidden sm:inline">Palette</span>
@@ -475,7 +475,7 @@ export default function SolaDashboard() {
 
         <div class="flex items-center gap-2">
           <span class="font-bold tracking-tight text-slate-900 dark:text-white text-xs whitespace-nowrap">Canvas</span>
-          <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-full border border-emerald-200/60 dark:border-emerald-500/20">
+          <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 rounded-full border border-blue-200/60 dark:border-blue-500/20">
             {cards.length} {cards.length === 1 ? 'card' : 'cards'}
           </span>
         </div>
@@ -499,7 +499,7 @@ export default function SolaDashboard() {
               {#each Object.entries(samplePresets) as [key, preset]}
                 <button
                   onclick={() => loadSample(key)}
-                  class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold' : 'text-slate-800 dark:text-slate-200'}">
+                  class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold' : 'text-slate-800 dark:text-slate-200'}">
                   <div class="font-bold">{preset.label}</div>
                   <div class="text-[10px] text-slate-400 font-normal">{preset.desc}</div>
                 </button>
@@ -541,7 +541,7 @@ export default function SolaDashboard() {
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">Primitives</span>
-              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">Drag & Drop</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">Drag & Drop</span>
             </div>
             <button onclick={() => (paletteOpen = false)} class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
@@ -554,7 +554,7 @@ export default function SolaDashboard() {
               type="text"
               bind:value={componentSearch}
               placeholder="Search 56 components..."
-              class="w-full pl-8 pr-7 py-2 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"
+              class="w-full pl-8 pr-7 py-2 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
             />
             {#if componentSearch}
               <button onclick={() => (componentSearch = '')} class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">&times;</button>
@@ -566,7 +566,7 @@ export default function SolaDashboard() {
             {#each catalogCategories as cat}
               <button
                 onclick={() => (componentCategory = cat)}
-                class="px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
+                class="px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
                 {cat}
               </button>
             {/each}
@@ -587,10 +587,10 @@ export default function SolaDashboard() {
                 tabindex="0"
                 ondragstart={(e) => onPaletteDragStart(e, item)}
                 ondragend={onDragEnd}
-                class="group flex items-start gap-2.5 p-2.5 bg-white dark:bg-white/[0.03] hover:bg-emerald-50/60 dark:hover:bg-emerald-500/10 border border-slate-200/70 dark:border-white/5 hover:border-emerald-500/40 rounded-xl transition-all cursor-grab active:cursor-grabbing shadow-2xs hover:shadow-xs">
+                class="group flex items-start gap-2.5 p-2.5 bg-white dark:bg-white/[0.03] hover:bg-blue-50/60 dark:hover:bg-blue-500/10 border border-slate-200/70 dark:border-white/5 hover:border-blue-500/40 rounded-xl transition-all cursor-grab active:cursor-grabbing shadow-2xs hover:shadow-xs">
                 
                 <!-- Category SVG Icon -->
-                <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <div class="w-7 h-7 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-105 transition-transform">
                   {#if item.category === 'Metrics & KPIs'}
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-6 4 4 6-8"/></svg>
                   {:else if item.category === 'Controllers & Sliders'}
@@ -615,7 +615,7 @@ export default function SolaDashboard() {
                     <span class="font-bold text-xs text-slate-900 dark:text-white truncate">{item.name}</span>
                     <button
                       onclick={() => addCatalogComponent(item)}
-                      class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 font-bold px-1.5 py-0.5 rounded hover:bg-emerald-50 dark:hover:bg-emerald-500/20 cursor-pointer">
+                      class="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:text-blue-500 font-bold px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-500/20 cursor-pointer">
                       + Add
                     </button>
                   </div>
@@ -637,7 +637,7 @@ export default function SolaDashboard() {
       <!-- Sola Arc Generative Prompt Bar (Top of Canvas) -->
       <div class="w-full bg-white dark:bg-[#0f172a]/90 backdrop-blur-2xl border border-slate-200/90 dark:border-white/10 rounded-2xl p-2 sm:p-3 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
         <div class="flex items-center gap-2 px-2 shrink-0">
-          <div class="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+          <div class="w-6 h-6 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
           </div>
           <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">Arc</span>
@@ -654,7 +654,7 @@ export default function SolaDashboard() {
         <button
           onclick={generateWithArc}
           disabled={isGeneratingArc || !arcPromptInput.trim()}
-          class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs shadow-emerald-500/20">
+          class="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs shadow-blue-500/20">
           {#if isGeneratingArc}
             <span class="w-3 h-3 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
             <span>Synthesizing...</span>
@@ -676,7 +676,7 @@ export default function SolaDashboard() {
           <div class="flex items-center gap-2">
             <button
               onclick={() => addComponent('stat')}
-              class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer">
+              class="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-slate-950 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer">
               + Add Metric Tile
             </button>
             <button
@@ -892,7 +892,7 @@ export default function SolaDashboard() {
         
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
           <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
             <h3 class="font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white font-mono">Properties</h3>
           </div>
           <button
@@ -906,7 +906,7 @@ export default function SolaDashboard() {
           <!-- Active Card Badge -->
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex items-center justify-between">
             <span class="text-[11px] font-mono text-slate-400">Selected Node</span>
-            <span class="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400">{activeCard.type}</span>
+            <span class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400">{activeCard.type}</span>
           </div>
 
           <!-- Title -->
@@ -915,7 +915,7 @@ export default function SolaDashboard() {
             <input
               type="text"
               bind:value={activeCard.title}
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none" />
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-blue-500 text-slate-900 dark:text-white outline-none" />
           </div>
 
           <!-- Subtitle -->
@@ -924,7 +924,7 @@ export default function SolaDashboard() {
             <input
               type="text"
               bind:value={activeCard.subtitle}
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none" />
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-blue-500 text-slate-900 dark:text-white outline-none" />
           </div>
 
           <!-- Value -->
@@ -933,7 +933,7 @@ export default function SolaDashboard() {
             <input
               type="text"
               bind:value={activeCard.value}
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-emerald-500 text-slate-900 dark:text-white outline-none font-mono" />
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:border-blue-500 text-slate-900 dark:text-white outline-none font-mono" />
           </div>
 
           <!-- Color Accent -->
@@ -1008,7 +1008,7 @@ export default function SolaDashboard() {
         
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-xs">
+            <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
               &lt;/&gt;
             </div>
             <div>
@@ -1027,17 +1027,17 @@ export default function SolaDashboard() {
         <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-xl">
           <button
             onclick={() => (exportTab = 'react')}
-            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'react' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
+            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'react' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
             React 19
           </button>
           <button
             onclick={() => (exportTab = 'svelte')}
-            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'svelte' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
+            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'svelte' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
             Svelte 5
           </button>
           <button
             onclick={() => (exportTab = 'webcomponent')}
-            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'webcomponent' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
+            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'webcomponent' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
             Native .sola
           </button>
         </div>
@@ -1047,7 +1047,7 @@ export default function SolaDashboard() {
           <pre class="bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs font-mono overflow-x-auto max-h-72 border border-white/5">{generatedCode}</pre>
           <button
             onclick={copyCode}
-            class="absolute top-3 right-3 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer {copyNotification ? 'bg-emerald-500 text-slate-950' : 'bg-white/10 hover:bg-white/20 text-white'}">
+            class="absolute top-3 right-3 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer {copyNotification ? 'bg-blue-500 text-slate-950' : 'bg-white/10 hover:bg-white/20 text-white'}">
             {copyNotification ? 'Copied!' : 'Copy Code'}
           </button>
         </div>

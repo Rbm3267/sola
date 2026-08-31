@@ -104,7 +104,7 @@
         {autoResize ? 'resize-none overflow-hidden' : resizeClassMap[resize] || 'resize-y'}
         {error
           ? 'border-rose-500 dark:border-rose-500/80 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20'
-          : 'border-slate-200 dark:border-white/10 focus:border-slate-400 dark:focus:border-emerald-500 focus:ring-2 focus:ring-slate-900/5 dark:focus:ring-emerald-500/20'}
+          : 'border-slate-200 dark:border-white/10 focus:border-slate-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-slate-900/5 dark:focus:ring-blue-500/20'}
         {disabled
           ? 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-white/[0.02] select-none'
           : 'hover:border-slate-300 dark:hover:border-white/20'}"

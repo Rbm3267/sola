@@ -57,7 +57,7 @@
   <div>
     <div class="h-16 flex items-center justify-between px-4 border-b border-slate-100 dark:border-white/5">
       <div class="flex items-center gap-2.5 overflow-hidden">
-        <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold shrink-0">
+        <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold shrink-0">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <rect x="3" y="3" width="18" height="18" rx="4"/>
             <path d="M3 9h18"/>
@@ -98,7 +98,7 @@
               <button
                 type="button"
                 onclick={() => selectItem(item)}
-                class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer {item.disabled ? 'opacity-40 pointer-events-none' : ''} {isSelected ? 'bg-emerald-500 text-slate-950 shadow-xs shadow-emerald-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'}"
+                class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer {item.disabled ? 'opacity-40 pointer-events-none' : ''} {isSelected ? 'bg-blue-500 text-slate-950 shadow-xs shadow-blue-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'}"
                 title={collapsed ? item.label : undefined}
               >
                 <div class="flex items-center gap-2.5 min-w-0">
@@ -114,7 +114,7 @@
                 </div>
 
                 {#if item.badge && !collapsed}
-                  <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded-md {isSelected ? 'bg-slate-950 text-emerald-400' : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">
+                  <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded-md {isSelected ? 'bg-slate-950 text-blue-400' : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">
                     {item.badge}
                   </span>
                 {/if}
@@ -129,7 +129,7 @@
   <!-- Bottom: Profile Footer -->
   <div class="p-3 border-t border-slate-100 dark:border-white/5">
     <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer overflow-hidden">
-      <div class="w-8 h-8 rounded-full bg-emerald-600 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0">
+      <div class="w-8 h-8 rounded-full bg-blue-600 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0">
         SA
       </div>
       {#if !collapsed}

@@ -246,7 +246,7 @@
     {#if executeMessage}
       <div 
         transition:fade={{ duration: 150 }}
-        class="absolute top-full right-0 mt-2 z-30 px-3 py-1.5 rounded-xl bg-emerald-900 text-emerald-100 border border-emerald-700 text-[11px] font-mono shadow-md whitespace-nowrap">
+        class="absolute top-full right-0 mt-2 z-30 px-3 py-1.5 rounded-xl bg-blue-900 text-blue-100 border border-blue-700 text-[11px] font-mono shadow-md whitespace-nowrap">
         ✅ {executeMessage}
       </div>
     {/if}
@@ -347,7 +347,7 @@
       </span>
 
       <!-- Track fill -->
-      <div class="absolute left-0 top-0 bottom-0 bg-emerald-500/10 pointer-events-none" style="width: {swipeProgress}%"></div>
+      <div class="absolute left-0 top-0 bottom-0 bg-blue-500/10 pointer-events-none" style="width: {swipeProgress}%"></div>
 
       <!-- Handle -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -359,7 +359,7 @@
         ontouchstart={startDrag}
         ontouchmove={handleDrag}
         ontouchend={stopDrag}
-        class="absolute left-1 top-1 bottom-1 w-10 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-md cursor-grab active:cursor-grabbing flex items-center justify-center transition-shadow"
+        class="absolute left-1 top-1 bottom-1 w-10 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-md cursor-grab active:cursor-grabbing flex items-center justify-center transition-shadow"
         style="transform: translateX({(swipeProgress / 100) * 160}px)"
       >
         <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>

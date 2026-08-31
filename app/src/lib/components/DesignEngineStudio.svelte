@@ -27,7 +27,7 @@
     
     <!-- Section Header -->
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold mb-3">
         <span>@sola/ui • Foundational Design System</span>
       </div>
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
@@ -58,17 +58,17 @@
         <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/5 p-1 rounded-xl">
           <button
             onclick={() => (activeTab = 'components')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'components' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'components' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
             Interactive Primitives
           </button>
           <button
             onclick={() => (activeTab = 'telemetry')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'telemetry' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'telemetry' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
             Telemetry & Charts
           </button>
           <button
             onclick={() => (activeTab = 'tokens')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'tokens' ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'tokens' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
             Tokens & Signals
           </button>
         </div>
@@ -84,7 +84,7 @@
             <div class="space-y-5">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Tactile Buttons & Actions</span>
-                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600">Spring Physics</span>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600">Spring Physics</span>
               </div>
 
               <!-- Buttons Row -->
@@ -119,14 +119,14 @@
               <div class="pt-4 border-t border-slate-100 dark:border-white/5 space-y-3">
                 <div class="flex items-center justify-between text-xs">
                   <span class="font-semibold text-slate-700 dark:text-slate-300">Signal Resistance Slider</span>
-                  <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">{sliderVal}%</span>
+                  <span class="font-mono font-bold text-blue-600 dark:text-blue-400">{sliderVal}%</span>
                 </div>
                 <input
                   type="range"
                   min="0"
                   max="100"
                   bind:value={sliderVal}
-                  class="w-full accent-emerald-500 h-2 bg-slate-100 dark:bg-white/10 rounded-lg cursor-pointer"
+                  class="w-full accent-blue-500 h-2 bg-slate-100 dark:bg-white/10 rounded-lg cursor-pointer"
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@
               <div class="grid grid-cols-2 gap-3 text-xs font-mono">
                 <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/80 dark:border-white/10">
                   <span class="text-slate-400 text-[10px] block">Frame Time</span>
-                  <span class="text-base font-extrabold text-emerald-600 dark:text-emerald-400">0.32ms</span>
+                  <span class="text-base font-extrabold text-blue-600 dark:text-blue-400">0.32ms</span>
                 </div>
                 <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/80 dark:border-white/10">
                   <span class="text-slate-400 text-[10px] block">VDOM Diffing Overhead</span>
@@ -160,15 +160,15 @@
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="p-3 bg-slate-950 text-white rounded-2xl border border-slate-800 space-y-1">
                   <span class="text-[10px] font-mono text-slate-400 block">Obsidian Dark</span>
-                  <span class="text-xs font-bold font-mono text-emerald-400">#090D19</span>
+                  <span class="text-xs font-bold font-mono text-blue-400">#090D19</span>
                 </div>
                 <div class="p-3 bg-slate-50 text-slate-900 rounded-2xl border border-slate-200 space-y-1">
                   <span class="text-[10px] font-mono text-slate-500 block">Clean Ivory</span>
                   <span class="text-xs font-bold font-mono text-slate-900">#FAFAFA</span>
                 </div>
-                <div class="p-3 bg-emerald-500 text-slate-950 rounded-2xl space-y-1">
-                  <span class="text-[10px] font-mono text-slate-950/70 block">Neon Emerald</span>
-                  <span class="text-xs font-bold font-mono text-slate-950">#10B981</span>
+                <div class="p-3 bg-blue-500 text-slate-950 rounded-2xl space-y-1">
+                  <span class="text-[10px] font-mono text-slate-950/70 block">Primary Blue</span>
+                  <span class="text-xs font-bold font-mono text-slate-950">#3B82F6</span>
                 </div>
                 <div class="p-3 bg-sky-500 text-slate-950 rounded-2xl space-y-1">
                   <span class="text-[10px] font-mono text-slate-950/70 block">Signal Sky</span>
@@ -191,22 +191,22 @@
               <div class="flex items-center gap-1">
                 <button
                   onclick={() => (selectedFramework = 'sola')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   .sola
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'react')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   React 19
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'svelte')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   Svelte 5
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'html')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   HTML
                 </button>
               </div>
@@ -224,7 +224,7 @@
             <div class="flex items-center gap-2 w-full sm:w-auto">
               <a
                 href="/components"
-                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-xs">
+                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs transition-all shadow-xs">
                 <span>View All 56 Primitives</span>
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>

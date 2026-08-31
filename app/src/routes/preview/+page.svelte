@@ -79,13 +79,13 @@
     
     <!-- Hero Header -->
     <div class="text-center max-w-3xl mx-auto space-y-4">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-bold shadow-2xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold shadow-2xs">
+        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
         <span>Sola AIR Chrome Extension v1.0.1</span>
       </div>
       
       <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.08]">
-        Preview UI Components on <span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 bg-clip-text text-transparent">Any Live Web App</span>
+        Preview UI Components on <span class="bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 bg-clip-text text-transparent">Any Live Web App</span>
       </h1>
       
       <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
@@ -118,10 +118,10 @@
       <!-- Placement Mode 1: Draggable HUD -->
       <div class="p-6 sm:p-7 rounded-3xl bg-slate-50/70 dark:bg-[#0c1222] border border-slate-200/80 dark:border-white/10 space-y-3 shadow-xs">
         <div class="flex items-center justify-between">
-          <div class="w-9 h-9 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs">
+          <div class="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
             A
           </div>
-          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Mode 1</span>
+          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400">Mode 1</span>
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Free-Floating Draggable HUD</h3>
         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -159,22 +159,22 @@
         <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl overflow-x-auto no-scrollbar">
           <button
             onclick={() => setStep(1)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 1 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 1 ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
             1. Open Side Panel
           </button>
           <button
             onclick={() => setStep(2)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 2 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 2 ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
             2. Choose Component
           </button>
           <button
             onclick={() => setStep(3)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 3 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 3 ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
             3. Anchor on Target Element
           </button>
           <button
             onclick={() => setStep(4)}
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 4 ? 'bg-white dark:bg-emerald-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 4 ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
             4. 1-Click Code Export
           </button>
         </div>
@@ -189,13 +189,13 @@
           <div class="flex items-center gap-2">
             <div class="w-3 h-3 rounded-full bg-rose-400"></div>
             <div class="w-3 h-3 rounded-full bg-amber-400"></div>
-            <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+            <div class="w-3 h-3 rounded-full bg-blue-400"></div>
           </div>
 
           <!-- URL Bar -->
           <div class="flex-1 max-w-lg bg-white dark:bg-white/5 border border-slate-300/60 dark:border-white/10 rounded-xl px-4 py-1.5 flex items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-300 shadow-2xs">
             <div class="flex items-center gap-2 truncate">
-              <svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <svg class="w-3.5 h-3.5 text-blue-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <span class="text-slate-400">https://</span>
               <span class="font-bold text-slate-900 dark:text-white">your-cloud-app.internal/analytics</span>
             </div>
@@ -206,8 +206,8 @@
           <div class="flex items-center gap-2">
             <button
               onclick={() => (isSidePanelOpen = !isSidePanelOpen)}
-              class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg {isSidePanelOpen ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs' : 'bg-white dark:bg-white/10 text-slate-700 dark:text-slate-300'} text-xs font-medium cursor-pointer transition-all">
-              <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg {isSidePanelOpen ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : 'bg-white dark:bg-white/10 text-slate-700 dark:text-slate-300'} text-xs font-medium cursor-pointer transition-all">
+              <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/>
                 <circle cx="12" cy="12" r="3" fill="currentColor"/>
               </svg>
@@ -236,9 +236,9 @@
 
               <!-- Host Base Grid with Target Element Anchor Indicator -->
               <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border {isTargetHovered ? 'border-2 border-dashed border-emerald-500 bg-emerald-500/5 ring-4 ring-emerald-500/10' : 'border-slate-200/80 dark:border-white/5'} transition-all relative">
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border {isTargetHovered ? 'border-2 border-dashed border-blue-500 bg-blue-500/5 ring-4 ring-blue-500/10' : 'border-slate-200/80 dark:border-white/5'} transition-all relative">
                   {#if isTargetHovered}
-                    <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-mono text-[9px] font-bold shadow-xs">
+                    <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-blue-500 text-slate-950 font-mono text-[9px] font-bold shadow-xs">
                       Target Anchor Container
                     </div>
                   {/if}
@@ -255,17 +255,17 @@
 
             <!-- INJECTED SHADOW DOM FLOATING OVERLAY -->
             {#if isCardInjected}
-              <div class="my-6 p-6 rounded-3xl bg-slate-950/95 text-white border-2 border-emerald-500 shadow-2xl shadow-emerald-500/20 animate-[slideUp_250ms_cubic-bezier(0.16,1,0.3,1)] relative z-20">
+              <div class="my-6 p-6 rounded-3xl bg-slate-950/95 text-white border-2 border-blue-500 shadow-2xl shadow-blue-500/20 animate-[slideUp_250ms_cubic-bezier(0.16,1,0.3,1)] relative z-20">
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping motion-reduce:animate-none"></span>
-                    <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-ping motion-reduce:animate-none"></span>
+                    <span class="text-xs font-mono font-bold uppercase tracking-wider text-blue-400">
                       Sola Shadow DOM • Injected Overlay
                     </span>
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300">
-                      <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+                      <svg class="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
                       <span>Anchored to Ingress Container</span>
                     </span>
                     <button
@@ -283,7 +283,7 @@
                   </div>
                   <div class="p-3 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-between font-mono">
                     <span class="text-xs text-slate-300">Throughput:</span>
-                    <span class="text-base font-black text-emerald-400">1,420 req/s</span>
+                    <span class="text-base font-black text-blue-400">1,420 req/s</span>
                   </div>
                 </div>
 
@@ -291,7 +291,7 @@
                   <span class="text-[10px] text-slate-400 font-mono">0 CSS leakage • Zero host re-renders</span>
                   <button
                     onclick={() => (activeAnimationStep = 4)}
-                    class="px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-[11px] hover:bg-emerald-400 transition-colors">
+                    class="px-3 py-1.5 rounded-xl bg-blue-500 text-slate-950 font-bold text-[11px] hover:bg-blue-400 transition-colors">
                     Copy Code Snippet
                   </button>
                 </div>
@@ -301,7 +301,7 @@
                 <p class="text-xs text-slate-400 font-medium">Click "View in My UI" in the Side Panel on the right to anchor an isolated zero-VDOM component overlay right here.</p>
                 <button
                   onclick={() => { isSidePanelOpen = true; isCardInjected = true; activeAnimationStep = 3; isTargetHovered = true; }}
-                  class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 cursor-pointer shadow-xs">
+                  class="px-4 py-2 rounded-xl bg-blue-500 text-slate-950 font-bold text-xs hover:bg-blue-400 cursor-pointer shadow-xs">
                   + Trigger Live Overlay Preview
                 </button>
               </div>
@@ -322,12 +322,12 @@
               <div>
                 <div class="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/5">
                   <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs">
+                    <div class="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
                       S
                     </div>
                     <span class="font-bold text-xs text-slate-900 dark:text-white">Sola UI Side Panel</span>
                   </div>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 font-bold">12 Cards</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 font-bold">12 Cards</span>
                 </div>
 
                 <!-- Side Panel Component Cards List -->
@@ -337,10 +337,10 @@
                   <!-- Item 1 -->
                   <button
                     onclick={() => { selectedComponent = 'Telemetry Stream Chart'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
-                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Telemetry Stream Chart' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
+                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Telemetry Stream Chart' && isCardInjected ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500 text-blue-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Telemetry Stream</span>
-                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
+                      <span class="text-[10px] font-mono text-blue-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Zero-VDOM pure SVG live chart</p>
                   </button>
@@ -348,10 +348,10 @@
                   <!-- Item 2 -->
                   <button
                     onclick={() => { selectedComponent = 'Haptic Rotary Dial'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
-                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Haptic Rotary Dial' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
+                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Haptic Rotary Dial' && isCardInjected ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500 text-blue-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Haptic Rotary Dial</span>
-                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
+                      <span class="text-[10px] font-mono text-blue-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Tactile rate-limiting throttle</p>
                   </button>
@@ -359,10 +359,10 @@
                   <!-- Item 3 -->
                   <button
                     onclick={() => { selectedComponent = 'Date Range Picker'; isCardInjected = true; isTargetHovered = true; activeAnimationStep = 3; }}
-                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Date Range Picker' && isCardInjected ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-emerald-50/50'}">
+                    class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Date Range Picker' && isCardInjected ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500 text-blue-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Date Range Picker</span>
-                      <span class="text-[10px] font-mono text-emerald-600 font-bold">Anchor →</span>
+                      <span class="text-[10px] font-mono text-blue-600 font-bold">Anchor →</span>
                     </div>
                     <p class="text-[10px] text-slate-400 font-normal mt-0.5">Calendar matrix range filter</p>
                   </button>
@@ -389,7 +389,7 @@
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
       
       <div class="p-8 rounded-3xl bg-slate-50/60 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.04] space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-sm">
+        <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
           1
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Install Chrome Extension</h3>

@@ -493,7 +493,7 @@
                   <h4 class="font-bold text-sm text-slate-900 dark:text-white">{selectedComponent.name}</h4>
                   <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs leading-relaxed">{selectedComponent.description}</p>
                 </div>
-                <div class="w-full bg-slate-950 rounded-xl p-4 text-xs font-mono text-emerald-300 overflow-x-auto">
+                <div class="w-full bg-slate-950 rounded-xl p-4 text-xs font-mono text-blue-300 overflow-x-auto">
                   <pre><code>{selectedComponent.codeSnippets.sola}</code></pre>
                 </div>
                 <div class="flex items-center gap-2">
@@ -615,7 +615,7 @@
 
           <!-- Code Snippet Output Window -->
           <div class="relative group">
-            <pre class="bg-slate-950 text-emerald-300 p-5 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{activeCodeSnippet}</code></pre>
+            <pre class="bg-slate-950 text-blue-300 p-5 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{activeCodeSnippet}</code></pre>
             <button 
               onclick={() => copyCode(activeCodeSnippet)}
               class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
