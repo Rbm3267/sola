@@ -1,10 +1,14 @@
 <script>
   export let label = "";
   export let initialChecked = false;
+  export let onChange = null;
   let checked = $state(initialChecked);
 
   function toggle() {
     checked = !checked();
+    if (typeof onChange === 'function') {
+      onChange(checked());
+    }
   }
 </script>
 

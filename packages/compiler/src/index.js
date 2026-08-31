@@ -172,6 +172,10 @@ function extractExpressions(text) {
       const inner = text.slice(i + 1, closeIdx).trim();
       if (inner.startsWith('#') || inner.startsWith('/') || inner.startsWith(':')) {
         result += text.slice(i, closeIdx + 1); i = closeIdx + 1;
+      } else if (inner.startsWith('@html')) {
+        const htmlExpr = inner.slice('@html'.length).trim();
+        result += `<sola-html expr="${htmlExpr.replace(/"/g, '&quot;')}"></sola-html>`;
+        i = closeIdx + 1;
       } else {
         result += `<sola-expr expr="${inner.replace(/"/g, '&quot;')}"></sola-expr>`;
         i = closeIdx + 1;
@@ -445,6 +449,20 @@ export function compile(source, options = {}) {
       // SyntaxError), and any {a || b}-style fallback expression — an extremely
       // common pattern — would otherwise produce invalid generated code.
       domCode += `  createEffect(() => { ${id}.textContent = String((${expr}) ?? ''); });\n`;
+      return;
+    }
+
+    // {@html expr} — renders expr as raw HTML via innerHTML, unlike {expr} which always
+    // goes through textContent. Wrapped in its own element so setting innerHTML can't
+    // clobber unrelated sibling nodes. Callers are responsible for trusting/sanitizing
+    // whatever markup they pass — same contract as innerHTML anywhere else.
+    if (node.name === 'sola-html') {
+      const expr = (node.attribs.expr || '').replace(/&quot;/g, '"');
+      const id = `h${uid++}`;
+      domCode += `  const ${id} = document.createElement('div');\n`;
+      domCode += `  ${id}.style.display = 'contents';\n`;
+      domCode += `  ${parentVar}.appendChild(${id});\n`;
+      domCode += `  createEffect(() => { ${id}.innerHTML = String((${expr}) ?? ''); });\n`;
       return;
     }
 

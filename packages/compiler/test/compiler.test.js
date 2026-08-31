@@ -66,6 +66,12 @@ test('text interpolation with object literal {fn({key: val})}', () => {
   assert(code.includes('JSON.stringify({a: 1, b: 2})'), 'nested object in text expr');
 });
 
+test('{@html expr} renders via innerHTML, not textContent', () => {
+  const { code } = compile(`<script>let html = $state('<b>hi</b>');</script><div>{@html html()}</div>`);
+  assert(code.includes('.innerHTML = String((html()) ?? \'\')'), 'innerHTML assignment with parenthesized expr');
+  assert(!code.includes('.textContent = String((html()'), 'does not also go through textContent');
+});
+
 test('text interpolation with {a || b} does not produce invalid ?? mixing', () => {
   // JS forbids `x || y ?? ''` without explicit grouping — a naive `String(expr ?? '')`
   // wrapper breaks the extremely common {a || b} fallback pattern used throughout
