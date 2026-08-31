@@ -43,14 +43,14 @@
     <span class="text-slate-500 dark:text-slate-400 font-normal">56 Primitives</span>
   </div>
 
-  <!-- Main Headline (Airy, Crisp, Modern) -->
+  <!-- Main Headline -->
   <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.06] mb-6 max-w-4xl">
-    Build beautiful interfaces from <span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">pure intent</span>.
+    Your UI shouldn't pay for <span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">work it didn't do</span>.
   </h1>
 
   <!-- Subheadline -->
   <p class="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
-    A zero-VDOM UI engine and design system that compiles declarative intent into fine-grained reactive DOM signals — zero virtual DOM overhead, multi-framework portability, and 56 handcrafted primitives.
+    Sola compiles your components into fine-grained signal subscriptions — each DOM node patches itself directly when its value changes. No virtual DOM diffing, no component tree re-renders. Drop into React, Svelte, or plain HTML with 56 handcrafted primitives in 3.2 kB.
   </p>
 
   <!-- Clean Action Bar (CTAs + CLI) -->

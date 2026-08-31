@@ -95,10 +95,10 @@
       <!-- Action CTAs -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
         <a
-          href="https://chromewebstore.google.com/detail/sola-ui"
+          href="https://chromewebstore.google.com/detail/sola-ui/cahdakefpjocaapggijdbbgidcjdaehc"
           target="_blank"
           rel="noopener noreferrer"
-          class="px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-emerald-500/20 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
+          class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/20 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
           <span>Add to Chrome (Web Store)</span>
         </a>
