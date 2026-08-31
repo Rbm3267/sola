@@ -11,7 +11,8 @@
 
 <p align="center">
   <a href="https://sola-air.dev"><b>sola-air.dev →</b></a> • 
-  <a href="https://sola-air.vercel.app"><b>sola-air.vercel.app →</b></a>
+  <a href="https://sola-air.vercel.app"><b>sola-air.vercel.app →</b></a> • 
+  <a href="./CHANGELOG.md"><b>Changelog →</b></a>
 </p>
 
 <p align="center">
