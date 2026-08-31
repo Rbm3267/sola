@@ -1,7 +1,8 @@
 <script>
-  let label = "DATE PICKER";
-  let value = $state("");
-  let placeholder = "Pick a date...";
+  export let label = "DATE PICKER";
+  export let initialValue = "";
+  export let placeholder = "Pick a date...";
+  let value = $state(initialValue);
 </script>
 
 <div class="sola-datepicker-root">

@@ -1,7 +1,8 @@
 <script>
-  let title = "SIGNAL TELEMETRY";
-  let value = "94.2 req/s";
-  let delta = "+14.8%";
+  export let title = "SIGNAL TELEMETRY";
+  export let value = "94.2 req/s";
+  export let delta = "+14.8%";
+  export let data = [35, 55, 40, 80, 65, 95, 70, 88];
 </script>
 
 <div class="sola-chart-card">
@@ -13,14 +14,9 @@
     <span class="sola-delta-badge">{delta}</span>
   </div>
   <div class="sola-spark-bars">
-    <div class="sola-bar" style="height: 35%;"></div>
-    <div class="sola-bar" style="height: 55%;"></div>
-    <div class="sola-bar" style="height: 40%;"></div>
-    <div class="sola-bar" style="height: 80%;"></div>
-    <div class="sola-bar" style="height: 65%;"></div>
-    <div class="sola-bar" style="height: 95%;"></div>
-    <div class="sola-bar" style="height: 70%;"></div>
-    <div class="sola-bar" style="height: 88%;"></div>
+    {#each data as barHeight}
+      <div class="sola-bar" style="height: {barHeight}%;"></div>
+    {/each}
   </div>
 </div>
 

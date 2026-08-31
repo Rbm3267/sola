@@ -1,6 +1,6 @@
 <script>
   // Sola Native Reactive Dashboard
-  let title = "Cluster Telemetry Mesh";
+  export let title = "Cluster Telemetry Mesh";
   let rps = $state(1420);
   let errorRate = $state(0.04);
   let nodes = $state([

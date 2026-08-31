@@ -1,6 +1,7 @@
 <script>
-  let label = "SELECT OPTION";
-  let selected = $state("");
+  export let label = "SELECT OPTION";
+  export let initialSelected = "";
+  let selected = $state(initialSelected);
 </script>
 
 <div class="sola-select-wrapper">
@@ -9,8 +10,8 @@
   {/if}
   <div class="select-field-wrap">
     <select class="select-native" bind:value="selected">
-      <option value="" disabled selected>Choose an option...</option>
-      <!-- Options slot / children -->
+      <option value="" disabled>Choose an option...</option>
+      <slot />
     </select>
     <div class="select-arrow">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>

@@ -1,17 +1,22 @@
 <script>
-  let label = "";
-  let checked = $state(false);
+  export let label = "";
+  export let initialChecked = false;
+  let checked = $state(initialChecked);
+
+  function toggle() {
+    checked = !checked();
+  }
 </script>
 
 <div class="sola-toggle-wrapper">
   {#if label}
     <span class="toggle-label">{label}</span>
   {/if}
-  <button 
-    type="button" 
-    role="switch" 
-    aria-checked="{checked()}" 
-    on:click={() => checked.set(!checked())} 
+  <button
+    type="button"
+    role="switch"
+    aria-checked="{checked()}"
+    on:click={toggle}
     class="toggle-track {checked() ? 'checked' : ''}">
     <span class="toggle-thumb"></span>
   </button>

@@ -1,19 +1,24 @@
 <script>
-  let title = "Modal Dialog";
-  let open = $state(false);
+  export let title = "Modal Dialog";
+  export let initialOpen = false;
+  let open = $state(initialOpen);
+
+  function close() {
+    open = false;
+  }
 </script>
 
 <div class="sola-modal-container {open() ? 'active' : ''}">
-  <div class="modal-backdrop" on:click={() => open.set(false)}></div>
+  <div class="modal-backdrop" on:click={close}></div>
   <div class="modal-card">
     <div class="modal-header">
       <h3 class="modal-title">{title}</h3>
-      <button class="close-btn" on:click={() => open.set(false)} aria-label="Close">
+      <button class="close-btn" on:click={close} aria-label="Close">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
     <div class="modal-body">
-      <!-- Modal body content -->
+      <slot />
     </div>
   </div>
 </div>

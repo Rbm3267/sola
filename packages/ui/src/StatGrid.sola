@@ -1,10 +1,10 @@
 <script>
-  let columns = 3;
-  let gap = "16px";
+  export let columns = 3;
+  export let gap = "16px";
 </script>
 
 <div class="sola-stat-grid" style="--grid-cols: {columns}; --grid-gap: {gap};">
-  <!-- Slot items mount here -->
+  <slot />
 </div>
 
 <style>

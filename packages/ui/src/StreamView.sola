@@ -1,6 +1,11 @@
 <script>
-  let content = $state("");
-  let streaming = $state(true);
+  // Accepts either a plain string or a getter function (const content = () => signal()),
+  // mirroring IntentCard/IntentList's convention for live/reactive values — resolved fresh
+  // on every read so a parent can hand this a signal for genuine streaming content.
+  export let content = "";
+  export let streaming = true;
+
+  let resolvedContent = $derived(() => (typeof content === 'function' ? content() : content));
 </script>
 
 <div class="sola-stream-view">
@@ -11,8 +16,8 @@
     </div>
   </div>
   <div class="stream-content">
-    <span>{content()}</span>
-    {#if streaming()}
+    <span>{resolvedContent()}</span>
+    {#if streaming}
       <span class="stream-cursor"></span>
     {/if}
   </div>
