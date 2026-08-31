@@ -65,7 +65,7 @@
     <!-- Card 1: Live RPS Counter -->
     <div class="dash-card">
       <div class="card-label">TOTAL THROUGHPUT</div>
-      <div class="card-value value-emerald">{formattedThroughput}</div>
+      <div class="card-value value-blue">{formattedThroughput}</div>
       <div class="card-subtext">Peak SLA: 2,000 req/s</div>
     </div>
 
@@ -75,7 +75,7 @@
       <div class="gauge-wrap">
         <svg width="76" height="76" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(226, 232, 240, 0.2)" stroke-width="8"/>
-          <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="8" stroke-dasharray="190 60" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="190 60" stroke-linecap="round" transform="rotate(-90 50 50)"/>
         </svg>
         <span class="gauge-center-text">{capacityPct}%</span>
       </div>
@@ -143,6 +143,30 @@
     color: #0f172a;
   }
 
+  @media (prefers-color-scheme: dark) {
+    .sola-dashboard-container { color: #f1f5f9; }
+    .dash-title { color: #ffffff; }
+    .dash-desc { color: #94a3b8; }
+    .dash-card { background: #0f172a; border-color: rgba(255,255,255,0.07); }
+    .controller-card { background: #0f172a; border-color: rgba(255,255,255,0.07); }
+    .table-card { background: #0f172a; border-color: rgba(255,255,255,0.07); }
+    .node-row { background: #1e293b; border-color: rgba(255,255,255,0.05); }
+    .node-name { color: #f1f5f9; }
+    .node-rps { color: #94a3b8; }
+    .rps-counter-pill { background: #1e293b; border-color: rgba(255,255,255,0.1); color: #f1f5f9; }
+    .controller-title { color: #f1f5f9; }
+    .controller-desc { color: #94a3b8; }
+    .card-value { color: #f1f5f9; }
+    .gauge-center-text { color: #f1f5f9; }
+    .alert-nominal { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); color: #6ee7b7; }
+    .alert-warning { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); color: #fcd34d; }
+    .btn-secondary { background: #1e293b; color: #cbd5e1; border-color: rgba(255,255,255,0.1); }
+    .btn-secondary:hover { background: #334155; }
+    .badge-row { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.25); }
+    .live-beacon { background: #3b82f6; }
+    .badge-text { color: #93c5fd; }
+  }
+
   .dash-header {
     display: flex;
     justify-content: space-between;
@@ -167,7 +191,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #10b981;
+    background: #3b82f6;
   }
 
   .badge-text {
@@ -206,12 +230,12 @@
   }
 
   .btn-primary {
-    background: #10b981;
-    color: #022c22;
+    background: #3b82f6;
+    color: #ffffff;
   }
 
   .btn-primary:hover {
-    background: #34d399;
+    background: #60a5fa;
   }
 
   .btn-secondary {
@@ -306,8 +330,8 @@
     margin-bottom: 6px;
   }
 
-  .value-emerald {
-    color: #10b981;
+  .value-blue {
+    color: #3b82f6;
   }
 
   .card-subtext {
@@ -355,7 +379,7 @@
 
   .sola-range-input {
     width: 100%;
-    accent-color: #10b981;
+    accent-color: #3b82f6;
     cursor: pointer;
   }
 
@@ -401,7 +425,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #10b981;
+    background: #3b82f6;
   }
 
   .node-name {
