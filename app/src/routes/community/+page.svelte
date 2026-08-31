@@ -288,6 +288,7 @@
 
   <!-- Template Details Modal -->
   {#if activeTemplateModal}
+    {@const accent = activeTemplateModal.cards[0]?.accentColor ?? 'slate'}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
@@ -300,7 +301,6 @@
         class="w-full max-w-2xl bg-white dark:bg-[#0c1222] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
 
         <!-- Modal gradient header -->
-        {@const accent = activeTemplateModal.cards[0]?.accentColor ?? 'slate'}
         <div class="bg-gradient-to-br {getGradient(accent)} px-6 py-5 relative overflow-hidden">
           <svg viewBox="0 0 240 44" preserveAspectRatio="none" class="absolute bottom-0 left-0 right-0 w-full h-10 opacity-15" aria-hidden="true">
             <polyline points={sparklines[activeTemplateModal.id] ?? '0,30 120,15 240,10'} fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
