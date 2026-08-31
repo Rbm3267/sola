@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Sola UI",
-  "version": "1.0.1",
-  "description": "Preview ambient zero-VDOM Sola UI components directly on top of your live web apps in a closed Shadow DOM.",
+  "name": "Sola AIR",
+  "version": "1.0.2",
+  "description": "Preview ambient zero-VDOM Sola AIR components directly on top of your live web apps in a closed Shadow DOM.",
   "permissions": [
     "activeTab",
     "storage",
@@ -16,7 +16,7 @@
     "default_path": "sidepanel.html"
   },
   "action": {
-    "default_title": "Open Sola Component Dock",
+    "default_title": "Open Sola AIR Component Dock",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
