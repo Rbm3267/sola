@@ -107,7 +107,7 @@
         </span>
       </div>
       <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-        3.2 kB Core • Zero-VDOM Native Signals
+        3.9 kB Core • Zero-VDOM Native Signals
       </span>
     </div>
   {/if}

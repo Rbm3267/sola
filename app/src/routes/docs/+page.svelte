@@ -782,7 +782,7 @@ export function SolaWidget({ title, value }) {
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.2 kB Bundle</h4>
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.9 kB Bundle</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Zero third-party dependencies. Instant time-to-interactive.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">

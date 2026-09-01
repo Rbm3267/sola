@@ -256,8 +256,8 @@ mount(<span class="c-fn">document</span>.getElementById(<span class="c-str">'app
       <h2 class="sd-h2">Adding to an existing Vite project</h2>
       <div class="sd-code-block">
         <div class="sd-code-header"><span>terminal</span></div>
-        <pre><code>npm install --save-dev @sola-air/vite-plugin
-npm install @sola-air/runtime</code></pre>
+        <pre><code>npm install --save-dev @sola-air-ui/vite-plugin-sola
+npm install @sola-air-ui/core</code></pre>
       </div>
 
       <div class="sd-code-block">

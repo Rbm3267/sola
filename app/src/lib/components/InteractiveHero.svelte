@@ -91,7 +91,7 @@
 
   <!-- Micro Technical Attributes Line -->
   <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] font-semibold text-slate-400 dark:text-slate-400 mb-12">
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> 3.2 kB Core Runtime</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> 3.9 kB Core Runtime</span>
     <span>•</span>
     <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> 0 Virtual DOM Diffing</span>
     <span>•</span>

@@ -71,7 +71,7 @@ The compiler transforms this into a self-contained ES module with:
 
 | Feature | Sola AIR | React | Svelte | Vue |
 |---|---|---|---|---|
-| **Bundle size** (hello world) | **~3.2 KB** | ~45 KB | ~4 KB | ~33 KB |
+| **Bundle size** (core, gzipped) | **~3.9 KB** | ~45 KB | ~4 KB | ~33 KB |
 | **Virtual DOM Overhead** | **None (Direct DOM)** | Yes | No | Yes |
 | **Built-in AI Intent Primitive** | **`$intent`** | ❌ | ❌ | ❌ |
 | **Secure On-Prem Data Signals** | **`$data` (Sola Relay)** | ❌ | ❌ | ❌ |
