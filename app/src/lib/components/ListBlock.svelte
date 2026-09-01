@@ -17,7 +17,7 @@
   }
 </script>
 
-<div class="group relative bg-white/90 dark:bg-white/[0.02] backdrop-blur-xl border border-slate-200/80 dark:border-white/[0.04] rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-6px_rgba(14,165,233,0.12)] hover:border-sky-300 dark:border-sky-500/30/80 transition-all duration-200 overflow-hidden w-full">
+<div class="group relative bg-white/90 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.04] rounded-3xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-6px_rgba(14,165,233,0.12)] hover:border-sky-300 dark:border-sky-500/30/80 transition-all duration-200 overflow-hidden w-full">
   
   <!-- Header -->
   <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-white/[0.04] relative z-10">

@@ -15,7 +15,7 @@
   const events = $derived(config.events && config.events.length > 0 ? config.events : defaultEvents);
 </script>
 
-<div class="bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/80 dark:border-white/[0.04] rounded-3xl p-6 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.04)] w-full">
+<div class="bg-white/95 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.04] rounded-3xl p-6 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.04)] w-full">
   <!-- Header -->
   <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.04] pb-3 mb-4">
     <div class="flex items-center gap-2">

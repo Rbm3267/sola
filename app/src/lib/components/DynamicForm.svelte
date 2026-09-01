@@ -16,7 +16,7 @@
   }
 </script>
 
-<div class="group relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/70 dark:border-white/[0.04] rounded-3xl p-6 sm:p-7 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_40px_-8px_rgba(245,158,11,0.12)] hover:border-amber-300 dark:border-amber-500/30/80 transition-all duration-300 overflow-hidden w-full">
+<div class="group relative bg-white/95 dark:bg-white/[0.02] border border-slate-200/70 dark:border-white/[0.04] rounded-3xl p-6 sm:p-7 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_40px_-8px_rgba(245,158,11,0.12)] hover:border-amber-300 dark:border-amber-500/30/80 transition-all duration-300 overflow-hidden w-full">
   
   <!-- Soft Solar Ambient Glow -->
   <div class="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-amber-200/20 via-orange-100/10 to-transparent rounded-full blur-2xl pointer-events-none"></div>

@@ -1713,6 +1713,33 @@ export const COMPONENT_CATALOG: CatalogComponent[] = [
       svelte: `<SolaHoverCard handle="@sola-engine" title="Sola" />`,
       html: `<sola-hover-card handle="@sola-engine"></sola-hover-card>`
     }
+  },
+
+  // 57. SolaSafeHTML
+  {
+    id: 'sola-safe-html',
+    name: 'Rich Text Renderer',
+    category: 'Data Display',
+    description: 'Renders external rich-text HTML (a CMS field, a KB article) as real inherited-typography DOM, with defensive stripping of scripts, event handlers, and javascript: URLs — no iframe, no nested scrollbar.',
+    tagline: 'CMS fields, knowledge-base excerpts, and curated rich text',
+    badge: 'Real DOM',
+    componentName: 'SolaSafeHTML',
+    defaultConfig: {
+      content: '<p>Gifts and meals can be a common part of business relationships, but they can also create <strong>conflicts of interest</strong> or the appearance of impropriety.</p><p>The following policy is designed to ensure employees maintain the highest ethical standards when giving or receiving gifts and meals.</p>',
+      maxHeight: '130px',
+      title: 'Gift and Meals Policy'
+    },
+    props: [
+      { name: 'content', type: 'string', defaultValue: '', description: 'Raw HTML to sanitize and render' },
+      { name: 'maxHeight', type: 'string', defaultValue: '', description: 'Caps height and adds a bottom mask-fade when set (e.g. "130px")' },
+      { name: 'title', type: 'string', defaultValue: 'Rich text content', description: 'Accessible region label' }
+    ],
+    codeSnippets: {
+      sola: `<SolaSafeHTML\n  content={kbArticle.html}\n  maxHeight="130px"\n  title={kbArticle.title}\n/>`,
+      react: `import { SolaSafeHTML } from '@sola/ui';\n\nexport function KbExcerpt({ article }) {\n  return (\n    <SolaSafeHTML content={article.html} maxHeight="130px" title={article.title} />\n  );\n}`,
+      svelte: `<script>\n  import { SolaSafeHTML } from '@sola/ui';\n</script>\n\n<SolaSafeHTML config={{ content: article.html, maxHeight: "130px", title: article.title }} />`,
+      html: `<sola-safe-html max-height="130px"></sola-safe-html>`
+    }
   }
 ];
 

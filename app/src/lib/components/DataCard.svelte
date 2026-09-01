@@ -11,7 +11,7 @@
   const isPositive = $derived(config.trend && !config.trend.startsWith('-'));
 </script>
 
-<div class="group relative bg-white/90 dark:bg-white/[0.02] backdrop-blur-xl border border-slate-200/80 dark:border-white/[0.04] rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-6px_rgba(14,165,233,0.12)] hover:border-sky-300 dark:border-sky-500/30/80 transition-all duration-200 overflow-hidden">
+<div class="group relative bg-white/90 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.04] rounded-3xl p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-6px_rgba(14,165,233,0.12)] hover:border-sky-300 dark:border-sky-500/30/80 transition-all duration-200 overflow-hidden">
   
   <!-- Subtle ambient corner glow -->
   <div class="absolute -right-8 -top-8 w-24 h-24 bg-gradient-to-br from-sky-400/10 to-violet-400/10 rounded-full blur-xl group-hover:scale-125 transition-transform duration-300 pointer-events-none"></div>

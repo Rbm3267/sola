@@ -76,7 +76,7 @@
 <div class="w-full flex flex-col gap-6">
   
   <!-- Top Behavioral Vector Telemetry HUD -->
-  <div class="bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 sm:p-6 shadow-sm text-slate-900 dark:text-white flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
+  <div class="bg-white/95 dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 sm:p-6 shadow-sm text-slate-900 dark:text-white flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
     
     <!-- Ambient Persona Subtle Glow -->
     <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl opacity-15 pointer-events-none {metrics.persona === 'sre_commander' ? 'bg-rose-500' : metrics.persona === 'finops_auditor' ? 'bg-violet-500' : 'bg-blue-500'}"></div>

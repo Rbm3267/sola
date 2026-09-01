@@ -50,7 +50,7 @@
 
   <!-- Subheadline -->
   <p class="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
-    Sola Sentinel observes real behavior — clicks, focus, what someone's typing — and <code>$intent</code> resolves a live, LLM-backed suggestion before they finish deciding what they need. Still zero-VDOM underneath: fine-grained signals, no diffing, no wasted re-renders.
+    Sola Sentinel observes real behavior — clicks, focus, what someone's typing — and <code class="font-mono text-[0.85em] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded-md">$intent</code> resolves a live, LLM-backed suggestion before they finish deciding what they need. Still zero-VDOM underneath: fine-grained signals, no diffing, no wasted re-renders.
   </p>
 
   <!-- Clean Action Bar (CTAs + CLI) -->

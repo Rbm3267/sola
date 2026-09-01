@@ -39,37 +39,37 @@
       <nav class="hidden md:flex items-center gap-1">
         <a 
           href="/" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath === '/' ? 'bg-amber-500/10 text-amber-900 dark:text-amber-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath === '/' ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Overview
         </a>
         <a 
           href="/studio" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/studio') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/studio') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Studio
         </a>
         <a 
           href="/community"
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/community') ? 'bg-violet-500/10 text-violet-900 dark:text-violet-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/community') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Community
         </a>
         <a
           href="/demo/ai"
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           AI Demo
         </a>
         <a
           href="/components" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/components') ? 'bg-amber-500/10 text-amber-900 dark:text-amber-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/components') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Components
         </a>
         <a 
           href="/preview" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/preview') ? 'bg-sky-500/10 text-sky-900 dark:text-sky-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/preview') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Extension
         </a>
         <a 
           href="/docs" 
-          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/docs') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all {currentPath.startsWith('/docs') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400 font-bold' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/60 dark:hover:bg-white/5'}">
           Docs
         </a>
       </nav>
@@ -134,43 +134,43 @@
       <a 
         href="/" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath === '/' ? 'bg-amber-500/10 text-amber-900 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath === '/' ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Overview</span>
       </a>
       <a 
         href="/studio" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/studio') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/studio') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Studio</span>
       </a>
       <a
         href="/community"
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/community') ? 'bg-violet-500/10 text-violet-900 dark:text-violet-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/community') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Community</span>
       </a>
       <a
         href="/demo/ai"
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/demo/ai') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>AI Demo</span>
       </a>
       <a
         href="/components" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/components') ? 'bg-amber-500/10 text-amber-900 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/components') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Components</span>
       </a>
       <a 
         href="/preview" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/preview') ? 'bg-sky-500/10 text-sky-900 dark:text-sky-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/preview') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Extension</span>
       </a>
       <a 
         href="/docs" 
         onclick={() => isMobileMenuOpen = false}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/docs') ? 'bg-blue-500/10 text-blue-900 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all {currentPath.startsWith('/docs') ? 'bg-emerald-500/10 text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
         <span>Documentation</span>
       </a>
     </div>

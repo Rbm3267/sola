@@ -30,7 +30,7 @@
   }
 </script>
 
-<div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-rose-200 dark:border-rose-500/20/90 rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all">
+<div class="relative bg-white/95 dark:bg-white/[0.02] border border-rose-200 dark:border-rose-500/20/90 rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all">
   
   <!-- Outer Glow Accent -->
   <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl pointer-events-none"></div>

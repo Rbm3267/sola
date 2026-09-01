@@ -29,7 +29,7 @@
   const activeColor = $derived(colorMap[config.color || 'emerald']);
 </script>
 
-<div class="group relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_36px_-6px_rgba(14,165,233,0.14)] hover:border-sky-300 dark:border-sky-500/30 transition-all duration-300 overflow-hidden">
+<div class="group relative bg-white/95 dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_36px_-6px_rgba(14,165,233,0.14)] hover:border-sky-300 dark:border-sky-500/30 transition-all duration-300 overflow-hidden">
   
   <!-- Specular highlight -->
   <div class="absolute inset-0 bg-gradient-to-br from-sky-50/50 via-transparent to-transparent pointer-events-none"></div>

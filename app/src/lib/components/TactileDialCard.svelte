@@ -37,7 +37,7 @@
   }
 </script>
 
-<div class="relative bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
+<div class="relative bg-white/95 dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center">
   
   <!-- Header -->
   <div class="w-full flex items-center justify-between mb-4">

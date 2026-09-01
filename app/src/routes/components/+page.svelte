@@ -1,14 +1,16 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
-  import GaugeCard from '$lib/components/GaugeCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
   import ClusterMatrix from '$lib/components/ClusterMatrix.svelte';
-  import FlowWaterfall from '$lib/components/FlowWaterfall.svelte';
-  import IncidentTriageMatrix from '$lib/components/IncidentTriageMatrix.svelte';
-  import TactileDialCard from '$lib/components/TactileDialCard.svelte';
   import StreamView from '$lib/components/StreamView.svelte';
+  import SolaMount from '$lib/components/SolaMount.svelte';
+  import GaugeCardSola from '@sola-air-ui/ui/GaugeCard.sola';
+  import TactileDialCardSola from '@sola-air-ui/ui/TactileDialCard.sola';
+  import FlowWaterfallSola from '@sola-air-ui/ui/FlowWaterfall.sola';
+  import IncidentTriageMatrixSola from '@sola-air-ui/ui/IncidentTriageMatrix.sola';
+  import SolaSafeHTMLSola from '@sola-air-ui/ui/SolaSafeHTML.sola';
   import DiffAudit from '$lib/components/DiffAudit.svelte';
   import SchemaInspector from '$lib/components/SchemaInspector.svelte';
   import SentinelCapsule from '$lib/components/SentinelCapsule.svelte';
@@ -257,15 +259,21 @@
               </div>
             {:else if selectedComponent.componentName === 'GaugeCard'}
               <div class="w-full max-w-sm">
-                <GaugeCard config={liveProps} />
+                {#key JSON.stringify(liveProps)}
+                  <SolaMount component={GaugeCardSola} props={liveProps} />
+                {/key}
               </div>
             {:else if selectedComponent.componentName === 'TactileDialCard'}
               <div class="w-full max-w-sm">
-                <TactileDialCard config={liveProps} />
+                {#key JSON.stringify(liveProps)}
+                  <SolaMount component={TactileDialCardSola} props={liveProps} />
+                {/key}
               </div>
             {:else if selectedComponent.componentName === 'FlowWaterfall'}
               <div class="w-full">
-                <FlowWaterfall config={liveProps} />
+                {#key JSON.stringify(liveProps)}
+                  <SolaMount component={FlowWaterfallSola} props={liveProps} />
+                {/key}
               </div>
             {:else if selectedComponent.componentName === 'ListBlock'}
               <div class="w-full">
@@ -281,7 +289,9 @@
               </div>
             {:else if selectedComponent.componentName === 'IncidentTriageMatrix'}
               <div class="w-full">
-                <IncidentTriageMatrix config={liveProps} />
+                {#key JSON.stringify(liveProps)}
+                  <SolaMount component={IncidentTriageMatrixSola} props={liveProps} />
+                {/key}
               </div>
             {:else if selectedComponent.componentName === 'StreamView'}
               <div class="w-full">
@@ -482,6 +492,12 @@
                   Hover over the handle to preview metadata:
                   <SolaHoverCard handle="@sola-architecture" title="Sola Architecture" description="Zero-VDOM, direct reactive graph bindings with sub-millisecond patch execution." />
                 </p>
+              </div>
+            {:else if selectedComponent.componentName === 'SolaSafeHTML'}
+              <div class="w-full max-w-md">
+                {#key JSON.stringify(liveProps)}
+                  <SolaMount component={SolaSafeHTMLSola} props={liveProps} />
+                {/key}
               </div>
             {:else}
               <!-- New components show schema-driven preview card -->
