@@ -1,22 +1,38 @@
 <script>
+  // Both columns and rows accept either a plain array or a getter function
+  // (const rows = () => signal()), matching StreamView/IntentCard/Modal's convention.
+  // Needed because a nested component's props are captured once at mount, not
+  // re-evaluated on later signal changes — a getter function is what stays live.
   export let columns = [];
   export let rows = [];
   export let striped = false;
+  // Optional (row, index) => void — when provided, rows get a pointer cursor and
+  // hover treatment. Common pattern: open a Modal with that row's detail.
+  export let onRowClick = null;
+
+  let resolvedColumns = $derived(() => (typeof columns === 'function' ? columns() : columns));
+  let resolvedRows = $derived(() => (typeof rows === 'function' ? rows() : rows));
+
+  function handleRowClick(row, i) {
+    if (typeof onRowClick === 'function') {
+      onRowClick(row, i);
+    }
+  }
 </script>
 
 <div class="table-wrapper">
   <table>
     <thead>
       <tr>
-        {#each columns as col}
+        {#each resolvedColumns() as col}
           <th>{col.label || col}</th>
         {/each}
       </tr>
     </thead>
     <tbody>
-      {#each rows as row, i}
-        <tr>
-          {#each columns as col}
+      {#each resolvedRows() as row, i}
+        <tr class="{typeof onRowClick === 'function' ? 'clickable' : ''}" onclick={() => handleRowClick(row, i)}>
+          {#each resolvedColumns() as col}
             <td>{row[col.key || col]}</td>
           {/each}
         </tr>
@@ -62,5 +78,9 @@
 
   tr:hover td {
     background: #f8fafc;
+  }
+
+  tr.clickable {
+    cursor: pointer;
   }
 </style>
