@@ -9,6 +9,11 @@
   // Optional (row, index) => void — when provided, rows get a pointer cursor and
   // hover treatment. Common pattern: open a Modal with that row's detail.
   export let onRowClick = null;
+  // Was previously left to every consumer to hand-roll via cascade overrides
+  // (th/td color, border, hover-background) whenever their own page had a
+  // dark mode — real, repeated boilerplate across this codebase's own
+  // consumers. Built in now so `dark={darkMode()}` replaces that.
+  export let dark = false;
 
   let resolvedColumns = $derived(() => (typeof columns === 'function' ? columns() : columns));
   let resolvedRows = $derived(() => (typeof rows === 'function' ? rows() : rows));
@@ -20,7 +25,7 @@
   }
 </script>
 
-<div class="table-wrapper">
+<div class="table-wrapper {dark ? 'dark' : ''}">
   <table>
     <thead>
       <tr>
@@ -46,7 +51,10 @@
     overflow-x: auto;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
+    transition: border-color 0.2s ease;
   }
+
+  .table-wrapper.dark { border-color: rgba(255, 255, 255, 0.08); }
 
   table {
     width: 100%;
@@ -66,10 +74,22 @@
     border-bottom: 1px solid #e2e8f0;
   }
 
+  .table-wrapper.dark th {
+    color: #6b7690;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+
   td {
     padding: 12px 16px;
     color: #334155;
     border-bottom: 1px solid #f1f5f9;
+  }
+
+  .table-wrapper.dark td {
+    color: #c3cbdc;
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    background: transparent;
   }
 
   tr:last-child td {
@@ -78,6 +98,10 @@
 
   tr:hover td {
     background: #f8fafc;
+  }
+
+  .table-wrapper.dark tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
   }
 
   tr.clickable {

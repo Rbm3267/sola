@@ -68,6 +68,16 @@
   }
   .sola-btn-destructive:hover { background: #dc2626; }
 
+  /* Was documented above (line 3) but never implemented — a variant="outline"
+     button silently fell through to just the base .sola-btn styles with no
+     background/border, rendering as unstyled transparent text. */
+  .sola-btn-outline {
+    background: transparent;
+    color: #10b981;
+    border-color: #10b981;
+  }
+  .sola-btn-outline:hover { background: rgba(16, 185, 129, 0.1); }
+
   .sola-btn-spinner {
     width: 14px;
     height: 14px;

@@ -94,6 +94,28 @@ export const tokens = {
     high:     { fg: '#dc2626', bg: '#fef2f2' },
     critical: { fg: '#9333ea', bg: '#faf5ff' },
   },
+
+  /**
+   * Stacking order. nav < dropdown < overlay-scrim < modal/sheet (same tier
+   * — mutually exclusive, focused overlays) < toast (always topmost).
+   */
+  zIndex: {
+    nav:      40,
+    dropdown: 100,
+    overlay:  800,
+    modal:    900,
+    sheet:    900,
+    toast:    1000,
+  },
+
+  /** One easing curve, two durations — see tokens.css for the rationale. */
+  motion: {
+    ease: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    duration: {
+      fast: '160ms',
+      base: '240ms',
+    },
+  },
 };
 
 export default tokens;

@@ -159,6 +159,31 @@
 
   /* ─── Focus ring ────────────────────────────────────────────────────────────*/
   --sola-focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.4);
+
+  /* ─── Z-index scale ─────────────────────────────────────────────────────────
+   * Every stacking-context component in the library should sit on one of
+   * these steps, never a bare magic number. nav < dropdown < overlay-scrim
+   * < modal/sheet (same tier — both are focused, blocking overlays that
+   * shouldn't appear at once) < toast (always topmost, so a confirmation
+   * or error stays visible even while a modal is open).
+   */
+  --sola-z-nav:      40;
+  --sola-z-dropdown: 100;
+  --sola-z-overlay:  800;
+  --sola-z-modal:    900;
+  --sola-z-sheet:    900;
+  --sola-z-toast:    1000;
+
+  /* ─── Motion ─────────────────────────────────────────────────────────────────
+   * One easing curve, two durations. `fast` for micro-interactions (hover,
+   * toggle); `base` for anything that opens/closes a surface (modal, sheet,
+   * dropdown). Components should reference these rather than hardcoding
+   * their own timing — three different curves across a handful of overlay
+   * components is what "inconsistent" looks like in practice.
+   */
+  --sola-ease-standard:  cubic-bezier(0.16, 1, 0.3, 1);
+  --sola-duration-fast:  160ms;
+  --sola-duration-base:  240ms;
 }
 
 /* ─── Dark mode — system default ─────────────────────────────────────────────

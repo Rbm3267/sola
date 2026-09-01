@@ -16,6 +16,11 @@ export { default as Toast } from './Toast.sola';
 export { default as StreamView } from './StreamView.sola';
 export { default as IntentCard } from './IntentCard.sola';
 export { default as IntentList } from './IntentList.sola';
+export { default as GaugeCard } from './GaugeCard.sola';
+export { default as FlowWaterfall } from './FlowWaterfall.sola';
+export { default as IncidentTriageMatrix } from './IncidentTriageMatrix.sola';
+export { default as TactileDialCard } from './TactileDialCard.sola';
+export { default as SolaSafeHTML } from './SolaSafeHTML.sola';
 
 // AI Interaction Primitives
 export { default as ConversationThread } from './ai/ConversationThread.sola';
