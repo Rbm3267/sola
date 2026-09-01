@@ -716,9 +716,9 @@ export function compile(source, options = {}) {
   output += `  // Reactive DOM graph\n`;
   output += domCode;
 
-  output += `\n  __flush_mounts();\n`;
+  output += `\n  __flush_mounts(__ctx);\n`;
   output += `\n  return () => {\n`;
-  output += `    __flush_destroys();\n`;
+  output += `    __flush_destroys(__ctx);\n`;
   output += `    popContext(__ctx);\n`;
   output += `    __target.innerHTML = '';\n`;
   output += `  };\n`;

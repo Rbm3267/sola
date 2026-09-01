@@ -178,22 +178,34 @@ export function onDestroy(fn) {
   }
 }
 
-// Called by compiled mount() function to flush instance mounts
-export function __flush_mounts() {
-  if (activeContext && activeContext.mounts.length > 0) {
-    const cbs = [...activeContext.mounts];
-    activeContext.mounts = [];
+// Called by compiled mount() function to flush instance mounts.
+//
+// Takes the specific context to flush (the one `pushContext()` returned for
+// THIS component instance) rather than trusting the module-global
+// `activeContext`. If a nested child component mounts during this
+// component's own DOM construction, the child's own pushContext() call
+// reassigns `activeContext` to the child's context and never pops it back
+// (a mounted child stays on the stack until it unmounts) — so by the time
+// the parent reaches its own flush call, `activeContext` no longer points
+// at the parent. Falls back to `activeContext` when called with no
+// argument, for compiled bundles built before this fix.
+export function __flush_mounts(ctx = activeContext) {
+  if (ctx && ctx.mounts.length > 0) {
+    const cbs = [...ctx.mounts];
+    ctx.mounts = [];
     for (const cb of cbs) {
       cb();
     }
   }
 }
 
-// Called when a component is torn down
-export function __flush_destroys() {
-  if (activeContext && activeContext.destroys.length > 0) {
-    const cbs = [...activeContext.destroys];
-    activeContext.destroys = [];
+// Called when a component is torn down. Same explicit-context fix as
+// __flush_mounts above — see that comment for why activeContext alone
+// isn't reliable once nested components are involved.
+export function __flush_destroys(ctx = activeContext) {
+  if (ctx && ctx.destroys.length > 0) {
+    const cbs = [...ctx.destroys];
+    ctx.destroys = [];
     for (const cb of cbs) {
       cb();
     }

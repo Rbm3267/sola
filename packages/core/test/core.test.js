@@ -1,14 +1,16 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { 
-  createSignal, 
-  createDerived, 
-  createEffect, 
+import {
+  createSignal,
+  createDerived,
+  createEffect,
   flushSync,
-  onMount, 
+  onMount,
   onDestroy,
   pushContext,
-  popContext
+  popContext,
+  __flush_mounts,
+  __flush_destroys
 } from '../src/index.js';
 
 describe('@sola/core reactivity engine', () => {
@@ -75,5 +77,43 @@ describe('@sola/core reactivity engine', () => {
     ctx2.mounts[0]();
     assert.strictEqual(mounted1, true);
     assert.strictEqual(mounted2, true);
+  });
+
+  it('should fire a parent component\'s onMount even when a nested child mounts during its own construction and stays on the context stack', () => {
+    // Mirrors exactly what compiled mount() output does: pushContext(), run
+    // the component's own script/DOM construction (which may mount nested
+    // children), then flush THIS component's own onMount callbacks using
+    // the specific context pushContext() returned — not whatever happens
+    // to be "active" afterward.
+    const parentCtx = pushContext();
+    let parentMounted = false;
+    onMount(() => { parentMounted = true; });
+
+    // Simulate a nested child component mounting while the parent's DOM is
+    // being built. A real mounted child never calls popContext() until it
+    // unmounts, so this reassigns the module-global activeContext to the
+    // child and leaves it there.
+    const childCtx = pushContext();
+    let childMounted = false;
+    onMount(() => { childMounted = true; });
+    __flush_mounts(childCtx);
+    assert.strictEqual(childMounted, true, 'child onMount should fire when flushed with its own context');
+    // Child stays mounted — no popContext(childCtx) here, matching real usage.
+
+    // Parent flushes its own mounts using the context IT was given, exactly
+    // like the compiler's `__flush_mounts(__ctx)` call site.
+    __flush_mounts(parentCtx);
+    assert.strictEqual(parentMounted, true, 'parent onMount must fire even though a child is still on the context stack');
+
+    // Teardown, again using the explicit context rather than relying on
+    // whatever activeContext happens to be (still childCtx at this point,
+    // since neither context has been popped yet).
+    let parentDestroyed = false;
+    parentCtx.destroys.push(() => { parentDestroyed = true; });
+    __flush_destroys(parentCtx);
+    assert.strictEqual(parentDestroyed, true);
+
+    popContext(childCtx);
+    popContext(parentCtx);
   });
 });
