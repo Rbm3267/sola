@@ -1,6 +1,6 @@
 {
   "name": "@sola-air-ui/ui",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
@@ -28,6 +28,7 @@
     "./html-viewer": "./src/HtmlViewer.sola",
     "./intent-card": "./src/IntentCard.sola",
     "./intent-list": "./src/IntentList.sola",
+    "./ambient-suggestion": "./src/AmbientSuggestion.sola",
     "./ai/conversation-thread": "./src/ai/ConversationThread.sola",
     "./ai/action-strip": "./src/ai/ActionStrip.sola",
     "./ai/confidence-badge": "./src/ai/ConfidenceBadge.sola",

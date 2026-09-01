@@ -4,12 +4,13 @@
   "workspaces": [
     "packages/*",
     "app",
-    "apps/*"
+    "apps/*",
+    "examples/*"
   ],
   "scripts": {
     "dev": "npm run dev -w app",
     "build": "npm run build -w app",
-    "test": "node --test packages/core/test/core.test.js && node packages/compiler/test/compiler.test.js",
+    "test": "node --test packages/core/test/core.test.js packages/core/test/sentinel.test.js && node packages/compiler/test/compiler.test.js",
     "test:e2e": "playwright test"
   },
   "allowScripts": {

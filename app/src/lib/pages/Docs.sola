@@ -156,6 +156,7 @@
 
       <p class="sd-nav-group-label">ADVANCED</p>
       <button class="sd-nav-link" data-nav="intent" onclick="{() => setSection('intent')}">Intent API</button>
+      <button class="sd-nav-link" data-nav="sentinel" onclick="{() => setSection('sentinel')}">Sola Sentinel</button>
       <button class="sd-nav-link" data-nav="export" onclick="{() => setSection('export')}">Framework Export</button>
       <button class="sd-nav-link" data-nav="compiler" onclick="{() => setSection('compiler')}">Compiler</button>
 
@@ -410,6 +411,44 @@ price = <span class="c-num">120</span>;</code></pre>
       </div>
     </div>
 
+    <!-- SOLA SENTINEL -->
+    <div data-sec="sentinel" class="sd-section" style="display:none">
+      <span class="sd-eyebrow">ADVANCED</span>
+      <h1 class="sd-h1">Sola Sentinel</h1>
+      <p class="sd-lead">Sentinel observes real user behavior — clicks, field focus, revisits, typed content — and turns it into two things: a real computed friction score (<code>flowIndex</code>), and, paired with <code>$intent</code>, proactive next-step suggestions.</p>
+
+      <h2 class="sd-h2">Friction detection</h2>
+      <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
+        <pre><code><span class="c-kw">import</span> { createSentinel } <span class="c-kw">from</span> <span class="c-str">'@sola-air-ui/core'</span>;
+
+<span class="c-kw">const</span> sentinel = <span class="c-fn">createSentinel</span>(<span class="c-str">'checkout-form'</span>);
+sentinel.<span class="c-fn">onFriction</span>((event) =&gt; console.log(event.message));
+
+<span class="c-comment">// three rapid clicks on the same action fires a RAGE_CLICK friction event</span>
+button.onclick = () =&gt; sentinel.<span class="c-fn">recordClick</span>(<span class="c-str">'submit'</span>);</code></pre>
+      </div>
+      <p class="sd-p"><code>flowIndex</code> (0–100) is computed, not a fixed decrement — it weighs recent friction events by severity and recency, how often the user backtracks between fields, and how erratic their pacing is.</p>
+
+      <h2 class="sd-h2">Ambient suggestions</h2>
+      <p class="sd-p">Feed field focus/blur events into the same sentinel, and it builds a natural-language prompt from observed activity once it detects a meaningful pause — hand that straight to <code>$intent</code> for a real, live suggestion.</p>
+      <div class="sd-code-block"><div class="sd-code-header"><span>.sola</span></div>
+        <pre><code>field.onfocus = () =&gt; sentinel.<span class="c-fn">recordFieldFocus</span>(<span class="c-str">'short_description'</span>);
+field.onblur = () =&gt; sentinel.<span class="c-fn">recordFieldBlur</span>(<span class="c-str">'short_description'</span>, field.value);
+
+<span class="c-kw">let</span> prompt = <span class="c-fn">$state</span>(<span class="c-kw">null</span>);
+<span class="c-fn">setInterval</span>(() =&gt; {
+  <span class="c-kw">if</span> (sentinel.<span class="c-fn">checkSignificance</span>()) prompt = sentinel.<span class="c-fn">buildPrompt</span>();
+}, <span class="c-num">400</span>);
+
+<span class="c-kw">let</span> suggestion = <span class="c-fn">$intent</span>(() =&gt; prompt());</code></pre>
+      </div>
+      <p class="sd-p">Render the result with <code>&lt;AmbientSuggestion suggestion={suggestion} /&gt;</code> from <code>@sola-air-ui/ui</code> — a small, dismissible, non-blocking suggestion that renders model output as text, never <code>innerHTML</code>.</p>
+
+      <div class="sd-callout sd-callout--amber">
+        <strong>No built-in debounce.</strong> <code>$intent</code> re-fires on every change to its prompt. The <code>checkSignificance()</code> poll above is the throttle — never wire raw input events straight into <code>$intent</code>.
+      </div>
+    </div>
+
     <!-- FRAMEWORK EXPORT -->
     <div data-sec="export" class="sd-section" style="display:none">
       <span class="sd-eyebrow">ADVANCED</span>
@@ -505,6 +544,7 @@ npx sola export --target wc --tag-name sola-button ./src/Button.sola</code></pre
             <tr><td><code>$derived</code></td><td><code>&lt;T&gt;(fn: () =&gt; T) =&gt; ReadSignal&lt;T&gt;</code></td><td>Create a computed value</td></tr>
             <tr><td><code>$effect</code></td><td><code>(fn: () =&gt; void | (() =&gt; void)) =&gt; void</code></td><td>Run a tracked side-effect</td></tr>
             <tr><td><code>$intent</code></td><td><code>(description: string) =&gt; void</code></td><td>AI macro (build-time only)</td></tr>
+            <tr><td><code>createSentinel</code></td><td><code>(name: string, options?) =&gt; SolaSentinel</code></td><td>Friction + ambient behavior observer</td></tr>
             <tr><td><code>tick</code></td><td><code>() =&gt; Promise&lt;void&gt;</code></td><td>Await pending DOM updates</td></tr>
             <tr><td><code>untrack</code></td><td><code>&lt;T&gt;(fn: () =&gt; T) =&gt; T</code></td><td>Read signals without tracking</td></tr>
           </tbody>

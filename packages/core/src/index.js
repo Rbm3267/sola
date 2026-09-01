@@ -476,65 +476,8 @@ class SignalMeshEngine {
 export const signalMesh = new SignalMeshEngine();
 export const createTopicSignal = (topic, initialVal) => signalMesh.topic(topic, initialVal);
 
-// ─── Sola Sentinel & Intent Telemetry Observer ───
-export class SolaSentinel {
-  constructor(name = 'default', options = {}) {
-    this.name = name;
-    this.thresholdMs = options.thresholdMs || 600;
-    this.maxRageClicks = options.maxRageClicks || 3;
-    this.clickHistory = [];
-    this.subscribers = new Set();
-    this.frictionEvents = [];
-    this.flowIndex = 99.8;
-  }
-
-  recordClick(actionId, target = 'button') {
-    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
-    this.clickHistory.push({ actionId, target, timestamp: now });
-    this.clickHistory = this.clickHistory.filter(c => now - c.timestamp < 2000);
-    
-    const recent = this.clickHistory.filter(c => c.actionId === actionId && now - c.timestamp < this.thresholdMs);
-    if (recent.length >= this.maxRageClicks) {
-      this.triggerFrictionAlert({
-        type: 'RAGE_CLICK',
-        actionId,
-        target,
-        count: recent.length,
-        timestamp: now,
-        severity: 'HIGH',
-        message: `Rage-click burst: ${recent.length} taps in ${Math.round(now - recent[0].timestamp)}ms`
-      });
-    }
-  }
-
-  recordSignalDrop(topic, error) {
-    this.triggerFrictionAlert({
-      type: 'SIGNAL_TIMEOUT',
-      topic,
-      error: error?.message || String(error),
-      timestamp: typeof performance !== 'undefined' ? performance.now() : Date.now(),
-      severity: 'CRITICAL',
-      message: `Signal channel "${topic}" breached SLA timeout (504 Gateway Stall)`
-    });
-  }
-
-  triggerFrictionAlert(event) {
-    this.frictionEvents.unshift(event);
-    if (this.frictionEvents.length > 50) this.frictionEvents.pop();
-    this.flowIndex = Math.max(68.5, Number((this.flowIndex - 3.8).toFixed(1)));
-    
-    this.subscribers.forEach(cb => {
-      try { cb(event, this); } catch(e) { console.error(e); }
-    });
-  }
-
-  onFriction(cb) {
-    this.subscribers.add(cb);
-    return () => this.subscribers.delete(cb);
-  }
-}
-
-export function createSentinel(name, options) {
-  return new SolaSentinel(name, options);
-}
+// ─── Sola Sentinel & Ambient Intent Telemetry Observer ───
+// Moved to sentinel.js — friction/rage-click detection, plus ambient
+// field-behavior capture, significance gating, and prompt building.
+export { SolaSentinel, createSentinel } from './sentinel.js';
 

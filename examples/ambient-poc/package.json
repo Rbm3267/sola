@@ -1,0 +1,16 @@
+{
+  "name": "@sola-air-ui/ambient-poc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Standalone proof of concept for ambient behavior observation -> real LLM-backed next-step suggestions (Sola Sentinel + $intent)",
+  "scripts": {
+    "build": "node build.mjs",
+    "prestart": "node build.mjs",
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^2.19.0",
+    "@sola-air-ui/compiler": "*"
+  }
+}

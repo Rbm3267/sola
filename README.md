@@ -90,6 +90,34 @@ The compiler transforms this into a self-contained ES module with:
 
 ---
 
+## Ambient Behavior Observation (Sola Sentinel)
+
+`SolaSentinel` observes real user behavior — clicks, field focus, revisits, typed content — and turns it into two things: a real computed friction score (`flowIndex`), and, paired with `$intent`, proactive next-step suggestions.
+
+```js
+import { createSentinel } from '@sola-air-ui/core';
+
+const sentinel = createSentinel('checkout-form');
+sentinel.onFriction((event) => console.log(event.message)); // e.g. rage-click bursts
+
+field.onfocus = () => sentinel.recordFieldFocus('short_description');
+field.onblur = () => sentinel.recordFieldBlur('short_description', field.value);
+
+// Debounced significance gate — createIntent has no built-in throttle, so this
+// poll decides *when* the observed behavior is worth interrupting the user for.
+setInterval(() => {
+  if (sentinel.checkSignificance()) promptSignal.write(sentinel.buildPrompt());
+}, 400);
+
+const suggestion = createIntent(() => promptSignal.read());
+```
+
+Render the result with `<AmbientSuggestion suggestion={suggestion} />` (`@sola-air-ui/ui/ambient-suggestion`) — a small, dismissible, non-blocking suggestion that renders model output as text, never `innerHTML`. A full working example — real Gemini call, real browser-verified, no mocked data — lives in [`examples/ambient-poc`](./examples/ambient-poc).
+
+`flowIndex` (0–100) is computed from actual signal density: recent friction events weighted by severity and recency, how often the user backtracks between fields, and how erratic their pacing is — not a fixed decrement per event.
+
+---
+
 ## Packages
 
 | Package | npm | Description |
@@ -117,6 +145,8 @@ sola/
 │   ├── sola-air/          # Meta-package (installs the full Sola AIR stack)
 │   ├── vite-plugin-sola/  # Vite plugin for .sola SFC compilation
 │   └── create-sola/       # Project scaffolding CLI
+├── examples/
+│   └── ambient-poc/       # Standalone Sola Sentinel + $intent ambient-suggestion demo
 ├── brand/                 # Official brand kit, logos, and favicons
 └── app/                   # Marketing site & interactive playground
 ```

@@ -82,3 +82,26 @@ package the way a real user would, not the local monorepo source.
   `boostTraffic`/`throttleTraffic` already used correctly.
 - **Changed:** `Chart`'s sparkline now renders from a `data` prop via
   `{#each}` instead of eight hardcoded bar heights.
+
+### `@sola-air-ui/core@1.1.0`
+
+- **Added:** `SolaSentinel` gains ambient field-behavior observation —
+  `recordFieldFocus`/`recordFieldBlur` (with automatic revisit detection),
+  a debounced significance gate (`checkSignificance`, since `createIntent`
+  has no built-in throttle), and `buildPrompt()` to turn observed activity
+  into a prompt for `$intent`. Moved out of `index.js` into its own
+  `sentinel.js` (`index.js` was already over this repo's file-size
+  guideline).
+- **Changed:** `flowIndex` is now a real computed score — weighted by recent
+  friction severity/recency, field-revisit ratio, and pacing variance —
+  instead of a fixed `-3.8` per friction event floored at a hardcoded 68.5.
+  Two different behavior sequences now produce two different scores; see
+  `packages/core/test/sentinel.test.js`.
+
+### `@sola-air-ui/ui@1.1.0`
+
+- **Added:** `AmbientSuggestion` component — renders a `SolaSentinel` +
+  `$intent` suggestion (accepts a plain object or a getter/signal, matching
+  `StreamView`/`IntentCard`'s convention), dismissible, non-blocking, and
+  renders model output as text only (never `innerHTML`). Verified end-to-end
+  against a real LLM in a real browser — see `examples/ambient-poc`.
