@@ -45,7 +45,7 @@
               Sola Design Studio
             </h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Drag-and-drop generative canvas with 56 primitives, live signal simulators, and instant multi-framework code export.
+              Drag-and-drop generative canvas with 28 components, live signal simulators, and instant multi-framework code export.
             </p>
           </div>
           <a href="/studio" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 group-hover:translate-x-1 transition-all">

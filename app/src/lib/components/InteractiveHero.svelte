@@ -40,17 +40,17 @@
     </span>
     <span>Sola AIR v{version} • Zero-VDOM Intent Engine</span>
     <span class="text-blue-400/80">/</span>
-    <span class="text-slate-500 dark:text-slate-400 font-normal">56 Primitives</span>
+    <span class="text-slate-500 dark:text-slate-400 font-normal">28 Components</span>
   </div>
 
   <!-- Main Headline -->
   <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.06] mb-6 max-w-4xl">
-    Your UI shouldn't pay for <span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">work it didn't do</span>.
+    Your UI shouldn't wait to be <span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">asked</span>.
   </h1>
 
   <!-- Subheadline -->
   <p class="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
-    Sola compiles your components into fine-grained signal subscriptions — each DOM node patches itself directly when its value changes. No virtual DOM diffing, no component tree re-renders. Drop into React, Svelte, or plain HTML with 56 handcrafted primitives in 3.2 kB.
+    Sola Sentinel observes real behavior — clicks, focus, what someone's typing — and <code>$intent</code> resolves a live, LLM-backed suggestion before they finish deciding what they need. Still zero-VDOM underneath: fine-grained signals, no diffing, no wasted re-renders.
   </p>
 
   <!-- Clean Action Bar (CTAs + CLI) -->
@@ -67,7 +67,7 @@
     <a 
       href="/components" 
       class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-xs hover:-translate-y-0.5 text-center text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
-      <span>Browse 56 Components</span>
+      <span>Browse 28 Components</span>
     </a>
     
     <!-- Inline CLI Pill -->

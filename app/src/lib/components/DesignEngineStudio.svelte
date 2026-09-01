@@ -31,7 +31,7 @@
         <span>@sola/ui • Foundational Design System</span>
       </div>
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
-        56 Zero-VDOM Primitives. Multi-Framework Portability.
+        28 Zero-VDOM Components. Multi-Framework Portability.
       </h2>
       <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed font-normal">
         From foundation buttons and date pickers to high-frequency telemetry charts and resizable NOC splitters — handcrafted with spring physics and zero virtual DOM diffing.
@@ -176,7 +176,7 @@
                 </div>
               </div>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Pre-calculated WCAG AAA mathematical luminance curves ensure pixel-perfect legibility and optical contrast across all 56 components.
+                Pre-calculated WCAG AAA mathematical luminance curves ensure pixel-perfect legibility and optical contrast across all 28 components.
               </p>
             </div>
           {/if}
@@ -225,7 +225,7 @@
               <a
                 href="/components"
                 class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs transition-all shadow-xs">
-                <span>View All 56 Primitives</span>
+                <span>View All 28 Components</span>
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
             </div>
