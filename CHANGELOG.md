@@ -2,6 +2,212 @@
 
 All notable fixes and changes to the Sola AIR packages. Dates are UTC.
 
+## 2026-09-01 (new primitives)
+
+Scoped down from a larger proposed "engine architecture" spec (Shadow DOM
+encapsulation, an atomic utility-class dictionary, a new state-mutation API)
+to the one part of it that was genuinely additive and low-risk: two new
+primitives. The rest would have meant either breaking every current
+consumer's reliance on cross-component `<style>`-block cascading (Shadow
+DOM) or building a second, parallel styling system alongside the existing
+scoped-`<style>` model (utility classes) — real decisions that deserve their
+own scoping pass, not something to fold into a component addition.
+
+### `@sola-air-ui/ui@1.3.0`
+
+- **Added `SolaSafeHTML`**: renders external rich-text HTML (a CMS field, a
+  KB article) as real inherited-typography DOM instead of an isolated
+  `<iframe>` — generalized from a pattern hand-built once already this
+  session for a real consumer's featured-article card. Deliberately *not*
+  presented as equivalent to `HtmlViewer`'s iframe-sandbox isolation — that
+  distinction is documented directly in the component, since `{@html}`
+  injection runs in the host page's own document and no amount of string
+  stripping changes that. Does real defensive stripping (`<script>` tags,
+  `on*` event-handler attributes, `javascript:` URLs, nested
+  `<iframe>`/`<object>`/`<embed>`) rather than just being named "safe" and
+  doing nothing — for genuinely untrusted content, `HtmlViewer`'s real
+  sandbox is still the right tool. Supports an optional `maxHeight` with a
+  mask-image fade for preview/excerpt use.
+- **`Table.sola`**: added a `dark` prop with real built-in dark-mode
+  styling. Previously every consumer with a dark mode had to hand-roll
+  `th`/`td` color/border/hover overrides via cascade (three separate real
+  examples of this exist in this codebase's own consumer projects) — now
+  `dark={darkMode()}` replaces that boilerplate. This is the actual gap
+  behind an external review's "SolaDataGrid" request; built as an
+  enhancement to the existing table rather than a second, parallel table
+  component, since a real one already existed and did most of the job.
+
+## 2026-09-01 (audit follow-up: live wiring + prop-shape fixes)
+
+### `@sola-air-ui/ui@1.2.1`
+
+- **Fixed:** `TactileDialCard.sola`, `FlowWaterfall.sola`, and
+  `IncidentTriageMatrix.sola` (added in `1.2.0`, same day) were faithful
+  ports of the original Svelte components' *behavior*, but their prop
+  shapes didn't match what the website's own component catalog
+  (`componentCatalog.ts`) actually declares and drives its live playground
+  with — e.g. `IncidentTriageMatrix` was ported as a single-incident command
+  card with playbooks, while the catalog's real, load-bearing schema
+  describes a multi-row incident list. Found only once the components were
+  actually wired into the live site (see below) instead of just
+  compile-checked in isolation. Reconciled all three against the catalog's
+  real prop contracts: `TactileDialCard` now takes `{title, metric, min,
+  max, currentValue}`; `FlowWaterfall` takes `steps: {name, value,
+  type}[]`; `IncidentTriageMatrix` renders a real multi-row `incidents:
+  {id, service, severity, status, latency}[]` matrix with a compact
+  playbooks section underneath (keeping the 1-click mitigation feature the
+  catalog's own description text still promises).
+
+### Website (`app/`)
+
+- **The four components above are now actually rendered by the live site**,
+  not just present in the package. `/components` previously hardcoded
+  Svelte-native versions of `GaugeCard`, `TactileDialCard`, `FlowWaterfall`,
+  and `IncidentTriageMatrix` in its live-preview panel; it now mounts the
+  real compiled `.sola` components via a small existing bridge
+  (`SolaMount.svelte`, already used by `/overview` — confirmed real infra,
+  not something built for this fix) wrapped in a `{#key}` block so the
+  interactive props playground still live-updates the preview on every
+  edit. Verified in a real browser (not just a build check): all four
+  render correctly, zero console errors, `GaugeCard`'s ring animates,
+  `TactileDialCard`'s drag interaction works, `FlowWaterfall`'s bars scale
+  correctly, `IncidentTriageMatrix`'s playbook buttons run.
+- Fixed a real same-role radius inconsistency: `DataCard.svelte` and
+  `ListBlock.svelte` used `rounded-2xl` on their outer card while the other
+  9 catalog card components use `rounded-3xl` for the same role — the two
+  outliers now match. Audited the rest of the touched pages (`Navbar`,
+  homepage, `/components`, `InteractiveHero`) for the same class of bug and
+  found none — most of what a raw `rounded-xl`/`2xl`/`3xl` grep flags
+  turns out to be legitimate outer-card/inner-box size hierarchy, not
+  actual inconsistency. A full site-wide spacing/radius audit (72 files
+  touch these classes in some form) remains open by choice — scoped down
+  to already-touched pages rather than attempted blind across the whole
+  site in one pass.
+
+## 2026-09-01 (design + engineering audit)
+
+A comprehensive external review of the whole project (marketing site, `.sola`
+component library, `AGENTS.md`) found the same underlying problem in several
+places: the project's own documentation and demo site had drifted ahead of
+what was actually implemented. This pass fixes the drift rather than the
+symptoms.
+
+### `AGENTS.md`
+
+Rewritten against the real compiler/core source, not memory. Removed an
+entire fictional section presenting production code samples for React, Vue,
+Angular, Web Components, SwiftUI, and React Native adapters — none of these
+packages exist. Removed a fictional "preset system" table (`stripe`,
+`linear`, `vercel`, etc. — no `packages/presets/` exists). Replaced a
+component-props table that documented six components (`GaugeCard`,
+`DynamicForm`, `ListBlock`, `FlowWaterfall`, `ReportDocViewer`,
+`ActionReportGenerator`) that had never been built as `.sola` files with the
+real, verified 27-component list. Corrected the `$state`/`$derived` example
+against the actual compiler transform (`$derived` requires an arrow
+function; template reads require an explicit `()` call) and corrected
+`{:else if}` to the single `{:else}` the compiler actually implements.
+
+### `@sola-air-ui/tokens@1.1.0`
+
+- **Added:** a z-index scale (`nav`, `dropdown`, `overlay`, `modal`,
+  `sheet`, `toast`) and a motion scale (one easing curve, two durations).
+  Both were missing — `Modal.sola` and `IntentSheet.sola` each independently
+  hardcoded their own z-index (`999` vs `9999`) and their own animation
+  timing (three different values across the two components combined).
+
+### `@sola-air-ui/ui@1.2.0`
+
+- **Fixed:** `Modal.sola` and `IntentSheet.sola` now consume the shared
+  z-index/motion scale from `@sola-air-ui/tokens` (with hardcoded fallbacks,
+  so they still work standalone without the tokens package loaded) instead
+  of inventing their own numbers.
+- **Fixed:** `Button.sola` documented a `variant="outline"` in its own
+  top-of-file comment that was never implemented — a button passed that
+  variant silently rendered with no background or border. Implemented it.
+- **Fixed:** `Canvas.sola` accepted `theme`, `padding`, and `layout` props
+  that were declared but never read anywhere in the component — every
+  Canvas rendered identically regardless of what was passed. Made all three
+  functional (verified first that no real consumer depended on the old
+  no-op behavior).
+- **Added:** four new real `.sola` components — `GaugeCard`,
+  `FlowWaterfall`, `IncidentTriageMatrix`, `TactileDialCard` — ported from
+  Svelte-only versions that previously existed solely in the marketing
+  site's `app/src/lib/components/`, not as installable library components.
+  The site was rendering its own showcase with components the library
+  itself didn't ship, which is the credibility problem the external review
+  called out directly. Fixed a real bug in the process: `GaugeCard`'s
+  Svelte version mapped its `emerald` color option to `text-blue-600`
+  Tailwind classes.
+
+### Website (`app/`, not published to npm)
+
+- Consolidated five different per-route accent colors in the nav (amber,
+  blue, violet, sky, blue again) and the homepage's three pillar cards down
+  to one — the brand color `@sola-air-ui/tokens` already documented as
+  primary (emerald) but the site itself wasn't consistently using.
+- Removed `backdrop-blur-2xl`/`-xl` from 15 content-card components that
+  were blurring a background already ~90–95% opaque — no visible effect,
+  just cost and haze. Left it in place on the actual modal/dropdown
+  overlays, where it does something.
+- Homepage pillar cards no longer trigger three simultaneous hover
+  animations (card lift + icon scale + link shift) at once — just the card
+  lift.
+- Corrected an inflated "28 components... instant multi-framework code
+  export" homepage claim (real count: 27; there is no multi-framework
+  export) and a homepage line referencing the fictional "preset showcase
+  across 5 universal tiers."
+- Discovered `app/src/lib/sola-engine/` (a second, duplicated copy of the
+  compiler) is dead code — nothing imports it. The site's real `.sola`
+  pipeline is the `vite-plugin-sola` in `vite.config.ts`, which imports
+  `compile` directly from `packages/compiler/src/index.js` and aliases
+  `@sola-air-ui/ui` to `packages/ui/src`. Left the dead directory in place
+  rather than deleting it blind, but noting it here so it doesn't get
+  mistaken for the real integration path later.
+
+## 2026-09-01
+
+Found while dogfooding again — this time a ServiceNow Service Portal widget
+whose `onMount` callback never fired once the same page also mounted other
+nested `@sola-air-ui/ui` components (`Table`, `Modal`, etc.), even though the
+identical `onMount` pattern worked correctly on a page with no nested
+components. Root-caused to the core lifecycle context stack, not the
+consuming app.
+
+### `@sola-air-ui/core@1.1.1`
+
+- **Fixed:** `__flush_mounts()` and `__flush_destroys()` operated on the
+  module-global `activeContext` instead of the specific context
+  `pushContext()` returned for the component being flushed. A mounted child
+  component's own `pushContext()` call reassigns `activeContext` and never
+  pops it back (a mounted child stays on the context stack until it
+  unmounts), so once a component mounted any nested child during its own DOM
+  construction, `activeContext` no longer pointed at the parent by the time
+  the parent tried to flush its own mount/destroy callbacks — silently
+  dropping them, with no error. Both functions now take an explicit `ctx`
+  argument (defaulting to `activeContext` for compiled bundles built before
+  this fix, so existing published output degrades gracefully rather than
+  breaking). Added a regression test exercising nested mounting explicitly;
+  the previous test suite only pushed/popped contexts in perfect order and
+  never exercised a nested-mount scenario, which is why this shipped
+  unnoticed.
+
+### `@sola-air-ui/compiler@1.0.8`
+
+- **Fixed:** generated `mount()` output now calls `__flush_mounts(__ctx)`
+  and `__flush_destroys(__ctx)` with the component's own captured context,
+  matching the `core@1.1.1` fix above — previously only `popContext(__ctx)`
+  passed the explicit context; the two flush calls did not.
+
+### Documentation
+
+- Every published package (`core`, `compiler`, `ui`, `tokens`, `relay`,
+  `providers`, `vite-plugin-sola`, `create-sola`, `mcp`, `sola-air`, plus
+  `behavior`) now has its own `README.md` — previously only the monorepo
+  root did, so a package's own npmjs.com page had nothing on it.
+- Fixed `@sola-air-ui/vite-plugin-sola`'s `repository` field, which pointed
+  at `github.com/rbm3267/sola` (a stale/incorrect URL) instead of
+  `sola-air`.
+
 ## 2026-08-31
 
 Found and fixed while dogfooding the published `sola-air` npm package end-to-end
