@@ -4,6 +4,10 @@ import UnoCSS from 'unocss/vite';
 import { readFileSync } from 'fs';
 import path from 'path';
 import solaPlugin from '../packages/vite-plugin-sola/src/index.js';
+// Handed to the plugin explicitly rather than left to a bare-specifier lookup
+// from Vite's config temp directory, which resolves differently depending on
+// how the installer hoisted the workspace.
+import { compile } from '../packages/compiler/src/index.js';
 
 // Every version shown anywhere on the site comes from a package manifest, so
 // the site cannot advertise a version that was never released.
@@ -70,7 +74,7 @@ export default defineConfig({
 		}
 	},
 	plugins: [
-		solaPlugin(),
+		solaPlugin({ compile }),
 		solaBanner(),
 		UnoCSS(),
 		sveltekit()

@@ -1,23 +1,35 @@
-import { compile } from '@sola-air-ui/compiler';
 import { readFileSync } from 'fs';
 
 /**
  * Vite plugin for .sola single-file components.
  *
- * @param {object}  [options]
- * @param {boolean} [options.sourcemap=true] Emit a source map so runtime errors
+ * @param {object}   [options]
+ * @param {boolean}  [options.sourcemap=true] Emit a source map so runtime errors
  *   and breakpoints land in the .sola file rather than in generated output.
+ * @param {Function} [options.compile] Compiler to use. Defaults to
+ *   @sola-air-ui/compiler, loaded on first use. This repo's own site passes its
+ *   workspace copy directly: Vite bundles a config file into
+ *   `<root>/node_modules/.vite-temp/`, and a bare specifier resolved from there
+ *   depends on how the installer happened to hoist things — which differs
+ *   between a local install and a clean CI one, and broke the deploy.
  */
 export default function solaPlugin(options = {}) {
-  const { sourcemap = true } = options;
+  const { sourcemap = true, compile: injectedCompile } = options;
+
+  let compileFn = injectedCompile ?? null;
+  async function getCompile() {
+    compileFn ??= (await import('@sola-air-ui/compiler')).compile;
+    return compileFn;
+  }
 
   return {
     name: 'vite-plugin-sola',
     enforce: 'pre',
 
-    load(id) {
+    async load(id) {
       if (!id.endsWith('.sola')) return null;
       try {
+        const compile = await getCompile();
         const source = readFileSync(id, 'utf-8');
         const compiled = compile(source, { filename: id, sourcemap });
         return { code: compiled.code, map: compiled.map ?? null };
