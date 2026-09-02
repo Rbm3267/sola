@@ -7,6 +7,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  no-local-config:
+    name: No local tooling config committed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # AGENTS.md once carried a generated block describing a contributor's
+      # local agent setup — tool routing, connected accounts, personas. The
+      # generator rewrites that block automatically, so without this check it
+      # returns to a public repo the next time anyone runs it.
+      - name: Reject generated local-tooling blocks
+        run: |
+          if git grep -In -e 'pandaos-managed' -e 'mcp__pandactions' \
+               -- . ':!.github/workflows/ci.yml' ; then
+            echo "::error::A generated local-tooling block is committed. Remove it before merging."
+            exit 1
+          fi
+          echo "No local tooling config found in tracked files."
+
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
