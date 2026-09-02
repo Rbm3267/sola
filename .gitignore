@@ -52,9 +52,3 @@ scratch/
 # Playwright artifacts (traces and error contexts, regenerated every run)
 test-results/
 playwright-report/
-
-# Local agent tooling. .pandaos/ in particular holds creds-access.json, which
-# must never be committed.
-.pandaos/
-.claude/
-.agents/
