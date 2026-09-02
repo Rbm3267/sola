@@ -181,9 +181,17 @@ function matchBrace(text, openPos) {
 }
 
 // Walk the template and resolve {expr} in attribute values using balanced-brace
-// matching, storing dynamic expressions in dynAttrs. Event/bind handlers are
-// stored as plain strings; other expressions become __soladyn_N__ markers.
-function preprocessTemplate(template, dynAttrs) {
+// matching. Both dynamic attributes and event/bind handlers are lifted into side
+// tables and replaced with brace-free markers (__soladyn_N__ / __solahandler_N__).
+//
+// Handlers must be lifted rather than written back as literal attribute text:
+// extractExpressions runs over the whole template afterwards and has no notion
+// of attribute boundaries, so a block-bodied handler like
+// `on:click={() => { n = n() + 1; }}` had its braces eaten and turned into a
+// <sola-expr> tag, which then shredded the rest of the tag into bogus
+// attributes. Markers contain no braces, so nothing downstream can see inside.
+function preprocessTemplate(template, dynAttrs, handlers) {
+  const isHandlerAttr = (name) => /^on:?[\w]+$/.test(name) || /^bind:[\w]+$/.test(name);
   let result = '';
   let i = 0;
   while (i < template.length) {
@@ -208,8 +216,9 @@ function preprocessTemplate(template, dynAttrs) {
           if (closeIdx !== -1) {
             const expr = template.slice(i + 1, closeIdx).trim();
             if (!expr.startsWith('#') && !expr.startsWith('/') && !expr.startsWith(':')) {
-              if (/^on:?[\w]+$/.test(attrName) || /^bind:[\w]+$/.test(attrName)) {
-                result += `${attrName}="${expr}"`;
+              if (isHandlerAttr(attrName)) {
+                handlers.push(expr);
+                result += `${attrName}="__solahandler_${handlers.length - 1}__"`;
               } else {
                 dynAttrs.push(expr);
                 result += `${attrName}="__soladyn_${dynAttrs.length - 1}__"`;
@@ -243,7 +252,14 @@ function preprocessTemplate(template, dynAttrs) {
           }
           parts.push({ text: currentText });
           if (i < template.length) i++; // skip closing quote
-          if (hasDyn) {
+          if (hasDyn && isHandlerAttr(attrName)) {
+            // A handler written in the quoted form, e.g. onclick="{() => go()}".
+            // Concatenating it as a string would produce an attribute holding
+            // source text rather than a wired listener.
+            const exprPart = parts.find((p) => p.expr !== undefined);
+            handlers.push(exprPart ? exprPart.expr : '() => {}');
+            result += `${attrName}="__solahandler_${handlers.length - 1}__"`;
+          } else if (hasDyn) {
             // Build a string-concatenation expression instead of a runtime backtick
             // template literal. Confirmed by driving a real browser against a live
             // ServiceNow Service Portal instance: its widget-script delivery pipeline
@@ -756,7 +772,15 @@ export function compile(source, options = {}) {
   // Pre-process attribute-bound expressions BEFORE extractExpressions using
   // balanced-brace matching (handles nested object literals, ternaries, etc.)
   const dynAttrs = [];
-  rawTemplate = preprocessTemplate(rawTemplate, dynAttrs);
+  const handlers = [];
+  rawTemplate = preprocessTemplate(rawTemplate, dynAttrs, handlers);
+
+  // Resolve a __solahandler_N__ marker back to its expression. Anything else is
+  // passed through, so a handler written as a bare identifier still works.
+  const resolveHandler = (val) => {
+    const m = /^__solahandler_(\d+)__$/.exec(val);
+    return m ? handlers[parseInt(m[1], 10)] : val;
+  };
   rawTemplate = extractExpressions(rawTemplate);
 
   // Convert {#if}/{:else}/{/if} and {#each}/{/each} into the sola-* tag form
@@ -941,6 +965,32 @@ export function compile(source, options = {}) {
   let domCode = '';
   const importedComponentSet = new Set(componentImports.map(i => i.localName));
 
+  const sourceFile = options.filename || '<component>';
+
+  // Reject a template expression that is not valid JavaScript, instead of
+  // emitting it and letting the bundler report a syntax error inside generated
+  // code the author never wrote. The usual cause is a literal brace in markup —
+  // a code sample containing `setInterval(() => {` — where `{` opens an
+  // expression, so everything up to the next `}` is swallowed.
+  function checkExpression(expr, whatFor) {
+    try {
+      const trimmed = expr.trim();
+      const node = acorn.parseExpressionAt(trimmed, 0, { ecmaVersion: 'latest' });
+      // parseExpressionAt stops at the first complete expression and ignores
+      // whatever follows, so `{<span>…}` only fails once the whole string has
+      // to be consumed.
+      if (node.end !== trimmed.length) throw new Error('trailing content');
+    } catch {
+      const preview = expr.length > 80 ? expr.slice(0, 80) + '…' : expr;
+      throw new Error(
+        `[sola compiler] Invalid ${whatFor} in ${sourceFile}:\n` +
+        `  {${preview}}\n` +
+        `  This is not a valid JavaScript expression. If you meant a literal ` +
+        `brace in your markup, escape it as &#123; and &#125;.`
+      );
+    }
+  }
+
   function emitNode(node, parentVar, locals = new Set()) {
     if (!node) return;
     // Template-expression rewrite with the current template scope (each-item /
@@ -958,7 +1008,9 @@ export function compile(source, options = {}) {
     }
 
     if (node.name === 'sola-expr') {
-      const expr = rewrite((node.attribs.expr || '').replace(/&quot;/g, '"'));
+      const raw = (node.attribs.expr || '').replace(/&quot;/g, '"');
+      checkExpression(raw, 'template expression');
+      const expr = rewrite(raw);
       const id = `e${uid++}`;
       domCode += `  const ${id} = document.createTextNode('');\n`;
       domCode += `  ${parentVar}.appendChild(${id});\n`;
@@ -995,24 +1047,21 @@ export function compile(source, options = {}) {
       // resolve them back to the real expression from dynAttrs and pass it as a raw
       // (unquoted) property so the child receives live data, not the placeholder text.
       //
-      // `onXxx`-named props (e.g. onChange={handler}) are a special case: preprocessTemplate
-      // strips their {expr} down to raw identifier text before this code ever sees them
-      // (the same exception that makes real onclick/on:click DOM handlers work), so they
-      // never arrive as a __soladyn_N__ placeholder at all. Since preprocessTemplate can't
-      // yet tell a component apart from a native element, that exception can't distinguish
-      // "this is a DOM event on <button>" from "this is a callback prop on <Toggle>" — so
-      // treat any on-prefixed key here as a raw expression too, same as a real dynAttr.
+      // `onXxx`-named props (e.g. onChange={handler}) arrive as a
+      // __solahandler_N__ marker, because preprocessTemplate cannot tell a
+      // component apart from a native element and lifts both the same way.
+      // Either way the expression is passed through as a live function.
       const propEntries = [];
       for (const [key, val] of Object.entries(node.attribs || {})) {
         const dynMatch = /^__soladyn_(\d+)__$/.exec(val);
-        const isEventLikeProp = /^on:?[\w]+$/.test(key);
+        const handlerMatch = /^__solahandler_(\d+)__$/.exec(val);
         // Dynamic (non-event) component props are deliberately NOT auto-called:
         // passing the getter is how a child receives live data today, and
         // README-syntax components rely on it.
         const propValue = dynMatch
           ? `(${dynAttrs[parseInt(dynMatch[1], 10)]})`
-          : isEventLikeProp
-            ? `(${rewrite(val)})`
+          : handlerMatch
+            ? `(${rewrite(handlers[parseInt(handlerMatch[1], 10)])})`
             : JSON.stringify(val);
         propEntries.push(`${JSON.stringify(key)}: ${propValue}`);
       }
@@ -1152,17 +1201,18 @@ export function compile(source, options = {}) {
       if (key.startsWith('on:')) {
         const eventName = key.slice(3);
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
-        // val is the handler expression (pre-processed from {expr}), pass directly
-        domCode += `  ${id}.addEventListener('${eventName}', ${rewrite(val)});\n`;
+        domCode += `  ${id}.addEventListener('${eventName}', ${rewrite(resolveHandler(val))});\n`;
       } else if (key.startsWith('on')) {
         const eventName = key.slice(2).toLowerCase();
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
-        domCode += `  ${id}.addEventListener('${eventName}', ${rewrite(val)});\n`;
+        domCode += `  ${id}.addEventListener('${eventName}', ${rewrite(resolveHandler(val))});\n`;
       } else if (key.startsWith('bind:')) {
         const prop = key.slice(5);
+        // bind:value={name} names a signal; the marker resolves back to it.
+        const bound = resolveHandler(val);
         if (prop === 'value') {
-          domCode += `  ${id}.addEventListener('input', (e) => { set_${val}(e.target.value); });\n`;
-          domCode += `  createEffect(() => { ${id}.value = ${val}() ?? ''; });\n`;
+          domCode += `  ${id}.addEventListener('input', (e) => { set_${bound}(e.target.value); });\n`;
+          domCode += `  createEffect(() => { ${id}.value = ${bound}() ?? ''; });\n`;
         }
       } else if (key === 'class' || key === 'className') {
         // Static values: emit as a plain string literal. A template literal here

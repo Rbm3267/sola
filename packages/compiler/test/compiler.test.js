@@ -170,6 +170,79 @@ test('README syntax remains fully valid (no rewrites of explicit calls)', () => 
   assert(!code.includes('()()'), 'no double calls anywhere');
 });
 
+// ── Invalid template expressions ────────────────────────────────────────────
+
+console.log('\nInvalid template expressions');
+
+test('an unparseable template expression fails with a useful message', () => {
+  // A literal brace in markup — a rendered code sample containing
+  // `setInterval(() => {` — opens an expression and swallows the markup after
+  // it. The compiler used to emit that as generated code and let the bundler
+  // report a syntax error in a file the author never wrote.
+  let err = null;
+  try {
+    compile(`<pre>setInterval(() =&gt; { doThing(); }, 400);</pre>`, { filename: 'Sample.sola' });
+  } catch (e) { err = e; }
+  assert(err, 'compile threw');
+  assert(err.message.includes('Sample.sola'), 'names the file');
+  assert(err.message.includes('&#123;'), 'suggests escaping the brace');
+});
+
+test('valid expressions are unaffected by the check', () => {
+  const { code } = compile(`<script>let a = $state(1);</script><div>{a > 0 ? 'yes' : 'no'}</div>`);
+  assert(code.includes("a() > 0 ? 'yes' : 'no'"), 'ternary compiles');
+});
+
+// ── Event handlers with block bodies ────────────────────────────────────────
+
+console.log('\nBlock-bodied event handlers');
+
+function assertValidJs(code, label) {
+  new Function(code.replace(/^import.*$/gm, '').replace('export default ', 'globalThis.__t = '));
+}
+
+test('on:click with a block body compiles', () => {
+  // Handler expressions used to be written back as literal attribute text, so
+  // extractExpressions ate their braces, emitted a <sola-expr> tag mid-handler
+  // and shredded the rest of the tag into bogus attributes.
+  const { code } = compile(`<script>let n = $state(0);</script><button on:click={() => { n = n() + 1; }}>go</button>`);
+  assertValidJs(code);
+  assert(code.includes("addEventListener('click', () => { set_n(n() + 1); })"), 'handler wired intact');
+  assert(!code.includes('sola-expr'), 'handler body not turned into an expression node');
+});
+
+test('onclick with several statements keeps all of them', () => {
+  const { code } = compile(`<script>let a = $state(0); let b = $state('');</script><button onclick={() => { a++; b = 'x'; }}>go</button>`);
+  assertValidJs(code);
+  assert(code.includes("set_a(a() + 1); set_b('x');"), 'both statements survive');
+});
+
+test('an object literal inside a handler survives', () => {
+  const { code } = compile(`<script>let o = $state(null);</script><button onclick={() => { o = { k: 1 }; }}>go</button>`);
+  assertValidJs(code);
+  assert(code.includes('set_o({ k: 1 })'), 'object literal intact');
+});
+
+test('a handler in the quoted form wires a listener, not a string', () => {
+  const { code } = compile(`<script>function go(){}</script><button onclick="{() => go()}">go</button>`);
+  assertValidJs(code);
+  assert(code.includes("addEventListener('click', () => go())"), 'listener wired');
+  assert(!code.includes("setAttribute('onclick'"), 'not written as an attribute string');
+});
+
+test('bind:value still resolves through the marker', () => {
+  const { code } = compile(`<script>let name = $state('');</script><input bind:value={name} />`);
+  assertValidJs(code);
+  assert(code.includes('set_name(e.target.value)'), 'writes back');
+  assert(code.includes('n0.value = name() ?? '), 'reads');
+});
+
+test('a callback prop on a component is passed as a function', () => {
+  const { code } = compile(`<script>import Toggle from './Toggle.sola'; let v = $state(false);</script><Toggle onChange={(x) => { v = x; }} />`);
+  assertValidJs(code.replace(/^import Toggle.*$/gm, ''));
+  assert(code.includes('"onChange": ((x) => { set_v(x); })'), 'callback passed live');
+});
+
 // ── else-if chains ──────────────────────────────────────────────────────────
 
 console.log('\nelse-if chains');
