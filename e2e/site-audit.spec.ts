@@ -9,15 +9,16 @@ test.describe('Sola AIR Site & Product Audit', () => {
     await expect(page).toHaveTitle(/Sola/);
 
     // 2. Main Brand Mark & Slogan
-    await expect(page.locator('h1')).toContainText('Build beautiful interfaces');
+    await expect(page.locator('h1')).toContainText("Your UI shouldn't wait to be");
 
-    // 3. Primary Navigation Elements
-    const nav = page.locator('nav');
-    await expect(nav.getByText('Studio')).toBeVisible();
-    await expect(nav.getByText('Components')).toBeVisible();
-    await expect(nav.getByText('Community')).toBeVisible();
-    await expect(nav.getByText('Docs')).toBeVisible();
-    await expect(nav.getByText('Extension')).toBeVisible();
+    // 3. Primary Navigation Elements. Secondary destinations moved under Tools,
+    //    so only the four that matter are asserted at the top level here;
+    //    site-quality.spec.ts covers the menu itself.
+    const nav = page.locator('header nav').first();
+    await expect(nav.getByRole('link', { name: 'Docs' })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Components' })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Studio' })).toBeVisible();
+    await expect(nav.getByRole('button', { name: 'Tools' })).toBeVisible();
   });
 
   test('Component Library Page Audit', async ({ page }) => {

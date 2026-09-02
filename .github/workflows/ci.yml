@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  browser:
+    name: Browser tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Build core IIFE bundle
+        run: npm run build -w @sola-air-ui/core
+      - run: npx playwright install --with-deps chromium
+
+      # No dev server needed: these compile components and mount them directly.
+      - name: Docs snippets and library components
+        run: npx playwright test e2e/docs-snippets.spec.ts e2e/ui-components.spec.ts
+
+      # These drive the real site, so they need it running.
+      - name: Build the site
+        run: npm run build
+      - name: Site quality and audit
+        run: |
+          npm run dev -w app &
+          npx wait-on http://localhost:5174 --timeout 60000
+          npx playwright test e2e/site-quality.spec.ts e2e/site-audit.spec.ts
+
+  scaffold:
+    name: Scaffold installs and builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      # Runs the real command a new user runs, against the real registry, and
+      # builds the result. This is the check that would have caught the
+      # scaffold pinning package versions that were never published.
+      - name: Scaffold a project
+        run: node packages/create-sola/src/cli.js smoke-app
+        working-directory: ${{ runner.temp }}
+
+      - name: Install scaffolded dependencies
+        run: npm install
+        working-directory: ${{ runner.temp }}/smoke-app
+
+      - name: Build scaffolded project
+        run: npm run build
+        working-directory: ${{ runner.temp }}/smoke-app
+
+      - name: Assert the build produced output
+        run: test -d dist && test -n "$(ls -A dist)"
+        working-directory: ${{ runner.temp }}/smoke-app
