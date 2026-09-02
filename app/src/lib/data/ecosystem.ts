@@ -114,7 +114,7 @@ export const SAAS_ECOSYSTEM: SaasIntegration[] = [
     name: 'Real-Time Telemetry & Log Stream',
     category: 'Telemetry & Systems',
     badge: 'Telemetry',
-    description: 'Sub-millisecond signal telemetry log with live microsecond event dispatching.',
+    description: 'Direct signal telemetry log with live microsecond event dispatching.',
     protocolUri: 'telemetry://stream/live',
     primaryComponent: 'StreamView',
     sampleIntent: 'Stream live error logs and trace anomalies in real-time',

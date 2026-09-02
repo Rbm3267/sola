@@ -1,24 +1,11 @@
 <script lang="ts">
-  import SolaButton from './SolaButton.svelte';
-  import SolaChart from './SolaChart.svelte';
-  import SolaDatePicker from './SolaDatePicker.svelte';
-  import SolaKbd from './SolaKbd.svelte';
+  import SentinelHeroDemo from './SentinelHeroDemo.svelte';
 
-  const version = __SOLA_VERSION__;
+  import { VERSIONS, PUBLISHED_COUNT, FACTS } from '$lib/data/site';
 
-  let activeTab = $state<'telemetry' | 'primitives' | 'signals'>('telemetry');
+  const version = VERSIONS.solaAir;
+
   let copied = $state(false);
-  let liveCounter = $state(184200);
-  let dialAngle = $state(64);
-  let isSimulating = $state(false);
-
-  function triggerSignalPulse() {
-    isSimulating = true;
-    liveCounter += Math.floor(Math.random() * 2400) + 600;
-    setTimeout(() => {
-      isSimulating = false;
-    }, 400);
-  }
 
   function copyCliCommand() {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -40,7 +27,7 @@
     </span>
     <span>Sola AIR v{version} • Zero-VDOM Intent Engine</span>
     <span class="text-blue-400/80">/</span>
-    <span class="text-slate-500 dark:text-slate-400 font-normal">28 Components</span>
+    <span class="text-slate-500 dark:text-slate-400 font-normal">{PUBLISHED_COUNT} Primitives</span>
   </div>
 
   <!-- Main Headline -->
@@ -55,19 +42,20 @@
 
   <!-- Clean Action Bar (CTAs + CLI) -->
   <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10 w-full sm:w-auto justify-center">
-    <!-- Primary CTA -->
-    <a 
-      href="/studio" 
-      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white shadow-md shadow-slate-900/10 dark:shadow-blue-500/20 hover:-translate-y-0.5 text-center text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
-      <span>Launch Studio Canvas</span>
+    <!-- Primary CTA: a developer evaluating the framework wants the quickstart,
+         not a drag-and-drop canvas. -->
+    <a
+      href="/docs"
+      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white shadow-md shadow-slate-900/10 dark:shadow-blue-500/20 hover:-translate-y-0.5 text-center text-sm flex items-center justify-center gap-2 cursor-pointer">
+      <span>Get started</span>
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
 
     <!-- Secondary CTA -->
-    <a 
-      href="/components" 
-      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-xs hover:-translate-y-0.5 text-center text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
-      <span>Browse 28 Components</span>
+    <a
+      href="/components"
+      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-xs hover:-translate-y-0.5 text-center text-sm flex items-center justify-center gap-2 cursor-pointer">
+      <span>Browse components</span>
     </a>
     
     <!-- Inline CLI Pill -->
@@ -90,169 +78,16 @@
   </div>
 
   <!-- Micro Technical Attributes Line -->
-  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] font-semibold text-slate-400 dark:text-slate-400 mb-12">
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> 3.9 kB Core Runtime</span>
+  <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400 mb-12">
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> {FACTS.coreSizeKb} core runtime</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> 0 Virtual DOM Diffing</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> No virtual DOM diffing</span>
     <span>•</span>
-    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span> Multi-Framework Export</span>
+    <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span> Compiles to plain DOM calls</span>
   </div>
 
-  <!-- Interactive Live Canvas Stage -->
-  <div class="w-full max-w-4xl mx-auto text-left">
-    
-    <!-- Stage Window -->
-    <div class="bg-white/95 dark:bg-[#0c1222] border border-slate-200/90 dark:border-white/10 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
-      
-      <!-- Stage Nav Header -->
-      <div class="px-5 py-3.5 border-b border-slate-100 dark:border-white/5 bg-slate-50/70 dark:bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        
-        <!-- Window Indicator & Mode Label -->
-        <div class="flex items-center gap-2.5">
-          <div class="flex items-center gap-1.5">
-            <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
-          </div>
-          <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase ml-1">
-            Live Reactive Canvas Stage
-          </span>
-        </div>
-
-        <!-- Interactive Scenario Switcher Tabs -->
-        <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/5 p-1 rounded-xl">
-          <button
-            onclick={() => (activeTab = 'telemetry')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'telemetry' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-            Telemetry Stream
-          </button>
-          <button
-            onclick={() => (activeTab = 'primitives')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'primitives' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-            Tactile Controls
-          </button>
-          <button
-            onclick={() => (activeTab = 'signals')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'signals' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}">
-            Signal Cascade
-          </button>
-        </div>
-      </div>
-
-      <!-- Stage Body Container -->
-      <div class="p-6 sm:p-8 space-y-6">
-        
-        {#if activeTab === 'telemetry'}
-          <!-- 1. Executive Telemetry Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            
-            <!-- Metric Card 1 -->
-            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 flex flex-col justify-between">
-              <div class="flex items-center justify-between text-slate-400 text-xs font-mono font-bold">
-                <span>INGESTION STREAM</span>
-                <span class="text-blue-600 font-bold">+18.4%</span>
-              </div>
-              <div class="my-3">
-                <div class="text-2xl sm:text-3xl font-black font-mono text-slate-900 dark:text-white tracking-tight">
-                  ${liveCounter.toLocaleString()}
-                </div>
-                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Real-time throughput</div>
-              </div>
-              <button
-                onclick={triggerSignalPulse}
-                class="w-full py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
-                <span>Inject Signal Pulse</span>
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-              </button>
-            </div>
-
-            <!-- Metric Card 2 (SVG Chart) -->
-            <div class="sm:col-span-2 p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 flex flex-col justify-between">
-              <div class="flex items-center justify-between text-slate-400 text-xs font-mono font-bold mb-2">
-                <span>1,000Hz SIGNAL RUNTIME</span>
-                <span class="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 text-[10px]">Zero GC</span>
-              </div>
-              <SolaChart
-                type="area"
-                color="indigo"
-                title="Direct Text Node Mutation"
-                subtitle="O(1) DOM patching with zero garbage collection"
-                height={120}
-              />
-            </div>
-          </div>
-
-        {:else if activeTab === 'primitives'}
-          <!-- 2. Tactile Controls & Physics -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Rotary / Slider -->
-            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 space-y-4">
-              <div class="flex items-center justify-between text-xs font-semibold">
-                <span class="text-slate-700 dark:text-slate-300">Tactile Signal Dial</span>
-                <span class="font-mono font-bold text-blue-600 dark:text-blue-400">{dialAngle}° / 100%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                bind:value={dialAngle}
-                class="w-full accent-blue-500 h-2 bg-slate-200 dark:bg-white/10 rounded-lg cursor-pointer"
-              />
-              <div class="flex items-center gap-2">
-                <SolaButton variant="primary" label="Primary Action" />
-                <SolaButton variant="secondary" label="Secondary" />
-                <SolaButton variant="ghost" label="Ghost" />
-              </div>
-            </div>
-
-            <!-- Date Picker & Kbd -->
-            <div class="p-5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5 space-y-3">
-              <SolaDatePicker label="Calendar" />
-              <div class="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-200/60 dark:border-white/5">
-                <span>Shortcuts:</span>
-                <div class="flex items-center gap-1.5">
-                  <SolaKbd keys={['⌘', 'K']} size="sm" />
-                  <SolaKbd keys={['ESC']} size="sm" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-        {:else}
-          <!-- 3. Signal Cascade Code -->
-          <div class="p-6 rounded-2xl bg-slate-950 text-slate-100 font-mono text-xs leading-relaxed space-y-3">
-            <div class="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800">
-              <span>App.sola • Native Single-File Component</span>
-              <span class="text-blue-400 font-bold">Compiled Zero-VDOM</span>
-            </div>
-            <pre><code>{`<script>
-  let metrics = $state({ count: ${liveCounter}, latency: 14.2 });
-  let status = $derived(metrics.latency < 20 ? "Optimal" : "Degraded");
-<\/script>
-
-<div class="telemetry-hud">
-  <h1>Ingestion: {metrics.count}</h1>
-  <SolaChart type="area" data={metrics} />
-</div>`}</code></pre>
-          </div>
-        {/if}
-      </div>
-
-      <!-- Stage Footer / Multi-Framework Bar -->
-      <div class="px-6 py-3.5 bg-slate-50/90 dark:bg-[#0c1222]/90 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-          <span class="font-medium text-slate-700 dark:text-slate-300">Live signal bus connected</span>
-        </div>
-        <div class="flex items-center gap-3 font-mono text-[11px]">
-          <span>React 19</span>
-          <span>•</span>
-          <span>Svelte 5</span>
-          <span>•</span>
-          <span>Web Components</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
+  <!-- The thesis, demonstrated: Sentinel watching a real form and resolving a
+       suggestion. The old stage showed three tabs of generic telemetry widgets,
+       none of which were what the headline is about. -->
+  <SentinelHeroDemo />
 </div>

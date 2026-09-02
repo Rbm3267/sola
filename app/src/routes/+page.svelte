@@ -6,6 +6,7 @@
   import DataCard from '$lib/components/DataCard.svelte';
   import DynamicForm from '$lib/components/DynamicForm.svelte';
   import ListBlock from '$lib/components/ListBlock.svelte';
+  import { CATALOG_COUNT } from '$lib/data/site';
 </script>
 
 <div class="flex flex-col w-full bg-white dark:bg-[#090d19] text-slate-900 dark:text-white transition-colors duration-300 min-h-screen">
@@ -45,7 +46,7 @@
               Sola Design Studio
             </h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Drag-and-drop generative canvas with 27 components and live signal simulators.
+              Drag-and-drop generative canvas with {CATALOG_COUNT} components and live signal simulators.
             </p>
           </div>
           <a href="/studio" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all">
@@ -106,7 +107,7 @@
       <div id="architecture" class="flex flex-col justify-center px-2 md:px-4 mt-8">
         <div class="text-center mb-12">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200/80 dark:border-white/[0.04] text-slate-700 dark:text-slate-300 text-xs font-mono font-bold mb-3">
-            <span>@sola/ui • Native Component Primitives</span>
+            <span>@sola-air-ui/ui • Native Component Primitives</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-3">Handcrafted UI Architecture</h2>
           <p class="text-base text-slate-600 dark:text-slate-400 font-normal max-w-2xl mx-auto leading-relaxed">
@@ -120,7 +121,7 @@
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between px-2">
               <span class="font-mono text-xs font-bold text-slate-500 dark:text-slate-400">DataCard.sola</span>
-              <span class="text-[10px] font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded font-bold border border-blue-100 dark:border-blue-500/20">Compiled DOM</span>
+              <span class="text-xs font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded font-bold border border-blue-100 dark:border-blue-500/20">Compiled DOM</span>
             </div>
             <div class="flex flex-col gap-3">
               <DataCard config={{ title: "Realized MRR", value: "$184,200", trend: "+14.2%", icon: "activity" }} />
@@ -132,7 +133,7 @@
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between px-2">
               <span class="font-mono text-xs font-bold text-slate-500 dark:text-slate-400">DynamicForm.sola</span>
-              <span class="text-[10px] font-mono text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10 px-2 py-0.5 rounded font-bold border border-violet-100 dark:border-violet-500/20">Live Schema</span>
+              <span class="text-xs font-mono text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10 px-2 py-0.5 rounded font-bold border border-violet-100 dark:border-violet-500/20">Live Schema</span>
             </div>
             <div>
               <DynamicForm config={{ 
@@ -150,7 +151,7 @@
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between px-2">
               <span class="font-mono text-xs font-bold text-slate-500 dark:text-slate-400">ListBlock.sola</span>
-              <span class="text-[10px] font-mono text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-500/10 px-2 py-0.5 rounded font-bold border border-sky-100 dark:border-sky-500/20">Signal List</span>
+              <span class="text-xs font-mono text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-500/10 px-2 py-0.5 rounded font-bold border border-sky-100 dark:border-sky-500/20">Signal List</span>
             </div>
             <div>
               <ListBlock config={{ 

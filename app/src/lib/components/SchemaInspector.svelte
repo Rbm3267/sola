@@ -61,7 +61,7 @@
   <div class="overflow-x-auto">
     <table class="w-full text-left font-mono text-xs">
       <thead>
-        <tr class="border-b border-slate-100 dark:border-white/[0.04] text-[11px] text-slate-400 uppercase">
+        <tr class="border-b border-slate-100 dark:border-white/[0.04] text-xs text-slate-400 uppercase">
           <th class="pb-2.5 font-bold">Column Name</th>
           <th class="pb-2.5 font-bold">Data Type</th>
           <th class="pb-2.5 font-bold text-center">Attributes</th>
@@ -78,17 +78,17 @@
               <span>{col.name}</span>
             </td>
             <td class="py-2.5 text-slate-600 dark:text-slate-400">
-              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 text-[11px] font-bold">
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 text-xs font-bold">
                 {col.type}
               </span>
             </td>
             <td class="py-2.5 text-center">
               {#if col.isPrimary}
-                <span class="px-1.5 py-0.5 rounded text-[10px] bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 font-bold">PK</span>
+                <span class="px-1.5 py-0.5 rounded text-xs bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 font-bold">PK</span>
               {:else if !col.isNullable}
-                <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 font-bold">NOT NULL</span>
+                <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 font-bold">NOT NULL</span>
               {:else}
-                <span class="text-[10px] text-slate-400">NULL</span>
+                <span class="text-xs text-slate-400">NULL</span>
               {/if}
             </td>
             <td class="py-2.5 text-right text-slate-500 dark:text-slate-400">
@@ -107,7 +107,7 @@
     </table>
   </div>
 
-  <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04]">
+  <div class="flex items-center justify-between text-xs font-mono text-slate-400 pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04]">
     <span>Zero-VDOM Relational Explorer</span>
     <span>Auto-Inferred Schema</span>
   </div>

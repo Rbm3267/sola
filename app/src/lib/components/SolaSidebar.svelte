@@ -67,7 +67,7 @@
         {#if !collapsed}
           <div class="truncate">
             <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Sola Core</h2>
-            <p class="text-[10px] text-slate-400 font-mono">Enterprise v1.0.1</p>
+            <p class="text-xs text-slate-400 font-mono">Enterprise v1.0.1</p>
           </div>
         {/if}
       </div>
@@ -88,7 +88,7 @@
       {#each groups as group}
         <div>
           {#if group.title && !collapsed}
-            <div class="px-3 pb-1.5 text-[10px] font-bold tracking-widest text-slate-400 uppercase font-mono">
+            <div class="px-3 pb-1.5 text-xs font-bold tracking-widest text-slate-400 uppercase font-mono">
               {group.title}
             </div>
           {/if}
@@ -114,7 +114,7 @@
                 </div>
 
                 {#if item.badge && !collapsed}
-                  <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded-md {isSelected ? 'bg-slate-950 text-blue-400' : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">
+                  <span class="px-1.5 py-0.5 text-xs font-mono font-bold rounded-md {isSelected ? 'bg-slate-950 text-blue-400' : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">
                     {item.badge}
                   </span>
                 {/if}
@@ -135,7 +135,7 @@
       {#if !collapsed}
         <div class="truncate min-w-0">
           <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Sola Admin</p>
-          <p class="text-[10px] text-slate-400 truncate">admin@sola-air.dev</p>
+          <p class="text-xs text-slate-400 truncate">admin@sola-air.dev</p>
         </div>
       {/if}
     </div>

@@ -35,7 +35,7 @@
     {#if label}
       <label class="absolute left-3 transition-all duration-200 pointer-events-none
         {focused || hasValue
-          ? '-top-2 text-[10px] font-semibold px-1 bg-white dark:bg-[#0f172a] z-10'
+          ? '-top-2 text-xs font-semibold px-1 bg-white dark:bg-[#0f172a] z-10'
           : 'top-2.5 text-sm'}
         {error ? 'text-rose-500' : focused ? 'text-blue-500' : 'text-slate-400 dark:text-slate-500'}">
         {label}

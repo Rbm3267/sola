@@ -150,10 +150,10 @@
     <div class="absolute z-50 mt-2 p-4 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl w-72 animate-[fadeSlide_150ms_ease-out]">
       <!-- Quick Presets -->
       <div class="flex items-center gap-1 mb-3 pb-3 border-b border-slate-100 dark:border-white/5">
-        <button onclick={() => quickSelect('today')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Today</button>
+        <button onclick={() => quickSelect('today')} class="px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Today</button>
         {#if range}
-          <button onclick={() => quickSelect('7days')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Last 7d</button>
-          <button onclick={() => quickSelect('30days')} class="px-2 py-1 text-[11px] rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Last 30d</button>
+          <button onclick={() => quickSelect('7days')} class="px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Last 7d</button>
+          <button onclick={() => quickSelect('30days')} class="px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 transition-colors">Last 30d</button>
         {/if}
       </div>
 
@@ -173,7 +173,7 @@
       <!-- Days Grid -->
       <div class="grid grid-cols-7 gap-1 text-center text-xs">
         {#each daysOfWeek as day}
-          <span class="text-[10px] font-semibold text-slate-400 py-1">{day}</span>
+          <span class="text-xs font-semibold text-slate-400 py-1">{day}</span>
         {/each}
 
         {#each Array(firstDayOfWeek) as _}

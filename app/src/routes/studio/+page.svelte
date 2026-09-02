@@ -4,6 +4,7 @@
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { COMMUNITY_TEMPLATES } from '$lib/data/communityTemplates';
+  import { CATALOG_COUNT } from '$lib/data/site';
 
   // --- 1. Universal Canvas Card Data Model ---
   interface StudioCard {
@@ -25,7 +26,8 @@
   let exportTab = $state<'react' | 'svelte' | 'webcomponent'>('react');
   let presetMenuOpen = $state(false);
 
-  // Non-blocking Left Docked Palette State
+  // Non-blocking Left Docked Palette State. Starts closed on phones, where it
+  // renders as a sheet over the canvas rather than beside it.
   let paletteOpen = $state(true);
   let componentSearch = $state('');
   let componentCategory = $state('All');
@@ -73,7 +75,7 @@
         { id: 'c1', type: 'stat', title: 'Primary Metric', subtitle: 'Live aggregated total', cols: 1, value: '$48,500', delta: '+14.2%', accentColor: 'emerald' },
         { id: 'c2', type: 'progress', title: 'Goal Completion', subtitle: 'Target milestone progress', cols: 1, value: 78, delta: '78%', accentColor: 'emerald' },
         { id: 'c3', type: 'slider', title: 'Adjustment Range', subtitle: 'Tactile input controller', cols: 1, value: 65, accentColor: 'emerald' },
-        { id: 'c4', type: 'chart', title: 'Signal Throughput', subtitle: 'Real-time 1,000Hz mesh', cols: 2, value: '95 req/s', accentColor: 'emerald' },
+        { id: 'c4', type: 'chart', title: 'Signal Throughput', subtitle: 'Live signal mesh', cols: 2, value: '95 req/s', accentColor: 'emerald' },
         { id: 'c5', type: 'feed', title: 'Activity & Updates', subtitle: 'Recent events log', cols: 1, value: 'Active', accentColor: 'slate' }
       ]
     },
@@ -161,6 +163,11 @@
   }
 
   onMount(() => {
+    // On a phone the palette covers the canvas, so open it on demand only.
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      paletteOpen = false;
+    }
+
     const presetParam = page.url.searchParams.get('preset') || page.url.searchParams.get('template');
     if (presetParam) {
       loadSample(presetParam);
@@ -413,7 +420,7 @@
   const generatedCode = $derived.by(() => {
     if (exportTab === 'react') {
       return `import React from 'react';
-import { DataCard, GaugeCard, FlowWaterfall } from '@sola/ui';
+import { DataCard, GaugeCard, FlowWaterfall } from '@sola-air-ui/ui';
 
 export default function SolaDashboard() {
   return (
@@ -428,7 +435,7 @@ export default function SolaDashboard() {
 }`;
     } else if (exportTab === 'svelte') {
       return '<' + 'script lang="ts">\n' +
-        '  import { DataCard, GaugeCard, FlowWaterfall } from "@sola/ui";\n' +
+        '  import { DataCard, GaugeCard, FlowWaterfall } from "@sola-air-ui/ui";\n' +
         '<' + '/script>\n\n' +
         '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8 bg-[#fafafa] dark:bg-[#090d19]">\n' +
         cards.map(c => `  <!-- ${c.title} -->\n  <div class="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a] rounded-2xl border border-slate-200/90 dark:border-white/10 p-6 shadow-sm">\n    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">${c.title}</h3>\n    <div class="text-3xl font-bold font-mono text-slate-900 dark:text-white mt-2">${c.value}</div>\n  </div>`).join('\n') +
@@ -468,14 +475,14 @@ export default function SolaDashboard() {
           title={paletteOpen ? 'Hide Component Palette' : 'Show Component Palette'}>
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
           <span class="hidden sm:inline">Palette</span>
-          <span class="px-1.5 py-0.2 bg-slate-950/15 rounded-md text-[10px] font-mono">{COMPONENT_CATALOG.length}</span>
+          <span class="px-1.5 py-0.2 bg-slate-950/15 rounded-md text-xs font-mono">{COMPONENT_CATALOG.length}</span>
         </button>
 
         <div class="h-4 w-px bg-slate-200 dark:bg-white/10 hidden sm:block"></div>
 
         <div class="flex items-center gap-2">
           <span class="font-bold tracking-tight text-slate-900 dark:text-white text-xs whitespace-nowrap">Canvas</span>
-          <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 rounded-full border border-blue-200/60 dark:border-blue-500/20">
+          <span class="px-2 py-0.5 text-xs font-mono font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 rounded-full border border-blue-200/60 dark:border-blue-500/20">
             {cards.length} {cards.length === 1 ? 'card' : 'cards'}
           </span>
         </div>
@@ -493,7 +500,7 @@ export default function SolaDashboard() {
 
           {#if presetMenuOpen}
             <div class="absolute right-0 sm:left-0 mt-2 w-64 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl p-1.5 z-50 animate-[fadeSlide_120ms_ease-out]">
-              <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
+              <div class="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
                 Starter Templates
               </div>
               {#each Object.entries(samplePresets) as [key, preset]}
@@ -501,7 +508,7 @@ export default function SolaDashboard() {
                   onclick={() => loadSample(key)}
                   class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold' : 'text-slate-800 dark:text-slate-200'}">
                   <div class="font-bold">{preset.label}</div>
-                  <div class="text-[10px] text-slate-400 font-normal">{preset.desc}</div>
+                  <div class="text-xs text-slate-400 font-normal">{preset.desc}</div>
                 </button>
               {/each}
               <div class="my-1 border-t border-slate-100 dark:border-white/5"></div>
@@ -532,16 +539,25 @@ export default function SolaDashboard() {
   <!-- 2. Main Studio Workspace Layout -->
   <div class="flex-1 flex w-full relative">
     
-    <!-- 2A. Non-Blocking Left Docked Component Palette (56 Primitives) -->
+    <!-- 2A. Component palette. Below md it is a bottom sheet over the canvas —
+         docking it beside a 390px viewport left the canvas a 60px sliver. -->
     {#if paletteOpen}
-      <aside class="w-80 shrink-0 border-r border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#090d19]/80 backdrop-blur-xl h-[calc(100vh-6.5rem)] sticky top-28 overflow-y-auto flex flex-col z-20 transition-all duration-200">
+      <button
+        class="md:hidden fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-xs"
+        aria-label="Close component palette"
+        onclick={() => (paletteOpen = false)}></button>
+      <aside class="fixed md:sticky inset-x-0 bottom-0 md:inset-auto z-40 md:z-20 w-full md:w-80 shrink-0 max-h-[75vh] md:max-h-none rounded-t-3xl md:rounded-none border-t md:border-t-0 md:border-r border-slate-200/80 dark:border-white/10 bg-white/95 md:bg-white/70 dark:bg-[#090d19]/95 md:dark:bg-[#090d19]/80 backdrop-blur-xl md:h-[calc(100vh-6.5rem)] md:top-28 overflow-y-auto flex flex-col transition-all duration-200 shadow-2xl md:shadow-none">
+        <!-- Sheet grabber, mobile only -->
+        <div class="md:hidden pt-2 pb-1 flex justify-center shrink-0">
+          <span class="w-10 h-1 rounded-full bg-slate-300 dark:bg-white/20"></span>
+        </div>
         
         <!-- Palette Header & Search -->
         <div class="p-4 border-b border-slate-100 dark:border-white/5 space-y-3 sticky top-0 bg-white/95 dark:bg-[#090d19]/95 backdrop-blur-xl z-10">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">Primitives</span>
-              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">Drag & Drop</span>
+              <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">Drag & Drop</span>
             </div>
             <button onclick={() => (paletteOpen = false)} class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
@@ -553,7 +569,7 @@ export default function SolaDashboard() {
             <input
               type="text"
               bind:value={componentSearch}
-              placeholder="Search 56 components..."
+              placeholder="Search {CATALOG_COUNT} components..."
               class="w-full pl-8 pr-7 py-2 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
             />
             {#if componentSearch}
@@ -566,7 +582,7 @@ export default function SolaDashboard() {
             {#each catalogCategories as cat}
               <button
                 onclick={() => (componentCategory = cat)}
-                class="px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
+                class="px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
                 {cat}
               </button>
             {/each}
@@ -615,11 +631,11 @@ export default function SolaDashboard() {
                     <span class="font-bold text-xs text-slate-900 dark:text-white truncate">{item.name}</span>
                     <button
                       onclick={() => addCatalogComponent(item)}
-                      class="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:text-blue-500 font-bold px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-500/20 cursor-pointer">
+                      class="text-xs font-mono text-blue-600 dark:text-blue-400 hover:text-blue-500 font-bold px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-500/20 cursor-pointer">
                       + Add
                     </button>
                   </div>
-                  <p class="text-[10px] text-slate-400 truncate">{item.tagline || item.description}</p>
+                  <p class="text-xs text-slate-400 truncate">{item.tagline || item.description}</p>
                 </div>
               </div>
             {/each}
@@ -715,7 +731,7 @@ export default function SolaDashboard() {
                   <div class="min-w-0">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">{card.title}</h4>
                     {#if card.subtitle}
-                      <p class="text-[10px] text-slate-400 truncate">{card.subtitle}</p>
+                      <p class="text-xs text-slate-400 truncate">{card.subtitle}</p>
                     {/if}
                   </div>
                 </div>
@@ -723,7 +739,7 @@ export default function SolaDashboard() {
                 <!-- Right Inline Quick Controls -->
                 <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                   <!-- Width Span Pills -->
-                  <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-lg border border-slate-200/60 dark:border-white/10 text-[9px] font-mono font-bold">
+                  <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-lg border border-slate-200/60 dark:border-white/10 text-xs font-mono font-bold">
                     <button
                       onclick={(e) => setCols(card, 1, e)}
                       class="px-1.5 py-0.5 rounded {card.cols === 1 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1x</button>
@@ -762,7 +778,7 @@ export default function SolaDashboard() {
                       <span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold {c.badgeBg} {c.textDark} {c.badgeBorder}">{card.delta}</span>
                     {/if}
                   </div>
-                  <div class="mt-3 text-[11px] text-slate-400 flex items-center justify-between font-mono">
+                  <div class="mt-3 text-xs text-slate-400 flex items-center justify-between font-mono">
                     <span>Direct editable value</span>
                     <span class="{c.textDark} font-bold">Zero-VDOM</span>
                   </div>
@@ -802,7 +818,7 @@ export default function SolaDashboard() {
                       max="100"
                       bind:value={card.value}
                       class="w-full {c.accent} cursor-pointer h-2 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
-                    <div class="flex justify-between text-[10px] font-mono text-slate-400">
+                    <div class="flex justify-between text-xs font-mono text-slate-400">
                       <span>0% (Min)</span>
                       <span>50% (Mid)</span>
                       <span>100% (Max)</span>
@@ -818,7 +834,7 @@ export default function SolaDashboard() {
                       </svg>
                       <div class="absolute inset-0 flex flex-col items-center justify-center font-mono">
                         <span class="text-lg font-black text-slate-900 dark:text-white">{card.value}</span>
-                        <span class="text-[9px] text-slate-400 font-bold uppercase">Val</span>
+                        <span class="text-xs text-slate-400 font-bold uppercase">Val</span>
                       </div>
                     </div>
                     <input
@@ -848,7 +864,7 @@ export default function SolaDashboard() {
                   <div class="space-y-2 py-1">
                     <div class="flex items-baseline justify-between font-mono">
                       <span class="text-2xl font-black text-slate-900 dark:text-white">{card.value}</span>
-                      <span class="text-[10px] font-bold {c.textDark} px-2 py-0.5 rounded {c.badgeBg}">1,000Hz Direct</span>
+                      <span class="text-xs font-bold {c.textDark} px-2 py-0.5 rounded {c.badgeBg}">Direct DOM</span>
                     </div>
                     <div class="h-16 flex items-end gap-1.5 pt-2">
                       {#each [40, 25, 60, 45, 80, 55, 90, 70, 85, 65, 95, 75] as height, idx}
@@ -861,11 +877,11 @@ export default function SolaDashboard() {
                   <div class="space-y-1.5 py-1 text-xs">
                     <div class="p-2 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5 flex items-center justify-between">
                       <span class="font-semibold text-slate-800 dark:text-slate-200">Cluster Sync</span>
-                      <span class="text-[10px] font-mono {c.textDark}">12ms ago</span>
+                      <span class="text-xs font-mono {c.textDark}">12ms ago</span>
                     </div>
                     <div class="p-2 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5 flex items-center justify-between">
                       <span class="font-semibold text-slate-800 dark:text-slate-200">Edge Ingress P99</span>
-                      <span class="text-[10px] font-mono {c.textDark}">Nominal</span>
+                      <span class="text-xs font-mono {c.textDark}">Nominal</span>
                     </div>
                   </div>
 
@@ -875,7 +891,7 @@ export default function SolaDashboard() {
                       <span class="w-2 h-2 rounded-full {c.bg}"></span>
                       <span class="font-bold text-xs text-slate-900 dark:text-white">{card.title}</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
+                    <p class="text-xs text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
                   </div>
                 {/if}
               </div>
@@ -886,9 +902,9 @@ export default function SolaDashboard() {
       {/if}
     </main>
 
-    <!-- 2C. Docked Right Properties Inspector (Never Overlaps Canvas Cards) -->
+    <!-- 2C. Properties inspector — a bottom sheet on phones, docked from md up. -->
     {#if activeCard}
-      <aside class="w-80 shrink-0 border-l border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#090d19]/80 backdrop-blur-xl h-[calc(100vh-6.5rem)] sticky top-28 overflow-y-auto p-4 flex flex-col z-20 transition-all duration-200">
+      <aside class="fixed md:sticky inset-x-0 bottom-0 md:inset-auto z-40 md:z-20 w-full md:w-80 shrink-0 max-h-[75vh] md:max-h-none rounded-t-3xl md:rounded-none border-t md:border-t-0 md:border-l border-slate-200/80 dark:border-white/10 bg-white/95 md:bg-white/70 dark:bg-[#090d19]/95 md:dark:bg-[#090d19]/80 backdrop-blur-xl md:h-[calc(100vh-6.5rem)] md:top-28 overflow-y-auto p-4 flex flex-col transition-all duration-200 shadow-2xl md:shadow-none">
         
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
           <div class="flex items-center gap-2">
@@ -905,8 +921,8 @@ export default function SolaDashboard() {
         <div class="space-y-3.5 text-xs pt-3">
           <!-- Active Card Badge -->
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex items-center justify-between">
-            <span class="text-[11px] font-mono text-slate-400">Selected Node</span>
-            <span class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400">{activeCard.type}</span>
+            <span class="text-xs font-mono text-slate-400">Selected Node</span>
+            <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">{activeCard.type}</span>
           </div>
 
           <!-- Title -->
@@ -1013,7 +1029,7 @@ export default function SolaDashboard() {
             </div>
             <div>
               <h3 class="font-bold text-sm text-slate-900 dark:text-white">Export Sola Canvas</h3>
-              <p class="text-[10px] text-slate-400">Zero-VDOM native code generator</p>
+              <p class="text-xs text-slate-400">Zero-VDOM native code generator</p>
             </div>
           </div>
           <button

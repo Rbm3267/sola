@@ -53,7 +53,7 @@
     <!-- Live SLA Countdown Pill -->
     <div class="flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] p-2.5 rounded-2xl border border-slate-200 dark:border-white/[0.04]">
       <div class="text-right">
-        <span class="text-[10px] font-mono text-slate-400 block uppercase">SLA Target Breach</span>
+        <span class="text-xs font-mono text-slate-400 block uppercase">SLA Target Breach</span>
         <span class="text-sm font-mono font-black text-rose-600 dark:text-rose-400">
           {config.slaRemainingMin !== undefined ? `${config.slaRemainingMin}m 00s` : '11m 42s'}
         </span>
@@ -65,11 +65,11 @@
   <!-- Blast Radius & Responders -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-xs font-mono">
     <div class="p-3 rounded-2xl bg-slate-50/80 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.04]">
-      <span class="text-[10px] text-slate-400 block uppercase mb-1">Blast Radius Impact</span>
+      <span class="text-xs text-slate-400 block uppercase mb-1">Blast Radius Impact</span>
       <span class="font-bold text-slate-800 dark:text-slate-200">{config.blastRadius || '42,000 Active Sessions • Checkout Ingress'}</span>
     </div>
     <div class="p-3 rounded-2xl bg-slate-50/80 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.04]">
-      <span class="text-[10px] text-slate-400 block uppercase mb-1">Incident Commander</span>
+      <span class="text-xs text-slate-400 block uppercase mb-1">Incident Commander</span>
       <span class="font-bold text-slate-800 dark:text-slate-200">Tier 3 Platform SRE (Beth Anglin)</span>
     </div>
   </div>
@@ -87,7 +87,7 @@
             <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
             <div>
               <span class="text-xs font-mono font-bold text-slate-900 dark:text-white block">{pb.title}</span>
-              <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400">{pb.action} {pb.automated ? '• Automated Execution' : ''}</span>
+              <span class="text-xs font-mono text-slate-500 dark:text-slate-400">{pb.action} {pb.automated ? '• Automated Execution' : ''}</span>
             </div>
           </div>
 
@@ -107,7 +107,7 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-4 mt-5 border-t border-slate-100 dark:border-white/[0.04]">
+  <div class="flex items-center justify-between text-xs font-mono text-slate-400 pt-4 mt-5 border-t border-slate-100 dark:border-white/[0.04]">
     <span>Enterprise MIM Direct Command Capsule</span>
     <span>Auto-Dispatching ACLs</span>
   </div>

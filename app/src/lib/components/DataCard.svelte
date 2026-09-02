@@ -20,7 +20,7 @@
   <div class="flex justify-between items-center mb-3.5 relative z-10">
     <div class="flex items-center gap-2">
       <span class="w-1.5 h-1.5 rounded-full {isPositive ? 'bg-blue-500' : 'bg-rose-500'}"></span>
-      <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">{config.title}</span>
+      <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">{config.title}</span>
     </div>
     
     <div class="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.04] flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:text-sky-600 dark:text-sky-400 group-hover:bg-sky-50 dark:bg-sky-500/10 group-hover:border-sky-200 dark:border-sky-500/20 transition-colors">
@@ -63,7 +63,7 @@
   <!-- Trend Footer Pill -->
   {#if config.trend}
     <div class="flex items-center gap-2 pt-1 border-t border-slate-100 dark:border-white/[0.04] relative z-10">
-      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold font-mono {isPositive ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20/60' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20/60'}">
+      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold font-mono {isPositive ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20/60' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20/60'}">
         {#if isPositive}
           <svg class="w-3 h-3 stroke-current" viewBox="0 0 24 24" fill="none" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
         {:else}
@@ -71,7 +71,7 @@
         {/if}
         <span>{config.trend}</span>
       </div>
-      <span class="text-slate-400 text-[11px] font-medium">vs last period</span>
+      <span class="text-slate-400 text-xs font-medium">vs last period</span>
     </div>
   {/if}
 </div>

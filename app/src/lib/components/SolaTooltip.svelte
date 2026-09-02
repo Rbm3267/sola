@@ -42,7 +42,7 @@
   {#if visible && text}
     <div
       class="absolute z-50 pointer-events-none {positionClasses[position]}
-        px-2.5 py-1.5 text-[11px] font-medium text-white bg-slate-900 dark:bg-slate-700
+        px-2.5 py-1.5 text-xs font-medium text-white bg-slate-900 dark:bg-slate-700
         rounded-lg shadow-lg dark:shadow-black/40 whitespace-nowrap
         animate-[fadeIn_100ms_ease-out]"
       role="tooltip"

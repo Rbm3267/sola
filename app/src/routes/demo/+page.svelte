@@ -6,7 +6,7 @@
   import SignalMeshConsole from '$lib/components/SignalMeshConsole.svelte';
   import BehavioralIntentConsole from '$lib/components/BehavioralIntentConsole.svelte';
   import SolaHost from '$lib/components/SolaHost.svelte';
-  import NativeDashboard from '@sola/ui/Dashboard.sola';
+  import NativeDashboard from '@sola-air-ui/ui/Dashboard.sola';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { onMount } from 'svelte';
@@ -490,7 +490,7 @@
           transition:fly={{ y: 20, duration: 250 }}
         >
           <!-- Floating Card Action Toolbar (Reorder, Span, Edit, Delete) -->
-          <div class="absolute -top-3.5 right-4 z-20 opacity-0 group-hover/widget:opacity-100 transition-all duration-150 flex items-center gap-1.5 bg-slate-900/90 backdrop-blur-md text-white px-3 py-1 rounded-2xl shadow-xl border border-slate-700/80 text-[11px] font-mono">
+          <div class="absolute -top-3.5 right-4 z-20 opacity-0 group-hover/widget:opacity-100 transition-all duration-150 flex items-center gap-1.5 bg-slate-900/90 backdrop-blur-md text-white px-3 py-1 rounded-2xl shadow-xl border border-slate-700/80 text-xs font-mono">
             
             <!-- Move Left / Up -->
             <button 

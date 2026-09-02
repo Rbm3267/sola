@@ -76,7 +76,7 @@
       </label>
       {#if maxLength !== undefined}
         <span
-          class="text-[11px] font-mono transition-colors duration-150 {isAtLimit
+          class="text-xs font-mono transition-colors duration-150 {isAtLimit
             ? 'text-rose-500 font-semibold'
             : isNearLimit
               ? 'text-amber-500 dark:text-amber-400'
@@ -135,7 +135,7 @@
 
     {#if !label && maxLength !== undefined}
       <span
-        class="text-[11px] font-mono ml-auto transition-colors duration-150 {isAtLimit
+        class="text-xs font-mono ml-auto transition-colors duration-150 {isAtLimit
           ? 'text-rose-500 font-semibold'
           : isNearLimit
             ? 'text-amber-500 dark:text-amber-400'

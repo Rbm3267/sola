@@ -66,7 +66,7 @@
           <h3 class="text-base sm:text-lg font-black text-slate-950 dark:text-slate-50 font-sans tracking-tight">
             Ambient Signal Telemetry Mesh
           </h3>
-          <span class="text-[10px] font-mono font-bold uppercase bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <span class="text-xs font-mono font-bold uppercase bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
             <span>4 Linked Widgets</span>
           </span>
@@ -104,14 +104,14 @@
     <!-- Widget 1: Rotary Touch Controller -->
     <div class="lg:col-span-4 flex flex-col gap-4">
       <div class="relative group">
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
           <span>Source Signal Publisher</span>
         </div>
         
         <div class="bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 shadow-xs flex flex-col items-center gap-4">
           <div class="text-center">
-            <span class="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
             <div class="text-2xl font-black text-slate-950 dark:text-slate-50 font-mono mt-0.5">{nodeCount} Nodes Active</div>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Use slider to adjust cluster replica quota</p>
           </div>
@@ -127,7 +127,7 @@
               oninput={(e) => handleNodeChange(Number((e.target as HTMLInputElement).value))}
               class="w-full h-2 bg-slate-100 dark:bg-white/[0.08] rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
-            <div class="flex justify-between text-[10px] font-mono text-slate-400">
+            <div class="flex justify-between text-xs font-mono text-slate-400">
               <span>8 Min</span>
               <span class="font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-500/20">{nodeCount} Workers</span>
               <span>128 Max</span>
@@ -160,7 +160,7 @@
         
         <!-- Subscriber Gauge -->
         <div class="relative group">
-          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
             <span>Signal Subscriber 1</span>
           </div>
@@ -176,7 +176,7 @@
 
         <!-- Live Telemetry Log -->
         <div class="relative group">
-          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
             <span>Live Signal Bus Stream</span>
           </div>
@@ -185,21 +185,21 @@
             <div>
               <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
                 <span class="text-xs font-mono font-bold text-slate-300">telemetry://signal-bus</span>
-                <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/30">0.2ms Subtask</span>
+                <span class="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/30">0.2ms Subtask</span>
               </div>
               
-              <div class="flex flex-col gap-2 max-h-[140px] overflow-y-auto no-scrollbar font-mono text-[11px]">
+              <div class="flex flex-col gap-2 max-h-[140px] overflow-y-auto no-scrollbar font-mono text-xs">
                 {#each signalPackets as sig (sig.id)}
                   <div class="flex items-center justify-between text-slate-400 bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800/80">
                     <span class="text-amber-400 truncate max-w-[140px]">{sig.topic}</span>
                     <span class="text-slate-200 font-bold">{sig.value}</span>
-                    <span class="text-blue-400 text-[10px]">{sig.latencyMs}ms</span>
+                    <span class="text-blue-400 text-xs">{sig.latencyMs}ms</span>
                   </div>
                 {/each}
               </div>
             </div>
 
-            <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400 border-t border-slate-800/80 pt-2 flex justify-between mt-3">
+            <div class="text-xs font-mono text-slate-500 dark:text-slate-400 border-t border-slate-800/80 pt-2 flex justify-between mt-3">
               <span>Bus Throughput: 4,200 msg/s</span>
               <span class="text-blue-400 font-bold">100% Synced</span>
             </div>
@@ -210,7 +210,7 @@
 
       <!-- Subscriber 2: Dynamic FinOps Waterfall -->
       <div class="relative group">
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
           <span>Signal Subscriber 2 • FinOps Ledger</span>
         </div>

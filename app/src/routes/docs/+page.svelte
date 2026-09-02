@@ -1,6 +1,18 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
   import DataCard from '$lib/components/DataCard.svelte';
+  // Every runnable sample below comes from one module that e2e/docs-snippets.spec.ts
+  // compiles and mounts in a browser, so a broken sample fails the build, not the reader.
+  import {
+    syntaxExample,
+    signalExample,
+    derivedExample,
+    effectExample,
+    mountExample,
+    intentMacroExample,
+    dataMacroExample
+  } from '$lib/data/docsSnippets';
+  import { VERSIONS } from '$lib/data/site';
 
   let activeSection = $state('quickstart');
   let askQuery = $state('');
@@ -29,7 +41,7 @@
     {
       name: 'Getting Started',
       items: [
-        { id: 'quickstart', title: 'Installation & Setup', badge: 'v1.0.1' },
+        { id: 'quickstart', title: 'Installation & Setup', badge: `v${VERSIONS.core}` },
         { id: 'syntax', title: 'The .sola Format' }
       ]
     },
@@ -111,92 +123,7 @@ export default defineConfig({
   plugins: [sola()]
 });`;
 
-  const syntaxExample = `<` + `script>
-  export let title = "Cluster Dashboard";
-  let count = $state(0);
-  let doubled = $derived(count * 2);
 
-  function increment() {
-    count++;
-  }
-<` + `/script>
-
-<div class="card">
-  <h3>{title}</h3>
-  <div class="value">{doubled}</div>
-  <button onclick={increment}>Increment Metric</button>
-</div>
-
-<` + `style>
-  .card {
-    padding: 1.5rem;
-    border-radius: 1rem;
-    background: #090d19;
-    color: #fff;
-  }
-  .value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #10b981;
-  }
-<` + `/style>`;
-
-  const signalExample = `import { createSignal } from '@sola-air-ui/core';
-
-// Create a reactive state tuple
-const [getCount, setCount] = createSignal(0);
-
-console.log(getCount()); // 0
-setCount(prev => prev + 1);
-console.log(getCount()); // 1`;
-
-  const derivedExample = `import { createSignal, createDerived } from '@sola-air-ui/core';
-
-const [getRps, setRps] = createSignal(1200);
-// Automatically recomputes when getRps updates
-const getThroughput = createDerived(() => \`\${getRps() * 60} req/min\`);
-
-console.log(getThroughput()); // "72000 req/min"`;
-
-  const effectExample = `import { createSignal, createEffect } from '@sola-air-ui/core';
-
-const [getLatency, setLatency] = createSignal(12);
-
-// Auto-subscribes to getLatency()
-createEffect(() => {
-  if (getLatency() > 100) {
-    console.warn("High latency threshold breach!");
-  }
-});`;
-
-  const mountExample = `import MyComponent from './MyComponent.sola';
-
-// Mount directly into vanilla DOM container
-const unmount = MyComponent(document.getElementById('root'), {
-  title: "Production Ingress Cluster"
-});
-
-// Clean up listeners when done
-unmount();`;
-
-  const intentMacroExample = `<` + `script>
-  // Declares an ambient component compiled via Gemini AST
-  let liveWidget = $intent("Generate cluster latency gauge with 50ms SLA threshold");
-<` + `/script>
-
-<div class="widget-host">
-  {liveWidget}
-</div>`;
-
-  const dataMacroExample = `<` + `script>
-  // Bi-directional WebSocket / SSE signal binding to Google Sheets or Postgres
-  let mrr = $data("sheet://finance/q3_metrics?field=mrr", { pollIntervalMs: 1000 });
-<` + `/script>
-
-<div class="metric-tile">
-  <span>Monthly Revenue</span>
-  <h2>{mrr.value}</h2>
-</div>`;
 
   const dockerfileCode = `FROM node:20-alpine
 WORKDIR /app
@@ -387,7 +314,7 @@ export function SolaWidget({ title, value }) {
     <div class="lg:hidden bg-white/95 dark:bg-[#090d19]/95 border-b border-slate-900/[0.04] dark:border-white/[0.06] p-5 space-y-6 shadow-2xl">
       {#each groups as grp}
         <div>
-          <h5 class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-2">{grp.name}</h5>
+          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 mb-2">{grp.name}</h5>
           <div class="space-y-1">
             {#each grp.items as item}
               <button 
@@ -395,7 +322,7 @@ export function SolaWidget({ title, value }) {
                 class="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between {activeSection === item.id ? 'bg-blue-500/10 text-blue-800 dark:text-blue-400 font-bold border border-blue-500/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
                 <span>{item.title}</span>
                 {#if item.badge}
-                  <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-800 dark:text-blue-300 font-bold">{item.badge}</span>
+                  <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-800 dark:text-blue-300 font-bold">{item.badge}</span>
                 {/if}
               </button>
             {/each}
@@ -426,7 +353,7 @@ export function SolaWidget({ title, value }) {
       <!-- Navigation Hierarchy -->
       {#each groups as grp}
         <div class="space-y-2">
-          <h5 class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200 px-3">
+          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200 px-3">
             {grp.name}
           </h5>
           <ul class="border-l border-slate-200 dark:border-white/10 space-y-1">
@@ -437,7 +364,7 @@ export function SolaWidget({ title, value }) {
                   class="w-full text-left pl-4 pr-3 py-1.5 text-xs transition-all duration-150 cursor-pointer flex items-center justify-between border-l -ml-px {activeSection === item.id ? 'border-blue-500 font-bold text-blue-700 dark:text-blue-400 bg-blue-500/5 dark:bg-blue-500/10 rounded-r-lg' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400'}">
                   <span class="truncate">{item.title}</span>
                   {#if item.badge}
-                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-800 dark:text-blue-300 font-bold">{item.badge}</span>
+                    <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-800 dark:text-blue-300 font-bold">{item.badge}</span>
                   {/if}
                 </button>
               </li>
@@ -452,7 +379,7 @@ export function SolaWidget({ title, value }) {
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <span>Sola AIR v1.0.1</span>
         </div>
-        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">
+        <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
           Single-file zero-VDOM reactivity for the ambient web.
         </p>
       </div>
@@ -469,7 +396,7 @@ export function SolaWidget({ title, value }) {
             class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white text-base font-bold cursor-pointer">
             &times;
           </button>
-          <div class="flex items-center gap-2 mb-3 text-blue-800 dark:text-blue-400 font-bold uppercase tracking-wider text-[11px]">
+          <div class="flex items-center gap-2 mb-3 text-blue-800 dark:text-blue-400 font-bold uppercase tracking-wider text-xs">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
             <span>Sola Arc Intelligence Response</span>
           </div>
@@ -515,10 +442,10 @@ export function SolaWidget({ title, value }) {
                   <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
                   <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
                   <span class="w-3 h-3 rounded-full bg-blue-500/80"></span>
-                  <span class="text-[11px] font-mono text-slate-400 ml-2">Terminal</span>
+                  <span class="text-xs font-mono text-slate-400 ml-2">Terminal</span>
                 </div>
                 <!-- Package Manager Tabs -->
-                <div class="flex items-center bg-slate-800 p-0.5 rounded-lg text-[10px] font-mono">
+                <div class="flex items-center bg-slate-800 p-0.5 rounded-lg text-xs font-mono">
                   {#each (['npm', 'pnpm', 'yarn', 'bun'] as const) as pm}
                     <button 
                       onclick={() => packageManager = pm}
@@ -534,7 +461,7 @@ export function SolaWidget({ title, value }) {
                   onclick={() => handleCopy(scaffoldCmds[packageManager], 'scaffold')}
                   class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0 ml-4">
                   {#if copiedId === 'scaffold'}
-                    <span class="text-[10px] text-blue-400 font-bold px-1">Copied!</span>
+                    <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
                   {:else}
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   {/if}
@@ -552,8 +479,8 @@ export function SolaWidget({ title, value }) {
 
             <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
               <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-                <span class="text-[11px] font-mono text-slate-400">Terminal</span>
-                <span class="text-[10px] font-mono text-slate-500">{packageManager}</span>
+                <span class="text-xs font-mono text-slate-400">Terminal</span>
+                <span class="text-xs font-mono text-slate-500">{packageManager}</span>
               </div>
               <div class="p-5 flex items-center justify-between font-mono text-xs text-blue-400 overflow-x-auto">
                 <code>$ {installCmds[packageManager]}</code>
@@ -561,7 +488,7 @@ export function SolaWidget({ title, value }) {
                   onclick={() => handleCopy(installCmds[packageManager], 'install')}
                   class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0 ml-4">
                   {#if copiedId === 'install'}
-                    <span class="text-[10px] text-blue-400 font-bold px-1">Copied!</span>
+                    <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
                   {:else}
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   {/if}
@@ -579,8 +506,8 @@ export function SolaWidget({ title, value }) {
 
             <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
               <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-                <span class="text-[11px] font-mono text-slate-400">vite.config.ts</span>
-                <span class="text-[10px] font-mono text-slate-500">TypeScript</span>
+                <span class="text-xs font-mono text-slate-400">vite.config.ts</span>
+                <span class="text-xs font-mono text-slate-500">TypeScript</span>
               </div>
               <div class="p-5 relative font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
                 <pre><code>{viteConfigCode}</code></pre>
@@ -588,7 +515,7 @@ export function SolaWidget({ title, value }) {
                   onclick={() => handleCopy(viteConfigCode, 'vite-cfg')}
                   class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer">
                   {#if copiedId === 'vite-cfg'}
-                    <span class="text-[10px] text-blue-400 font-bold px-1">Copied!</span>
+                    <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
                   {:else}
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   {/if}
@@ -613,17 +540,17 @@ export function SolaWidget({ title, value }) {
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
-              <span class="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 uppercase">Part 1</span>
+              <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 uppercase">Part 1</span>
               <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt;</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>) and handlers.</p>
             </div>
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
-              <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
+              <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
               <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Standard declarative markup with <code>&#123;expression&#125;</code> bindings.</p>
             </div>
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
-              <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
+              <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
               <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt;</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Auto-scoped CSS hashed at compile time with 0 global collisions.</p>
             </div>
@@ -632,8 +559,8 @@ export function SolaWidget({ title, value }) {
           <!-- Code Window -->
           <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
             <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-              <span class="text-[11px] font-mono text-slate-400">MetricCard.sola</span>
-              <span class="text-[10px] font-mono text-slate-500">Single-File Component</span>
+              <span class="text-xs font-mono text-slate-400">MetricCard.sola</span>
+              <span class="text-xs font-mono text-slate-500">Single-File Component</span>
             </div>
             <div class="p-5 relative font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{syntaxExample}</code></pre>
@@ -641,7 +568,7 @@ export function SolaWidget({ title, value }) {
                 onclick={() => handleCopy(syntaxExample, 'syntax')}
                 class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer">
                 {#if copiedId === 'syntax'}
-                  <span class="text-[10px] text-blue-400 font-bold px-1">Copied!</span>
+                  <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
                 {:else}
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 {/if}
@@ -656,13 +583,13 @@ export function SolaWidget({ title, value }) {
                 <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
                 <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">Live Synchronized Sandbox</h3>
               </div>
-              <span class="text-[10px] font-mono bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full font-bold">Native DOM</span>
+              <span class="text-xs font-mono bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full font-bold">Native DOM</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               <div class="space-y-3">
                 <div>
-                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Card Title Prop</label>
+                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Card Title Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxTitle}
@@ -670,7 +597,7 @@ export function SolaWidget({ title, value }) {
                   />
                 </div>
                 <div>
-                  <label class="block text-[10px] font-mono font-bold text-slate-400 uppercase mb-1">Card Value Prop</label>
+                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Card Value Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxValue}
@@ -783,11 +710,11 @@ export function SolaWidget({ title, value }) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
               <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.9 kB Bundle</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Zero third-party dependencies. Instant time-to-interactive.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">No third-party runtime dependencies.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">Sub-Millisecond Speed</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Only modified DOM nodes are updated on state shifts.</p>
+              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">No Diff Step</h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Only the DOM nodes a changed signal owns are written to.</p>
             </div>
           </div>
         </article>
@@ -937,7 +864,7 @@ export function SolaWidget({ title, value }) {
           <button 
             onclick={() => activeSection = prevItem.id}
             class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-blue-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-left transition-all group cursor-pointer shadow-2xs">
-            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+            <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
               <svg class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
               <span>Previous</span>
             </div>
@@ -953,7 +880,7 @@ export function SolaWidget({ title, value }) {
           <button 
             onclick={() => activeSection = nextItem.id}
             class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-blue-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-right transition-all group cursor-pointer shadow-2xs ml-auto w-full sm:w-auto sm:min-w-[200px]">
-            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
+            <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
               <span>Next</span>
               <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </div>

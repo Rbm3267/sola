@@ -1,9 +1,12 @@
 <script>
+  export let primitiveCount = 26;
+
   let signalTick = $state(148200);
-  let activeTab = $state("signals");
+  let ticks = $state(0);
 
   function triggerTick() {
     signalTick += 1200;
+    ticks++;
   }
 </script>
 
@@ -11,66 +14,103 @@
   <!-- Hero Section -->
   <div class="hero-section">
     <div class="hero-badge">
-      <span>@sola/core • ZERO-VDOM REACTIVE RUNTIME</span>
+      <span>@sola-air-ui/core • ZERO-VDOM REACTIVE RUNTIME</span>
     </div>
     <h1 class="hero-heading">
-      The Intent-Driven UI Engine for Modern Ambient Apps
+      This page is a Sola component
     </h1>
     <p class="hero-subtext">
-      Sub-millisecond DOM updates, pure SVG physics controllers, and multi-framework export compiled from native .sola single-file components.
+      Everything below compiled from a single <code>.sola</code> file into direct DOM
+      calls — no virtual DOM, no diffing, no framework runtime around it. The counter
+      is live: each click writes to exactly one text node.
     </p>
 
     <div class="hero-ctas">
-      <a href="/studio" class="cta-primary">Launch Studio Canvas →</a>
-      <a href="/components" class="cta-secondary">Explore 28 Components</a>
+      <a href="/docs" class="cta-primary">Get started →</a>
+      <a href="/components" class="cta-secondary">Browse {primitiveCount} primitives</a>
     </div>
+  </div>
+
+  <!-- Live proof: a real signal, updating a real text node -->
+  <div class="proof-card">
+    <div class="proof-label">Live signal</div>
+    <div class="proof-value">{signalTick}</div>
+    <div class="proof-meta">{ticks} updates · one text node mutated per click</div>
+    <button class="proof-btn" onclick={triggerTick}>Emit signal</button>
   </div>
 
   <!-- Grid Pillars -->
   <div class="pillars-grid">
     <div class="pillar-card">
       <div class="pillar-icon">01</div>
-      <h3 class="pillar-title">Zero-VDOM Signals</h3>
-      <p class="pillar-desc">O(1) direct DOM text-node mutations at 1,000Hz with zero garbage collection or React Fiber reconciliation overhead.</p>
+      <h3 class="pillar-title">Zero-VDOM signals</h3>
+      <p class="pillar-desc">A signal write reaches the text node or attribute it owns directly. There is no diff pass and no reconciler in between.</p>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-icon">02</div>
-      <h3 class="pillar-title">Tactile Spring Physics</h3>
-      <p class="pillar-desc">Rotary dials, range sliders, and rolling counters with true inertia, damping, and hardware-grade resistance.</p>
+      <h3 class="pillar-title">Tactile controls</h3>
+      <p class="pillar-desc">Rotary dials, range sliders, and rolling counters driven by drag and wheel input with eased, momentum-style motion.</p>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-icon">03</div>
-      <h3 class="pillar-title">Multi-Framework Portability</h3>
-      <p class="pillar-desc">One signal core compiles to native .sola, React 19 JSX, Svelte 5 runes, and framework-agnostic Web Components.</p>
+      <h3 class="pillar-title">Compiles to plain DOM</h3>
+      <p class="pillar-desc">One signal core, compiled from <code>.sola</code> single-file components into ordinary DOM calls you can read.</p>
     </div>
   </div>
 </div>
 
 <style>
+  /* Themed through tokens so the page is legible on both grounds. The light
+     values are the defaults; the dark block only redefines the tokens. */
   .sola-overview-root {
+    --ov-ink: #0f172a;
+    --ov-ink-2: #475569;
+    --ov-surface: #ffffff;
+    --ov-surface-2: #f8fafc;
+    --ov-line: rgba(15, 23, 42, 0.1);
+    --ov-accent: #047857;
+    --ov-accent-soft: rgba(16, 185, 129, 0.1);
+    --ov-accent-line: rgba(16, 185, 129, 0.3);
+    --ov-on-accent: #ffffff;
+
     width: 100%;
     max-width: 1140px;
     margin: 0 auto;
     padding: 48px 24px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #f8fafc;
+    color: var(--ov-ink);
   }
+
+  @media (prefers-color-scheme: dark) {
+    .sola-overview-root {
+      --ov-ink: #f8fafc;
+      --ov-ink-2: #94a3b8;
+      --ov-surface: rgba(15, 23, 42, 0.8);
+      --ov-surface-2: rgba(255, 255, 255, 0.04);
+      --ov-line: rgba(255, 255, 255, 0.1);
+      --ov-accent: #10b981;
+      --ov-accent-soft: rgba(16, 185, 129, 0.12);
+      --ov-accent-line: rgba(16, 185, 129, 0.3);
+      --ov-on-accent: #052e23;
+    }
+  }
+
   .hero-section {
     text-align: center;
     max-width: 800px;
-    margin: 0 auto 64px auto;
+    margin: 0 auto 40px auto;
   }
   .hero-badge {
     display: inline-flex;
     padding: 4px 12px;
     border-radius: 9999px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    color: #10b981;
-    font-size: 11px;
-    font-family: monospace;
+    background: var(--ov-accent-soft);
+    border: 1px solid var(--ov-accent-line);
+    color: var(--ov-accent);
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-weight: 700;
     margin-bottom: 20px;
   }
@@ -79,7 +119,7 @@
     font-weight: 900;
     line-height: 1.1;
     letter-spacing: -0.03em;
-    color: #fff;
+    color: var(--ov-ink);
     margin-bottom: 16px;
   }
   @media (max-width: 640px) {
@@ -88,13 +128,22 @@
   .hero-subtext {
     font-size: 16px;
     line-height: 1.6;
-    color: #94a3b8;
+    color: var(--ov-ink-2);
     margin-bottom: 32px;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    background: var(--ov-surface-2);
+    border: 1px solid var(--ov-line);
+    padding: 1px 5px;
+    border-radius: 5px;
   }
   .hero-ctas {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 12px;
   }
   .cta-primary {
@@ -102,15 +151,15 @@
     align-items: center;
     padding: 12px 24px;
     border-radius: 12px;
-    background: #10b981;
-    color: #090d19;
+    background: var(--ov-accent);
+    color: var(--ov-on-accent);
     font-weight: 800;
-    font-size: 13px;
+    font-size: 14px;
     text-decoration: none;
     transition: all 0.15s ease;
   }
   .cta-primary:hover {
-    background: #059669;
+    filter: brightness(1.08);
     transform: translateY(-1px);
   }
   .cta-secondary {
@@ -118,17 +167,68 @@
     align-items: center;
     padding: 12px 24px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #fff;
+    background: var(--ov-surface-2);
+    border: 1px solid var(--ov-line);
+    color: var(--ov-ink);
     font-weight: 700;
-    font-size: 13px;
+    font-size: 14px;
     text-decoration: none;
     transition: all 0.15s ease;
   }
   .cta-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--ov-accent-line);
   }
+
+  .proof-card {
+    max-width: 420px;
+    margin: 0 auto 56px auto;
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--ov-surface-2);
+    border: 1px solid var(--ov-line);
+    text-align: center;
+  }
+  .proof-label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ov-ink-2);
+  }
+  .proof-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--ov-ink);
+    margin: 8px 0 4px;
+  }
+  .proof-meta {
+    font-size: 13px;
+    color: var(--ov-ink-2);
+    margin-bottom: 16px;
+  }
+  .proof-btn {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--ov-accent-line);
+    background: var(--ov-accent-soft);
+    color: var(--ov-accent);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .proof-btn:hover {
+    background: var(--ov-accent);
+    color: var(--ov-on-accent);
+  }
+  .proof-btn:focus-visible {
+    outline: 2px solid var(--ov-accent);
+    outline-offset: 2px;
+  }
+
   .pillars-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -138,31 +238,31 @@
     .pillars-grid { grid-template-columns: 1fr; }
   }
   .pillar-card {
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--ov-surface);
+    border: 1px solid var(--ov-line);
     border-radius: 20px;
     padding: 24px;
     transition: all 0.2s ease;
   }
   .pillar-card:hover {
-    border-color: rgba(16, 185, 129, 0.3);
+    border-color: var(--ov-accent-line);
   }
   .pillar-icon {
-    font-family: monospace;
-    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
     font-weight: 800;
-    color: #10b981;
+    color: var(--ov-accent);
     margin-bottom: 12px;
   }
   .pillar-title {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 800;
-    color: #fff;
+    color: var(--ov-ink);
     margin-bottom: 8px;
   }
   .pillar-desc {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.6;
-    color: #94a3b8;
+    color: var(--ov-ink-2);
   }
 </style>

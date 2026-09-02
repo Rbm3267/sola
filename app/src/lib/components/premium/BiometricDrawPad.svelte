@@ -72,7 +72,7 @@
 <div class="w-full flex flex-col gap-2">
   <div class="flex justify-between items-center px-1">
     <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Signature Pad</span>
-    <button onclick={clear} class="text-[10px] text-slate-400 hover:text-slate-700 dark:text-slate-300 font-mono uppercase cursor-pointer">Clear</button>
+    <button onclick={clear} class="text-xs text-slate-400 hover:text-slate-700 dark:text-slate-300 font-mono uppercase cursor-pointer">Clear</button>
   </div>
 
   <div class="w-full h-[200px] bg-slate-50 dark:bg-white/[0.04] rounded-2xl border-2 border-dashed border-slate-200 dark:border-white/[0.04] overflow-hidden relative">

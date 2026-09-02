@@ -53,7 +53,7 @@
     </svg>
   </div>
   <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Right-Click Anywhere Inside</p>
-  <p class="text-[11px] text-slate-400 mt-0.5">Triggers Sola Context Menu with keyboard shortcuts</p>
+  <p class="text-xs text-slate-400 mt-0.5">Triggers Sola Context Menu with keyboard shortcuts</p>
 </div>
 
 {#if isOpen}
@@ -72,7 +72,7 @@
         >
           <span class="font-medium">{item.label}</span>
           {#if item.shortcut}
-            <span class="text-[10px] font-mono opacity-50">{item.shortcut}</span>
+            <span class="text-xs font-mono opacity-50">{item.shortcut}</span>
           {/if}
         </button>
       {/if}

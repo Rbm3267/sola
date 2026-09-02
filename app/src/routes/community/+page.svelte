@@ -118,13 +118,21 @@
     <div class="text-center max-w-3xl mx-auto space-y-3">
       <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold shadow-2xs">
         <svg class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
-        Community Presets & Starter Kits
+        Concept Layouts
       </div>
       <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
-        Pre-Built Layouts & Starter Kits
+        Layout concepts to start from
       </h1>
       <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
-        Handcrafted, zero-VDOM templates for analytics, developer tooling, commerce, and personal workflows. 1-click open in Studio or export to native .sola.
+        Dashboard shapes for analytics, developer tooling, commerce, and personal workflows.
+        Open one in Studio or export it to native <code class="font-mono text-[0.9em]">.sola</code>.
+      </p>
+
+      <!-- These are design concepts with sample data, not projects anyone has
+           shipped. Saying so is the difference between a gallery and a claim. -->
+      <p class="inline-flex items-start gap-2 text-left text-sm text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-500/10 border border-amber-200/80 dark:border-amber-500/20 rounded-2xl px-4 py-3">
+        <svg class="w-4 h-4 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.5"/></svg>
+        <span>Every layout here is a concept built with sample data to show what Sola can render. None is a shipped project, and no one has contributed one yet.</span>
       </p>
     </div>
 
@@ -192,11 +200,11 @@
 
               <!-- Badge row -->
               <div class="flex items-center gap-2 mb-4">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border {getBadgeBg(accent)}">
-                  {item.badge}
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider border border-white/25 bg-white/10 text-white/90">
+                  Concept
                 </span>
-                <span class="text-[10px] font-mono text-white/50">
-                  {item.cards.length} Primitives
+                <span class="text-xs font-mono text-white/50">
+                  {item.cards.length} Primitives · sample data
                 </span>
               </div>
 
@@ -211,7 +219,7 @@
                     {primaryCard.delta}
                   </div>
                 {/if}
-                <div class="text-[10px] font-mono text-white/50 mt-1">{primaryCard?.title}</div>
+                <div class="text-xs font-mono text-white/50 mt-1">{primaryCard?.title}</div>
               </div>
 
               <!-- Decorative sparkline -->
@@ -246,7 +254,7 @@
               <!-- Signal chips -->
               <div class="flex flex-wrap gap-1.5">
                 {#each item.signals as sig}
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-white/[0.06]">
+                  <span class="px-2 py-0.5 rounded-md text-xs font-mono bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-white/[0.06]">
                     {sig}
                   </span>
                 {/each}
@@ -307,7 +315,7 @@
           </svg>
           <div class="flex items-start justify-between gap-4 relative z-10">
             <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border {getBadgeBg(accent)}">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase border {getBadgeBg(accent)}">
                 {activeTemplateModal.category}
               </span>
               <h2 class="text-xl font-black text-white mt-2 leading-snug">{activeTemplateModal.name}</h2>

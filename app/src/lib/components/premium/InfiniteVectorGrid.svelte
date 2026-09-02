@@ -73,7 +73,7 @@
     </g>
   </svg>
   
-  <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur text-white text-[10px] font-mono px-3 py-1.5 rounded-lg">
+  <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur text-white text-xs font-mono px-3 py-1.5 rounded-lg">
     ZOOM: {(scale * 100).toFixed(0)}%
   </div>
 </div>

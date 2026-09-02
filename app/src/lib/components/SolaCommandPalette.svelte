@@ -191,7 +191,7 @@
         {:else}
           {#each groupedCommands as group}
             <div>
-              <div class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 {group.name}
               </div>
               <div class="space-y-0.5">
@@ -245,7 +245,7 @@
                     <!-- Right: Shortcut Badge (Kbd style) -->
                     {#if cmd.shortcut}
                       <kbd
-                        class="flex-shrink-0 px-2 py-0.5 text-[11px] font-mono font-medium rounded-md
+                        class="flex-shrink-0 px-2 py-0.5 text-xs font-mono font-medium rounded-md
                           {isActive
                             ? 'bg-white dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30'
                             : 'bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10'} shadow-xs"
@@ -262,19 +262,19 @@
       </div>
 
       <!-- Footer navigation tips -->
-      <div class="flex items-center justify-between px-4 py-2.5 bg-slate-50/80 dark:bg-white/[0.02] border-t border-slate-200/80 dark:border-white/10 text-[11px] text-slate-400 dark:text-slate-500 select-none">
+      <div class="flex items-center justify-between px-4 py-2.5 bg-slate-50/80 dark:bg-white/[0.02] border-t border-slate-200/80 dark:border-white/10 text-xs text-slate-400 dark:text-slate-500 select-none">
         <div class="flex items-center gap-3">
           <span class="flex items-center gap-1">
-            <kbd class="px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-white/10 text-[10px] font-mono text-slate-600 dark:text-slate-300">↑↓</kbd>
+            <kbd class="px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-white/10 text-xs font-mono text-slate-600 dark:text-slate-300">↑↓</kbd>
             <span>navigate</span>
           </span>
           <span class="flex items-center gap-1">
-            <kbd class="px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-white/10 text-[10px] font-mono text-slate-600 dark:text-slate-300">↵</kbd>
+            <kbd class="px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-white/10 text-xs font-mono text-slate-600 dark:text-slate-300">↵</kbd>
             <span>select</span>
           </span>
         </div>
         <span class="flex items-center gap-1">
-          <kbd class="px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-white/10 text-[10px] font-mono text-slate-600 dark:text-slate-300">esc</kbd>
+          <kbd class="px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-white/10 text-xs font-mono text-slate-600 dark:text-slate-300">esc</kbd>
           <span>close</span>
         </span>
       </div>

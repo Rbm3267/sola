@@ -2,6 +2,7 @@
   import Navbar from '$lib/components/Navbar.svelte';
   import { onMount } from 'svelte';
   import SolaButton from '$lib/components/SolaButton.svelte';
+  import { GITHUB_URL } from '$lib/data/site';
 
   // Animation Step State
   let activeAnimationStep = $state<1 | 2 | 3 | 4>(1);
@@ -104,7 +105,7 @@
         </a>
 
         <a
-          href="https://github.com/Rbm3267/sola/raw/main/packages/sola-extension/sola-extension.zip"
+          href="{GITHUB_URL}/raw/main/packages/sola-extension/sola-extension.zip"
           class="px-6 py-3 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 font-bold text-xs sm:text-sm shadow-xs hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span>Download Zip (Unpacked)</span>
@@ -121,7 +122,7 @@
           <div class="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
             A
           </div>
-          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400">Mode 1</span>
+          <span class="text-xs font-mono uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400">Mode 1</span>
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Free-Floating Draggable HUD</h3>
         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -135,7 +136,7 @@
           <div class="w-9 h-9 rounded-2xl bg-sky-50 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold text-xs">
             B
           </div>
-          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-sky-600 dark:text-sky-400">Mode 2</span>
+          <span class="text-xs font-mono uppercase tracking-wider font-bold text-sky-600 dark:text-sky-400">Mode 2</span>
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Target Element Selector (Click to Anchor)</h3>
         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -199,7 +200,7 @@
               <span class="text-slate-400">https://</span>
               <span class="font-bold text-slate-900 dark:text-white">your-cloud-app.internal/analytics</span>
             </div>
-            <span class="text-[10px] text-slate-400">Host Webpage</span>
+            <span class="text-xs text-slate-400">Host Webpage</span>
           </div>
 
           <!-- Chrome Toolbar with Sola Extension Icon -->
@@ -211,7 +212,7 @@
                 <circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/>
                 <circle cx="12" cy="12" r="3" fill="currentColor"/>
               </svg>
-              <span class="text-[11px] font-bold">Sola UI</span>
+              <span class="text-xs font-bold">Sola UI</span>
             </button>
           </div>
         </div>
@@ -229,7 +230,7 @@
                   <h3 class="text-lg font-bold text-slate-900 dark:text-white">Active Cloud Console</h3>
                   <p class="text-xs text-slate-400">Live host page DOM (e.g. internal dashboard, cloud admin, or local server)</p>
                 </div>
-                <span class="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-[10px] font-mono font-bold text-slate-500">
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-xs font-mono font-bold text-slate-500">
                   Host DOM
                 </span>
               </div>
@@ -238,16 +239,16 @@
               <div class="grid grid-cols-2 gap-4">
                 <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border {isTargetHovered ? 'border-2 border-dashed border-blue-500 bg-blue-500/5 ring-4 ring-blue-500/10' : 'border-slate-200/80 dark:border-white/5'} transition-all relative">
                   {#if isTargetHovered}
-                    <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-blue-500 text-slate-950 font-mono text-[9px] font-bold shadow-xs">
+                    <div class="absolute -top-2.5 right-3 px-2 py-0.5 rounded bg-blue-500 text-slate-950 font-mono text-xs font-bold shadow-xs">
                       Target Anchor Container
                     </div>
                   {/if}
-                  <span class="text-[11px] text-slate-400">Primary Ingress Volume</span>
+                  <span class="text-xs text-slate-400">Primary Ingress Volume</span>
                   <div class="text-xl font-black font-mono mt-1 text-slate-900 dark:text-white">142,400 req/s</div>
                 </div>
 
                 <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/5">
-                  <span class="text-[11px] text-slate-400">Global Median Latency</span>
+                  <span class="text-xs text-slate-400">Global Median Latency</span>
                   <div class="text-xl font-black font-mono mt-1 text-slate-900 dark:text-white">3.4 ms</div>
                 </div>
               </div>
@@ -264,7 +265,7 @@
                     </span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-mono bg-white/10 text-slate-300">
                       <svg class="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
                       <span>Anchored to Ingress Container</span>
                     </span>
@@ -288,10 +289,10 @@
                 </div>
 
                 <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                  <span class="text-[10px] text-slate-400 font-mono">0 CSS leakage • Zero host re-renders</span>
+                  <span class="text-xs text-slate-400 font-mono">0 CSS leakage • Zero host re-renders</span>
                   <button
                     onclick={() => (activeAnimationStep = 4)}
-                    class="px-3 py-1.5 rounded-xl bg-blue-500 text-slate-950 font-bold text-[11px] hover:bg-blue-400 transition-colors">
+                    class="px-3 py-1.5 rounded-xl bg-blue-500 text-slate-950 font-bold text-xs hover:bg-blue-400 transition-colors">
                     Copy Code Snippet
                   </button>
                 </div>
@@ -310,7 +311,7 @@
             <!-- Bottom Host Webpage Status -->
             <div class="pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-400">
               <span>Host runtime active</span>
-              <span class="font-mono text-[10px]">Shadow DOM Sandbox: #sola-preview-root</span>
+              <span class="font-mono text-xs">Shadow DOM Sandbox: #sola-preview-root</span>
             </div>
           </div>
 
@@ -327,12 +328,12 @@
                     </div>
                     <span class="font-bold text-xs text-slate-900 dark:text-white">Sola UI Side Panel</span>
                   </div>
-                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 font-bold">12 Cards</span>
+                  <span class="text-xs font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 font-bold">12 Cards</span>
                 </div>
 
                 <!-- Side Panel Component Cards List -->
                 <div class="mt-3 space-y-2">
-                  <div class="text-[10px] font-mono uppercase tracking-wider font-bold text-slate-400">Click to Preview in Host Page:</div>
+                  <div class="text-xs font-mono uppercase tracking-wider font-bold text-slate-400">Click to Preview in Host Page:</div>
 
                   <!-- Item 1 -->
                   <button
@@ -340,9 +341,9 @@
                     class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Telemetry Stream Chart' && isCardInjected ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500 text-blue-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Telemetry Stream</span>
-                      <span class="text-[10px] font-mono text-blue-600 font-bold">Anchor →</span>
+                      <span class="text-xs font-mono text-blue-600 font-bold">Anchor →</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 font-normal mt-0.5">Zero-VDOM pure SVG live chart</p>
+                    <p class="text-xs text-slate-400 font-normal mt-0.5">Zero-VDOM pure SVG live chart</p>
                   </button>
 
                   <!-- Item 2 -->
@@ -351,9 +352,9 @@
                     class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Haptic Rotary Dial' && isCardInjected ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500 text-blue-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Haptic Rotary Dial</span>
-                      <span class="text-[10px] font-mono text-blue-600 font-bold">Anchor →</span>
+                      <span class="text-xs font-mono text-blue-600 font-bold">Anchor →</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 font-normal mt-0.5">Tactile rate-limiting throttle</p>
+                    <p class="text-xs text-slate-400 font-normal mt-0.5">Tactile rate-limiting throttle</p>
                   </button>
 
                   <!-- Item 3 -->
@@ -362,9 +363,9 @@
                     class="w-full p-2.5 rounded-xl border text-left transition-all cursor-pointer {selectedComponent === 'Date Range Picker' && isCardInjected ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500 text-blue-950 dark:text-white font-bold' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 hover:bg-blue-50/50'}">
                     <div class="flex items-center justify-between">
                       <span class="text-xs">Date Range Picker</span>
-                      <span class="text-[10px] font-mono text-blue-600 font-bold">Anchor →</span>
+                      <span class="text-xs font-mono text-blue-600 font-bold">Anchor →</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 font-normal mt-0.5">Calendar matrix range filter</p>
+                    <p class="text-xs text-slate-400 font-normal mt-0.5">Calendar matrix range filter</p>
                   </button>
                 </div>
               </div>

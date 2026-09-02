@@ -1,7 +1,7 @@
 <script lang="ts">
   let {
     title = 'Sola Architecture',
-    description = 'Zero-VDOM, direct reactive graph bindings with sub-millisecond patch execution.',
+    description = 'Zero-VDOM, direct reactive graph bindings with no diffing between a signal write and the DOM.',
     handle = '@sola-engine',
     avatarText = 'SO'
   } = $props<{
@@ -40,15 +40,15 @@
         </div>
         <div class="min-w-0">
           <h4 class="text-xs font-bold text-slate-900 dark:text-white">{title}</h4>
-          <p class="text-[10px] text-slate-400 font-mono">{handle}</p>
+          <p class="text-xs text-slate-400 font-mono">{handle}</p>
         </div>
       </div>
       <p class="text-xs text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed">
         {description}
       </p>
-      <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] font-mono text-slate-400">
+      <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs font-mono text-slate-400">
         <span>Signal Status</span>
-        <span class="text-blue-500 font-bold">1,000Hz Mesh</span>
+        <span class="text-blue-500 font-bold">Signal Mesh</span>
       </div>
     </div>
   {/if}

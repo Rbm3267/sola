@@ -75,18 +75,18 @@
 
     <!-- Aggregate Status Pills -->
     <div class="flex items-center gap-1.5 flex-wrap justify-end">
-      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20/80 text-blue-800 dark:text-blue-300 text-[11px] font-mono font-bold">
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20/80 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold">
         <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
         {nominalCount} Nominal
       </span>
       {#if warningCount > 0}
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-[11px] font-mono font-bold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-bold">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
           {warningCount} Degraded
         </span>
       {/if}
       {#if criticalCount > 0}
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20/80 text-rose-900 text-[11px] font-mono font-bold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20/80 text-rose-900 text-xs font-mono font-bold">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
           {criticalCount} Critical
         </span>
@@ -108,11 +108,11 @@
           <span class="w-3.5 h-3.5 rounded-lg shadow-sm {getStatusColor(node.status)}"></span>
         </div>
 
-        <span class="text-[11px] font-mono font-bold text-slate-800 dark:text-slate-200 truncate max-w-full text-center">
+        <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 truncate max-w-full text-center">
           {node.id}
         </span>
         
-        <span class="text-[10px] font-mono text-slate-600 dark:text-slate-400 truncate max-w-full">
+        <span class="text-xs font-mono text-slate-600 dark:text-slate-400 truncate max-w-full">
           {node.load !== undefined ? `${node.load}% load` : (node.latency || node.status)}
         </span>
       </button>
@@ -126,26 +126,26 @@
         <span class="w-2.5 h-2.5 rounded-full {getStatusColor(hoveredNode.status)}"></span>
         <div>
           <span class="text-xs font-mono font-bold text-slate-200">{hoveredNode.label}</span>
-          <span class="text-[10px] font-mono text-slate-400 block">Region: {hoveredNode.region || 'global'} • Status: {hoveredNode.status.toUpperCase()}</span>
+          <span class="text-xs font-mono text-slate-400 block">Region: {hoveredNode.region || 'global'} • Status: {hoveredNode.status.toUpperCase()}</span>
         </div>
       </div>
       <div class="flex items-center gap-4 text-right">
         {#if hoveredNode.load !== undefined}
           <div>
-            <span class="text-[10px] font-mono text-slate-400 block uppercase">CPU Load</span>
+            <span class="text-xs font-mono text-slate-400 block uppercase">CPU Load</span>
             <span class="text-xs font-mono font-bold {hoveredNode.load > 80 ? 'text-rose-400' : 'text-blue-400'}">{hoveredNode.load}%</span>
           </div>
         {/if}
         {#if hoveredNode.latency}
           <div>
-            <span class="text-[10px] font-mono text-slate-400 block uppercase">Latency</span>
+            <span class="text-xs font-mono text-slate-400 block uppercase">Latency</span>
             <span class="text-xs font-mono font-bold text-sky-400">{hoveredNode.latency}</span>
           </div>
         {/if}
       </div>
     </div>
   {:else}
-    <div class="flex items-center justify-between text-[11px] font-mono text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-white/[0.04]">
+    <div class="flex items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-white/[0.04]">
       <span>Zero-VDOM Cluster Canvas</span>
       <span>Hover a node for live APM telemetry</span>
     </div>

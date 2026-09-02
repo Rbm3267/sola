@@ -85,7 +85,7 @@
                 {activeMode === 'sheets' ? 'App.sola (Financial Ops Sheet)' : 'App.sola (PostgreSQL Cluster)'}
               </span>
             </div>
-            <span class="text-[10px] font-mono bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-amber-300">
+            <span class="text-xs font-mono bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-amber-300">
               zero-vdom
             </span>
           </div>

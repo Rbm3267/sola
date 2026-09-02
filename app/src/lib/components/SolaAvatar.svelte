@@ -18,8 +18,8 @@
   let imgError = $state(false);
 
   const sizeMap: Record<string, string> = {
-    xs: 'w-6 h-6 text-[9px]',
-    sm: 'w-8 h-8 text-[10px]',
+    xs: 'w-6 h-6 text-xs',
+    sm: 'w-8 h-8 text-xs',
     default: 'w-10 h-10 text-xs',
     lg: 'w-12 h-12 text-sm',
     xl: 'w-16 h-16 text-base'

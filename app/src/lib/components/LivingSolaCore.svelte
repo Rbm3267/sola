@@ -106,7 +106,7 @@
           {isGenerating ? 'Building Reactive DOM Tree...' : isListening ? 'Listening on Intent Stream...' : 'Ambient Intent Engine Active'}
         </span>
       </div>
-      <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+      <span class="text-xs font-mono text-slate-500 dark:text-slate-400">
         3.9 kB Core • Zero-VDOM Native Signals
       </span>
     </div>

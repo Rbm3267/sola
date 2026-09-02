@@ -1,0 +1,54 @@
+// Single source for facts the site states about itself.
+//
+// Component counts and version strings used to be typed by hand in six places
+// and disagreed with each other (28 / 27 / 56 / 57 for one number, against a
+// package that exports 26). Everything here is derived from the catalog or a
+// package manifest, so a claim can only be wrong if the code is.
+
+import { COMPONENT_CATALOG, type CatalogComponent } from './componentCatalog';
+
+export const GITHUB_URL = 'https://github.com/Rbm3267/sola-air';
+export const GITHUB_REPO = 'Rbm3267/sola-air';
+
+/** Versions injected at build time from the package manifests (see vite.config.ts). */
+export const VERSIONS = {
+  solaAir: __SOLA_VERSION__,
+  core: __SOLA_CORE_VERSION__,
+  compiler: __SOLA_COMPILER_VERSION__,
+  ui: __SOLA_UI_VERSION__
+};
+
+/** Names @sola-air-ui/ui really exports, read from its entry point at build time. */
+export const PUBLISHED_PRIMITIVES: ReadonlySet<string> = new Set(__SOLA_UI_EXPORTS__);
+
+/**
+ * True when a catalog entry is a primitive someone can install today, rather
+ * than a preview built for this site. The catalog used to present both as the
+ * same thing.
+ */
+export function isPublished(component: Pick<CatalogComponent, 'componentName'>): boolean {
+  return PUBLISHED_PRIMITIVES.has(component.componentName);
+}
+
+/** Primitives installable from npm today. */
+export const PUBLISHED_COUNT = PUBLISHED_PRIMITIVES.size;
+
+/** Everything the catalog shows, published primitives and previews together. */
+export const CATALOG_COUNT = COMPONENT_CATALOG.length;
+
+/** Catalog entries that are previews, not yet part of the published package. */
+export const PREVIEW_COUNT = COMPONENT_CATALOG.filter((c) => !isPublished(c)).length;
+
+/** Distinct categories represented in the catalog. */
+export const CATEGORY_COUNT = new Set(COMPONENT_CATALOG.map((c) => c.category)).size;
+
+/**
+ * Measured, reproducible facts only. Anything stated as a number on the site
+ * should be traceable to something a reader could verify — the review pulled
+ * "1,000Hz", "O(1) with zero GC" and "hardware-grade resistance" precisely
+ * because nothing stood behind them.
+ */
+export const FACTS = {
+  /** Minified + gzipped size of the core runtime bundle. */
+  coreSizeKb: '3.9 kB'
+};

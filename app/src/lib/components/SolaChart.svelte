@@ -88,7 +88,7 @@
     </div>
     {#if hoveredIndex !== null && data[hoveredIndex]}
       <div class="flex items-center gap-2 px-2.5 py-1 bg-slate-100 dark:bg-white/10 rounded-xl">
-        <span class="text-[11px] text-slate-500 dark:text-slate-400">{data[hoveredIndex].label}:</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400">{data[hoveredIndex].label}:</span>
         <span class="text-xs font-bold font-mono text-slate-900 dark:text-white">{data[hoveredIndex].value}</span>
       </div>
     {/if}
@@ -184,7 +184,7 @@
   </div>
 
   <!-- X-Axis Labels -->
-  <div class="flex justify-between items-center px-4 pt-2 text-[10px] font-mono text-slate-400">
+  <div class="flex justify-between items-center px-4 pt-2 text-xs font-mono text-slate-400">
     {#each data as d, i}
       <span class={hoveredIndex === i ? 'text-blue-500 font-bold' : ''}>{d.label}</span>
     {/each}

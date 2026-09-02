@@ -46,7 +46,7 @@
           <span class="card-delta">+18.4%</span>
         </div>
         <div class="card-value">$148,200</div>
-        <div class="card-meta">Zero-VDOM O(1) Signal Target</div>
+        <div class="card-meta">Bound to one signal, written directly</div>
       </div>
 
       <!-- Card 2: Status HUD -->
@@ -62,18 +62,18 @@
       <!-- Card 3: Dial Controller -->
       <div class="sola-card col-1">
         <div class="card-header">
-          <span class="card-label">SIGNAL FREQUENCY</span>
-          <span class="card-delta">1,000Hz</span>
+          <span class="card-label">MESH NODES</span>
+          <span class="card-delta">live</span>
         </div>
-        <div class="card-value">1.0 kHz</div>
-        <div class="card-meta">Sub-millisecond Patch Loop</div>
+        <div class="card-value">{nodeCount}</div>
+        <div class="card-meta">Direct DOM writes</div>
       </div>
 
       <!-- Card 4: Signal Stream Waterfall -->
       <div class="sola-card col-2">
         <div class="card-header">
           <span class="card-label">TELEMETRY STREAM CASCADE</span>
-          <span class="card-delta">Zero GC</span>
+          <span class="card-delta">Live</span>
         </div>
         <div class="spark-bars">
           <div class="bar" style="height: 40%;"></div>
@@ -92,7 +92,7 @@
       <div class="sola-card col-1">
         <div class="card-header">
           <span class="card-label">SIGNAL RUNTIME</span>
-          <span class="card-badge-live">@sola/core</span>
+          <span class="card-badge-live">@sola-air-ui/core</span>
         </div>
         <div class="code-preview">
           <code>const count = $state(0);<br/>count.subscribe(val => patch(val));</code>

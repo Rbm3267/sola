@@ -54,14 +54,14 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
     id: 'llm-streaming-token-hud',
     name: 'Real-Time Neural Token Streaming & TTFT HUD',
     category: 'Autonomous AI & Agents',
-    tagline: 'High-throughput LLM streaming monitor with sub-millisecond text-node patch rendering',
+    tagline: 'LLM streaming monitor that patches text nodes directly as tokens arrive',
     description: 'Tracks time-to-first-token (TTFT), token output velocity (tok/s), context buffer compaction, and live inference cost.',
     badge: 'Next Gen',
     signals: ['neural/token_rate', 'neural/ttft_latency', 'neural/context_fill'],
     cards: [
       { id: 'nt1', type: 'stat', title: 'Token Throughput', subtitle: 'Streaming generation velocity', cols: 1, value: '4,280 tok/s', delta: '+340 tok/s', accentColor: 'violet' },
       { id: 'nt2', type: 'progress', title: 'Context Window Saturation', subtitle: '128k token allocation', cols: 1, value: 68, delta: '68%', accentColor: 'violet' },
-      { id: 'nt3', type: 'chart', title: 'Token Egress Velocity Stream', subtitle: '1,000Hz text node mutation rate', cols: 2, value: '4.2k tok/s', accentColor: 'violet' },
+      { id: 'nt3', type: 'chart', title: 'Token Egress Velocity Stream', subtitle: 'Text node mutation rate', cols: 2, value: '4.2k tok/s', accentColor: 'violet' },
       { id: 'nt4', type: 'code', title: 'Zero-VDOM Streaming Buffer', subtitle: 'Direct reactive DOM binding', cols: 2, value: 'Prompt Engine', accentColor: 'slate' }
     ],
     solaCode: `<script>
@@ -87,7 +87,7 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
     badge: 'High Perf',
     signals: ['wasm/isolate_boot_ms', 'wasm/memory_watermark', 'edge/global_pops'],
     cards: [
-      { id: 'ew1', type: 'stat', title: 'Cold-Start Latency', subtitle: 'Sub-millisecond isolate spawn', cols: 1, value: '0.08ms', delta: '-0.02ms', accentColor: 'emerald' },
+      { id: 'ew1', type: 'stat', title: 'Cold-Start Latency', subtitle: 'Isolate spawn time', cols: 1, value: '0.08ms', delta: '-0.02ms', accentColor: 'emerald' },
       { id: 'ew2', type: 'progress', title: 'Linear Memory Allocation', subtitle: '4MB per isolate cap', cols: 1, value: 42, delta: '42%', accentColor: 'emerald' },
       { id: 'ew3', type: 'chart', title: 'Global Edge Ingress Map', subtitle: '32 Edge PoPs real-time load', cols: 2, value: '98k req/s', accentColor: 'emerald' },
       { id: 'ew4', type: 'radial_dial', title: 'Concurrency Limiter', subtitle: 'Dynamic worker scaling cap', cols: 1, value: 75, accentColor: 'emerald' }
@@ -131,16 +131,16 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
   // ==========================================
   {
     id: 'robotics-actuator-telemetry',
-    name: 'Robotics Actuator Kinematics & 1,000Hz Telemetry',
+    name: 'Robotics Actuator Kinematics',
     category: 'Robotics & Spatial',
     tagline: '6-DOF joint angle dials, torque sensor curves, and emergency e-stop sentinel',
-    description: 'Real-time robotics telemetry dashboard operating at 1,000Hz direct DOM patch loop without virtual DOM latency spikes.',
+    description: 'Robotics telemetry dashboard that patches the DOM directly, with no virtual DOM in the path spikes.',
     badge: 'Hardware',
     signals: ['robot/joint_angles', 'robot/torque_nm', 'robot/estop_state'],
     cards: [
       { id: 'rb1', type: 'radial_dial', title: 'End-Effector Joint Angle', subtitle: 'Haptic precision angle control', cols: 1, value: 45, accentColor: 'amber' },
       { id: 'rb2', type: 'stat', title: 'Actuator Torque Peak', subtitle: 'Load sensor feedback', cols: 1, value: '28.4 Nm', delta: 'Nominal', accentColor: 'amber' },
-      { id: 'rb3', type: 'chart', title: '1,000Hz Sensor Fusion Curve', subtitle: 'IMU & Torque continuous telemetry', cols: 2, value: '1.0 kHz', accentColor: 'amber' },
+      { id: 'rb3', type: 'chart', title: 'Sensor Fusion Curve', subtitle: 'IMU & Torque continuous telemetry', cols: 2, value: '1.0 kHz', accentColor: 'amber' },
       { id: 'rb4', type: 'status', title: 'Hardware Sentinel Condition', subtitle: 'E-Stop closed-loop watchdog', cols: 1, value: 'Armed & Nominal', accentColor: 'emerald' }
     ],
     solaCode: `<script>
@@ -157,7 +157,7 @@ export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
     id: 'spatial-audio-haptics',
     name: 'Spatial Coordinates & Soundfield Stage',
     category: 'Robotics & Spatial',
-    tagline: '360° tactile coordinate stage with inertia damping and spring physics',
+    tagline: '360° tactile coordinate stage with eased, momentum-style motion',
     description: 'Spatial UI controller allowing fluid dragging of audio sources and tactile anchor points in 3D coordinate space.',
     badge: 'Spatial',
     signals: ['spatial/pan_azimuth', 'spatial/elevation', 'spatial/haptic_intensity'],

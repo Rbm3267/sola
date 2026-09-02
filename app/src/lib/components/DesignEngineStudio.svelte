@@ -1,5 +1,6 @@
 <script lang="ts">
   import SolaButton from './SolaButton.svelte';
+  import { PUBLISHED_COUNT, CATALOG_COUNT } from '$lib/data/site';
   import SolaDatePicker from './SolaDatePicker.svelte';
   import SolaChart from './SolaChart.svelte';
   import SolaKbd from './SolaKbd.svelte';
@@ -16,8 +17,8 @@
 
   const frameworkSnippets = {
     sola: `<script>\n  let count = $state(12);\n  let health = $derived(count > 10 ? "Optimal" : "Degraded");\n<\/script>\n\n<SolaButton variant="primary" onclick={() => count++}>\n  Trigger Signal ({count})\n</SolaButton>\n<SolaChart type="area" color="emerald" data={signalStream} />`,
-    react: `import { SolaButton, SolaChart } from '@sola/react';\n\nexport function TelemetryHUD() {\n  const [count, setCount] = useState(12);\n  return (\n    <div className="flex flex-col gap-4">\n      <SolaButton variant="primary" onClick={() => setCount(c => c + 1)}>\n        Trigger Signal ({count})\n      </SolaButton>\n      <SolaChart type="area" color="emerald" data={stream} />\n    </div>\n  );\n}`,
-    svelte: `<script lang="ts">\n  import { SolaButton, SolaChart } from '@sola/ui';\n  let count = $state(12);\n<\/script>\n\n<SolaButton variant="primary" onclick={() => count++}>\n  Trigger Signal ({count})\n</SolaButton>\n<SolaChart type="area" color="emerald" data={signalStream} />`,
+    react: `import { SolaButton, SolaChart } from '@sola-air-ui/react';\n\nexport function TelemetryHUD() {\n  const [count, setCount] = useState(12);\n  return (\n    <div className="flex flex-col gap-4">\n      <SolaButton variant="primary" onClick={() => setCount(c => c + 1)}>\n        Trigger Signal ({count})\n      </SolaButton>\n      <SolaChart type="area" color="emerald" data={stream} />\n    </div>\n  );\n}`,
+    svelte: `<script lang="ts">\n  import { SolaButton, SolaChart } from '@sola-air-ui/ui';\n  let count = $state(12);\n<\/script>\n\n<SolaButton variant="primary" onclick={() => count++}>\n  Trigger Signal ({count})\n</SolaButton>\n<SolaChart type="area" color="emerald" data={signalStream} />`,
     html: `<!-- Web Component Mount (Zero-VDOM) -->\n<script type="module" src="https://cdn.sola-air.dev/sola-ui.js"><\/script>\n\n<sola-button variant="primary">Trigger Signal</sola-button>\n<sola-chart type="area" color="emerald"></sola-chart>`
   };
 </script>
@@ -28,13 +29,13 @@
     <!-- Section Header -->
     <div class="text-center max-w-3xl mx-auto mb-12">
       <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold mb-3">
-        <span>@sola/ui • Foundational Design System</span>
+        <span>@sola-air-ui/ui • Foundational Design System</span>
       </div>
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
-        28 Zero-VDOM Components. Multi-Framework Portability.
+        {PUBLISHED_COUNT} published primitives. Multi-framework portability.
       </h2>
       <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed font-normal">
-        From foundation buttons and date pickers to high-frequency telemetry charts and resizable NOC splitters — handcrafted with spring physics and zero virtual DOM diffing.
+        From foundation buttons and date pickers to high-frequency telemetry charts and resizable NOC splitters — handcrafted with eased motion and no virtual DOM diffing.
       </p>
     </div>
 
@@ -49,7 +50,7 @@
             <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
             <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
           </div>
-          <span class="text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Sola Design System Inspector
           </span>
         </div>
@@ -84,7 +85,7 @@
             <div class="space-y-5">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Tactile Buttons & Actions</span>
-                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600">Spring Physics</span>
+                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600">Eased Motion</span>
               </div>
 
               <!-- Buttons Row -->
@@ -137,17 +138,17 @@
               <SolaChart
                 type="area"
                 color="emerald"
-                title="1,000Hz Ingestion Mesh"
-                subtitle="O(1) direct text-node DOM mutation with zero garbage collection"
+                title="Live Ingestion Mesh"
+                subtitle="Each signal writes to the one text node it owns, with no diff pass in between"
                 height={170}
               />
               <div class="grid grid-cols-2 gap-3 text-xs font-mono">
                 <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/80 dark:border-white/10">
-                  <span class="text-slate-400 text-[10px] block">Frame Time</span>
+                  <span class="text-slate-400 text-xs block">Frame Time</span>
                   <span class="text-base font-extrabold text-blue-600 dark:text-blue-400">0.32ms</span>
                 </div>
                 <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/80 dark:border-white/10">
-                  <span class="text-slate-400 text-[10px] block">VDOM Diffing Overhead</span>
+                  <span class="text-slate-400 text-xs block">VDOM Diffing Overhead</span>
                   <span class="text-base font-extrabold text-slate-900 dark:text-white">0.00ms</span>
                 </div>
               </div>
@@ -159,19 +160,19 @@
               <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Core Design System Tokens</div>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="p-3 bg-slate-950 text-white rounded-2xl border border-slate-800 space-y-1">
-                  <span class="text-[10px] font-mono text-slate-400 block">Obsidian Dark</span>
+                  <span class="text-xs font-mono text-slate-400 block">Obsidian Dark</span>
                   <span class="text-xs font-bold font-mono text-blue-400">#090D19</span>
                 </div>
                 <div class="p-3 bg-slate-50 text-slate-900 rounded-2xl border border-slate-200 space-y-1">
-                  <span class="text-[10px] font-mono text-slate-500 block">Clean Ivory</span>
+                  <span class="text-xs font-mono text-slate-500 block">Clean Ivory</span>
                   <span class="text-xs font-bold font-mono text-slate-900">#FAFAFA</span>
                 </div>
                 <div class="p-3 bg-blue-500 text-slate-950 rounded-2xl space-y-1">
-                  <span class="text-[10px] font-mono text-slate-950/70 block">Primary Blue</span>
+                  <span class="text-xs font-mono text-slate-950/70 block">Primary Blue</span>
                   <span class="text-xs font-bold font-mono text-slate-950">#3B82F6</span>
                 </div>
                 <div class="p-3 bg-sky-500 text-slate-950 rounded-2xl space-y-1">
-                  <span class="text-[10px] font-mono text-slate-950/70 block">Signal Sky</span>
+                  <span class="text-xs font-mono text-slate-950/70 block">Signal Sky</span>
                   <span class="text-xs font-bold font-mono text-slate-950">#0EA5E9</span>
                 </div>
               </div>
@@ -187,45 +188,45 @@
           <div>
             <!-- Framework Selector Header -->
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Multi-Target Output</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Multi-Target Output</span>
               <div class="flex items-center gap-1">
                 <button
                   onclick={() => (selectedFramework = 'sola')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   .sola
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'react')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   React 19
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'svelte')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   Svelte 5
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'html')}
-                  class="px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
                   HTML
                 </button>
               </div>
             </div>
 
             <!-- Code Snippet -->
-            <div class="overflow-x-auto text-[11px] leading-relaxed text-slate-300">
+            <div class="overflow-x-auto text-xs leading-relaxed text-slate-300">
               <pre><code>{frameworkSnippets[selectedFramework]}</code></pre>
             </div>
           </div>
 
           <!-- Bottom Actions -->
           <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 mt-6">
-            <span class="text-[10px] text-slate-400">Zero runtime overhead</span>
+            <span class="text-xs text-slate-400">Zero runtime overhead</span>
             <div class="flex items-center gap-2 w-full sm:w-auto">
               <a
                 href="/components"
                 class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs transition-all shadow-xs">
-                <span>View All 28 Components</span>
+                <span>View all {CATALOG_COUNT} components</span>
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
             </div>

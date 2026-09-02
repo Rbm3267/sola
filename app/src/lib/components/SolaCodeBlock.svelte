@@ -98,7 +98,7 @@
         </span>
       {/if}
       {#if language}
-        <span class="px-2 py-0.5 text-[10px] font-mono font-medium rounded-md uppercase tracking-wider bg-slate-200/80 dark:bg-white/10 text-slate-600 dark:text-slate-400">
+        <span class="px-2 py-0.5 text-xs font-mono font-medium rounded-md uppercase tracking-wider bg-slate-200/80 dark:bg-white/10 text-slate-600 dark:text-slate-400">
           {language}
         </span>
       {/if}

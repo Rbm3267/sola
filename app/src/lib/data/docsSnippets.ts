@@ -1,0 +1,181 @@
+// Single source of truth for the executable code samples shown in the docs.
+//
+// These are imported by both the docs page and e2e/docs-snippets.spec.ts, which
+// compiles every `.sola` snippet here and mounts it in a real browser, and runs
+// every `js` snippet against the real core runtime. Keeping one copy is what
+// makes that test meaningful: a sample cannot be published without passing.
+
+const OPEN = '<' + 'script>';
+const CLOSE = '<' + '/script>';
+const STYLE_OPEN = '<' + 'style>';
+const STYLE_CLOSE = '<' + '/style>';
+
+/** A `.sola` component sample, compiled and mounted by the docs snippet test. */
+export interface SolaSnippet {
+  id: string;
+  code: string;
+  /** Text the mounted component must render. */
+  expectText: string[];
+  /** Optional: click this selector once, then assert `expectAfterClick`. */
+  click?: string;
+  expectAfterClick?: string[];
+  /** Props passed to the compiled mount function. */
+  props?: Record<string, unknown>;
+}
+
+/** A runtime-API sample, executed against @sola-air-ui/core by the same test. */
+export interface JsSnippet {
+  id: string;
+  code: string;
+  /** Console output the sample's own comments claim it produces. */
+  expectLogs: string[];
+}
+
+export const syntaxExample = `${OPEN}
+  export let title = "Cluster Dashboard";
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+
+  function increment() {
+    count++;
+  }
+${CLOSE}
+
+<div class="card">
+  <h3>{title}</h3>
+  <div class="value">{doubled}</div>
+  <button onclick={increment}>Increment Metric</button>
+</div>
+
+${STYLE_OPEN}
+  .card {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: #090d19;
+    color: #fff;
+  }
+  .value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #10b981;
+  }
+${STYLE_CLOSE}`;
+
+export const eachExample = `${OPEN}
+  let nodes = $state([
+    { id: 'eu-west-1', rps: 420 },
+    { id: 'us-east-2', rps: 1180 }
+  ]);
+${CLOSE}
+
+<ul class="nodes">
+  {#each nodes as node (node.id)}
+    <li>{node.id} — {node.rps} RPS</li>
+  {/each}
+</ul>`;
+
+export const conditionalExample = `${OPEN}
+  let healthy = $state(true);
+${CLOSE}
+
+<div class="status">
+  {#if healthy}
+    <span>All systems nominal</span>
+  {:else}
+    <span>Degraded</span>
+  {/if}
+  <button onclick={() => healthy = !healthy}>Toggle</button>
+</div>`;
+
+export const signalExample = `import { createSignal } from '@sola-air-ui/core';
+
+// Create a reactive state tuple
+const [getCount, setCount] = createSignal(0);
+
+console.log(getCount()); // 0
+setCount(prev => prev + 1);
+console.log(getCount()); // 1`;
+
+export const derivedExample = `import { createSignal, createDerived } from '@sola-air-ui/core';
+
+const [getRps, setRps] = createSignal(1200);
+// Automatically recomputes when getRps updates
+const getThroughput = createDerived(() => \`\${getRps() * 60} req/min\`);
+
+console.log(getThroughput()); // "72000 req/min"`;
+
+export const effectExample = `import { createSignal, createEffect } from '@sola-air-ui/core';
+
+const [getLatency, setLatency] = createSignal(12);
+
+// Auto-subscribes to getLatency()
+createEffect(() => {
+  if (getLatency() > 100) {
+    console.warn("High latency threshold breach!");
+  }
+});`;
+
+export const mountExample = `import MyComponent from './MyComponent.sola';
+
+// Mount directly into vanilla DOM container
+const unmount = MyComponent(document.getElementById('root'), {
+  title: "Production Ingress Cluster"
+});
+
+// Clean up listeners when done
+unmount();`;
+
+export const intentMacroExample = `${OPEN}
+  // Resolves an ambient component through the configured intent provider
+  let liveWidget = $intent("Generate cluster latency gauge with 50ms SLA threshold");
+${CLOSE}
+
+<div class="widget-host">
+  {#if liveWidget.loading}
+    <span>Resolving…</span>
+  {:else}
+    <div>{liveWidget}</div>
+  {/if}
+</div>`;
+
+export const dataMacroExample = `${OPEN}
+  // Live connection through the Sola Relay, refreshed on an interval
+  let mrr = $data("sheet://finance/q3_metrics?field=mrr", { refresh: "30s" });
+${CLOSE}
+
+<div class="metric-tile">
+  <span>Monthly Revenue</span>
+  <h2>{mrr.data}</h2>
+</div>`;
+
+/** Every `.sola` snippet the docs publish, with what it must render. */
+export const solaSnippets: SolaSnippet[] = [
+  {
+    id: 'syntax',
+    code: syntaxExample,
+    props: { title: 'Cluster Dashboard' },
+    expectText: ['Cluster Dashboard', '0', 'Increment Metric'],
+    click: 'button',
+    // count 1 → doubled 2
+    expectAfterClick: ['2']
+  },
+  {
+    id: 'each',
+    code: eachExample,
+    expectText: ['eu-west-1', '420 RPS', 'us-east-2', '1180 RPS']
+  },
+  {
+    id: 'conditional',
+    code: conditionalExample,
+    expectText: ['All systems nominal'],
+    click: 'button',
+    expectAfterClick: ['Degraded']
+  }
+];
+
+/** Every runtime-API snippet, with the output its own comments promise. */
+export const jsSnippets: JsSnippet[] = [
+  { id: 'signal', code: signalExample, expectLogs: ['0', '1'] },
+  { id: 'derived', code: derivedExample, expectLogs: ['72000 req/min'] },
+  { id: 'effect', code: effectExample, expectLogs: [] }
+];

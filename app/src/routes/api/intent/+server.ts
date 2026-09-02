@@ -70,7 +70,7 @@ export async function POST({ request, getClientAddress }) {
 
     if (!apiKey) {
       return json({ 
-        reply: "Sola Arc is running in sovereign offline mode. Sola components compile directly into native reactive DOM nodes via @sola/compiler with zero-VDOM signals. For live AI generation, configure GEMINI_API_KEY in your environment." 
+        reply: "Sola Arc is running in sovereign offline mode. Sola components compile directly into native reactive DOM nodes via @sola-air-ui/compiler with zero-VDOM signals. For live AI generation, configure GEMINI_API_KEY in your environment." 
       });
     }
 
@@ -85,7 +85,7 @@ export async function POST({ request, getClientAddress }) {
         return json({ error: 'Invalid query. Query must be between 1 and 2000 characters.' }, { status: 400 });
       }
 
-      const architectSystemPrompt = `You are **Sola Arc**, the autonomous Principal UI & Systems Solutions Architect for the Sola Reactive Runtime ecosystem (@sola/core, @sola/ui, @sola/compiler, @sola/relay).
+      const architectSystemPrompt = `You are **Sola Arc**, the autonomous Principal UI & Systems Solutions Architect for the Sola Reactive Runtime ecosystem (@sola-air-ui/core, @sola-air-ui/ui, @sola-air-ui/compiler, @sola/relay).
 
 Your Mission:
 1. Explain how Sola embeds and modernizes existing web applications (React 19, Next.js App Router, Svelte 5, Vue 3, Angular, or legacy enterprise platforms and custom monoliths).

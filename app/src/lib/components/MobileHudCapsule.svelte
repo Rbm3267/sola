@@ -93,7 +93,7 @@
 
         <!-- Latency Micro-Badge -->
         <div class="flex items-center gap-2">
-          <span class="text-[10px] font-mono bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30 font-bold">
+          <span class="text-xs font-mono bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30 font-bold">
             0.2ms Signal Bus
           </span>
           <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
@@ -131,7 +131,7 @@
               {intents.find(i => i.id === selectedIntentKey)?.label}
             </span>
           </div>
-          <p class="text-[11px] text-slate-400 mt-0.5">
+          <p class="text-xs text-slate-400 mt-0.5">
             {intents.find(i => i.id === selectedIntentKey)?.desc}
           </p>
         </div>
@@ -220,7 +220,7 @@
         </div>
 
         <!-- Explainer -->
-        <p class="text-[11px] text-slate-400 leading-relaxed">
+        <p class="text-xs text-slate-400 leading-relaxed">
           1-thumb mobile triggers to generate and preview zero-VDOM components on your screen:
         </p>
 
@@ -233,7 +233,7 @@
               class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-850 text-left transition-all cursor-pointer group flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-blue-400 font-bold border border-slate-700">
+                  <span class="text-xs font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-blue-400 font-bold border border-slate-700">
                     {intent.badge}
                   </span>
                 </div>
@@ -241,7 +241,7 @@
                   {intent.label}
                 </span>
               </div>
-              <span class="text-[10px] font-mono text-slate-400 flex items-center gap-1 mt-2">
+              <span class="text-xs font-mono text-slate-400 flex items-center gap-1 mt-2">
                 <span>Preview</span>
                 <svg class="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </span>

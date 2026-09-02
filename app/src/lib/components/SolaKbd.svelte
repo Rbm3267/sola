@@ -8,7 +8,7 @@
   }>();
 
   const sizeClasses = {
-    sm: 'px-1.5 py-0.5 text-[10px] min-w-[18px]',
+    sm: 'px-1.5 py-0.5 text-xs min-w-[18px]',
     md: 'px-2 py-1 text-xs min-w-[22px]',
     lg: 'px-2.5 py-1.5 text-sm min-w-[28px]'
   };

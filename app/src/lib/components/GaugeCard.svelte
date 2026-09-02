@@ -40,7 +40,7 @@
       <span class="w-2 h-2 rounded-full {activeColor.bg} animate-pulse"></span>
       <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-mono">{config.title}</span>
     </div>
-    <span class="text-[10px] font-mono font-bold bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-md">
+    <span class="text-xs font-mono font-bold bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-md">
       Live Gauge
     </span>
   </div>
@@ -85,7 +85,7 @@
   </div>
 
   <!-- Bottom Telemetry Bar -->
-  <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-400 relative z-10">
+  <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-400 relative z-10">
     <span class="flex items-center gap-1.5">
       <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
       <span>Telemetry Synchronized</span>

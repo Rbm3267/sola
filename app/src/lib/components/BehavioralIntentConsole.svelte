@@ -101,15 +101,15 @@
     <!-- Live Telemetry Readout Chips -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto relative z-10 font-mono text-xs">
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
-        <span class="text-[10px] text-slate-400 font-bold uppercase">Typing Cadence</span>
+        <span class="text-xs text-slate-400 font-bold uppercase">Typing Cadence</span>
         <span class="text-amber-600 dark:text-amber-400 font-black">{metrics.typingVelocityCps} chars/sec</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
-        <span class="text-[10px] text-slate-400 font-bold uppercase">Hover Dwell</span>
+        <span class="text-xs text-slate-400 font-bold uppercase">Hover Dwell</span>
         <span class="text-sky-600 dark:text-sky-400 font-black">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5 col-span-2 sm:col-span-1">
-        <span class="text-[10px] text-slate-400 font-bold uppercase">Rage Click Vector</span>
+        <span class="text-xs text-slate-400 font-bold uppercase">Rage Click Vector</span>
         <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 dark:text-rose-400 font-black animate-pulse' : 'text-slate-700 dark:text-slate-300 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
       </div>
     </div>
@@ -143,7 +143,7 @@
     <div 
       transition:fly={{ y: -8, duration: 200 }}
       class="p-4 rounded-2xl bg-blue-950/80 border border-blue-800/80 text-blue-300 font-mono text-xs flex flex-col gap-1 shadow-sm">
-      <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400">Playbook Execution Audit Log:</span>
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Playbook Execution Audit Log:</span>
       {#each actionLog as log}
         <div>{log}</div>
       {/each}
@@ -165,7 +165,7 @@
         ontouchend={() => handleTouchEnd('incident')}
         class="relative group cursor-pointer transition-all">
         
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
           <span>Enterprise Incident (Hold to inspect)</span>
         </div>
@@ -203,7 +203,7 @@
         ontouchend={() => handleNodeClick('degraded-node')}
         class="relative group cursor-pointer transition-all">
         
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
           <span>AWS Worker (Tap 3x rapidly)</span>
         </div>
@@ -238,7 +238,7 @@
         ontouchend={() => handleTouchEnd('finops')}
         class="relative group cursor-pointer transition-all">
         
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-[9px] font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
           <span>FinOps Revenue (Hold to inspect)</span>
         </div>

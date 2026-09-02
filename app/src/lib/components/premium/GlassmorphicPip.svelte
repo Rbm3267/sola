@@ -68,7 +68,7 @@
     "
   >
     <div class="flex justify-between items-center">
-      <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Telemetry PIP</span>
+      <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Telemetry PIP</span>
       <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
     </div>
     <div class="text-xs font-mono text-slate-600 dark:text-slate-400">

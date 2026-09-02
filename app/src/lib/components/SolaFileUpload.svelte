@@ -102,7 +102,7 @@
             </div>
             <div class="min-w-0">
               <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{file.name}</p>
-              <p class="text-[10px] text-slate-400 font-mono">{file.size}</p>
+              <p class="text-xs text-slate-400 font-mono">{file.size}</p>
             </div>
           </div>
 

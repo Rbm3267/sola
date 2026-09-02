@@ -79,15 +79,15 @@
   <!-- Metadata Sub-bar -->
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5 text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-50/80 dark:bg-white/[0.04] p-3 rounded-2xl border border-slate-100 dark:border-white/[0.04]">
     <div>
-      <span class="text-[10px] text-slate-400 block uppercase">Requester</span>
+      <span class="text-xs text-slate-400 block uppercase">Requester</span>
       <span class="font-bold text-slate-800 dark:text-slate-200">{config.requester || 'Platform SRE Team'}</span>
     </div>
     <div>
-      <span class="text-[10px] text-slate-400 block uppercase">Release Window</span>
+      <span class="text-xs text-slate-400 block uppercase">Release Window</span>
       <span class="font-bold text-slate-800 dark:text-slate-200">{config.window || 'Tonight 02:00 UTC'}</span>
     </div>
     <div class="col-span-2 sm:col-span-1">
-      <span class="text-[10px] text-slate-400 block uppercase">CAB Status</span>
+      <span class="text-xs text-slate-400 block uppercase">CAB Status</span>
       <span class="font-bold {approvalState === 'approved' ? 'text-blue-600 dark:text-blue-400' : approvalState === 'rejected' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'}">
         {approvalState === 'approved' ? 'Approved for Release' : approvalState === 'rejected' ? 'Changes Rejected' : 'Pending 1 Signoff'}
       </span>
@@ -96,7 +96,7 @@
 
   <!-- Syntax Diff Canvas -->
   <div class="bg-slate-950 dark:bg-white text-white rounded-2xl p-4 font-mono text-xs overflow-x-auto mb-6 border border-slate-800">
-    <div class="text-[11px] text-slate-400 pb-2 mb-3 border-b border-slate-800 flex items-center justify-between">
+    <div class="text-xs text-slate-400 pb-2 mb-3 border-b border-slate-800 flex items-center justify-between">
       <span>config/production/cluster.hcl</span>
       <span class="text-amber-400 font-bold">+2 / -2 Lines Changed</span>
     </div>
@@ -112,7 +112,7 @@
 
   <!-- Interactive Action Bar -->
   <div class="flex items-center justify-between gap-3 pt-2">
-    <span class="text-[11px] font-mono text-slate-400">
+    <span class="text-xs font-mono text-slate-400">
       Zero-VDOM Two-Way Intent Mutator
     </span>
 

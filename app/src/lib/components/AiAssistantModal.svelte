@@ -9,7 +9,7 @@
   let messages = $state<Array<{ role: 'user' | 'assistant'; text: string; timestamp?: string }>>([
     {
       role: 'assistant',
-      text: "I am **Sola AIR**, your ambient intent intelligence.\n\nAsk me how to embed Sola into your stack (**React 19, Next.js, Svelte 5, Vue 3, or Web Components**), wire live data signals (**Postgres, Stripe, WebSockets**), or ship zero-VDOM UIs with sub-millisecond patch speeds.",
+      text: "I am **Sola AIR**, your ambient intent intelligence.\n\nAsk me how to embed Sola into your stack (**React 19, Next.js, Svelte 5, Vue 3, or Web Components**), wire live data signals (**Postgres, Stripe, WebSockets**), or ship zero-VDOM UIs with direct patch speeds.",
       timestamp: 'Just now'
     }
   ]);
@@ -23,7 +23,7 @@
     "Zero-VDOM vs React State",
     "Show a .sola component",
     "Connect a WebSocket signal",
-    "How does 1,000Hz tick work?",
+    "How does signal tracking work?",
     "Sola in an existing codebase"
   ];
 
@@ -38,7 +38,7 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>');
-    html = html.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-slate-200/70 dark:bg-white/10 font-mono text-[11px] text-blue-700 dark:text-blue-300">$1</code>');
+    html = html.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-slate-200/70 dark:bg-white/10 font-mono text-xs text-blue-700 dark:text-blue-300">$1</code>');
     html = html.replace(/\n\n/g, '<br/><br/>').replace(/\n/g, '<br/>');
     return html;
   }
@@ -71,7 +71,7 @@
     } catch {
       messages = [...messages, {
         role: 'assistant',
-        text: "Sola primitives compile directly into native DOM nodes via `@sola/compiler`. Use `createSignal()` for local state and import from `@sola/ui` for zero-VDOM mounting inside any host framework.",
+        text: "Sola primitives compile directly into native DOM nodes via `@sola-air-ui/compiler`. Use `createSignal()` for local state and import from `@sola-air-ui/ui` for zero-VDOM mounting inside any host framework.",
         timestamp: formatTimestamp()
       }];
     } finally {
@@ -148,19 +148,19 @@
               <h2 id="arc-title" class="text-sm font-black text-slate-900 dark:text-white tracking-tight">
                 Sola <span class="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">AIR</span>
               </h2>
-              <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-300 font-mono text-[9px] font-bold tracking-wide">
+              <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-300 font-mono text-xs font-bold tracking-wide">
                 Intent Intelligence
               </span>
             </div>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-              <p class="text-[10px] text-slate-400 font-mono">Active · Ambient Intent Runtime</p>
+              <p class="text-xs text-slate-400 font-mono">Active · Ambient Intent Runtime</p>
             </div>
           </div>
         </div>
 
         <div class="flex items-center gap-1.5">
-          <kbd class="hidden sm:inline-block px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[10px] font-mono text-slate-400">ESC</kbd>
+          <kbd class="hidden sm:inline-block px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-mono text-slate-400">ESC</kbd>
           <button
             type="button"
             onclick={() => (isOpen = false)}
@@ -178,7 +178,7 @@
 
         {#each messages as msg, idx}
           <div class="flex flex-col gap-1 {msg.role === 'user' ? 'items-end' : 'items-start'}">
-            <span class="text-[9px] font-mono font-bold uppercase text-slate-400 px-1">
+            <span class="text-xs font-mono font-bold uppercase text-slate-400 px-1">
               {msg.role === 'user' ? 'You' : 'Sola AIR'}
               {#if msg.timestamp}<span class="font-normal text-slate-300 dark:text-slate-600 ml-1">· {msg.timestamp}</span>{/if}
             </span>
@@ -192,7 +192,7 @@
             {#if msg.role === 'assistant'}
               <button
                 onclick={() => copyMessage(idx, msg.text)}
-                class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-mono text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer ml-1">
+                class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-xs font-mono text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer ml-1">
                 {#if copiedIndex === idx}
                   <svg class="w-3 h-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                   <span class="text-blue-500 font-bold">Copied</span>
@@ -215,13 +215,13 @@
 
       <!-- Quick Prompts — wrapped, never overflows -->
       <div class="px-4 pt-3 pb-2 border-t border-slate-100 dark:border-white/[0.06] bg-white dark:bg-[#0b0f1e] shrink-0">
-        <p class="text-[9px] font-mono font-bold uppercase text-slate-400 mb-2">Suggestions</p>
+        <p class="text-xs font-mono font-bold uppercase text-slate-400 mb-2">Suggestions</p>
         <div class="flex flex-wrap gap-1.5">
           {#each quickPrompts as qp}
             <button
               type="button"
               onclick={() => pickPrompt(qp)}
-              class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 dark:bg-white/5 dark:hover:bg-blue-500/10 border border-slate-200/80 dark:border-white/[0.08] hover:border-blue-300 dark:hover:border-blue-500/30 text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-[11px] whitespace-nowrap transition-all cursor-pointer">
+              class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 dark:bg-white/5 dark:hover:bg-blue-500/10 border border-slate-200/80 dark:border-white/[0.08] hover:border-blue-300 dark:hover:border-blue-500/30 text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-xs whitespace-nowrap transition-all cursor-pointer">
               {qp}
             </button>
           {/each}

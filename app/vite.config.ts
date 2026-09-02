@@ -3,17 +3,35 @@ import { defineConfig } from 'vite';
 import UnoCSS from 'unocss/vite';
 import { readFileSync } from 'fs';
 import path from 'path';
-import { compile } from '../packages/compiler/src/index.js';
+import solaPlugin from '../packages/vite-plugin-sola/src/index.js';
 
-const solaVersion = JSON.parse(
-	readFileSync(path.resolve(__dirname, '../packages/sola-air/package.json'), 'utf-8')
-).version;
+// Every version shown anywhere on the site comes from a package manifest, so
+// the site cannot advertise a version that was never released.
+function manifestVersion(pkgDir: string) {
+	return JSON.parse(
+		readFileSync(path.resolve(__dirname, `../packages/${pkgDir}/package.json`), 'utf-8')
+	).version as string;
+}
 
-function sola() {
+const solaVersion = manifestVersion('sola-air');
+const coreVersion = manifestVersion('core');
+const compilerVersion = manifestVersion('compiler');
+const uiVersion = manifestVersion('ui');
+
+// The names @sola-air-ui/ui actually exports, read from its entry point. The
+// site uses this to tell a published primitive apart from a preview built only
+// for this site, instead of asserting a component count by hand.
+const uiExports = [
+	...readFileSync(path.resolve(__dirname, '../packages/ui/src/index.js'), 'utf-8')
+		.matchAll(/export\s*\{\s*default as (\w+)/g)
+].map((m) => m[1]);
+
+// Banner only — compilation itself is the published plugin, so the site and a
+// scaffolded project run the same code path.
+function solaBanner() {
 	return {
-		name: 'vite-plugin-sola',
-		enforce: 'pre' as const,
-		configureServer(server) {
+		name: 'sola-dev-banner',
+		configureServer() {
 			const c1 = '\x1b[38;2;56;189;248m'; // sky-400
 			const c2 = '\x1b[38;2;59;130;246m'; // blue-500
 			const c3 = '\x1b[38;2;139;92;246m'; // violet-500
@@ -29,19 +47,17 @@ function sola() {
 				console.log(`            ${d}Compiler ready in ${Math.round(performance.now())}ms${r}`);
 				console.log('');
 			}, 100);
-		},
-		load(id: string) {
-			if (!id.endsWith('.sola')) return null;
-			const source = readFileSync(id, 'utf-8');
-			const compiled = compile(source, id);
-			return { code: compiled.code || compiled, map: null };
 		}
 	};
 }
 
 export default defineConfig({
 	define: {
-		__SOLA_VERSION__: JSON.stringify(solaVersion)
+		__SOLA_VERSION__: JSON.stringify(solaVersion),
+		__SOLA_CORE_VERSION__: JSON.stringify(coreVersion),
+		__SOLA_COMPILER_VERSION__: JSON.stringify(compilerVersion),
+		__SOLA_UI_VERSION__: JSON.stringify(uiVersion),
+		__SOLA_UI_EXPORTS__: JSON.stringify(uiExports)
 	},
 	resolve: {
 		alias: {
@@ -54,7 +70,8 @@ export default defineConfig({
 		}
 	},
 	plugins: [
-		sola(),
+		solaPlugin(),
+		solaBanner(),
 		UnoCSS(),
 		sveltekit()
 	]

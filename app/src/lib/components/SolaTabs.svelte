@@ -36,7 +36,7 @@
       >
         {tab.label}
         {#if tab.badge}
-          <span class="ml-1.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-400">
+          <span class="ml-1.5 px-1.5 py-0.5 text-xs font-bold rounded-full bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-400">
             {tab.badge}
           </span>
         {/if}
@@ -58,7 +58,7 @@
       >
         {tab.label}
         {#if tab.badge}
-          <span class="ml-1.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full
+          <span class="ml-1.5 px-1.5 py-0.5 text-xs font-bold rounded-full
             {current === tab.id ? 'bg-white/20' : 'bg-slate-200 dark:bg-white/10'} text-current">
             {tab.badge}
           </span>
@@ -82,7 +82,7 @@
         <span class="flex items-center gap-1.5">
           {tab.label}
           {#if tab.badge}
-            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400">
+            <span class="px-1.5 py-0.5 text-xs font-bold rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400">
               {tab.badge}
             </span>
           {/if}

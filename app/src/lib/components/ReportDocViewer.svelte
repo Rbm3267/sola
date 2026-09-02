@@ -141,7 +141,7 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-white/[0.04]">
     <div class="flex flex-col gap-1.5">
       <div class="flex items-center gap-2">
-        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20">
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20">
           {config.classification || 'Internal Technical Brief'}
         </span>
         <span class="text-xs font-mono text-slate-400">
@@ -196,7 +196,7 @@
         {#if s.alertType === 'note'}
           <div class="p-3.5 rounded-2xl bg-sky-50 dark:bg-sky-500/10/80 border border-sky-200 dark:border-sky-500/20/80 text-sky-900 text-xs font-mono flex items-start gap-2.5">
             <svg class="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span class="leading-relaxed"><strong>System Note:</strong> Direct-DOM rendering preserves sub-millisecond document repaint speed without layout shifts.</span>
+            <span class="leading-relaxed"><strong>System Note:</strong> Direct-DOM rendering preserves document repaint speed without layout shifts.</span>
           </div>
         {:else if s.alertType === 'tip'}
           <div class="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-500/10/80 border border-blue-200 dark:border-blue-500/20/80 text-blue-900 text-xs font-mono flex items-start gap-2.5">
@@ -209,7 +209,7 @@
         {#if s.table}
           <div class="overflow-x-auto rounded-2xl border border-slate-200/90 dark:border-white/[0.04] shadow-2xs mt-1">
             <table class="w-full text-left text-xs font-mono">
-              <thead class="bg-slate-50 dark:bg-white/[0.04] border-b border-slate-200 dark:border-white/[0.04] text-slate-700 dark:text-slate-300 uppercase font-bold text-[10px]">
+              <thead class="bg-slate-50 dark:bg-white/[0.04] border-b border-slate-200 dark:border-white/[0.04] text-slate-700 dark:text-slate-300 uppercase font-bold text-xs">
                 <tr>
                   {#each s.table.headers as th}
                     <th class="px-3.5 py-2.5">{th}</th>
@@ -232,7 +232,7 @@
         <!-- Code Block if present -->
         {#if s.codeBlock}
           <div class="relative group mt-1">
-            <div class="absolute top-2.5 right-3 text-[10px] font-mono text-slate-400 uppercase">
+            <div class="absolute top-2.5 right-3 text-xs font-mono text-slate-400 uppercase">
               {s.codeBlock.language}
             </div>
             <pre class="p-4 rounded-2xl bg-slate-950 dark:bg-white text-sky-300 font-mono text-xs overflow-x-auto border border-slate-800 leading-relaxed"><code>{s.codeBlock.code}</code></pre>

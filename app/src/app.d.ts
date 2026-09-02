@@ -11,6 +11,10 @@ declare global {
 }
 
 declare const __SOLA_VERSION__: string;
+declare const __SOLA_CORE_VERSION__: string;
+declare const __SOLA_COMPILER_VERSION__: string;
+declare const __SOLA_UI_VERSION__: string;
+declare const __SOLA_UI_EXPORTS__: string[];
 
 declare module '*.sola' {
 	const mount: (target: HTMLElement, props?: Record<string, any>) => (() => void) | void;

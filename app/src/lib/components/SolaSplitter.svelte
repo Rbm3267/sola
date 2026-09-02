@@ -58,7 +58,7 @@
     <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
       Real-time signal ingestion pipeline. Drag the divider handle to resize panes fluidly.
     </p>
-    <div class="mt-4 p-3 bg-slate-50 dark:bg-white/5 rounded-xl font-mono text-[11px] text-slate-700 dark:text-slate-300">
+    <div class="mt-4 p-3 bg-slate-50 dark:bg-white/5 rounded-xl font-mono text-xs text-slate-700 dark:text-slate-300">
       width: {Math.round(splitPercent)}%
     </div>
   </div>
@@ -84,7 +84,7 @@
     <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
       Active node graph inspection & compiler output stream.
     </p>
-    <div class="mt-4 p-3 bg-slate-50 dark:bg-white/5 rounded-xl font-mono text-[11px] text-slate-700 dark:text-slate-300">
+    <div class="mt-4 p-3 bg-slate-50 dark:bg-white/5 rounded-xl font-mono text-xs text-slate-700 dark:text-slate-300">
       width: {Math.round(100 - splitPercent)}%
     </div>
   </div>

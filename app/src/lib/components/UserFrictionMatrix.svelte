@@ -145,7 +145,7 @@
         </p>
       </div>
 
-      <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+      <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
         Live Interactive Testbed
       </span>
     </div>
@@ -162,7 +162,7 @@
           <span class="text-xs font-bold text-white group-hover:text-blue-400 font-mono">1. User Action Tap</span>
           <span class="w-2 h-2 rounded-full bg-blue-400"></span>
         </div>
-        <p class="text-[11px] text-slate-400">
+        <p class="text-xs text-slate-400">
           Click 1x for normal flow. Click 3x rapidly to simulate a <strong>Rage-Click Burst</strong>.
         </p>
       </button>
@@ -176,7 +176,7 @@
           <span class="text-xs font-bold text-white group-hover:text-amber-400 font-mono">2. Simulate 504 Timeout</span>
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
         </div>
-        <p class="text-[11px] text-slate-400">
+        <p class="text-xs text-slate-400">
           Simulates a dead upstream API endpoint to test graceful cache fallback.
         </p>
       </button>
@@ -190,7 +190,7 @@
           <span class="text-xs font-bold text-white group-hover:text-sky-400 font-mono">3. Restore Nominal State</span>
           <span class="w-2 h-2 rounded-full bg-sky-400"></span>
         </div>
-        <p class="text-[11px] text-slate-400">
+        <p class="text-xs text-slate-400">
           Clears circuit-breaker alerts and restores Flow Index to 99.8%.
         </p>
       </button>
@@ -211,8 +211,8 @@
           <div class="text-xs font-bold text-white font-mono">
             {isCircuitBreakerActive ? 'Self-Healing Circuit Breaker Engaged' : 'Component Surface Operating Nominally'}
           </div>
-          <div class="text-[11px] text-slate-400 font-mono mt-0.5">
-            {isCircuitBreakerActive ? 'Serving cached signal snapshot with isolated event boundary' : 'Sub-millisecond event propagation • 0% drop rate'}
+          <div class="text-xs text-slate-400 font-mono mt-0.5">
+            {isCircuitBreakerActive ? 'Serving cached signal snapshot with isolated event boundary' : 'Direct event propagation • 0% drop rate'}
           </div>
         </div>
       </div>
@@ -233,7 +233,7 @@
       <span class="text-xs font-bold font-mono text-slate-300 uppercase tracking-wider">
         Live Telemetry &amp; Intent Dispatch Feed
       </span>
-      <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
+      <span class="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
         Streaming (&lt; 0.05ms)
       </span>
     </div>
@@ -242,12 +242,12 @@
       {#each events as ev (ev.id)}
         <div transition:slide={{ duration: 150 }} class="p-3 rounded-xl bg-slate-950 dark:bg-white border border-slate-850 flex items-center justify-between text-xs font-mono">
           <div class="flex items-center gap-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {ev.status === 'nominal' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : (ev.status === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20')}">
+            <span class="px-2 py-0.5 rounded text-xs font-bold uppercase {ev.status === 'nominal' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : (ev.status === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20')}">
               {ev.type}
             </span>
             <span class="text-slate-300">{ev.message}</span>
           </div>
-          <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-[11px] shrink-0">
+          <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-xs shrink-0">
             <span>{ev.target}</span>
             <span class="text-slate-400 font-bold">{ev.latency}</span>
             <span>{ev.timestamp}</span>

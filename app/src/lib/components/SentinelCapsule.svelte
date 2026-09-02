@@ -38,11 +38,11 @@
           <span class="text-xs font-mono font-bold tracking-tight text-slate-200">
             {isCircuitBreakerActive ? 'Sentinel Friction Triggered' : 'Sola Intent Sentinel'}
           </span>
-          <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/15 text-blue-400 border border-blue-500/30'}">
+          <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/15 text-blue-400 border border-blue-500/30'}">
             {flowIndex}% Flow Index
           </span>
         </div>
-        <div class="text-[11px] text-slate-400 font-mono flex items-center gap-2 mt-0.5">
+        <div class="text-xs text-slate-400 font-mono flex items-center gap-2 mt-0.5">
           <span>Telemetry Bus: Active</span>
           <span>•</span>
           <span>{frictionCount} Friction Events</span>
@@ -56,7 +56,7 @@
         <button 
           type="button"
           onclick={onReset}
-          class="px-2.5 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono text-[11px] font-bold transition-all cursor-pointer">
+          class="px-2.5 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono text-xs font-bold transition-all cursor-pointer">
           Reset Bus
         </button>
       {/if}
@@ -76,15 +76,15 @@
     <div transition:slide={{ duration: 180 }} class="mt-3.5 pt-3 border-t border-slate-800/80 flex flex-col gap-2.5">
       <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono">
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Paint Overhead</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 uppercase">Paint Overhead</div>
           <div class="font-bold text-blue-400 mt-0.5">&lt; 0.02ms</div>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Rage Clicks</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 uppercase">Rage Clicks</div>
           <div class="font-bold {frictionCount > 0 ? 'text-amber-400' : 'text-slate-300'} mt-0.5">{frictionCount} Detected</div>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Self-Heal Mode</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 uppercase">Self-Heal Mode</div>
           <div class="font-bold text-sky-400 mt-0.5">Cache &amp; Queue</div>
         </div>
       </div>
@@ -94,7 +94,7 @@
           <svg class="w-4 h-4 text-amber-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           <div class="flex-1">
             <span class="font-bold text-amber-300 block">[{activeAlert.type}]</span>
-            <span class="text-[11px] leading-relaxed text-amber-200/90">{activeAlert.message}</span>
+            <span class="text-xs leading-relaxed text-amber-200/90">{activeAlert.message}</span>
           </div>
         </div>
       {/if}
