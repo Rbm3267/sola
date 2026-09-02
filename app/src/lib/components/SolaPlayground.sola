@@ -32,9 +32,9 @@
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="metric-label">Reactive Signals</div>
-        <div class="metric-val">{count()}</div>
+        <div class="metric-val">{count}</div>
         <div class="metric-footer">
-          <button on:click={() => count.set(count() + 1)} class="pill-btn">+ Increment Signal</button>
+          <button on:click={() => count++} class="pill-btn">+ Increment Signal</button>
         </div>
       </div>
 

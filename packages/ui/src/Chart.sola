@@ -37,19 +37,19 @@
   .sola-chart-title {
     font-size: 11px;
     font-weight: 700;
-    color: #64748b;
+    color: var(--sola-color-neutral-500, #64748b);
     font-family: monospace;
   }
   .sola-chart-val {
     font-size: 22px;
     font-weight: 800;
-    color: #fff;
+    color: var(--sola-color-neutral-0, #fff);
     font-family: monospace;
     margin-top: 4px;
   }
   .sola-delta-badge {
     background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
+    color: var(--sola-color-primary-500, #10b981);
     font-size: 10px;
     font-weight: 700;
     padding: 2px 6px;
@@ -69,6 +69,6 @@
     transition: all 0.2s ease;
   }
   .sola-bar:hover {
-    background: #10b981;
+    background: var(--sola-color-primary-500, #10b981);
   }
 </style>

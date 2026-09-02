@@ -31,10 +31,10 @@
 <style>
   .sola-html-viewer {
     width: 100%;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     border-radius: 12px;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--sola-surface-0, #ffffff);
   }
 
   .sola-html-viewer-frame {

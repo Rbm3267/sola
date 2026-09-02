@@ -1,7 +1,7 @@
 {
   "name": "@sola-air-ui/compiler",
   "version": "1.0.8",
-  "description": "Compiler for Sola single-file components (.sola) — transforms template + script + style to ES modules",
+  "description": "Compiler for Sola single-file components (.sola) \u2014 transforms template + script + style to ES modules",
   "type": "module",
   "main": "./src/index.js",
   "bin": {
@@ -34,5 +34,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "types": "./types/index.d.ts"
 }

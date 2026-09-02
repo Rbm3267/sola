@@ -40,8 +40,11 @@ export function createSignal(initialValue) {
   };
 
   const write = (newValue) => {
-    if (value !== newValue) {
-      value = newValue;
+    // Function updater form: setCount(prev => prev + 1). Matches Solid/React
+    // semantics — to store a function as the value itself, wrap it: set(() => fn).
+    const next = typeof newValue === 'function' ? newValue(value) : newValue;
+    if (value !== next) {
+      value = next;
       for (const sub of [...subscribers]) {
         pendingEffects.add(sub);
       }

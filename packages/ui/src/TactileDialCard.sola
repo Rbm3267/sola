@@ -101,7 +101,7 @@
 <style>
   .sola-dial-card {
     position: relative;
-    background: #ffffff;
+    background: var(--sola-surface-0, #ffffff);
     border: 1px solid rgba(226, 232, 240, 0.9);
     border-radius: 24px;
     padding: 24px;
@@ -121,7 +121,7 @@
   .sola-dial-emerald { --dial-dot: #10b981; }
   .sola-dial-sky     { --dial-dot: #0ea5e9; }
 
-  .dial-title { font-size: 11px; font-family: ui-monospace, monospace; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.06em; margin: 0; }
+  .dial-title { font-size: 11px; font-family: ui-monospace, monospace; font-weight: 900; color: var(--sola-text-primary, #0f172a); text-transform: uppercase; letter-spacing: 0.06em; margin: 0; }
 
   .dial-badge {
     font-size: 10px;
@@ -153,7 +153,7 @@
 
   .dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
   .dial-value { font-size: 26px; font-weight: 900; color: #020617; font-family: ui-monospace, monospace; letter-spacing: -0.02em; }
-  .dial-hint { font-size: 10px; font-family: ui-monospace, monospace; color: #64748b; margin-top: 2px; }
+  .dial-hint { font-size: 10px; font-family: ui-monospace, monospace; color: var(--sola-color-neutral-500, #64748b); margin-top: 2px; }
 
-  .dial-subtext { font-size: 12px; color: #64748b; margin-top: 8px; font-family: ui-monospace, monospace; }
+  .dial-subtext { font-size: 12px; color: var(--sola-color-neutral-500, #64748b); margin-top: 8px; font-family: ui-monospace, monospace; }
 </style>

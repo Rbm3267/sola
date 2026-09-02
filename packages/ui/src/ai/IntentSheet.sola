@@ -1,4 +1,7 @@
 <script>
+  // Accepts a plain boolean or a getter (() => signal()), so the sheet works
+  // both self-contained and parent-controlled. It used to be read as `open()`
+  // and written as `open(false)` — a prop can be neither, so closing threw.
   export let open = false;
   export let title = 'AI Response';
   export let intent = null;        // $intent signal or plain value
@@ -6,6 +9,78 @@
   export let onclose = null;
   export let onaction = null;
   export let side = 'right';       // 'right' | 'bottom'
+
+  let isOpen = $state(typeof open === 'function' ? open() : Boolean(open));
+
+  createEffect(() => {
+    if (typeof open === 'function') {
+      isOpen = Boolean(open());
+    }
+  });
+
+  const uid = Math.random().toString(36).slice(2, 9);
+  const titleId = 'sola-sheet-title-' + uid;
+  const sheetId = 'sola-sheet-' + uid;
+
+  let returnFocusTo = null;
+
+  const FOCUSABLE = 'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+  function sheetElement() {
+    return typeof document === 'undefined' ? null : document.getElementById(sheetId);
+  }
+
+  function focusableItems() {
+    const el = sheetElement();
+    return el ? Array.from(el.querySelectorAll(FOCUSABLE)) : [];
+  }
+
+  function handleKeydown(e) {
+    if (!isOpen()) return;
+
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      close();
+      return;
+    }
+
+    if (e.key !== 'Tab') return;
+    const items = focusableItems();
+    if (items.length === 0) { e.preventDefault(); return; }
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  createEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (isOpen()) {
+      returnFocusTo = document.activeElement;
+      document.addEventListener('keydown', handleKeydown, true);
+      queueMicrotask(() => {
+        const items = focusableItems();
+        (items[0] || sheetElement())?.focus?.();
+      });
+    } else {
+      document.removeEventListener('keydown', handleKeydown, true);
+      if (returnFocusTo && typeof returnFocusTo.focus === 'function') {
+        returnFocusTo.focus();
+        returnFocusTo = null;
+      }
+    }
+  });
+
+  onDestroy(() => {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('keydown', handleKeydown, true);
+    }
+  });
 
   let resolved = $derived(() => {
     if (!intent) return null;
@@ -22,7 +97,7 @@
   });
 
   function close() {
-    open(false);
+    isOpen = false;
     if (onclose) onclose();
   }
 
@@ -36,17 +111,24 @@
   }
 </script>
 
-{#if open()}
+{#if isOpen()}
   <div class="sola-sheet-backdrop" onclick={handleBackdrop}>
-    <div class="sola-sheet side-{side}">
+    <div
+      class="sola-sheet side-{side}"
+      id={sheetId}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      tabindex="-1"
+    >
       <!-- Header -->
       <div class="sheet-header">
         <div class="header-left">
-          <div class="ai-dot"></div>
-          <h2 class="sheet-title">{title}</h2>
+          <div class="ai-dot" aria-hidden="true"></div>
+          <h2 class="sheet-title" id={titleId}>{title}</h2>
         </div>
-        <button class="close-btn" onclick={close}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="close-btn" type="button" onclick={close} aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
@@ -56,11 +138,11 @@
       <!-- Body -->
       <div class="sheet-body">
         {#if isLoading()}
-          <div class="sheet-loading">
-            <div class="shimmer"></div>
-            <div class="shimmer short"></div>
-            <div class="shimmer"></div>
-            <div class="shimmer xshort"></div>
+          <div class="sheet-loading" role="status" aria-live="polite" aria-label="Resolving response">
+            <div class="shimmer" aria-hidden="true"></div>
+            <div class="shimmer short" aria-hidden="true"></div>
+            <div class="shimmer" aria-hidden="true"></div>
+            <div class="shimmer xshort" aria-hidden="true"></div>
           </div>
         {:else if resolved()}
           <div class="sheet-content">
@@ -115,7 +197,7 @@
   .sola-sheet-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.4);
+    background: var(--sola-surface-overlay, rgba(15, 23, 42, 0.4));
     backdrop-filter: blur(4px);
     /* Was a bare 9999 — Modal.sola independently hardcoded 999. Both now come
        from the shared scale in @sola-air-ui/tokens instead of two components
@@ -127,7 +209,7 @@
   }
 
   .sola-sheet {
-    background: #fff;
+    background: var(--sola-surface-0, #fff);
     display: flex;
     flex-direction: column;
     box-shadow: -8px 0 40px rgba(0,0,0,0.12);
@@ -165,7 +247,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 24px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--sola-border-subtle, #f1f5f9);
   }
 
   .header-left {
@@ -178,8 +260,8 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 6px #10b981;
+    background: var(--sola-alert-positive, #10b981);
+    box-shadow: 0 0 6px var(--sola-alert-positive, #10b981);
     animation: pulse 2s infinite;
   }
 
@@ -189,26 +271,28 @@
   }
 
   .sheet-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #0f172a;
+    font-size: var(--sola-font-size-lg, 15px);
+    font-weight: var(--sola-font-weight-bold, 700);
+    color: var(--sola-text-primary, #0f172a);
     margin: 0;
   }
 
   .close-btn {
     width: 32px;
     height: 32px;
-    border-radius: 10px;
+    border-radius: var(--sola-radius-md, 10px);
     border: none;
-    background: #f1f5f9;
+    background: var(--sola-surface-1, #f1f5f9);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #64748b;
+    color: var(--sola-text-secondary, #64748b);
     transition: background var(--sola-duration-fast, 160ms) var(--sola-ease-standard, cubic-bezier(0.16, 1, 0.3, 1));
   }
-  .close-btn:hover { background: #e2e8f0; color: #0f172a; }
+  .close-btn:hover { background: var(--sola-surface-2, #e2e8f0); color: var(--sola-text-primary, #0f172a); }
+  .close-btn:focus-visible,
+  .sola-sheet:focus-visible { outline: none; box-shadow: var(--sola-focus-ring, 0 0 0 3px rgba(16, 185, 129, 0.4)); }
   .close-btn svg { width: 14px; height: 14px; }
 
   .sheet-body {
@@ -226,7 +310,7 @@
   .shimmer {
     height: 14px;
     border-radius: 8px;
-    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background: linear-gradient(90deg, var(--sola-surface-1, #f1f5f9) 25%, var(--sola-surface-2, #e2e8f0) 50%, var(--sola-surface-1, #f1f5f9) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -241,16 +325,16 @@
   .sheet-content { display: flex; flex-direction: column; gap: 12px; }
 
   .content-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #0f172a;
+    font-size: var(--sola-font-size-xl, 18px);
+    font-weight: var(--sola-font-weight-bold, 700);
+    color: var(--sola-text-primary, #0f172a);
     margin: 0;
   }
 
   .prose {
-    font-size: 14px;
-    line-height: 1.7;
-    color: #334155;
+    font-size: var(--sola-font-size-md, 14px);
+    line-height: var(--sola-leading-relaxed, 1.7);
+    color: var(--sola-text-primary, #334155);
     margin: 0;
     white-space: pre-wrap;
   }
@@ -262,16 +346,16 @@
     flex-direction: column;
     gap: 6px;
   }
-  .content-list li { font-size: 14px; color: #334155; line-height: 1.5; }
+  .content-list li { font-size: var(--sola-font-size-md, 14px); color: var(--sola-text-primary, #334155); line-height: var(--sola-leading-normal, 1.5); }
 
   .json-view {
     font-size: 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    background: var(--sola-surface-1, #f8fafc);
+    border: 1px solid var(--sola-border-default, #e2e8f0);
+    border-radius: var(--sola-radius-md, 10px);
     padding: 14px;
     overflow-x: auto;
-    color: #475569;
+    color: var(--sola-text-secondary, #475569);
     font-family: ui-monospace, monospace;
   }
 
@@ -280,7 +364,7 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
     padding: 40px 0;
   }
   .sheet-empty svg { width: 40px; height: 40px; }
@@ -288,7 +372,7 @@
 
   .sheet-footer {
     padding: 16px 24px;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--sola-border-subtle, #f1f5f9);
     display: flex;
     gap: 8px;
     justify-content: flex-end;
@@ -306,17 +390,22 @@
   }
 
   .footer-btn.default {
-    background: #f1f5f9;
-    color: #334155;
-    border-color: #e2e8f0;
+    background: var(--sola-surface-1, #f1f5f9);
+    color: var(--sola-text-primary, #334155);
+    border-color: var(--sola-border-default, #e2e8f0);
   }
-  .footer-btn.default:hover { background: #e2e8f0; }
+  .footer-btn.default:hover { background: var(--sola-surface-2, #e2e8f0); }
 
   .footer-btn.primary {
-    background: #10b981;
-    color: #fff;
+    background: var(--sola-color-primary-500, #10b981);
+    color: var(--sola-color-neutral-0, #fff);
   }
-  .footer-btn.primary:hover { background: #059669; }
+  .footer-btn.primary:hover { background: var(--sola-color-primary-600, #059669); }
+  .footer-btn:focus-visible { outline: none; box-shadow: var(--sola-focus-ring, 0 0 0 3px rgba(16, 185, 129, 0.4)); }
 
   .footer-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sola-sheet, .side-bottom, .ai-dot, .shimmer { animation: none; }
+  }
 </style>

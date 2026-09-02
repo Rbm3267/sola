@@ -25,8 +25,8 @@
 
 <style>
   .sola-stream-view {
-    background: #0f172a;
-    color: #f8fafc;
+    background: var(--sola-color-neutral-900, #0f172a);
+    color: var(--sola-color-neutral-50, #f8fafc);
     border-radius: 18px;
     padding: 20px;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

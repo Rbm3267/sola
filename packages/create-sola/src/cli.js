@@ -8,6 +8,26 @@ import readline from 'node:readline';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const { version: CLI_VERSION } = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')
+);
+
+// Dependency ranges written into every scaffolded project. Kept here as the
+// single source and checked against the workspace manifests by
+// test/scaffold.test.js, so a package release cannot silently leave the
+// scaffold pointing at versions that were never published.
+export const SOLA_DEPS = {
+  dependencies: {
+    '@sola-air-ui/core': '^1.1.1',
+    '@sola-air-ui/ui': '^1.3.0'
+  },
+  devDependencies: {
+    '@sola-air-ui/compiler': '^1.0.8',
+    '@sola-air-ui/vite-plugin-sola': '^1.0.3',
+    'vite': '^6.0.0'
+  }
+};
+
 const c = {
   reset: '\x1b[0m',
   bold: '\x1b[1m',
@@ -18,39 +38,40 @@ const c = {
   slate: '\x1b[38;2;148;163;184m'
 };
 
-console.log(`
+const defaultProjectName = 'my-sola-app';
+
+// Exported so tests can scaffold into a temp directory without going through
+// argv or stdin. Only the CLI entrypoint below prompts.
+export async function run(targetArg, { cwd = process.cwd(), quiet = false } = {}) {
+  const log = quiet ? () => {} : console.log;
+
+  log(`
 ${c.emerald}   ✧ ${c.reset}
-${c.emerald} ✧ ◯ ✧  ${c.bold}Sola v1.0.0${c.reset}
+${c.emerald} ✧ ◯ ✧  ${c.bold}create-sola v${CLI_VERSION}${c.reset}
 ${c.emerald}   ✧   ${c.slate}Zero-VDOM Ambient Reactive Runtime${c.reset}
 `);
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-const defaultProjectName = 'my-sola-app';
-const targetArg = process.argv[2];
-
-async function run() {
   let projectName = targetArg;
   if (!projectName) {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
     projectName = await new Promise((resolve) => {
       rl.question(`${c.bold}? Project name:${c.reset} ${c.dim}(${defaultProjectName})${c.reset} `, (answer) => {
         resolve(answer.trim() || defaultProjectName);
       });
     });
+    rl.close();
   }
-  rl.close();
 
-  const targetDir = path.resolve(process.cwd(), projectName);
+  const targetDir = path.resolve(cwd, projectName);
 
   if (fs.existsSync(targetDir) && fs.readdirSync(targetDir).length > 0) {
-    console.error(`\n${c.amber}Error: Directory '${projectName}' is not empty.${c.reset}`);
-    process.exit(1);
+    throw new Error(`Directory '${projectName}' is not empty.`);
   }
 
-  console.log(`\n${c.dim}Scaffolding project in${c.reset} ${c.bold}${targetDir}${c.reset}...\n`);
+  log(`\n${c.dim}Scaffolding project in${c.reset} ${c.bold}${targetDir}${c.reset}...\n`);
 
   fs.mkdirSync(targetDir, { recursive: true });
   fs.mkdirSync(path.join(targetDir, 'src'), { recursive: true });
@@ -66,34 +87,16 @@ async function run() {
       build: 'vite build',
       preview: 'vite preview'
     },
-    dependencies: {
-      '@sola-air-ui/core': '^1.0.0',
-      '@sola-air-ui/ui': '^1.0.0'
-    },
-    devDependencies: {
-      '@sola-air-ui/compiler': '^1.0.0',
-      'vite': '^6.0.0'
-    }
+    dependencies: { ...SOLA_DEPS.dependencies },
+    devDependencies: { ...SOLA_DEPS.devDependencies }
   };
   fs.writeFileSync(path.join(targetDir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n');
 
   // 2. vite.config.js
+  // Uses the published plugin rather than a hand-rolled copy, so a scaffolded
+  // project and the documented setup are the same code path.
   const viteConfig = `import { defineConfig } from 'vite';
-import { compile } from '@sola-air-ui/compiler';
-import fs from 'node:fs';
-
-function sola() {
-  return {
-    name: 'vite-plugin-sola',
-    enforce: 'pre',
-    load(id) {
-      if (!id.endsWith('.sola')) return null;
-      const source = fs.readFileSync(id, 'utf-8');
-      const compiled = compile(source, id);
-      return { code: compiled.code || compiled, map: null };
-    }
-  };
-}
+import sola from '@sola-air-ui/vite-plugin-sola';
 
 export default defineConfig({
   plugins: [sola()]
@@ -134,7 +137,7 @@ export default defineConfig({
   const appSola = `<script>
   let title = "${projectName}";
   let count = $state(0);
-  let double = $derived(count() * 2);
+  let double = $derived(count * 2);
 
   function increment() {
     count++;
@@ -146,7 +149,7 @@ export default defineConfig({
 </script>
 
 <div class="sola-app">
-  <div class="badge">Sola v1.0.0 • Zero-VDOM Native</div>
+  <div class="badge">Zero-VDOM Native</div>
   <h1>{title}</h1>
   <p class="subtitle">Fine-grained reactive signals running directly on raw DOM nodes.</p>
 
@@ -316,14 +319,22 @@ npm run build
 `;
   fs.writeFileSync(path.join(targetDir, 'README.md'), readme);
 
-  console.log(`${c.emerald}✔ Project created successfully!${c.reset}\n`);
-  console.log(`To get started:\n`);
-  console.log(`  ${c.bold}cd ${projectName}${c.reset}`);
-  console.log(`  ${c.bold}npm install${c.reset}`);
-  console.log(`  ${c.bold}npm run dev${c.reset}\n`);
+  log(`${c.emerald}✔ Project created successfully!${c.reset}\n`);
+  log(`To get started:\n`);
+  log(`  ${c.bold}cd ${projectName}${c.reset}`);
+  log(`  ${c.bold}npm install${c.reset}`);
+  log(`  ${c.bold}npm run dev${c.reset}\n`);
+
+  return targetDir;
 }
 
-run().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Only scaffold when run as a command, so importing this module for tests is safe.
+const invokedDirectly =
+  process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (invokedDirectly) {
+  run(process.argv[2]).catch((err) => {
+    console.error(`\n${c.amber}Error: ${err.message}${c.reset}`);
+    process.exit(1);
+  });
+}

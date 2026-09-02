@@ -195,7 +195,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
     padding: 0 4px;
   }
 
@@ -209,20 +209,20 @@
   }
 
   .msg--user .msg-content {
-    background: #10b981;
-    color: #fff;
+    background: var(--sola-color-primary-500, #10b981);
+    color: var(--sola-color-neutral-0, #fff);
     border-radius: 16px 16px 4px 16px;
   }
 
   .msg--assistant .msg-content {
-    background: #f8fafc;
-    color: #0f172a;
-    border: 1px solid #e2e8f0;
+    background: var(--sola-surface-1, #f8fafc);
+    color: var(--sola-text-primary, #0f172a);
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     border-radius: 16px 16px 16px 4px;
   }
 
   .msg--error .msg-content {
-    background: #fef2f2;
+    background: var(--sola-alert-high-bg, #fef2f2);
     color: #ef4444;
     border-color: #fecaca;
   }
@@ -236,7 +236,7 @@
     display: inline-block;
     width: 2px;
     height: 14px;
-    background: #10b981;
+    background: var(--sola-color-primary-500, #10b981);
     vertical-align: middle;
     margin-left: 2px;
     animation: blink 0.7s infinite;
@@ -254,7 +254,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
     text-align: center;
     padding: 40px;
   }
@@ -262,7 +262,7 @@
   .empty-icon svg {
     width: 40px;
     height: 40px;
-    color: #cbd5e1;
+    color: var(--sola-color-neutral-300, #cbd5e1);
   }
 
   .empty-state p {
@@ -274,7 +274,7 @@
     display: flex;
     gap: 8px;
     padding: 12px 16px;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--sola-surface-2, #f1f5f9);
     background: #fafbfc;
     align-items: flex-end;
   }
@@ -282,46 +282,46 @@
   .thread-input {
     flex: 1;
     resize: none;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     border-radius: 14px;
     padding: 10px 14px;
     font-size: 14px;
     font-family: inherit;
     line-height: 1.5;
     outline: none;
-    background: #fff;
-    color: #0f172a;
+    background: var(--sola-surface-0, #fff);
+    color: var(--sola-text-primary, #0f172a);
     transition: border-color 0.15s;
     max-height: 160px;
     overflow-y: auto;
   }
 
   .thread-input:focus {
-    border-color: #10b981;
+    border-color: var(--sola-color-primary-500, #10b981);
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
   }
 
   .thread-input:disabled {
-    background: #f8fafc;
-    color: #94a3b8;
+    background: var(--sola-surface-1, #f8fafc);
+    color: var(--sola-text-tertiary, #94a3b8);
   }
 
   .send-btn {
     width: 40px;
     height: 40px;
     border-radius: 12px;
-    background: #10b981;
+    background: var(--sola-color-primary-500, #10b981);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--sola-color-neutral-0, #fff);
     transition: background 0.15s, transform 0.1s;
     flex-shrink: 0;
   }
 
-  .send-btn:hover:not(:disabled) { background: #059669; transform: scale(1.05); }
+  .send-btn:hover:not(:disabled) { background: var(--sola-color-primary-600, #059669); transform: scale(1.05); }
   .send-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
 
   .send-btn svg {

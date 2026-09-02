@@ -52,7 +52,7 @@
      theme-aware via the host's cascade. */
   .sola-safe-html {
     position: relative;
-    background: #ffffff;
+    background: var(--sola-surface-0, #ffffff);
     color: #111827;
     font-size: 14px;
     line-height: 1.65;
@@ -66,7 +66,7 @@
     right: 0;
     bottom: 0;
     height: 48px;
-    background: linear-gradient(to bottom, transparent, #ffffff);
+    background: linear-gradient(to bottom, transparent, var(--sola-surface-0, #ffffff));
     pointer-events: none;
   }
 

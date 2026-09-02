@@ -1,7 +1,7 @@
 {
   "name": "@sola-air-ui/core",
   "version": "1.1.1",
-  "description": "Zero-VDOM reactivity engine — signals, effects, lifecycle, and intent primitives",
+  "description": "Zero-VDOM reactivity engine \u2014 signals, effects, lifecycle, and intent primitives",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
@@ -14,7 +14,8 @@
   },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "types"
   ],
   "dependencies": {
     "esbuild": "^0.21.5"
@@ -36,5 +37,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "types": "./types/index.d.ts"
 }

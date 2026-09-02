@@ -43,28 +43,28 @@
   .sola-btn-lg { padding: 14px 24px; font-size: 15px; }
 
   .sola-btn-primary {
-    background: #10b981;
+    background: var(--sola-color-primary-500, #10b981);
     color: #090d19;
     font-weight: 700;
   }
-  .sola-btn-primary:hover { background: #059669; }
+  .sola-btn-primary:hover { background: var(--sola-color-primary-600, #059669); }
 
   .sola-btn-secondary {
     background: rgba(255, 255, 255, 0.08);
-    color: #f8fafc;
+    color: var(--sola-color-neutral-50, #f8fafc);
     border-color: rgba(255, 255, 255, 0.1);
   }
   .sola-btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
 
   .sola-btn-ghost {
     background: transparent;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
   }
-  .sola-btn-ghost:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+  .sola-btn-ghost:hover { color: var(--sola-color-neutral-0, #fff); background: rgba(255, 255, 255, 0.05); }
 
   .sola-btn-destructive {
     background: #ef4444;
-    color: #fff;
+    color: var(--sola-color-neutral-0, #fff);
   }
   .sola-btn-destructive:hover { background: #dc2626; }
 
@@ -73,8 +73,8 @@
      background/border, rendering as unstyled transparent text. */
   .sola-btn-outline {
     background: transparent;
-    color: #10b981;
-    border-color: #10b981;
+    color: var(--sola-color-primary-500, #10b981);
+    border-color: var(--sola-color-primary-500, #10b981);
   }
   .sola-btn-outline:hover { background: rgba(16, 185, 129, 0.1); }
 

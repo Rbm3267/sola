@@ -1,7 +1,7 @@
 {
   "name": "@sola-air-ui/vite-plugin-sola",
   "version": "1.0.3",
-  "description": "Vite plugin for Sola — compile .sola single-file components at build time",
+  "description": "Vite plugin for Sola \u2014 compile .sola single-file components at build time",
   "type": "module",
   "main": "./src/index.js",
   "exports": {

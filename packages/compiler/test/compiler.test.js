@@ -25,9 +25,9 @@ test('$state compiles to createSignal', () => {
   assert(code.includes('const [count, set_count] = createSignal(0)'), 'createSignal');
 });
 
-test('$derived wraps expr in arrow when not already a fn', () => {
+test('$derived wraps expr in arrow and auto-calls the signal', () => {
   const { code } = compile(`<script>let x = $state(1); let doubled = $derived(x * 2);</script><span>{doubled}</span>`);
-  assert(code.includes('createDerived(() => x * 2)'), 'arrow wrap');
+  assert(code.includes('createDerived(() => x() * 2)'), 'arrow wrap with auto-call');
 });
 
 test('$derived passes fn through unchanged', () => {
@@ -55,6 +55,245 @@ test('compound assignment operators (*=, /=, **=)', () => {
   assert(code.includes('set_count(count() * (2))'), '*=');
   assert(code.includes('set_count(count() / (2))'), '/=');
   assert(code.includes('set_count(count() ** (2))'), '**=');
+});
+
+// ── Reactive auto-call (parenthesis-free syntax) ────────────────────────────
+
+console.log('\nReactive auto-call');
+
+test('bare signal read in text interpolation auto-calls: {count} → count()', () => {
+  const { code } = compile(`<script>let count = $state(0);</script><span>{count}</span>`);
+  assert(code.includes("String((count()) ?? '')"), 'auto-called in text expr');
+});
+
+test('explicit call is left alone: {count()} does not become count()()', () => {
+  const { code } = compile(`<script>let count = $state(0);</script><span>{count()}</span>`);
+  assert(code.includes("String((count()) ?? '')"), 'single call');
+  assert(!code.includes('count()()'), 'no double call');
+});
+
+test('the docs "Cluster Dashboard" sample compiles to working code', () => {
+  const { code } = compile(`<script>
+  export let title = "Cluster Dashboard";
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+
+  function increment() {
+    count++;
+  }
+</script>
+
+<div class="card">
+  <h3>{title}</h3>
+  <div class="value">{doubled}</div>
+  <button onclick={increment}>Increment Metric</button>
+</div>`);
+  assert(code.includes('createDerived(() => count() * 2)'), 'derived body auto-calls');
+  assert(code.includes("String((doubled()) ?? '')"), 'derived read auto-calls');
+  assert(code.includes('set_count(count() + 1)'), 'count++ rewritten');
+  assert(code.includes("addEventListener('click', increment)"), 'handler wired');
+});
+
+test('member access on a state object auto-calls the base: {user.name} → user().name', () => {
+  const { code } = compile(`<script>let user = $state({ name: 'Ada' });</script><span>{user.name}</span>`);
+  assert(code.includes('user().name'), 'member object auto-called');
+});
+
+test('inline handler with update expr: onclick={() => count++}', () => {
+  const { code } = compile(`<script>let count = $state(0);</script><button onclick={() => count++}>+</button>`);
+  assert(code.includes('set_count(count() + 1)'), 'update rewritten inside handler');
+});
+
+test('inline handler with assignment: onclick={() => count = 5}', () => {
+  const { code } = compile(`<script>let count = $state(0);</script><button onclick={() => count = 5}>set</button>`);
+  assert(code.includes('set_count(5)'), 'assignment rewritten inside handler');
+});
+
+test('signal read in script function body auto-calls', () => {
+  const { code } = compile(`<script>let count = $state(0); function log() { console.log(count); }</script>`);
+  assert(code.includes('console.log(count())'), 'read in fn body auto-called');
+});
+
+test('read before declaration (hoisted handler) still auto-calls', () => {
+  const { code } = compile(`<script>function log() { return doubled; } let x = $state(1); let doubled = $derived(x * 2);</script>`);
+  assert(code.includes('return doubled()'), 'hoisted read auto-called');
+});
+
+test('shadowed name is not auto-called', () => {
+  const { code } = compile(`<script>let count = $state(0); function f(count) { return count + 1; }</script>`);
+  assert(code.includes('return count + 1'), 'param shadow respected');
+});
+
+test('each item shadows a signal of the same name', () => {
+  const { code } = compile(`<script>let items = $state([1,2]); let item = $state('sig');</script><div>{#each items as item}<span>{item}</span>{/each}</div>`);
+  assert(code.includes('const _items = items() || []'), 'each source auto-called');
+  assert(code.includes("String((item) ?? '')"), 'loop-local item not auto-called');
+});
+
+test('{#if} condition auto-calls signals', () => {
+  const { code } = compile(`<script>let open = $state(false);</script>{#if open}<span>yes</span>{/if}`);
+  assert(code.includes('if (open())'), 'condition auto-called');
+});
+
+test('dynamic attribute auto-calls: class={theme}', () => {
+  const { code } = compile(`<script>let theme = $state('dark');</script><div class={theme}></div>`);
+  assert(code.includes('(theme())'), 'attr expr auto-called');
+});
+
+test('object shorthand expands: {count} → {count: count()}', () => {
+  const { code } = compile(`<script>let count = $state(0);</script><span>{JSON.stringify({count})}</span>`);
+  assert(code.includes('count: count()'), 'shorthand expanded');
+});
+
+test('$intent accessor read bare auto-calls; .loading sub-signal call preserved', () => {
+  const { code } = compile(`<script>let w = $intent("gauge");</script><div>{w}</div><span>{w.loading}</span>`);
+  assert(code.includes("String((w()) ?? '')"), 'intent bare read auto-called');
+  assert(code.includes('w.loading()'), 'sub-signal called on the accessor');
+  assert(!code.includes('w().loading'), 'accessor identity preserved for sub-signals');
+});
+
+test('$data member access goes through the call: {mrr.data} → mrr().data, refetch untouched', () => {
+  const { code } = compile(`<script>let mrr = $data("sheet://x");</script><h2>{mrr.data}</h2><button onclick={() => mrr.refetch()}>r</button>`);
+  assert(code.includes('mrr().data'), 'data member through call');
+  assert(code.includes('mrr.refetch()'), 'accessor methods untouched');
+});
+
+test('README syntax remains fully valid (no rewrites of explicit calls)', () => {
+  const { code } = compile(`<script>
+  let count = $state(0);
+  let doubled = $derived(() => count() * 2);
+  function inc() { count = count() + 1; }
+</script>
+<button on:click={inc}>Count: {count()} Doubled: {doubled()}</button>`);
+  assert(code.includes('createDerived(() => count() * 2)'), 'derived fn unchanged');
+  assert(code.includes('set_count(count() + 1)'), 'assignment RHS unchanged');
+  assert(!code.includes('()()'), 'no double calls anywhere');
+});
+
+// ── else-if chains ──────────────────────────────────────────────────────────
+
+console.log('\nelse-if chains');
+
+test('{:else if} compiles to a nested conditional', () => {
+  const { code } = compile(
+    `<script>let n = $state(2);</script>{#if n === 1}<p>one</p>{:else if n === 2}<p>two</p>{:else}<p>many</p>{/if}`
+  );
+  new Function(code.replace(/^import.*$/gm, '').replace('export default ', 'globalThis.__t = '));
+  assert(code.includes('if (n() === 1)'), 'first branch');
+  assert(code.includes('if (n() === 2)'), 'else-if branch became its own condition');
+  assert(code.includes('many'), 'final else retained');
+});
+
+test('a later branch is not evaluated when an earlier one matches', () => {
+  // The failure this guards against: every branch's expression ran regardless
+  // of its condition, so `{:else if x.y}` threw as soon as x was null.
+  const { code } = compile(
+    `<script>let v = $state(null);</script>{#if !v}<p>empty</p>{:else if v.title}<p>{v.title}</p>{/if}`
+  );
+  const runnable = code
+    .replace(/^import.*$/gm, "const { createSignal, createDerived, createEffect, onMount, onDestroy, pushContext, popContext, __flush_mounts, __flush_destroys } = globalThis.__core;")
+    .replace('export default ', 'globalThis.__mount = ');
+  assert(runnable.includes('v().title'), 'guarded branch still compiled');
+  // Structurally, the guarded access must sit inside the else branch.
+  const elseIdx = code.indexOf('} else {');
+  assert(elseIdx !== -1 && code.indexOf('v().title') > elseIdx, 'guarded access is inside the else branch');
+});
+
+test('three-branch chain nests correctly', () => {
+  const { code } = compile(
+    `<script>let s = $state('b');</script>{#if s === 'a'}<p>A</p>{:else if s === 'b'}<p>B</p>{:else if s === 'c'}<p>C</p>{:else}<p>D</p>{/if}`
+  );
+  new Function(code.replace(/^import.*$/gm, '').replace('export default ', 'globalThis.__t = '));
+  for (const cond of ["s() === 'a'", "s() === 'b'", "s() === 'c'"]) {
+    assert(code.includes(`if (${cond})`), `branch ${cond}`);
+  }
+  assert(code.includes('>D<') || code.includes('`D`'), 'final else retained');
+});
+
+// ── Template-literal escaping ───────────────────────────────────────────────
+
+console.log('\nTemplate-literal escaping');
+
+test('a backtick inside <style> does not break out of the generated literal', () => {
+  // A CSS comment quoting a class name in backticks used to terminate the
+  // template literal the stylesheet is emitted into, so the rest of the CSS was
+  // parsed as JavaScript and threw ReferenceError at mount time.
+  const { code } = compile(`<script>let a = $state(1);</script><div class="x">{a}</div><style>
+  .x {
+    /* some hosts ship their own \`.x\` class */
+    color: red;
+  }
+</style>`);
+  // Must still be valid JavaScript...
+  new Function(code.replace(/^import.*$/gm, '').replace('export default ', 'globalThis.__t = '));
+  // ...with the backtick escaped rather than closing the literal.
+  assert(code.includes('\\`.x\\`'), 'backtick escaped inside the style literal');
+});
+
+test('${ inside <style> is escaped rather than interpolated', () => {
+  const { code } = compile(`<div class="y"></div><style>.y::after { content: "\${notAVar}"; }</style>`);
+  new Function(code.replace(/^import.*$/gm, '').replace('export default ', 'globalThis.__t = '));
+  assert(code.includes('\\${notAVar}'), 'interpolation escaped');
+});
+
+test('a backtick in a static attribute value cannot break out', () => {
+  const { code } = compile('<div title="a `b` c" class="d `e`"></div>');
+  new Function(code.replace(/^import.*$/gm, '').replace('export default ', 'globalThis.__t = '));
+  assert(code.includes('"a `b` c"'), 'attribute emitted as a string literal');
+});
+
+// ── Source maps ─────────────────────────────────────────────────────────────
+
+console.log('\nSource maps');
+
+test('emits a v3 source map naming the .sola file', () => {
+  const { map } = compile(`<script>let count = $state(0);</script><span>{count}</span>`, {
+    filename: 'src/Widget.sola'
+  });
+  assert(map, 'map emitted');
+  assert.strictEqual(map.version, 3);
+  assert.deepStrictEqual(map.sources, ['src/Widget.sola']);
+  assert(map.sourcesContent[0].includes('$state(0)'), 'original source embedded');
+  assert(map.mappings.length > 0, 'mappings present');
+});
+
+test('source map points a user-script line back at its line in the .sola file', () => {
+  // `let total = $state(7);` is on line 2 (zero-based) of the file below.
+  const source = `<script>
+  // a comment
+  let total = $state(7);
+</script>
+<span>{total}</span>`;
+  const { code, map } = compile(source, { filename: 'W.sola' });
+
+  const generatedLine = code.split('\n').findIndex((l) => l.includes('createSignal(7)'));
+  assert(generatedLine >= 0, 'found generated signal line');
+
+  // Decode just enough VLQ to read the source line each generated line maps to.
+  const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  const lines = map.mappings.split(';');
+  let sourceLine = 0;
+  let found = null;
+  for (let i = 0; i < lines.length; i++) {
+    if (!lines[i]) continue;
+    const fields = [];
+    let shift = 0, value = 0;
+    for (const ch of lines[i]) {
+      const digit = B64.indexOf(ch);
+      value += (digit & 31) << shift;
+      if (digit & 32) { shift += 5; continue; }
+      fields.push(value & 1 ? -(value >> 1) : value >> 1);
+      shift = 0; value = 0;
+    }
+    sourceLine += fields[2];
+    if (i === generatedLine) { found = sourceLine; break; }
+  }
+  assert.strictEqual(found, 2, 'maps to line 2 of the .sola source');
+});
+
+test('sourcemap:false suppresses the map', () => {
+  const { map } = compile(`<script>let a = $state(1);</script>`, { sourcemap: false });
+  assert.strictEqual(map, null);
 });
 
 // ── Nested brace expressions ─────────────────────────────────────────────────
@@ -137,7 +376,7 @@ test('{#if}{:else} emits both branches', () => {
   const { code } = compile(`
 <script>let ok = $state(true);</script>
 {#if ok}<span>Yes</span>{:else}<span>No</span>{/if}`);
-  assert(code.includes('if (ok)'), 'condition check');
+  assert(code.includes('if (ok())'), 'condition auto-called');
   assert(code.includes('Yes'), 'then branch');
   assert(code.includes('No'), 'else branch');
 });

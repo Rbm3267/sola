@@ -65,13 +65,13 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #10b981;
+    background: var(--sola-color-primary-500, #10b981);
   }
 
   .card-title {
     font-size: 11px;
     font-weight: 700;
-    color: #64748b;
+    color: var(--sola-color-neutral-500, #64748b);
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -80,7 +80,7 @@
   .card-value {
     font-size: 2.25rem;
     font-weight: 900;
-    color: #0f172a;
+    color: var(--sola-text-primary, #0f172a);
     letter-spacing: -0.03em;
     line-height: 1;
     margin-bottom: 14px;
@@ -91,7 +91,7 @@
     align-items: center;
     gap: 8px;
     padding-top: 10px;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--sola-surface-2, #f1f5f9);
   }
 
   .trend-badge {
@@ -102,14 +102,14 @@
     font-size: 11px;
     font-weight: 700;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    background: #ecfdf5;
-    color: #047857;
+    background: var(--sola-alert-positive-bg, #ecfdf5);
+    color: var(--sola-color-primary-700, #047857);
     border: 1px solid rgba(16, 185, 129, 0.2);
   }
 
   .period-label {
     font-size: 11px;
     font-weight: 500;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
   }
 </style>

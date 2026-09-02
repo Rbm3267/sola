@@ -46,13 +46,13 @@
   .card-header {
     margin-bottom: 20px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--sola-surface-2, #f1f5f9);
   }
 
   .card-title {
     font-size: 18px;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--sola-text-primary, #0f172a);
     letter-spacing: -0.02em;
   }
 </style>

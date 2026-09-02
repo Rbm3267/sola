@@ -21,6 +21,18 @@ describe('@sola/core reactivity engine', () => {
     assert.strictEqual(count(), 25);
   });
 
+  it('should support function updaters in the setter', () => {
+    const [count, setCount] = createSignal(0);
+    setCount(prev => prev + 1);
+    setCount(prev => prev + 1);
+    assert.strictEqual(count(), 2);
+    // Storing an actual function requires the wrap form
+    const fn = () => 'stored';
+    const [f, setF] = createSignal(null);
+    setF(() => fn);
+    assert.strictEqual(f(), fn);
+  });
+
   it('should compute derived values reactively', () => {
     const [a, setA] = createSignal(2);
     const [b, setB] = createSignal(3);

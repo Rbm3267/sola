@@ -58,13 +58,13 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
   }
 
   .strip-label svg {
     width: 12px;
     height: 12px;
-    color: #10b981;
+    color: var(--sola-color-primary-500, #10b981);
   }
 
   .strip-actions {
@@ -89,26 +89,26 @@
   }
 
   .action-chip.default {
-    background: #f1f5f9;
-    color: #334155;
-    border-color: #e2e8f0;
+    background: var(--sola-surface-2, #f1f5f9);
+    color: var(--sola-color-neutral-700, #334155);
+    border-color: var(--sola-border-subtle, #e2e8f0);
   }
   .action-chip.default:hover:not(.disabled) {
-    background: #e2e8f0;
-    border-color: #cbd5e1;
+    background: var(--sola-color-neutral-200, #e2e8f0);
+    border-color: var(--sola-border-default, #cbd5e1);
   }
 
   .action-chip.primary {
-    background: #10b981;
-    color: #fff;
-    border-color: #10b981;
+    background: var(--sola-color-primary-500, #10b981);
+    color: var(--sola-color-neutral-0, #fff);
+    border-color: var(--sola-color-primary-500, #10b981);
   }
   .action-chip.primary:hover:not(.disabled) {
-    background: #059669;
+    background: var(--sola-color-primary-600, #059669);
   }
 
   .action-chip.danger {
-    background: #fef2f2;
+    background: var(--sola-alert-high-bg, #fef2f2);
     color: #ef4444;
     border-color: #fecaca;
   }

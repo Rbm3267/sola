@@ -11,6 +11,18 @@ const VOID_ELEMENTS = new Set([
   'link', 'meta', 'param', 'source', 'track', 'wbr'
 ]);
 
+// Escape a string that is emitted inside a backtick template literal. Without
+// this, a single backtick anywhere in a <style> block (a CSS comment quoting a
+// class name, say) closes the literal early and the rest of the stylesheet is
+// parsed as JavaScript — which fails at runtime, not at compile time. `${` is
+// escaped for the same reason.
+function escapeTemplateLiteral(str) {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/`/g, '\\`')
+    .replace(/\$\{/g, '\\${');
+}
+
 function hashString(str) {
   let hash = 5381;
   for (let i = 0; i < str.length; i++) {
@@ -20,26 +32,106 @@ function hashString(str) {
   return 'sola-' + Math.abs(hash).toString(36);
 }
 
+function scopeSelectorList(selector, scopeHash) {
+  return selector
+    .split(',')
+    .map(part => {
+      const trimmed = part.trim();
+      if (!trimmed) return part;
+      // Insert scope hash before pseudo-class/element (e.g. button:hover → button.hash:hover)
+      const pseudoIdx = trimmed.search(/::?[\w-]/);
+      if (pseudoIdx > 0) {
+        return `${trimmed.slice(0, pseudoIdx)}.${scopeHash}${trimmed.slice(pseudoIdx)}`;
+      }
+      return `${trimmed}.${scopeHash}`;
+    })
+    .join(', ');
+}
+
+// Scope every rule's selector to this component.
+//
+// Deliberately brace-depth aware rather than a single regex: a regex that treats
+// any run of text before `{` as a selector also rewrites declaration values that
+// happen to contain a brace (`content: "${x}"`, `grid-template-areas`, a data:
+// URI), silently corrupting the stylesheet. Only text at depth 0 — or directly
+// inside an at-rule block such as @media — is a selector.
 function scopeStyles(css, scopeHash) {
-  return css.replace(/([^\r\n,{}]+)(,(?=[^{}]*{)|\s*{)/g, (match, selector, trailing) => {
-    if (selector.trim().startsWith('@') || selector.trim().startsWith('from') || selector.trim().startsWith('to') || /^\d+%/.test(selector.trim())) {
-      return match;
+  let out = '';
+  let buf = '';           // pending selector text
+  let depth = 0;          // brace nesting
+  let inStr = null;       // quote char while inside a string
+  let inComment = false;
+  // Depths that hold declarations rather than nested rules; their contents are
+  // copied through untouched.
+  const ruleDepths = [];
+
+  for (let i = 0; i < css.length; i++) {
+    const ch = css[i];
+    const next = css[i + 1];
+
+    if (inComment) {
+      buf += ch;
+      if (ch === '*' && next === '/') { buf += next; i++; inComment = false; }
+      continue;
     }
-    const scopedSelector = selector
-      .split(',')
-      .map(part => {
-        const trimmed = part.trim();
-        if (!trimmed) return part;
-        // Insert scope hash before pseudo-class/element (e.g. button:hover → button.hash:hover)
-        const pseudoIdx = trimmed.search(/::?[\w-]/);
-        if (pseudoIdx > 0) {
-          return `${trimmed.slice(0, pseudoIdx)}.${scopeHash}${trimmed.slice(pseudoIdx)}`;
-        }
-        return `${trimmed}.${scopeHash}`;
-      })
-      .join(', ');
-    return scopedSelector + trailing;
-  });
+    if (inStr) {
+      buf += ch;
+      if (ch === '\\') { if (next !== undefined) { buf += next; i++; } continue; }
+      if (ch === inStr) inStr = null;
+      continue;
+    }
+    if (ch === '/' && next === '*') { buf += ch + next; i++; inComment = true; continue; }
+    if (ch === '"' || ch === "'") { inStr = ch; buf += ch; continue; }
+
+    if (ch === '{') {
+      const isDeclarationBlock = depth > 0 && !ruleDepths.includes(depth);
+      if (isDeclarationBlock) {
+        // A brace inside a declaration value — not a rule. Pass it through.
+        buf += ch;
+        continue;
+      }
+
+      // Split the buffer into everything that is not the selector (comments and
+      // whitespace) and the selector itself. A comment sitting above a rule —
+      // `/* Dark mode */ @media ...` — must not be treated as part of it, or the
+      // at-rule is misclassified and the scope hash lands inside the comment.
+      const commentEnd = buf.lastIndexOf('*/');
+      const selectorStart = commentEnd === -1 ? 0 : commentEnd + 2;
+      const afterComments = buf.slice(selectorStart);
+      const leadingLen = selectorStart + (afterComments.length - afterComments.trimStart().length);
+      const leading = buf.slice(0, leadingLen);
+      const selector = buf.slice(leadingLen);
+      const trimmed = selector.trim();
+      const isAtRule = trimmed.startsWith('@');
+      const isKeyframeStop =
+        trimmed.startsWith('from') || trimmed.startsWith('to') || /^\d+%/.test(trimmed);
+
+      // @media/@supports wrap further rules; @keyframes stops and plain rules
+      // wrap declarations.
+      const wrapsRules = isAtRule && /^@(media|supports|container|layer|scope)\b/.test(trimmed);
+
+      out += leading;
+      out += (isAtRule || isKeyframeStop) ? selector : scopeSelectorList(selector, scopeHash);
+      out += ch;
+      buf = '';
+      depth++;
+      if (wrapsRules) ruleDepths.push(depth);
+      continue;
+    }
+
+    if (ch === '}') {
+      out += buf + ch;
+      buf = '';
+      const idx = ruleDepths.indexOf(depth);
+      if (idx !== -1) ruleDepths.splice(idx, 1);
+      depth = Math.max(0, depth - 1);
+      continue;
+    }
+
+    buf += ch;
+  }
+
+  return out + buf;
 }
 
 function extractScriptAndStyle(source) {
@@ -48,10 +140,15 @@ function extractScriptAndStyle(source) {
   let template = source;
 
   let isTypeScript = false;
+  // Zero-based line in the original .sola file where the script body starts,
+  // so generated output can be mapped back to it.
+  let scriptStartLine = 0;
   const scriptMatch = template.match(/<script(?:\s+lang=["'](ts|js)["'])?>([\s\S]*?)<\/script>/);
   if (scriptMatch) {
     isTypeScript = scriptMatch[1] === 'ts';
     script = scriptMatch[2];
+    const openTagEnd = scriptMatch.index + scriptMatch[0].indexOf('>') + 1;
+    scriptStartLine = source.slice(0, openTagEnd).split('\n').length - 1;
     template = template.replace(scriptMatch[0], '');
   }
 
@@ -61,7 +158,7 @@ function extractScriptAndStyle(source) {
     template = template.replace(styleMatch[0], '');
   }
 
-  return { script, style, template, isTypeScript };
+  return { script, style, template, isTypeScript, scriptStartLine };
 }
 
 // Returns the index of the closing } that matches the { at openPos,
@@ -179,6 +276,167 @@ function preprocessTemplate(template, dynAttrs) {
   return result;
 }
 
+// Rewrite `{:else if C}` into `{:else}{#if C}` plus a matching `{/if}`, so an
+// else-if chain becomes ordinary nested if/else blocks that the block handling
+// below already understands. Without this the chain is never recognised and
+// every branch's expression is evaluated regardless of the condition — an
+// `{:else if x}{...x.y...}` chain throws on null the moment the first branch
+// is false.
+function desugarElseIf(template) {
+  const OPEN = '{#if';
+  const CLOSE = '{/if}';
+
+  // Index of the {/if} matching the {#if} that starts at openIdx.
+  function matchingClose(text, openIdx) {
+    let depth = 0;
+    let i = openIdx;
+    while (i < text.length) {
+      if (text.startsWith(OPEN, i)) { depth++; i += OPEN.length; continue; }
+      if (text.startsWith(CLOSE, i)) {
+        depth--;
+        if (depth === 0) return i;
+        i += CLOSE.length;
+        continue;
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  // First `{:else if ...}` that belongs to this block rather than a nested one.
+  function findElseIf(text, from, to) {
+    let depth = 0;
+    let i = from;
+    while (i < to) {
+      if (text.startsWith(OPEN, i)) { depth++; i += OPEN.length; continue; }
+      if (text.startsWith(CLOSE, i)) { depth--; i += CLOSE.length; continue; }
+      if (depth === 0 && text.startsWith('{:else', i)) {
+        const end = text.indexOf('}', i);
+        if (end === -1) return null;
+        const inner = text.slice(i + '{:else'.length, end);
+        if (/^\s+if\s+/.test(inner)) {
+          return { start: i, end, condition: inner.replace(/^\s+if\s+/, '').trim() };
+        }
+      }
+      i++;
+    }
+    return null;
+  }
+
+  let result = template;
+  let searchFrom = 0;
+  while (true) {
+    const openIdx = result.indexOf(OPEN, searchFrom);
+    if (openIdx === -1) break;
+
+    const closeIdx = matchingClose(result, openIdx);
+    if (closeIdx === -1) { searchFrom = openIdx + OPEN.length; continue; }
+
+    const hit = findElseIf(result, openIdx + OPEN.length, closeIdx);
+    if (!hit) { searchFrom = openIdx + OPEN.length; continue; }
+
+    // {:else if C}  →  {:else}{#if C} ... {/if}, the extra close going just
+    // before this block's own {/if}.
+    result =
+      result.slice(0, hit.start) +
+      '{:else}{#if ' + hit.condition + '}' +
+      result.slice(hit.end + 1, closeIdx) +
+      CLOSE +
+      result.slice(closeIdx);
+    // Re-examine this same block: a chain may hold several else-ifs.
+  }
+
+  return result;
+}
+
+// Convert {#if}/{:else}/{/if} and {#each}/{/each} blocks into the sola-* tag
+// form the DOM emitter understands.
+//
+// Written as a recursive scanner rather than the regexes this replaced: a
+// non-greedy regex cannot count nesting, so `{#if a}…{:else}{#if b}…{/if}{/if}`
+// captured an unbalanced fragment as the else branch and produced structurally
+// wrong output. Anything deeper than two levels was silently corrupted.
+function transformBlocks(template) {
+  const attr = (s) => String(s).trim().replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+  // Index of the tag closing the block opened at `openIdx`, honouring nesting.
+  function matchEnd(text, openIdx, openTag, closeTag) {
+    let depth = 0;
+    let i = openIdx;
+    while (i < text.length) {
+      if (text.startsWith(openTag, i)) { depth++; i += openTag.length; continue; }
+      if (text.startsWith(closeTag, i)) {
+        depth--;
+        if (depth === 0) return i;
+        i += closeTag.length;
+        continue;
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  // Position of this block's own {:else}, ignoring any belonging to nested blocks.
+  function topLevelElse(text, from, to) {
+    let depth = 0;
+    let i = from;
+    while (i < to) {
+      if (text.startsWith('{#if', i)) { depth++; i += 4; continue; }
+      if (text.startsWith('{/if}', i)) { depth--; i += 5; continue; }
+      if (depth === 0 && text.startsWith('{:else}', i)) return i;
+      i++;
+    }
+    return -1;
+  }
+
+  function walk(text) {
+    let out = '';
+    let i = 0;
+    while (i < text.length) {
+      if (text.startsWith('{#if', i)) {
+        const condEnd = text.indexOf('}', i);
+        if (condEnd === -1) { out += text[i++]; continue; }
+        const condition = text.slice(i + 4, condEnd);
+        const end = matchEnd(text, i, '{#if', '{/if}');
+        if (end === -1) { out += text[i++]; continue; }
+
+        const body = text.slice(condEnd + 1, end);
+        const elseIdx = topLevelElse(body, 0, body.length);
+        const thenPart = elseIdx === -1 ? body : body.slice(0, elseIdx);
+        const elsePart = elseIdx === -1 ? null : body.slice(elseIdx + '{:else}'.length);
+
+        out += `<sola-if condition="${attr(condition)}"><sola-then>${walk(thenPart)}</sola-then>`;
+        if (elsePart !== null) out += `<sola-else>${walk(elsePart)}</sola-else>`;
+        out += `</sola-if>`;
+        i = end + '{/if}'.length;
+        continue;
+      }
+
+      if (text.startsWith('{#each', i)) {
+        const headEnd = text.indexOf('}', i);
+        if (headEnd === -1) { out += text[i++]; continue; }
+        const head = text.slice(i, headEnd + 1);
+        const parsed = /^{#each\s+([\s\S]*?)\s+as\s+([\w$]+)(?:\s*,\s*([\w$]+))?(?:\s*\(([^)]+)\))?}$/.exec(head);
+        const end = matchEnd(text, i, '{#each', '{/each}');
+        if (!parsed || end === -1) { out += text[i++]; continue; }
+
+        const [, arr, item, index, key] = parsed;
+        out += `<sola-each array="${attr(arr)}" item="${attr(item)}"`;
+        if (index) out += ` index="${attr(index)}"`;
+        if (key) out += ` key="${attr(key)}"`;
+        out += `>${walk(text.slice(headEnd + 1, end))}</sola-each>`;
+        i = end + '{/each}'.length;
+        continue;
+      }
+
+      out += text[i++];
+    }
+    return out;
+  }
+
+  return walk(template);
+}
+
 // Replace {expr} in text content with <sola-expr> tags, using balanced-brace
 // matching so expressions like {fn({key: val})} work correctly.
 function extractExpressions(text) {
@@ -221,14 +479,279 @@ function stripTypeScript(code) {
   return code;
 }
 
+// ─── Reactive auto-call transform ───
+// Makes the parenthesis-free syntax real: bare reads of $state/$derived vars
+// compile to getter calls (count → count(), user.name → user().name), so
+// `$derived(count * 2)` and `{doubled}` behave the way the docs show them.
+// Explicit calls (count()) are left alone, keeping the README syntax valid.
+
+function collectPatternNames(node, out) {
+  if (!node) return;
+  switch (node.type) {
+    case 'Identifier': out.add(node.name); break;
+    case 'ObjectPattern': node.properties.forEach(p => collectPatternNames(p.value || p.argument, out)); break;
+    case 'ArrayPattern': node.elements.forEach(el => collectPatternNames(el, out)); break;
+    case 'AssignmentPattern': collectPatternNames(node.left, out); break;
+    case 'RestElement': collectPatternNames(node.argument, out); break;
+  }
+}
+
+// Collect every name declared anywhere inside a function body. Deliberately
+// conservative: a name declared in ANY nested scope suppresses auto-call for
+// that name within the function, preferring a missed rewrite over a wrong one.
+function collectDeclaredNames(node, out) {
+  if (!node || typeof node !== 'object' || !node.type) return;
+  if (node.type === 'VariableDeclaration') node.declarations.forEach(d => collectPatternNames(d.id, out));
+  if ((node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration') && node.id) out.add(node.id.name);
+  if (node.type === 'CatchClause' && node.param) collectPatternNames(node.param, out);
+  for (const key of Object.keys(node)) {
+    if (key === 'type') continue;
+    const child = node[key];
+    if (Array.isArray(child)) child.forEach(c => collectDeclaredNames(c, out));
+    else if (child && typeof child === 'object' && child.type) collectDeclaredNames(child, out);
+  }
+}
+
+// Pre-pass: find every $state/$derived/$intent/$data declaration up front so
+// reads that appear earlier in the source (hoisted functions) still rewrite.
+function collectReactiveVars(ast) {
+  const vars = { state: new Set(), derived: new Set(), intent: new Set(), data: new Set() };
+  (function walk(node) {
+    if (!node || typeof node !== 'object' || !node.type) return;
+    if (node.type === 'VariableDeclaration') {
+      for (const decl of node.declarations) {
+        if (decl.init && decl.init.type === 'CallExpression' &&
+            decl.init.callee.type === 'Identifier' && decl.id.type === 'Identifier') {
+          const macro = decl.init.callee.name;
+          if (macro === '$state') vars.state.add(decl.id.name);
+          else if (macro === '$derived') vars.derived.add(decl.id.name);
+          else if (macro === '$intent') vars.intent.add(decl.id.name);
+          else if (macro === '$data') vars.data.add(decl.id.name);
+        }
+      }
+    }
+    for (const key of Object.keys(node)) {
+      if (key === 'type') continue;
+      const child = node[key];
+      if (Array.isArray(child)) child.forEach(walk);
+      else if (child && typeof child === 'object' && child.type) walk(child);
+    }
+  })(ast);
+  return vars;
+}
+
+const DATA_ACCESSOR_METHODS = new Set(['refetch', 'stop']);
+const INTENT_SUB_SIGNALS = new Set(['loading', 'error']);
+
+function reactiveKind(name, vars, shadowStack) {
+  for (const scope of shadowStack) if (scope.has(name)) return null;
+  if (vars.state.has(name)) return 'state';
+  if (vars.derived.has(name)) return 'derived';
+  if (vars.intent.has(name)) return 'intent';
+  if (vars.data.has(name)) return 'data';
+  return null;
+}
+
+// Walk an AST emitting position edits that implement the reactive rewrite:
+//  - `count = v`  → `set_count(v)`     (bracket edits so children still walk)
+//  - `count += v` → `set_count(count() + (v))`
+//  - `count++`    → `set_count(count() + 1)`
+//  - bare read    → `count()`; member-object read `user.name` → `user().name`
+//  - `{count}` shorthand in object literals → `{count: count()}`
+//  - $intent accessors: `x.loading` → `x.loading()` (sub-signals live on the fn)
+//  - $data accessors: `x.data` → `x().data`, but `x.refetch`/`x.stop` untouched
+function emitReactiveEdits(rootNode, src, vars, edits, initialShadows) {
+  function walk(node, parent, shadows) {
+    if (!node || typeof node !== 'object' || !node.type) return;
+
+    if (node.type === 'FunctionDeclaration' || node.type === 'FunctionExpression' || node.type === 'ArrowFunctionExpression') {
+      const scope = new Set();
+      if (node.id) scope.add(node.id.name);
+      (node.params || []).forEach(p => collectPatternNames(p, scope));
+      collectDeclaredNames(node.body, scope);
+      shadows = [...shadows, scope];
+    }
+
+    if (node.type === 'AssignmentExpression' && node.left.type === 'Identifier' &&
+        reactiveKind(node.left.name, vars, shadows) === 'state') {
+      const name = node.left.name;
+      if (node.operator === '=') {
+        edits.push({ start: node.start, end: node.right.start, replacement: `set_${name}(` });
+        edits.push({ start: node.end, end: node.end, replacement: `)` });
+      } else {
+        const rawOp = node.operator.slice(0, -1);
+        edits.push({ start: node.start, end: node.right.start, replacement: `set_${name}(${name}() ${rawOp} (` });
+        edits.push({ start: node.end, end: node.end, replacement: `))` });
+      }
+      walk(node.right, node, shadows);
+      return;
+    }
+
+    if (node.type === 'UpdateExpression' && node.argument.type === 'Identifier' &&
+        reactiveKind(node.argument.name, vars, shadows) === 'state') {
+      const name = node.argument.name;
+      const op = node.operator === '++' ? '+' : '-';
+      edits.push({ start: node.start, end: node.end, replacement: `set_${name}(${name}() ${op} 1)` });
+      return;
+    }
+
+    // $intent sub-signals: x.loading / x.error are functions hung on the accessor
+    if (node.type === 'MemberExpression' && !node.computed &&
+        node.object.type === 'Identifier' && node.property.type === 'Identifier' &&
+        reactiveKind(node.object.name, vars, shadows) === 'intent' &&
+        INTENT_SUB_SIGNALS.has(node.property.name) &&
+        !(parent && parent.type === 'CallExpression' && parent.callee === node)) {
+      edits.push({ start: node.end, end: node.end, replacement: `()` });
+      return; // children need no further rewriting
+    }
+
+    if (node.type === 'Identifier') {
+      const kind = reactiveKind(node.name, vars, shadows);
+      if (kind) {
+        // A fragment root (e.g. the whole expression is just `count`) has no
+        // parent — treat it as a plain read position.
+        const p = parent || { type: '__fragment_root__' };
+        const isDeclOrBinding =
+          (p.type === 'VariableDeclarator' && p.id === node) ||
+          ((p.type === 'FunctionDeclaration' || p.type === 'FunctionExpression' || p.type === 'ClassDeclaration') && p.id === node) ||
+          (p.type === 'AssignmentPattern' && p.left === node) ||
+          p.type === 'RestElement' ||
+          p.type === 'ImportSpecifier' || p.type === 'ImportDefaultSpecifier' ||
+          p.type === 'ExportSpecifier' || p.type === 'LabeledStatement' ||
+          p.type === 'BreakStatement' || p.type === 'ContinueStatement';
+        const isMemberProp = p.type === 'MemberExpression' && p.property === node && !p.computed;
+        const isCallee = (p.type === 'CallExpression' || p.type === 'NewExpression') && p.callee === node;
+        const isAssignTarget = (p.type === 'AssignmentExpression' && p.left === node) || p.type === 'UpdateExpression';
+        const isPropertyKey = p.type === 'Property' && p.key === node && !p.computed && !p.shorthand;
+        const isShorthand = p.type === 'Property' && p.shorthand && p.value === node;
+        const isMemberObject = p.type === 'MemberExpression' && p.object === node;
+
+        if (!isDeclOrBinding && !isMemberProp && !isCallee && !isAssignTarget && !isPropertyKey) {
+          if (isShorthand) {
+            edits.push({ start: node.start, end: node.end, replacement: `${node.name}: ${node.name}()` });
+            return;
+          }
+          if (isMemberObject) {
+            if (kind === 'state' || kind === 'derived' ||
+                (kind === 'data' && !(p.property.type === 'Identifier' && !p.computed && DATA_ACCESSOR_METHODS.has(p.property.name)))) {
+              edits.push({ start: node.end, end: node.end, replacement: `()` });
+            }
+            // intent accessors keep their function identity for member access
+            return;
+          }
+          edits.push({ start: node.end, end: node.end, replacement: `()` });
+          return;
+        }
+      }
+    }
+
+    for (const key of Object.keys(node)) {
+      if (key === 'type') continue;
+      const child = node[key];
+      if (Array.isArray(child)) child.forEach(c => walk(c, node, shadows));
+      else if (child && typeof child === 'object' && child.type) walk(child, node, shadows);
+    }
+  }
+  walk(rootNode, null, initialShadows || []);
+}
+
+function applyEdits(src, edits) {
+  // Descending by start (then end) so earlier positions stay valid; zero-width
+  // inserts at a shared position land before same-position range replacements.
+  const sorted = [...edits].sort((a, b) => (b.start - a.start) || (b.end - a.end));
+  let out = src;
+  for (const edit of sorted) {
+    out = out.slice(0, edit.start) + edit.replacement + out.slice(edit.end);
+  }
+  return out;
+}
+
+const NO_REACTIVE_VARS = { state: new Set(), derived: new Set(), intent: new Set(), data: new Set() };
+
+function hasReactiveVars(vars) {
+  return vars.state.size > 0 || vars.derived.size > 0 || vars.intent.size > 0 || vars.data.size > 0;
+}
+
+// Rewrite one template expression (text interpolation, dynamic attribute,
+// if-condition, each-source, event handler) with the reactive auto-call rules.
+// `locals` holds template-scope names (each-item, each-index) that shadow signals.
+// Unparseable input is returned unchanged — the emitter will surface it as-is.
+function transformTemplateExpression(src, vars, locals) {
+  if (!hasReactiveVars(vars) || !src || !src.trim()) return src;
+  let ast;
+  try {
+    ast = acorn.parseExpressionAt(src, 0, { ecmaVersion: 'latest' });
+  } catch {
+    return src;
+  }
+  const edits = [];
+  emitReactiveEdits(ast, src, vars, edits, locals && locals.size ? [locals] : []);
+  return edits.length > 0 ? applyEdits(src, edits) : src;
+}
+
+// ─── Source maps ───
+// The generated module inlines the user's script verbatim (indented by two
+// spaces) into the mount function, so every line of that block maps 1:1 back to
+// its line in the .sola file. That covers the case that matters: a runtime error
+// or breakpoint inside user code pointing at user code rather than at generated
+// output. Emitted DOM instructions have no user-authored counterpart and are
+// deliberately left unmapped.
+
+const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+function encodeVlq(value) {
+  let vlq = value < 0 ? ((-value) << 1) | 1 : value << 1;
+  let out = '';
+  do {
+    let digit = vlq & 0b11111;
+    vlq >>>= 5;
+    if (vlq > 0) digit |= 0b100000;
+    out += B64[digit];
+  } while (vlq > 0);
+  return out;
+}
+
+/**
+ * Build a v3 source map from a list of {generatedLine, sourceLine} pairs
+ * (both zero-based), each mapping column 0 to column 0 of the source line.
+ */
+function buildSourceMap(segments, filename, sourceContent, generatedLineCount) {
+  const byLine = new Map();
+  for (const seg of segments) byLine.set(seg.generatedLine, seg.sourceLine);
+
+  let prevSourceLine = 0;
+  const lines = [];
+  for (let line = 0; line < generatedLineCount; line++) {
+    if (!byLine.has(line)) { lines.push(''); continue; }
+    const sourceLine = byLine.get(line);
+    // [generatedColumn, sourceIndex, sourceLine, sourceColumn], all relative
+    // except generatedColumn which resets each line.
+    lines.push(
+      encodeVlq(0) + encodeVlq(0) + encodeVlq(sourceLine - prevSourceLine) + encodeVlq(0)
+    );
+    prevSourceLine = sourceLine;
+  }
+
+  return {
+    version: 3,
+    file: filename ? filename.replace(/\.sola$/, '.js') : undefined,
+    sources: [filename || 'component.sola'],
+    sourcesContent: [sourceContent],
+    names: [],
+    mappings: lines.join(';')
+  };
+}
+
 export function compile(source, options = {}) {
   const target = options.target || 'esm'; // 'esm' | 'iife'
-  const { script: scriptContent, style: styleContent, template: rawTemplateSource, isTypeScript } = extractScriptAndStyle(source);
+  const { script: scriptContent, style: styleContent, template: rawTemplateSource, isTypeScript, scriptStartLine } = extractScriptAndStyle(source);
   const scopeHash = hashString(styleContent || rawTemplateSource);
   const hasStyles = styleContent.trim().length > 0;
   const scopedCss = hasStyles ? scopeStyles(styleContent, scopeHash) : '';
 
-  let rawTemplate = rawTemplateSource;
+  // Flatten else-if chains into nested if/else before anything else looks at
+  // the template, so the block handling below only ever sees the simple form.
+  let rawTemplate = desugarElseIf(rawTemplateSource);
 
   // Pre-process attribute-bound expressions BEFORE extractExpressions using
   // balanced-brace matching (handles nested object literals, ternaries, etc.)
@@ -236,14 +759,9 @@ export function compile(source, options = {}) {
   rawTemplate = preprocessTemplate(rawTemplate, dynAttrs);
   rawTemplate = extractExpressions(rawTemplate);
 
-  // Pre-process logic blocks: structured if-then-else
-  // Process nested or sequential if/else blocks cleanly
-  rawTemplate = rawTemplate
-    .replace(/{#if\s+([\s\S]*?)}([\s\S]*?){:else}([\s\S]*?){\/if}/g, '<sola-if condition="$1"><sola-then>$2</sola-then><sola-else>$3</sola-else></sola-if>')
-    .replace(/{#if\s+([\s\S]*?)}([\s\S]*?){\/if}/g, '<sola-if condition="$1"><sola-then>$2</sola-then></sola-if>')
-    .replace(/{#each\s+([\s\S]*?)\s+as\s+([\w]+)(?:\s*,\s*([\w]+))?(?:\s*\(([^)]+)\))?}/g,
-      (_, arr, item, index, key) => `<sola-each array="${arr}" item="${item}"${index ? ` index="${index}"` : ''}${key ? ` key="${key.trim()}"` : ''}>`)
-    .replace(/{\/each}/g, '</sola-each>');
+  // Convert {#if}/{:else}/{/if} and {#each}/{/each} into the sola-* tag form
+  // the emitter walks.
+  rawTemplate = transformBlocks(rawTemplate);
 
   // Parse HTML AST
   const templateNodes = [];
@@ -285,10 +803,19 @@ export function compile(source, options = {}) {
   const exportedProps = [];
   const componentImports = [];
 
+  let reactiveVars = NO_REACTIVE_VARS;
   if (strippedScript.trim()) {
     try {
       const ast = acorn.parse(strippedScript, { ecmaVersion: 'latest', sourceType: 'module' });
       const edits = [];
+      // Whole-node removals (imports, exported props): any rewrite edit that
+      // falls inside one of these spans must be dropped, not applied on top.
+      const removedRanges = [];
+
+      // Pre-pass so reads that appear before their $state declaration
+      // (hoisted handler functions) still rewrite correctly.
+      reactiveVars = collectReactiveVars(ast);
+      for (const name of reactiveVars.state) stateVars.add(name);
 
       function walkAST(node, parent) {
         if (!node || typeof node !== 'object') return;
@@ -306,6 +833,7 @@ export function compile(source, options = {}) {
             end: node.end,
             replacement: `// import hoisted: ${node.source.value}`
           });
+          removedRanges.push([node.start, node.end]);
         }
 
         // Exported props
@@ -317,103 +845,64 @@ export function compile(source, options = {}) {
               ? strippedScript.slice(decl.init.start, decl.init.end)
               : 'undefined';
             exportedProps.push({ name, default: defaultVal });
-            edits.push({
-              start: node.start,
-              end: node.end,
-              replacement: ''
-            });
           });
+          edits.push({ start: node.start, end: node.end, replacement: '' });
+          removedRanges.push([node.start, node.end]);
         }
 
-        // $state() -> createSignal()
-        if (node.type === 'VariableDeclaration') {
-          node.declarations.forEach(decl => {
-            if (decl.init && decl.init.type === 'CallExpression') {
-              const callee = decl.init.callee;
-              if (callee.type === 'Identifier' && callee.name === '$state') {
-                const varName = decl.id.name;
-                stateVars.add(varName);
-                const initArg = decl.init.arguments[0];
-                const initVal = initArg ? strippedScript.slice(initArg.start, initArg.end) : 'undefined';
+        // $state()/$derived()/$effect()/$intent()/$data() macro declarations.
+        // Bracket edits (head + tail) leave the argument expression in place so
+        // the reactive rewrite pass below can still auto-call signals inside it.
+        if (node.type === 'VariableDeclaration' && node.declarations.length === 1) {
+          const decl = node.declarations[0];
+          if (decl.init && decl.init.type === 'CallExpression' && decl.init.callee.type === 'Identifier') {
+            const macro = decl.init.callee.name;
+            const arg = decl.init.arguments[0];
+            const lastArg = decl.init.arguments[decl.init.arguments.length - 1];
+            if (macro === '$state') {
+              const varName = decl.id.name;
+              if (arg) {
+                edits.push({ start: node.start, end: arg.start, replacement: `const [${varName}, set_${varName}] = createSignal(` });
+                edits.push({ start: lastArg.end, end: node.end, replacement: `);` });
+              } else {
+                edits.push({ start: node.start, end: node.end, replacement: `const [${varName}, set_${varName}] = createSignal(undefined);` });
+              }
+            } else if (macro === '$derived') {
+              const varName = decl.id.name;
+              if (arg) {
+                const isFn = arg.type === 'ArrowFunctionExpression' || arg.type === 'FunctionExpression';
                 edits.push({
                   start: node.start,
-                  end: node.end,
-                  replacement: `const [${varName}, set_${varName}] = createSignal(${initVal});`
+                  end: arg.start,
+                  replacement: isFn ? `const ${varName} = createDerived(` : `const ${varName} = createDerived(() => `
                 });
-              } else if (callee.type === 'Identifier' && callee.name === '$derived') {
-                const varName = decl.id.name;
-                const expr = decl.init.arguments[0];
-                const exprSrc = expr ? strippedScript.slice(expr.start, expr.end) : 'undefined';
-                const isFn = expr && (expr.type === 'ArrowFunctionExpression' || expr.type === 'FunctionExpression');
-                edits.push({
-                  start: node.start,
-                  end: node.end,
-                  replacement: isFn
-                    ? `const ${varName} = createDerived(${exprSrc});`
-                    : `const ${varName} = createDerived(() => ${exprSrc});`
-                });
-              } else if (callee.type === 'Identifier' && callee.name === '$effect') {
-                const body = decl.init.arguments[0];
-                const bodySrc = body ? strippedScript.slice(body.start, body.end) : '() => {}';
-                edits.push({
-                  start: node.start,
-                  end: node.end,
-                  replacement: `createEffect(${bodySrc});`
-                });
-              } else if (callee.type === 'Identifier' && callee.name === '$intent') {
-                const promptArg = decl.init.arguments[0]
-                  ? strippedScript.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
-                  : "''";
-                const fallbackArg = decl.init.arguments[1]
-                  ? strippedScript.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
-                  : 'null';
-                edits.push({
-                  start: node.start,
-                  end: node.end,
-                  replacement: `const ${decl.id.name} = createIntent(${promptArg}, ${fallbackArg});`
-                });
-              } else if (callee.type === 'Identifier' && callee.name === '$data') {
-                const sourceArg = decl.init.arguments[0]
-                  ? strippedScript.slice(decl.init.arguments[0].start, decl.init.arguments[0].end)
-                  : "''";
-                const optsArg = decl.init.arguments[1]
-                  ? ', ' + strippedScript.slice(decl.init.arguments[1].start, decl.init.arguments[1].end)
-                  : '';
-                edits.push({
-                  start: node.start,
-                  end: node.end,
-                  replacement: `const ${decl.id.name} = createData(${sourceArg}${optsArg});`
-                });
+                edits.push({ start: arg.end, end: node.end, replacement: `);` });
+              } else {
+                edits.push({ start: node.start, end: node.end, replacement: `const ${varName} = createDerived(() => undefined);` });
+              }
+            } else if (macro === '$effect') {
+              if (arg) {
+                edits.push({ start: node.start, end: arg.start, replacement: `createEffect(` });
+                edits.push({ start: arg.end, end: node.end, replacement: `);` });
+              } else {
+                edits.push({ start: node.start, end: node.end, replacement: `createEffect(() => {});` });
+              }
+            } else if (macro === '$intent') {
+              if (arg) {
+                edits.push({ start: node.start, end: arg.start, replacement: `const ${decl.id.name} = createIntent(` });
+                edits.push({ start: lastArg.end, end: node.end, replacement: `);` });
+              } else {
+                edits.push({ start: node.start, end: node.end, replacement: `const ${decl.id.name} = createIntent('');` });
+              }
+            } else if (macro === '$data') {
+              if (arg) {
+                edits.push({ start: node.start, end: arg.start, replacement: `const ${decl.id.name} = createData(` });
+                edits.push({ start: lastArg.end, end: node.end, replacement: `);` });
+              } else {
+                edits.push({ start: node.start, end: node.end, replacement: `const ${decl.id.name} = createData('');` });
               }
             }
-          });
-        }
-
-        // Assignment to state var: count = x -> set_count(x) (supporting all 10 assignment operators)
-        if (node.type === 'AssignmentExpression' &&
-            node.left.type === 'Identifier' &&
-            stateVars.has(node.left.name)) {
-          const name = node.left.name;
-          const rightSource = strippedScript.slice(node.right.start, node.right.end);
-          if (node.operator === '=') {
-            edits.push({ start: node.start, end: node.end, replacement: `set_${name}(${rightSource})` });
-          } else {
-            const rawOp = node.operator.slice(0, -1);
-            edits.push({ start: node.start, end: node.end, replacement: `set_${name}(${name}() ${rawOp} (${rightSource}))` });
           }
-        }
-
-        // Update expressions: count++ / count--
-        if (node.type === 'UpdateExpression' &&
-            node.argument.type === 'Identifier' &&
-            stateVars.has(node.argument.name)) {
-          const name = node.argument.name;
-          const op = node.operator === '++' ? '+' : '-';
-          edits.push({
-            start: node.start,
-            end: node.end,
-            replacement: `set_${name}(${name}() ${op} 1)`
-          });
         }
 
         for (const key of Object.keys(node)) {
@@ -429,10 +918,17 @@ export function compile(source, options = {}) {
 
       walkAST(ast, null);
 
-      edits.sort((a, b) => b.start - a.start);
-      for (const edit of edits) {
-        jsOutput = jsOutput.slice(0, edit.start) + edit.replacement + jsOutput.slice(edit.end);
+      // Reactive rewrite pass: assignments/updates to signals become setter
+      // calls, bare signal reads become getter calls. Edits landing inside a
+      // removed import/export span are dropped.
+      const rewriteEdits = [];
+      emitReactiveEdits(ast, strippedScript, reactiveVars, rewriteEdits, []);
+      for (const edit of rewriteEdits) {
+        if (removedRanges.some(([s, e]) => edit.start >= s && edit.end <= e)) continue;
+        edits.push(edit);
       }
+
+      jsOutput = applyEdits(strippedScript, edits);
     } catch (err) {
       const loc = err.loc ? ` (line ${err.loc.line}, col ${err.loc.column})` : '';
       const filePath = typeof options === 'string' ? options : (options.filename || '<script>');
@@ -445,8 +941,11 @@ export function compile(source, options = {}) {
   let domCode = '';
   const importedComponentSet = new Set(componentImports.map(i => i.localName));
 
-  function emitNode(node, parentVar) {
+  function emitNode(node, parentVar, locals = new Set()) {
     if (!node) return;
+    // Template-expression rewrite with the current template scope (each-item /
+    // each-index names shadow signals of the same name).
+    const rewrite = (expr) => transformTemplateExpression(expr, reactiveVars, locals);
 
     if (node.type === 'text') {
       const text = node.data.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
@@ -459,7 +958,7 @@ export function compile(source, options = {}) {
     }
 
     if (node.name === 'sola-expr') {
-      const expr = (node.attribs.expr || '').replace(/&quot;/g, '"');
+      const expr = rewrite((node.attribs.expr || '').replace(/&quot;/g, '"'));
       const id = `e${uid++}`;
       domCode += `  const ${id} = document.createTextNode('');\n`;
       domCode += `  ${parentVar}.appendChild(${id});\n`;
@@ -476,7 +975,7 @@ export function compile(source, options = {}) {
     // clobber unrelated sibling nodes. Callers are responsible for trusting/sanitizing
     // whatever markup they pass — same contract as innerHTML anywhere else.
     if (node.name === 'sola-html') {
-      const expr = (node.attribs.expr || '').replace(/&quot;/g, '"');
+      const expr = rewrite((node.attribs.expr || '').replace(/&quot;/g, '"'));
       const id = `h${uid++}`;
       domCode += `  const ${id} = document.createElement('div');\n`;
       domCode += `  ${id}.style.display = 'contents';\n`;
@@ -507,10 +1006,13 @@ export function compile(source, options = {}) {
       for (const [key, val] of Object.entries(node.attribs || {})) {
         const dynMatch = /^__soladyn_(\d+)__$/.exec(val);
         const isEventLikeProp = /^on:?[\w]+$/.test(key);
+        // Dynamic (non-event) component props are deliberately NOT auto-called:
+        // passing the getter is how a child receives live data today, and
+        // README-syntax components rely on it.
         const propValue = dynMatch
           ? `(${dynAttrs[parseInt(dynMatch[1], 10)]})`
           : isEventLikeProp
-            ? `(${val})`
+            ? `(${rewrite(val)})`
             : JSON.stringify(val);
         propEntries.push(`${JSON.stringify(key)}: ${propValue}`);
       }
@@ -520,7 +1022,7 @@ export function compile(source, options = {}) {
       if (node.children && node.children.length > 0) {
         const slotVar = `${cid}_slot`;
         domCode += `  const ${slotVar} = (__slot_target) => {\n`;
-        node.children.forEach(child => emitNode(child, '__slot_target'));
+        node.children.forEach(child => emitNode(child, '__slot_target', locals));
         domCode += `  };\n`;
         propEntries.push(`children: ${slotVar}`);
       }
@@ -547,17 +1049,17 @@ export function compile(source, options = {}) {
 
       domCode += `  createEffect(() => {\n`;
       domCode += `    ${cid}_els.forEach(e => e.remove()); ${cid}_els = [];\n`;
-      domCode += `    if (${node.attribs.condition}) {\n`;
+      domCode += `    if (${rewrite(node.attribs.condition)}) {\n`;
       if (thenChild) {
         domCode += `      const f = document.createDocumentFragment();\n`;
-        thenChild.children.forEach(child => emitNode(child, 'f'));
+        thenChild.children.forEach(child => emitNode(child, 'f', locals));
         domCode += `      Array.from(f.childNodes).forEach(n => ${cid}_els.push(n));\n`;
         domCode += `      ${cid}_a.parentNode.insertBefore(f, ${cid}_a.nextSibling);\n`;
       }
       domCode += `    } else {\n`;
       if (elseChild) {
         domCode += `      const f = document.createDocumentFragment();\n`;
-        elseChild.children.forEach(child => emitNode(child, 'f'));
+        elseChild.children.forEach(child => emitNode(child, 'f', locals));
         domCode += `      Array.from(f.childNodes).forEach(n => ${cid}_els.push(n));\n`;
         domCode += `      ${cid}_a.parentNode.insertBefore(f, ${cid}_a.nextSibling);\n`;
       }
@@ -569,14 +1071,21 @@ export function compile(source, options = {}) {
     // {#each} with optional keyed diffing: {#each items as item (item.id)}
     if (node.name === 'sola-each') {
       const eid = `e${uid++}`;
-      const keyExpr = node.attribs.key || null;
+      // Item/index names shadow signals inside the loop body and key expression
+      const eachLocals = new Set(locals);
+      eachLocals.add(node.attribs.item);
+      if (node.attribs.index) eachLocals.add(node.attribs.index);
+      const arrayExpr = rewrite(node.attribs.array);
+      const keyExpr = node.attribs.key
+        ? transformTemplateExpression(node.attribs.key, reactiveVars, eachLocals)
+        : null;
       domCode += `  const ${eid}_a = document.createComment('each');\n`;
       domCode += `  ${parentVar}.appendChild(${eid}_a);\n`;
       if (keyExpr) {
         // Keyed: maintain a Map<key, Node[]> and reconcile on each run
         domCode += `  let ${eid}_keyMap = new Map();\n`;
         domCode += `  createEffect(() => {\n`;
-        domCode += `    const _items = ${node.attribs.array} || [];\n`;
+        domCode += `    const _items = ${arrayExpr} || [];\n`;
         domCode += `    const _nextKeys = _items.map((${node.attribs.item}, _i) => String(${keyExpr}));\n`;
         domCode += `    // Remove stale keys\n`;
         domCode += `    for (const [_k, _nodes] of ${eid}_keyMap) {\n`;
@@ -590,7 +1099,7 @@ export function compile(source, options = {}) {
         domCode += `      const _key = String(${keyExpr});\n`;
         domCode += `      if (!${eid}_keyMap.has(_key)) {\n`;
         domCode += `        const f = document.createDocumentFragment();\n`;
-        node.children.forEach(child => emitNode(child, 'f'));
+        node.children.forEach(child => emitNode(child, 'f', eachLocals));
         domCode += `        const _nodes = Array.from(f.childNodes);\n`;
         domCode += `        ${eid}_keyMap.set(_key, _nodes);\n`;
         domCode += `        ${eid}_a.parentNode.insertBefore(f, _anchor);\n`;
@@ -602,12 +1111,12 @@ export function compile(source, options = {}) {
         domCode += `  let ${eid}_els = [];\n`;
         domCode += `  createEffect(() => {\n`;
         domCode += `    ${eid}_els.forEach(e => e.remove()); ${eid}_els = [];\n`;
-        domCode += `    const _items = ${node.attribs.array} || [];\n`;
+        domCode += `    const _items = ${arrayExpr} || [];\n`;
         domCode += `    const f = document.createDocumentFragment();\n`;
         domCode += `    for (let _i = 0; _i < _items.length; _i++) {\n`;
         domCode += `      const ${node.attribs.item} = _items[_i];\n`;
         if (node.attribs.index) domCode += `      const ${node.attribs.index} = _i;\n`;
-        node.children.forEach(child => emitNode(child, 'f'));
+        node.children.forEach(child => emitNode(child, 'f', eachLocals));
         domCode += `    }\n`;
         domCode += `    Array.from(f.childNodes).forEach(n => ${eid}_els.push(n));\n`;
         domCode += `    ${eid}_a.parentNode.insertBefore(f, ${eid}_a.nextSibling);\n`;
@@ -629,7 +1138,7 @@ export function compile(source, options = {}) {
       // Dynamic attribute pre-processed from {expr} in attribute values
       const dynMatch = /^__soladyn_(\d+)__$/.exec(val);
       if (dynMatch) {
-        const expr = dynAttrs[parseInt(dynMatch[1])];
+        const expr = rewrite(dynAttrs[parseInt(dynMatch[1])]);
         if (BOOLEAN_ATTRS.has(key)) {
           domCode += `  createEffect(() => { const _v = !!(${expr}); if (_v) ${id}.setAttribute('${key}', ''); else ${id}.removeAttribute('${key}'); });\n`;
         } else if (key === 'class' || key === 'className') {
@@ -644,11 +1153,11 @@ export function compile(source, options = {}) {
         const eventName = key.slice(3);
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
         // val is the handler expression (pre-processed from {expr}), pass directly
-        domCode += `  ${id}.addEventListener('${eventName}', ${val});\n`;
+        domCode += `  ${id}.addEventListener('${eventName}', ${rewrite(val)});\n`;
       } else if (key.startsWith('on')) {
         const eventName = key.slice(2).toLowerCase();
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(eventName)) continue;
-        domCode += `  ${id}.addEventListener('${eventName}', ${val});\n`;
+        domCode += `  ${id}.addEventListener('${eventName}', ${rewrite(val)});\n`;
       } else if (key.startsWith('bind:')) {
         const prop = key.slice(5);
         if (prop === 'value') {
@@ -656,9 +1165,12 @@ export function compile(source, options = {}) {
           domCode += `  createEffect(() => { ${id}.value = ${val}() ?? ''; });\n`;
         }
       } else if (key === 'class' || key === 'className') {
-        domCode += `  ${id}.className += ' ' + \`${val}\`;\n`;
+        // Static values: emit as a plain string literal. A template literal here
+        // would let a backtick or ${ in the markup break out into expression
+        // position; JSON.stringify cannot.
+        domCode += `  ${id}.className += ' ' + ${JSON.stringify(val)};\n`;
       } else {
-        domCode += `  ${id}.setAttribute('${key}', \`${val}\`);\n`;
+        domCode += `  ${id}.setAttribute(${JSON.stringify(key)}, ${JSON.stringify(val)});\n`;
       }
     }
 
@@ -666,7 +1178,7 @@ export function compile(source, options = {}) {
 
     if (node.children && !VOID_ELEMENTS.has(node.name)) {
       for (const child of node.children) {
-        emitNode(child, id);
+        emitNode(child, id, locals);
       }
     }
   }
@@ -701,7 +1213,7 @@ export function compile(source, options = {}) {
     output += `  if (typeof document !== 'undefined' && !window['__SOLA_STYLE_${scopeHash}']) {\n`;
     output += `    window['__SOLA_STYLE_${scopeHash}'] = true;\n`;
     output += `    const styleEl = document.createElement('style');\n`;
-    output += `    styleEl.textContent = \`${scopedCss}\`;\n`;
+    output += `    styleEl.textContent = \`${escapeTemplateLiteral(scopedCss)}\`;\n`;
     output += `    document.head.appendChild(styleEl);\n`;
     output += `  }\n\n`;
   }
@@ -711,7 +1223,11 @@ export function compile(source, options = {}) {
   }
 
   output += `\n  // User script\n`;
-  output += jsOutput.split('\n').map(l => '  ' + l).join('\n') + '\n\n';
+  // Record where the user's script lands in the output so each of its lines can
+  // be mapped back to the same line of the .sola file.
+  const userScriptGeneratedStart = output.split('\n').length - 1;
+  const userScriptLines = jsOutput.split('\n');
+  output += userScriptLines.map(l => '  ' + l).join('\n') + '\n\n';
 
   output += `  // Reactive DOM graph\n`;
   output += domCode;
@@ -727,9 +1243,23 @@ export function compile(source, options = {}) {
     output += `})();\n`;
   }
 
+  // The reactive rewrite can add or remove characters within a line but never
+  // splits one, so the user script's line count is preserved and each line maps
+  // straight back to its origin.
+  let map = null;
+  if (options.sourcemap !== false) {
+    const filename = options.filename || 'component.sola';
+    const segments = userScriptLines.map((_, i) => ({
+      generatedLine: userScriptGeneratedStart + i,
+      sourceLine: scriptStartLine + i
+    }));
+    map = buildSourceMap(segments, filename, source, output.split('\n').length);
+  }
+
   return {
     code: output,
     scopeHash,
-    css: scopedCss
+    css: scopedCss,
+    map
   };
 }

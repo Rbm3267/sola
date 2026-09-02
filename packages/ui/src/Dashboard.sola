@@ -140,27 +140,27 @@
     margin: 0 auto;
     padding: 32px 24px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #0f172a;
+    color: var(--sola-text-primary, #0f172a);
   }
 
   @media (prefers-color-scheme: dark) {
-    .sola-dashboard-container { color: #f1f5f9; }
-    .dash-title { color: #ffffff; }
-    .dash-desc { color: #94a3b8; }
-    .dash-card { background: #0f172a; border-color: rgba(255,255,255,0.07); }
-    .controller-card { background: #0f172a; border-color: rgba(255,255,255,0.07); }
-    .table-card { background: #0f172a; border-color: rgba(255,255,255,0.07); }
-    .node-row { background: #1e293b; border-color: rgba(255,255,255,0.05); }
-    .node-name { color: #f1f5f9; }
-    .node-rps { color: #94a3b8; }
-    .rps-counter-pill { background: #1e293b; border-color: rgba(255,255,255,0.1); color: #f1f5f9; }
-    .controller-title { color: #f1f5f9; }
-    .controller-desc { color: #94a3b8; }
-    .card-value { color: #f1f5f9; }
-    .gauge-center-text { color: #f1f5f9; }
+    .sola-dashboard-container { color: var(--sola-color-neutral-100, #f1f5f9); }
+    .dash-title { color: var(--sola-color-neutral-0, #ffffff); }
+    .dash-desc { color: var(--sola-text-tertiary, #94a3b8); }
+    .dash-card { background: var(--sola-color-neutral-900, #0f172a); border-color: rgba(255,255,255,0.07); }
+    .controller-card { background: var(--sola-color-neutral-900, #0f172a); border-color: rgba(255,255,255,0.07); }
+    .table-card { background: var(--sola-color-neutral-900, #0f172a); border-color: rgba(255,255,255,0.07); }
+    .node-row { background: var(--sola-color-neutral-800, #1e293b); border-color: rgba(255,255,255,0.05); }
+    .node-name { color: var(--sola-color-neutral-100, #f1f5f9); }
+    .node-rps { color: var(--sola-text-tertiary, #94a3b8); }
+    .rps-counter-pill { background: var(--sola-color-neutral-800, #1e293b); border-color: rgba(255,255,255,0.1); color: var(--sola-color-neutral-100, #f1f5f9); }
+    .controller-title { color: var(--sola-color-neutral-100, #f1f5f9); }
+    .controller-desc { color: var(--sola-text-tertiary, #94a3b8); }
+    .card-value { color: var(--sola-color-neutral-100, #f1f5f9); }
+    .gauge-center-text { color: var(--sola-color-neutral-100, #f1f5f9); }
     .alert-nominal { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); color: #6ee7b7; }
     .alert-warning { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); color: #fcd34d; }
-    .btn-secondary { background: #1e293b; color: #cbd5e1; border-color: rgba(255,255,255,0.1); }
+    .btn-secondary { background: var(--sola-color-neutral-800, #1e293b); color: var(--sola-color-neutral-300, #cbd5e1); border-color: rgba(255,255,255,0.1); }
     .btn-secondary:hover { background: #334155; }
     .badge-row { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.25); }
     .live-beacon { background: #3b82f6; }
@@ -197,7 +197,7 @@
   .badge-text {
     font-size: 11px;
     font-weight: 700;
-    color: #047857;
+    color: var(--sola-color-primary-700, #047857);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
@@ -210,7 +210,7 @@
 
   .dash-desc {
     font-size: 13px;
-    color: #64748b;
+    color: var(--sola-color-neutral-500, #64748b);
     margin: 0;
   }
 
@@ -231,7 +231,7 @@
 
   .btn-primary {
     background: #3b82f6;
-    color: #ffffff;
+    color: var(--sola-color-neutral-0, #ffffff);
   }
 
   .btn-primary:hover {
@@ -239,13 +239,13 @@
   }
 
   .btn-secondary {
-    background: #f1f5f9;
-    color: #334155;
-    border: 1px solid #e2e8f0;
+    background: var(--sola-surface-2, #f1f5f9);
+    color: var(--sola-color-neutral-700, #334155);
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
   }
 
   .btn-secondary:hover {
-    background: #e2e8f0;
+    background: var(--sola-color-neutral-200, #e2e8f0);
   }
 
   .alert-banner {
@@ -282,8 +282,8 @@
   }
 
   .dash-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--sola-surface-0, #ffffff);
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.03);
@@ -317,7 +317,7 @@
   .card-label {
     font-size: 10px;
     font-weight: 700;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
     letter-spacing: 0.1em;
     margin-bottom: 6px;
   }
@@ -336,12 +336,12 @@
 
   .card-subtext {
     font-size: 11px;
-    color: #64748b;
+    color: var(--sola-color-neutral-500, #64748b);
   }
 
   .controller-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--sola-surface-0, #ffffff);
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
@@ -362,19 +362,19 @@
 
   .controller-desc {
     font-size: 12px;
-    color: #64748b;
+    color: var(--sola-color-neutral-500, #64748b);
     margin: 0;
   }
 
   .rps-counter-pill {
     padding: 4px 10px;
     border-radius: 8px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--sola-surface-1, #f8fafc);
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     font-size: 12px;
     font-weight: 800;
     font-family: ui-monospace, SFMono-Regular, monospace;
-    color: #0f172a;
+    color: var(--sola-text-primary, #0f172a);
   }
 
   .sola-range-input {
@@ -384,8 +384,8 @@
   }
 
   .table-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--sola-surface-0, #ffffff);
+    border: 1px solid var(--sola-border-subtle, #e2e8f0);
     border-radius: 20px;
     padding: 20px;
   }
@@ -393,7 +393,7 @@
   .table-title {
     font-size: 13px;
     font-weight: 800;
-    color: #64748b;
+    color: var(--sola-color-neutral-500, #64748b);
     margin-bottom: 12px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -411,8 +411,8 @@
     align-items: center;
     padding: 10px 14px;
     border-radius: 12px;
-    background: #f8fafc;
-    border: 1px solid #f1f5f9;
+    background: var(--sola-surface-1, #f8fafc);
+    border: 1px solid var(--sola-surface-2, #f1f5f9);
   }
 
   .node-id-group {
@@ -431,12 +431,12 @@
   .node-name {
     font-size: 13px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--sola-text-primary, #0f172a);
   }
 
   .node-sub {
     font-size: 10px;
-    color: #94a3b8;
+    color: var(--sola-text-tertiary, #94a3b8);
     font-family: ui-monospace, monospace;
   }
 
@@ -450,7 +450,7 @@
     font-size: 12px;
     font-weight: 700;
     font-family: ui-monospace, monospace;
-    color: #334155;
+    color: var(--sola-color-neutral-700, #334155);
   }
 
   .status-pill {
@@ -458,8 +458,8 @@
     border-radius: 6px;
     font-size: 10px;
     font-weight: 800;
-    background: #ecfdf5;
-    color: #047857;
+    background: var(--sola-alert-positive-bg, #ecfdf5);
+    color: var(--sola-color-primary-700, #047857);
     border: 1px solid rgba(16, 185, 129, 0.2);
   }
 </style>

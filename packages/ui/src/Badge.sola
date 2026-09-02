@@ -17,13 +17,13 @@
   }
 
   .default {
-    background: #f1f5f9;
-    color: #64748b;
+    background: var(--sola-surface-2, #f1f5f9);
+    color: var(--sola-color-neutral-500, #64748b);
   }
 
   .success {
-    background: #ecfdf5;
-    color: #059669;
+    background: var(--sola-alert-positive-bg, #ecfdf5);
+    color: var(--sola-alert-positive, #059669);
   }
 
   .warning {
@@ -32,7 +32,7 @@
   }
 
   .error {
-    background: #fef2f2;
-    color: #dc2626;
+    background: var(--sola-alert-high-bg, #fef2f2);
+    color: var(--sola-alert-high, #dc2626);
   }
 </style>

@@ -23,8 +23,8 @@
   }
 
   .success {
-    background: #ecfdf5;
-    color: #047857;
+    background: var(--sola-alert-positive-bg, #ecfdf5);
+    color: var(--sola-color-primary-700, #047857);
     border-color: #a7f3d0;
   }
 
@@ -35,7 +35,7 @@
   }
 
   .error {
-    background: #fef2f2;
+    background: var(--sola-alert-high-bg, #fef2f2);
     color: #b91c1c;
     border-color: #fecaca;
   }

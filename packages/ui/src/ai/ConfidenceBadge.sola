@@ -68,7 +68,7 @@
     color: #065f46;
     border-color: #a7f3d0;
   }
-  .tier-high .dot { background: #10b981; box-shadow: 0 0 4px #10b981; }
+  .tier-high .dot { background: var(--sola-color-primary-500, #10b981); box-shadow: 0 0 4px #10b981; }
 
   .tier-medium {
     background: #fffbeb;
@@ -78,16 +78,16 @@
   .tier-medium .dot { background: #f59e0b; }
 
   .tier-low {
-    background: #fef2f2;
+    background: var(--sola-alert-high-bg, #fef2f2);
     color: #7f1d1d;
     border-color: #fecaca;
   }
   .tier-low .dot { background: #ef4444; }
 
   .tier-unknown {
-    background: #f8fafc;
-    color: #64748b;
-    border-color: #e2e8f0;
+    background: var(--sola-surface-1, #f8fafc);
+    color: var(--sola-color-neutral-500, #64748b);
+    border-color: var(--sola-border-subtle, #e2e8f0);
   }
   .tier-unknown .dot { background: #94a3b8; }
 </style>
