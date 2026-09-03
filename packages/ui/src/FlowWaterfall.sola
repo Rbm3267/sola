@@ -81,7 +81,7 @@
   .wf-title { font-size: 15px; font-weight: 900; color: #020617; letter-spacing: -0.01em; font-family: ui-monospace, monospace; margin: 0; }
 
   .wf-final { text-align: right; flex-shrink: 0; }
-  .wf-final-label { font-size: 10px; font-family: ui-monospace, monospace; color: var(--sola-text-tertiary, #94a3b8); text-transform: uppercase; display: block; }
+  .wf-final-label { font-size: 12px; font-family: ui-monospace, monospace; color: var(--sola-text-tertiary, #94a3b8); text-transform: uppercase; display: block; }
   .wf-final-value { font-size: 18px; font-weight: 900; font-family: ui-monospace, monospace; color: var(--sola-color-primary-700, #047857); letter-spacing: -0.01em; }
 
   .wf-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
@@ -125,7 +125,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 11px;
+    font-size: 12px;
     font-family: ui-monospace, monospace;
     color: var(--sola-text-tertiary, #94a3b8);
     padding-top: 12px;

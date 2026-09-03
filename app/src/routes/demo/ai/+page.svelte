@@ -205,7 +205,7 @@
           {#each messages as msg}
             <div class="flex {msg.role === 'user' ? 'justify-end' : 'justify-start'} gap-2.5">
               {#if msg.role === 'assistant'}
-                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 mt-1 flex items-center justify-center text-white" style="font-size:9px;font-weight:700">AI</div>
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 mt-1 flex items-center justify-center text-white" style="font-size:12px;font-weight:700">AI</div>
               {/if}
               <div class="max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed
                 {msg.role === 'user'
@@ -355,7 +355,7 @@
                       color: {row.fg};
                       background: {row.bg};
                       border-color: {row.fg}22;
-                      font-size: {size === 'sm' ? '11px' : size === 'md' ? '13px' : '15px'};
+                      font-size: {size === 'sm' ? '12px' : size === 'md' ? '13px' : '15px'};
                       padding: {size === 'sm' ? '2px 8px' : size === 'md' ? '4px 10px' : '6px 14px'};
                       gap: {size === 'sm' ? '4px' : '6px'};
                     "
@@ -368,7 +368,7 @@
                     "></span>
                     {row.label}
                     {#if row.score !== null}
-                      <span style="opacity:0.65;font-family:monospace;font-size:0.85em">{(row.score * 100).toFixed(0)}%</span>
+                      <span style="opacity:0.65;font-family:monospace;font-size:1em">{(row.score * 100).toFixed(0)}%</span>
                     {/if}
                   </span>
                 {/each}
@@ -396,7 +396,6 @@
         >
           Analyze incident INC0042 →
         </button>
-        <p class="text-xs text-slate-400 dark:text-slate-500 mt-3 font-mono">open={sheetOpen} · loading={sheetLoading} · content={(sheetContent ? 'structured' : 'null')}</p>
       </div>
 
       <!-- Sheet overlay -->

@@ -8,6 +8,12 @@ import { test, expect, type Page } from '@playwright/test';
 const DESKTOP = { width: 1440, height: 900 };
 const PHONE = { width: 390, height: 844 };
 
+/** Every page on the site. Sweeps run over all of them: the earlier checks
+ *  covered four or five, so a dead repository link on /privacy and stale
+ *  "1,000Hz" copy on /demo both passed while broken. */
+const ALL_PAGES = ['/', '/docs', '/components', '/studio', '/community',
+                   '/demo', '/demo/ai', '/preview', '/overview', '/privacy'];
+
 /** Every rendered text size on the page, for elements that actually show text. */
 async function textSizes(page: Page) {
   return page.evaluate(() => {
@@ -29,7 +35,7 @@ async function textSizes(page: Page) {
   });
 }
 
-for (const path of ['/', '/components', '/docs']) {
+for (const path of ALL_PAGES) {
   test(`${path} has no text below the 12px floor`, async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto(path);
@@ -60,8 +66,9 @@ test('nav offers four destinations, with the rest under Tools', async ({ page })
 
   // They are reachable, one click away.
   await nav.getByRole('button', { name: 'Tools' }).click();
-  await expect(page.getByRole('link', { name: /AI Demo/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: /Extension/ })).toBeVisible();
+  const header = page.locator('header');
+  await expect(header.getByRole('link', { name: /AI Demo/ })).toBeVisible();
+  await expect(header.getByRole('link', { name: /Extension/ })).toBeVisible();
 });
 
 test('hero CTA sends a developer to the quickstart', async ({ page }) => {
@@ -104,7 +111,7 @@ test('the hero demonstrates the thing the headline claims', async ({ page }) => 
 });
 
 test('every repository link points at the real repository', async ({ page }) => {
-  for (const path of ['/', '/docs', '/components', '/preview']) {
+  for (const path of ALL_PAGES) {
     await page.goto(path);
     const hrefs = await page
       .locator('a[href*="github.com"]')
@@ -125,7 +132,7 @@ test('no performance claim without a number behind it', async ({ page }) => {
     /spring physics/i
   ];
 
-  for (const path of ['/', '/docs', '/components', '/studio', '/overview']) {
+  for (const path of ALL_PAGES) {
     await page.goto(path);
     await page.waitForLoadState('networkidle');
     const body = await page.locator('body').innerText();
@@ -243,3 +250,46 @@ for (const osTheme of ['light', 'dark'] as const) {
     });
   }
 }
+
+test('every page is reachable, and the policy page especially', async ({ page }) => {
+  // /privacy, /demo and /overview were linked from nowhere. A privacy policy a
+  // visitor cannot reach is a problem beyond navigation.
+  await page.setViewportSize(DESKTOP);
+  await page.goto('/');
+  // The site renders client-side, so the nav and footer do not exist yet
+  // at goto time.
+  await page.waitForLoadState('networkidle');
+  const norm = (h: string) => {
+    const path = (h ?? '').split('?')[0].split('#')[0];
+    return path.length > 1 ? path.replace(/\/$/, '') : path;
+  };
+  const hrefs = new Set(
+    (await page.locator('a[href]').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? '')))
+      .map(norm)
+  );
+  for (const route of ALL_PAGES) {
+    expect(hrefs.has(norm(route)), `${route} is not reachable from the homepage`).toBe(true);
+  }
+});
+
+test('no page ships debug output', async ({ page }) => {
+  // /demo/ai rendered `open=false · loading=false · content=null` to visitors.
+  for (const path of ALL_PAGES) {
+    await page.goto(path);
+    await page.waitForLoadState('networkidle');
+    const body = await page.locator('body').innerText();
+    for (const pattern of [/open=(true|false)/, /loading=(true|false)/, /content=(null|undefined)/, /undefined/]) {
+      expect(body, `${path} shows debug output matching ${pattern}`).not.toMatch(pattern);
+    }
+  }
+});
+
+test('a version on screen names the package it belongs to', async ({ page }) => {
+  // Four bare version strings across the site read as contradictions.
+  await page.goto('/docs');
+  await page.waitForLoadState('networkidle');
+  const footer = await page.locator('footer').innerText();
+  for (const pkg of ['core', 'compiler', 'ui']) {
+    expect(footer, `footer should attribute the ${pkg} version`).toContain(pkg);
+  }
+});

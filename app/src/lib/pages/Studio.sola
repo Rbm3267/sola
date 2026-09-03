@@ -150,7 +150,7 @@
     letter-spacing: -0.02em;
   }
   .studio-badge {
-    font-size: 10px;
+    font-size: 12px;
     font-family: monospace;
     font-weight: 700;
     padding: 2px 8px;
@@ -218,14 +218,14 @@
     margin-bottom: 12px;
   }
   .card-label {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     font-family: monospace;
     color: #64748b;
     letter-spacing: 0.08em;
   }
   .card-delta {
-    font-size: 10px;
+    font-size: 12px;
     font-family: monospace;
     font-weight: 700;
     color: #10b981;
@@ -234,7 +234,7 @@
     border-radius: 6px;
   }
   .card-badge-live {
-    font-size: 10px;
+    font-size: 12px;
     font-family: monospace;
     font-weight: 700;
     color: #38bdf8;
@@ -253,7 +253,7 @@
     color: #10b981;
   }
   .card-meta {
-    font-size: 11px;
+    font-size: 12px;
     color: #94a3b8;
   }
   .spark-bars {
@@ -277,7 +277,7 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     padding: 10px;
-    font-size: 11px;
+    font-size: 12px;
     font-family: monospace;
     color: #38bdf8;
     margin-bottom: 8px;

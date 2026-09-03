@@ -177,7 +177,7 @@
   }
 
   .badge-text {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--sola-color-primary-700, #047857);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -297,7 +297,7 @@
   }
 
   .card-label {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--sola-text-tertiary, #94a3b8);
     letter-spacing: 0.1em;
@@ -317,7 +317,7 @@
   }
 
   .card-subtext {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--sola-text-secondary, #64748b);
   }
 
@@ -417,7 +417,7 @@
   }
 
   .node-sub {
-    font-size: 10px;
+    font-size: 12px;
     color: var(--sola-text-tertiary, #94a3b8);
     font-family: ui-monospace, monospace;
   }
@@ -438,7 +438,7 @@
   .status-pill {
     padding: 2px 8px;
     border-radius: 6px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 800;
     background: var(--sola-alert-positive-bg, #ecfdf5);
     color: var(--sola-color-primary-700, #047857);

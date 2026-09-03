@@ -377,7 +377,7 @@ export function SolaWidget({ title, value }) {
       <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-xs space-y-2">
         <div class="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          <span>Sola AIR v1.0.1</span>
+          <span>Sola AIR v{VERSIONS.solaAir}</span>
         </div>
         <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
           Single-file zero-VDOM reactivity for the ambient web.

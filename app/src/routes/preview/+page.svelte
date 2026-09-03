@@ -2,7 +2,7 @@
   import Navbar from '$lib/components/Navbar.svelte';
   import { onMount } from 'svelte';
   import SolaButton from '$lib/components/SolaButton.svelte';
-  import { GITHUB_URL } from '$lib/data/site';
+  import { GITHUB_URL, VERSIONS } from '$lib/data/site';
 
   // Animation Step State
   let activeAnimationStep = $state<1 | 2 | 3 | 4>(1);
@@ -82,7 +82,7 @@
     <div class="text-center max-w-3xl mx-auto space-y-4">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold shadow-2xs">
         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-        <span>Sola AIR Chrome Extension v1.0.1</span>
+        <span>Sola AIR Chrome Extension v{VERSIONS.extension}</span>
       </div>
       
       <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.08]">

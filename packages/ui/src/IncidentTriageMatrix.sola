@@ -97,7 +97,7 @@
   .triage-description { font-size: 12px; color: var(--sola-text-secondary, #64748b); margin: 0; }
   .triage-count {
     flex-shrink: 0;
-    font-size: 11px;
+    font-size: 12px;
     font-family: ui-monospace, monospace;
     font-weight: 900;
     color: #881337;
@@ -125,11 +125,11 @@
   .triage-row-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .triage-row-text { display: flex; flex-direction: column; min-width: 0; }
   .triage-row-service { font-size: 12px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--sola-text-primary, #0f172a); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .triage-row-id { font-size: 10px; font-family: ui-monospace, monospace; color: var(--sola-text-tertiary, #94a3b8); }
+  .triage-row-id { font-size: 12px; font-family: ui-monospace, monospace; color: var(--sola-text-tertiary, #94a3b8); }
 
   .triage-sev-pill {
     flex-shrink: 0;
-    font-size: 10px;
+    font-size: 12px;
     font-family: ui-monospace, monospace;
     font-weight: 900;
     padding: 2px 8px;
@@ -140,11 +140,11 @@
   .sev-p3 { background: var(--sola-alert-info-bg, #f0f9ff); color: #0369a1; border: 1px solid #bae6fd; }
 
   .triage-row-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .triage-status { font-size: 11px; font-family: ui-monospace, monospace; font-weight: 700; color: var(--sola-text-secondary, #475569); }
-  .triage-latency { font-size: 11px; font-family: ui-monospace, monospace; color: var(--sola-text-tertiary, #94a3b8); }
+  .triage-status { font-size: 12px; font-family: ui-monospace, monospace; font-weight: 700; color: var(--sola-text-secondary, #475569); }
+  .triage-latency { font-size: 12px; font-family: ui-monospace, monospace; color: var(--sola-text-tertiary, #94a3b8); }
 
   .triage-playbooks { padding-top: 16px; border-top: 1px solid var(--sola-surface-2, #f1f5f9); display: flex; flex-direction: column; gap: 8px; }
-  .triage-playbooks-label { font-size: 11px; font-family: ui-monospace, monospace; font-weight: 700; color: var(--sola-text-secondary, #475569); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+  .triage-playbooks-label { font-size: 12px; font-family: ui-monospace, monospace; font-weight: 700; color: var(--sola-text-secondary, #475569); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
 
   .triage-playbook-row {
     display: flex;
@@ -163,7 +163,7 @@
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     font-family: ui-monospace, monospace;
     font-weight: 700;
     color: var(--sola-color-neutral-0, #ffffff);

@@ -17,6 +17,12 @@ function manifestVersion(pkgDir: string) {
 	).version as string;
 }
 
+// The Chrome extension versions independently of the packages, so read it from
+// the manifest that actually ships rather than restating it in the page.
+const extensionVersion = JSON.parse(
+	readFileSync(path.resolve(__dirname, '../packages/sola-extension/manifest.json'), 'utf-8')
+).version as string;
+
 const solaVersion = manifestVersion('sola-air');
 const coreVersion = manifestVersion('core');
 const compilerVersion = manifestVersion('compiler');
@@ -61,7 +67,8 @@ export default defineConfig({
 		__SOLA_CORE_VERSION__: JSON.stringify(coreVersion),
 		__SOLA_COMPILER_VERSION__: JSON.stringify(compilerVersion),
 		__SOLA_UI_VERSION__: JSON.stringify(uiVersion),
-		__SOLA_UI_EXPORTS__: JSON.stringify(uiExports)
+		__SOLA_UI_EXPORTS__: JSON.stringify(uiExports),
+		__SOLA_EXTENSION_VERSION__: JSON.stringify(extensionVersion)
 	},
 	resolve: {
 		alias: {

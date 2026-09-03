@@ -7,6 +7,7 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme.svelte';
+	import SiteFooter from '$lib/components/SiteFooter.svelte';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
@@ -32,5 +33,6 @@
 
 <div class="min-h-screen flex flex-col w-full transition-colors duration-200">
 	{@render children()}
+	<SiteFooter />
 </div>
 

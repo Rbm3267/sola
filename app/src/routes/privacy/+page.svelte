@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { GITHUB_URL, GITHUB_REPO } from '$lib/data/site';
   import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
@@ -125,7 +126,7 @@
       <section class="space-y-3 pt-4 border-t border-slate-100 dark:border-white/5">
         <h2 class="text-xl font-bold text-slate-950 dark:text-white tracking-tight">5. Contact & Questions</h2>
         <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-          For questions regarding this privacy policy or Sola security architecture, review the open-source repository at <a href="https://github.com/Rbm3267/sola" class="text-blue-600 dark:text-blue-400 underline font-medium" target="_blank" rel="noopener noreferrer">github.com/Rbm3267/sola</a>.
+          For questions regarding this privacy policy or Sola security architecture, review the open-source repository at <a href="{GITHUB_URL}" class="text-blue-600 dark:text-blue-400 underline font-medium" target="_blank" rel="noopener noreferrer">{GITHUB_REPO}</a>.
         </p>
       </section>
 

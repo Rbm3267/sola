@@ -90,7 +90,7 @@
   .gauge-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; color: var(--gauge-ring-color, #10b981); }
 
   .gauge-title {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--sola-text-secondary, #64748b);
     text-transform: uppercase;
@@ -99,7 +99,7 @@
   }
 
   .gauge-badge {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     background: var(--sola-surface-2, #f1f5f9);
     border: 1px solid var(--sola-border-subtle, #e2e8f0);
@@ -126,7 +126,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 11px;
+    font-size: 12px;
     font-family: ui-monospace, monospace;
     color: var(--sola-text-tertiary, #94a3b8);
   }

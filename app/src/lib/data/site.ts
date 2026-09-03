@@ -15,7 +15,9 @@ export const VERSIONS = {
   solaAir: __SOLA_VERSION__,
   core: __SOLA_CORE_VERSION__,
   compiler: __SOLA_COMPILER_VERSION__,
-  ui: __SOLA_UI_VERSION__
+  ui: __SOLA_UI_VERSION__,
+  /** The Chrome extension, read from its own manifest. */
+  extension: __SOLA_EXTENSION_VERSION__
 };
 
 /** Names @sola-air-ui/ui really exports, read from its entry point at build time. */
