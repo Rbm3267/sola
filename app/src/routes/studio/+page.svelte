@@ -3,7 +3,7 @@
   import { COMPONENT_CATALOG, type CatalogComponent } from '$lib/data/componentCatalog';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
-  import { COMMUNITY_TEMPLATES } from '$lib/data/communityTemplates';
+  import { STUDIO_PRESETS } from '$lib/data/studioPresets';
   import { CATALOG_COUNT } from '$lib/data/site';
 
   // --- 1. Universal Canvas Card Data Model ---
@@ -125,9 +125,9 @@
       cards = JSON.parse(JSON.stringify(samplePresets[key].cards));
       activeCardId = null;
     } else {
-      const communityTemplate = COMMUNITY_TEMPLATES.find(t => t.id === key);
-      if (communityTemplate) {
-        cards = JSON.parse(JSON.stringify(communityTemplate.cards));
+      const preset = STUDIO_PRESETS.find(t => t.id === key);
+      if (preset) {
+        cards = JSON.parse(JSON.stringify(preset.cards));
         activeCardId = null;
       }
     }

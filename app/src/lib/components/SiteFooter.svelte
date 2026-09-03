@@ -27,7 +27,6 @@
       heading: 'Project',
       links: [
         { href: GITHUB_URL, label: 'GitHub', external: true },
-        { href: '/community', label: 'Concept Layouts' },
         { href: '/privacy', label: 'Privacy' }
       ]
     }

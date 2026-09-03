@@ -11,7 +11,7 @@ const PHONE = { width: 390, height: 844 };
 /** Every page on the site. Sweeps run over all of them: the earlier checks
  *  covered four or five, so a dead repository link on /privacy and stale
  *  "1,000Hz" copy on /demo both passed while broken. */
-const ALL_PAGES = ['/', '/docs', '/components', '/studio', '/community',
+const ALL_PAGES = ['/', '/docs', '/components', '/studio',
                    '/demo', '/demo/ai', '/preview', '/overview', '/privacy'];
 
 /** Every rendered text size on the page, for elements that actually show text. */
@@ -326,7 +326,7 @@ test('light-mode text contrast does not regress', async ({ page }) => {
   // never rise. Elements painted by a CSS gradient are skipped: backgroundColor
   // cannot describe a gradient, so they cannot be judged this way.
   const budget: Record<string, number> = {
-    '/': 20, '/docs': 11, '/components': 5, '/studio': 12, '/community': 43,
+    '/': 20, '/docs': 11, '/components': 5, '/studio': 12,
     '/demo': 12, '/demo/ai': 38, '/preview': 6, '/overview': 1, '/privacy': 1
   };
 

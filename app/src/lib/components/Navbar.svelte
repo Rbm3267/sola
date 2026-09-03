@@ -19,8 +19,7 @@
 
   const toolsNav = [
     { href: '/demo/ai', label: 'AI Demo', blurb: 'Ambient intent, resolved live' },
-    { href: '/preview', label: 'Extension', blurb: 'Inspect Sola in any page' },
-    { href: '/community', label: 'Community', blurb: 'Starters and examples' }
+    { href: '/preview', label: 'Extension', blurb: 'Inspect Sola in any page' }
   ];
 
   let isAiModalOpen = $state(false);

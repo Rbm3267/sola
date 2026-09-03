@@ -1,4 +1,4 @@
-export interface SolaTemplate {
+export interface StudioPreset {
   id: string;
   name: string;
   category: 'Autonomous AI & Agents' | 'Edge & Neural Systems' | 'Robotics & Spatial' | 'SaaS & Analytics' | 'Commerce & Retail' | 'Productivity & Tasks' | 'Operations & Health';
@@ -20,7 +20,7 @@ export interface SolaTemplate {
   solaCode: string;
 }
 
-export const COMMUNITY_TEMPLATES: SolaTemplate[] = [
+export const STUDIO_PRESETS: StudioPreset[] = [
   // ==========================================
   // --- Category: Autonomous AI & Agents ---
   // ==========================================
