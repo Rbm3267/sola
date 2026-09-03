@@ -1132,29 +1132,63 @@ export function compile(source, options = {}) {
       domCode += `  ${parentVar}.appendChild(${eid}_a);\n`;
       if (keyExpr) {
         // Keyed: maintain a Map<key, Node[]> and reconcile on each run
-        domCode += `  let ${eid}_keyMap = new Map();\n`;
-        domCode += `  createEffect(() => {\n`;
-        domCode += `    const _items = ${arrayExpr} || [];\n`;
-        domCode += `    const _nextKeys = _items.map((${node.attribs.item}, _i) => String(${keyExpr}));\n`;
-        domCode += `    // Remove stale keys\n`;
-        domCode += `    for (const [_k, _nodes] of ${eid}_keyMap) {\n`;
-        domCode += `      if (!_nextKeys.includes(_k)) { _nodes.forEach(n => n.remove()); ${eid}_keyMap.delete(_k); }\n`;
-        domCode += `    }\n`;
-        domCode += `    // Insert/reorder items\n`;
-        domCode += `    let _anchor = ${eid}_a.nextSibling;\n`;
-        domCode += `    for (let _i = 0; _i < _items.length; _i++) {\n`;
-        domCode += `      const ${node.attribs.item} = _items[_i];\n`;
-        if (node.attribs.index) domCode += `      const ${node.attribs.index} = _i;\n`;
-        domCode += `      const _key = String(${keyExpr});\n`;
-        domCode += `      if (!${eid}_keyMap.has(_key)) {\n`;
-        domCode += `        const f = document.createDocumentFragment();\n`;
+        // Reconcile by walking the new order and moving each key's nodes into
+        // place against a cursor. The previous version only ever inserted, and
+        // against an anchor it never advanced — so reordering a keyed list (a
+        // sort, a drag, a reverse) left the DOM in its original order, silently.
+        domCode += `  let ${eid}_keyMap = new Map();
+`;
+        domCode += `  createEffect(() => {
+`;
+        domCode += `    const _items = ${arrayExpr} || [];
+`;
+        domCode += `    const _parent = ${eid}_a.parentNode;
+`;
+        domCode += `    const _seen = new Set();
+`;
+        domCode += `    let _cursor = ${eid}_a.nextSibling;
+`;
+        domCode += `    for (let _i = 0; _i < _items.length; _i++) {
+`;
+        domCode += `      const ${node.attribs.item} = _items[_i];
+`;
+        if (node.attribs.index) domCode += `      const ${node.attribs.index} = _i;
+`;
+        domCode += `      const _key = String(${keyExpr});
+`;
+        domCode += `      _seen.add(_key);
+`;
+        domCode += `      let _nodes = ${eid}_keyMap.get(_key);
+`;
+        domCode += `      if (!_nodes) {
+`;
+        domCode += `        const f = document.createDocumentFragment();
+`;
         node.children.forEach(child => emitNode(child, 'f', eachLocals));
-        domCode += `        const _nodes = Array.from(f.childNodes);\n`;
-        domCode += `        ${eid}_keyMap.set(_key, _nodes);\n`;
-        domCode += `        ${eid}_a.parentNode.insertBefore(f, _anchor);\n`;
-        domCode += `      }\n`;
-        domCode += `    }\n`;
-        domCode += `  });\n`;
+        domCode += `        _nodes = Array.from(f.childNodes);
+`;
+        domCode += `        ${eid}_keyMap.set(_key, _nodes);
+`;
+        domCode += `      }
+`;
+        domCode += `      for (const _n of _nodes) {
+`;
+        domCode += `        if (_n === _cursor) { _cursor = _cursor.nextSibling; }
+`;
+        domCode += `        else { _parent.insertBefore(_n, _cursor); }
+`;
+        domCode += `      }
+`;
+        domCode += `    }
+`;
+        domCode += `    for (const [_k, _stale] of ${eid}_keyMap) {
+`;
+        domCode += `      if (!_seen.has(_k)) { _stale.forEach(n => n.remove()); ${eid}_keyMap.delete(_k); }
+`;
+        domCode += `    }
+`;
+        domCode += `  });
+`;
       } else {
         // Unkeyed: full teardown + rebuild
         domCode += `  let ${eid}_els = [];\n`;

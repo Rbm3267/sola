@@ -166,7 +166,7 @@ The compiled mount function signature:
 
 ---
 
-## Runtime Exports (@sola/core)
+## Runtime Exports (@sola-air-ui/core)
 
   createSignal(initial)    → [getter, setter]
   createEffect(fn)         Runs fn reactively; re-runs when signals it reads change.

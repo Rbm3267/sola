@@ -33,7 +33,7 @@
         <span class="badge-text">Native Zero-VDOM Sola Runtime</span>
       </div>
       <h1 class="dash-title">{title}</h1>
-      <p class="dash-desc">Direct fine-grained signal subscriptions running on 3.2 kB @sola/core mesh.</p>
+      <p class="dash-desc">Fine-grained signal subscriptions writing straight to the DOM, with no diff step.</p>
     </div>
     
     <div class="header-actions">
@@ -96,7 +96,7 @@
     <div class="controller-header">
       <div>
         <h3 class="controller-title">Simulate Ingress Load Dial</h3>
-        <p class="controller-desc">Drag slider to test 1,000Hz zero-VDOM fine-grained signal propagation.</p>
+        <p class="controller-desc">Drag the slider to watch a signal propagate straight to the nodes that read it.</p>
       </div>
       <span class="rps-counter-pill">{rps} RPS</span>
     </div>

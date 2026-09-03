@@ -113,7 +113,7 @@
   function generateCode(componentId, metrics, contextLabel) {
     const page = getPageSummary();
     const title = contextLabel || page.title;
-    const imp = `import { ${COMPONENTS[componentId]?.name || 'DataCard'} } from '@sola/ui';`;
+    const imp = `import { ${COMPONENTS[componentId]?.name || 'DataCard'} } from '@sola-air-ui/ui';`;
 
     if (metrics.length === 0) return imp;
 
@@ -521,18 +521,18 @@
   };
 
   const COMPONENTS = {
-    datacard:  { name: 'DataCard',        code: `import { DataCard } from '@sola/ui';` },
-    gauge:     { name: 'GaugeCard',       code: `import { GaugeCard } from '@sola/ui';` },
-    waterfall: { name: 'FlowWaterfall',   code: `import { FlowWaterfall } from '@sola/ui';` },
-    dial:      { name: 'TactileDialCard', code: `import { TactileDialCard } from '@sola/ui';` },
-    toggle:    { name: 'Toggle',          code: `import { Toggle } from '@sola/ui';` },
-    slider:    { name: 'RangeSlider',     code: `import { RangeSlider } from '@sola/ui';` },
-    button:    { name: 'Button',          code: `import { Button } from '@sola/ui';` },
-    tabs:      { name: 'Tabs',            code: `import { Tabs } from '@sola/ui';` },
-    avatar:    { name: 'Avatar',          code: `import { Avatar } from '@sola/ui';` },
-    listblock: { name: 'ListBlock',       code: `import { ListBlock } from '@sola/ui';` },
-    stream:    { name: 'StreamView',      code: `import { StreamView } from '@sola/ui';` },
-    sentinel:  { name: 'SentinelCapsule',code: `import { SentinelCapsule } from '@sola/ui';` },
+    datacard:  { name: 'DataCard',        code: `import { DataCard } from '@sola-air-ui/ui';` },
+    gauge:     { name: 'GaugeCard',       code: `import { GaugeCard } from '@sola-air-ui/ui';` },
+    waterfall: { name: 'FlowWaterfall',   code: `import { FlowWaterfall } from '@sola-air-ui/ui';` },
+    dial:      { name: 'TactileDialCard', code: `import { TactileDialCard } from '@sola-air-ui/ui';` },
+    toggle:    { name: 'Toggle',          code: `import { Toggle } from '@sola-air-ui/ui';` },
+    slider:    { name: 'RangeSlider',     code: `import { RangeSlider } from '@sola-air-ui/ui';` },
+    button:    { name: 'Button',          code: `import { Button } from '@sola-air-ui/ui';` },
+    tabs:      { name: 'Tabs',            code: `import { Tabs } from '@sola-air-ui/ui';` },
+    avatar:    { name: 'Avatar',          code: `import { Avatar } from '@sola-air-ui/ui';` },
+    listblock: { name: 'ListBlock',       code: `import { ListBlock } from '@sola-air-ui/ui';` },
+    stream:    { name: 'StreamView',      code: `import { StreamView } from '@sola-air-ui/ui';` },
+    sentinel:  { name: 'SentinelCapsule',code: `import { SentinelCapsule } from '@sola-air-ui/ui';` },
   };
 
   function startTargetPicker(componentId) {

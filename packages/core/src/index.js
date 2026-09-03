@@ -1,4 +1,4 @@
-// @sola/core — Reactivity Engine V4
+// @sola-air-ui/core — Reactivity Engine V4
 // Milestone 1: Full reactivity primitives, lifecycle hooks, batched updates, configurable intents
 
 // ─── Effect Stack ───

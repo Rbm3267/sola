@@ -478,13 +478,23 @@ test('keyed {#each items as item (item.id)} uses Map reconciliation', () => {
 {#each rows as row (row.id)}<div>{row.name}</div>{/each}`);
   assert(code.includes('_keyMap'), 'keyed map');
   assert(code.includes('String(row.id)'), 'key expression');
-  assert(code.includes('e0_keyMap.has(_key)'), 'key existence check');
+  assert(code.includes('e0_keyMap.get(_key)'), 'looks the key up so existing nodes are reused, not rebuilt');
   assert(code.includes('e0_keyMap.delete(_k)'), 'stale key removal');
 });
 
 test('{#each} with index variable', () => {
   const { code } = compile(`{#each items as item, i}<li>{i}: {item}</li>{/each}`);
   assert(code.includes('const i = _i'), 'index variable bound');
+});
+
+test('keyed {#each} emits a reconciler that can move nodes', () => {
+  // The old emitter only inserted, against an anchor it never advanced, so
+  // reordering a keyed list left the DOM in its original order — silently.
+  const { code } = compile(`<script>let items = $state([]);</script><ul>{#each items as it (it.id)}<li>{it.n}</li>{/each}</ul>`);
+  assert(code.includes('insertBefore(_n, _cursor)'), 'moves existing nodes into place');
+  assert(code.includes('_cursor = _cursor.nextSibling'), 'advances a cursor');
+  assert(code.includes('_seen.add(_key)'), 'tracks live keys');
+  assert(!code.includes('_nextKeys.includes'), 'no O(n^2) key scan');
 });
 
 // ── Styles ────────────────────────────────────────────────────────────────────
