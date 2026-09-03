@@ -157,7 +157,8 @@
         </div>
 
         <!-- 4 Step Tabs -->
-        <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl overflow-x-auto no-scrollbar">
+        <!-- Wraps rather than scrolls: the strip was 616px of tabs in a 581px box, so the fourth step was cut mid-word with no affordance suggesting it existed. -->
+        <div class="flex flex-wrap items-center justify-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-2xl">
           <button
             onclick={() => setStep(1)}
             class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {activeAnimationStep === 1 ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400'}">
