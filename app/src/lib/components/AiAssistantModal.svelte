@@ -95,21 +95,56 @@
     }
   }
 
+  let dialogEl = $state<HTMLElement | null>(null);
+  let returnFocusTo: HTMLElement | null = null;
+
+  const FOCUSABLE =
+    'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
   onMount(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        isOpen = !isOpen;
+      // Only Escape is handled here. The shortcut itself lives in the navbar:
+      // both listened for it, one setting open and one toggling, so the two
+      // cancelled out and the palette advertised on every page never opened.
+      if (e.key === 'Escape' && isOpen) {
+        isOpen = false;
+        return;
       }
-      if (e.key === 'Escape' && isOpen) isOpen = false;
+
+      // Keep Tab inside the dialog. It escaped on the first press.
+      if (e.key !== 'Tab' || !isOpen || !dialogEl) return;
+      const items = Array.from(dialogEl.querySelectorAll<HTMLElement>(FOCUSABLE))
+        .filter((el) => el.offsetParent !== null || el === document.activeElement);
+      if (items.length === 0) { e.preventDefault(); return; }
+      const first = items[0];
+      // Focus is moved into the dialog asynchronously after it opens, so a
+      // Tab pressed in that window would otherwise walk the page behind it.
+      if (!dialogEl.contains(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+        return;
+      }
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
   });
 
   $effect(() => {
     if (isOpen) {
+      returnFocusTo = document.activeElement as HTMLElement | null;
       setTimeout(() => inputEl?.focus(), 80);
+    } else if (returnFocusTo) {
+      // Send focus back where it came from rather than to the top of the page.
+      returnFocusTo.focus?.();
+      returnFocusTo = null;
     }
   });
 </script>
@@ -127,6 +162,7 @@
     <div
       transition:fly={{ y: 20, duration: 220, easing: cubicOut }}
       onclick={(e) => e.stopPropagation()}
+      bind:this={dialogEl}
       role="dialog"
       aria-modal="true"
       aria-labelledby="arc-title"

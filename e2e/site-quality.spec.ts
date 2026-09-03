@@ -397,3 +397,25 @@ test('a reduced-motion preference is honoured', async ({ page }) => {
   );
   expect(moving, 'elements still animating under reduced motion').toBe(0);
 });
+
+test('the command palette opens, traps focus, and gives it back', async ({ page }) => {
+  // Two components listened for the shortcut — one setting open, one toggling —
+  // so they cancelled out and the palette advertised on every page never
+  // opened by keyboard at all. Focus also escaped it on the first Tab.
+  await page.setViewportSize(DESKTOP);
+  await page.goto('/docs');
+  await page.waitForLoadState('networkidle');
+
+  await page.keyboard.press('Control+k');
+  const dialog = page.getByRole('dialog');
+  await expect(dialog, 'the advertised shortcut must open the palette').toBeVisible();
+
+  for (let i = 0; i < 10; i++) {
+    await page.keyboard.press('Tab');
+    const inside = await page.evaluate(() => !!document.activeElement?.closest('[role="dialog"]'));
+    expect(inside, `focus escaped the dialog on Tab ${i + 1}`).toBe(true);
+  }
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+});
