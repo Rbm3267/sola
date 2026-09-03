@@ -89,3 +89,22 @@ nav::-webkit-scrollbar,
   width: 0 !important;
   height: 0 !important;
 }
+
+/* Respect a reduced-motion preference.
+ *
+ * The site had no such rule, so under `prefers-reduced-motion: reduce` roughly
+ * 80 elements kept animating — pinging status dots, pulsing badges, spinners —
+ * and every transition kept running. Not honoured with `!important` lightly:
+ * the animations are declared across many component-scoped stylesheets, and
+ * a preference the user set at the OS level should win over all of them.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

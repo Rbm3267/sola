@@ -67,14 +67,14 @@
         {#if !collapsed}
           <div class="truncate">
             <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Sola Core</h2>
-            <p class="text-xs text-slate-400 font-mono">Enterprise</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Enterprise</p>
           </div>
         {/if}
       </div>
 
       <button
         onclick={() => (collapsed = !collapsed)}
-        class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+        class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
         title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
       >
         <svg class="w-4 h-4 transition-transform duration-200 {collapsed ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -88,7 +88,7 @@
       {#each groups as group}
         <div>
           {#if group.title && !collapsed}
-            <div class="px-3 pb-1.5 text-xs font-bold tracking-widest text-slate-400 uppercase font-mono">
+            <div class="px-3 pb-1.5 text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase font-mono">
               {group.title}
             </div>
           {/if}
@@ -102,7 +102,7 @@
                 title={collapsed ? item.label : undefined}
               >
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-4 h-4 shrink-0 flex items-center justify-center {isSelected ? 'text-slate-950' : 'text-slate-400'}">
+                  <div class="w-4 h-4 shrink-0 flex items-center justify-center {isSelected ? 'text-slate-950' : 'text-slate-500 dark:text-slate-400'}">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="3"/>
                       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -135,7 +135,7 @@
       {#if !collapsed}
         <div class="truncate min-w-0">
           <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Sola Admin</p>
-          <p class="text-xs text-slate-400 truncate">admin@sola-air.dev</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 truncate">admin@sola-air.dev</p>
         </div>
       {/if}
     </div>

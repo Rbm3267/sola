@@ -79,7 +79,7 @@
 
     <!-- Quick Presets -->
     <div class="flex items-center gap-1.5 self-stretch sm:self-auto overflow-x-auto no-scrollbar">
-      <span class="text-xs font-mono font-bold text-slate-400 uppercase mr-1">Throttle:</span>
+      <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mr-1">Throttle:</span>
       <button 
         onclick={() => handleNodeChange(16)}
         class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 16 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
@@ -111,7 +111,7 @@
         
         <div class="bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 shadow-xs flex flex-col items-center gap-4">
           <div class="text-center">
-            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
+            <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
             <div class="text-2xl font-black text-slate-950 dark:text-slate-50 font-mono mt-0.5">{nodeCount} Nodes Active</div>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Use slider to adjust cluster replica quota</p>
           </div>
@@ -127,7 +127,7 @@
               oninput={(e) => handleNodeChange(Number((e.target as HTMLInputElement).value))}
               class="w-full h-2 bg-slate-100 dark:bg-white/[0.08] rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
-            <div class="flex justify-between text-xs font-mono text-slate-400">
+            <div class="flex justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
               <span>8 Min</span>
               <span class="font-bold text-amber-900 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-500/20">{nodeCount} Workers</span>
               <span>128 Max</span>
@@ -190,7 +190,7 @@
               
               <div class="flex flex-col gap-2 max-h-[140px] overflow-y-auto no-scrollbar font-mono text-xs">
                 {#each signalPackets as sig (sig.id)}
-                  <div class="flex items-center justify-between text-slate-400 bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800/80">
+                  <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800/80">
                     <span class="text-amber-400 truncate max-w-[140px]">{sig.topic}</span>
                     <span class="text-slate-200 font-bold">{sig.value}</span>
                     <span class="text-blue-400 text-xs">{sig.latencyMs}ms</span>

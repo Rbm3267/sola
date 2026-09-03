@@ -85,7 +85,7 @@
   </div>
 
   <!-- Bottom Telemetry Bar -->
-  <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-400 relative z-10">
+  <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400 relative z-10">
     <span class="flex items-center gap-1.5">
       <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
       <span>Telemetry Synchronized</span>

@@ -82,7 +82,7 @@
         <span class="flex items-center gap-1.5">
           {tab.label}
           {#if tab.badge}
-            <span class="px-1.5 py-0.5 text-xs font-bold rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400">
+            <span class="px-1.5 py-0.5 text-xs font-bold rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400">
               {tab.badge}
             </span>
           {/if}

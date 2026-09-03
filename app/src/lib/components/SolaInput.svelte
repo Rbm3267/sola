@@ -62,7 +62,7 @@
     {#if hasValue && !disabled}
       <button
         onclick={clear}
-        class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
+        class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
         aria-label="Clear input"
       >
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>

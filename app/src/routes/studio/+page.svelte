@@ -21,6 +21,7 @@
 
   let arcPromptInput = $state('');
   let isGeneratingArc = $state(false);
+  let arcError = $state('');
   let activeCardId = $state<string | null>(null);
   let exportModalOpen = $state(false);
   let exportTab = $state<'react' | 'svelte' | 'webcomponent'>('react');
@@ -385,34 +386,69 @@
   async function generateWithArc() {
     if (!arcPromptInput.trim()) return;
     isGeneratingArc = true;
+    arcError = '';
     try {
       const res = await fetch('/api/intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: `Generate a responsive studio dashboard canvas containing 4 components based on this request: "${arcPromptInput}". Return JSON format with array of components.` })
+        // The field is `intent`. This sent `prompt`, which the endpoint never
+        // reads, so every request came back 400 with an empty-input error.
+        body: JSON.stringify({
+          intent: `Generate a responsive studio dashboard canvas containing 4 components based on this request: "${arcPromptInput}"`
+        })
       });
-      const data = await res.json();
-      if (data.components && Array.isArray(data.components) && data.components.length > 0) {
-        pushHistory();
-        const generated: StudioCard[] = data.components.map((item: any, i: number) => ({
-          id: 'arc_' + i + '_' + Math.random().toString(36).substring(2, 6),
-          type: item.type || 'stat',
-          title: item.title || 'Telemetry Node',
-          subtitle: item.subtitle || 'AI Synthesized intent',
-          cols: item.cols || (i === 0 ? 2 : 1),
-          value: item.value || '$42.8k',
-          delta: item.delta || '+18%',
-          accentColor: 'emerald',
-          config: item.config
-        }));
-        cards = generated;
-        activeCardId = generated[0].id;
+
+      // A 400 does not throw, so this used to fall through to a silent no-op.
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        arcError = body?.error ?? `Generation failed (${res.status}). Please try again.`;
+        return;
       }
-    } catch {
-      addComponent('stat');
+
+      // The endpoint answers with a bare array of { component, colSpan, config },
+      // the same shape /demo consumes. This expected { components: [...] } with
+      // an entirely different item shape, so even a successful response mapped
+      // every field to its default and produced four identical placeholder tiles.
+      const data = await res.json();
+      const items = Array.isArray(data) ? data : Array.isArray(data.components) ? data.components : [];
+      if (items.length === 0) {
+        arcError = 'Arc did not return any components for that request. Try describing the panels you want.';
+        return;
+      }
+
+      // Map the generator's component names onto the canvas card types.
+      const TYPE_BY_COMPONENT: Record<string, string> = {
+        GaugeCard: 'radial_dial', DataCard: 'stat', StatGrid: 'stat',
+        Chart: 'chart', SolaChart: 'chart', FlowWaterfall: 'waterfall',
+        Table: 'table', ListBlock: 'feed', StreamView: 'feed',
+        DynamicForm: 'status', IncidentTriageMatrix: 'table',
+        TactileDialCard: 'slider', ProgressSteps: 'progress'
+      };
+
+      pushHistory();
+      const generated: StudioCard[] = items.map((item: any, i: number) => {
+        const config = item.config ?? {};
+        return {
+          id: 'arc_' + i + '_' + Math.random().toString(36).substring(2, 6),
+          type: item.type ?? TYPE_BY_COMPONENT[item.component] ?? 'stat',
+          title: config.title ?? item.title ?? item.component ?? 'Telemetry Node',
+          subtitle: config.subtitle ?? item.subtitle ?? 'Generated from your intent',
+          cols: (item.colSpan ?? item.cols ?? (i === 0 ? 2 : 1)) as 1 | 2 | 3,
+          value: config.value ?? item.value ?? '—',
+          delta: config.trend ?? config.delta ?? item.delta,
+          accentColor: 'emerald',
+          config
+        };
+      });
+      cards = generated;
+      activeCardId = generated[0].id;
+      // Only clear on success — wiping the prompt after a failure loses the
+      // user's words and leaves nothing to retry.
+      arcPromptInput = '';
+    } catch (err) {
+      arcError = err instanceof Error ? err.message : 'Could not reach the intent service.';
     } finally {
       isGeneratingArc = false;
-      arcPromptInput = '';
     }
   }
 
@@ -500,7 +536,7 @@ export default function SolaDashboard() {
 
           {#if presetMenuOpen}
             <div class="absolute right-0 sm:left-0 mt-2 w-64 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl p-1.5 z-50 animate-[fadeSlide_120ms_ease-out]">
-              <div class="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+              <div class="px-3 py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
                 Starter Templates
               </div>
               {#each Object.entries(samplePresets) as [key, preset]}
@@ -508,7 +544,7 @@ export default function SolaDashboard() {
                   onclick={() => loadSample(key)}
                   class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold' : 'text-slate-800 dark:text-slate-200'}">
                   <div class="font-bold">{preset.label}</div>
-                  <div class="text-xs text-slate-400 font-normal">{preset.desc}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400 font-normal">{preset.desc}</div>
                 </button>
               {/each}
               <div class="my-1 border-t border-slate-100 dark:border-white/5"></div>
@@ -559,13 +595,13 @@ export default function SolaDashboard() {
               <span class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">Primitives</span>
               <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">Drag & Drop</span>
             </div>
-            <button onclick={() => (paletteOpen = false)} class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">
+            <button onclick={() => (paletteOpen = false)} class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </button>
           </div>
 
           <div class="relative">
-            <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <input
               type="text"
               bind:value={componentSearch}
@@ -573,7 +609,7 @@ export default function SolaDashboard() {
               class="w-full pl-8 pr-7 py-2 text-xs bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
             />
             {#if componentSearch}
-              <button onclick={() => (componentSearch = '')} class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">&times;</button>
+              <button onclick={() => (componentSearch = '')} class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 text-xs">&times;</button>
             {/if}
           </div>
 
@@ -592,7 +628,7 @@ export default function SolaDashboard() {
         <!-- Draggable Primitives List -->
         <div class="p-3 space-y-2 flex-1">
           {#if filteredCatalog.length === 0}
-            <div class="py-12 text-center text-xs text-slate-400">
+            <div class="py-12 text-center text-xs text-slate-500 dark:text-slate-400">
               No components matching "{componentSearch}".
             </div>
           {:else}
@@ -635,7 +671,7 @@ export default function SolaDashboard() {
                       + Add
                     </button>
                   </div>
-                  <p class="text-xs text-slate-400 truncate">{item.tagline || item.description}</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{item.tagline || item.description}</p>
                 </div>
               </div>
             {/each}
@@ -680,6 +716,27 @@ export default function SolaDashboard() {
           {/if}
         </button>
       </div>
+
+      <!-- Arc could fail with no feedback at all: the prompt was cleared and
+           nothing appeared. A failure has to be visible and recoverable. -->
+      {#if arcError}
+        <div
+          role="alert"
+          class="mt-3 flex items-start gap-2.5 rounded-2xl border border-rose-200 dark:border-rose-500/25 bg-rose-50 dark:bg-rose-500/10 px-4 py-3">
+          <svg class="w-4 h-4 mt-0.5 shrink-0 text-rose-600 dark:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.5"/></svg>
+          <div class="flex-1">
+            <p class="text-sm text-rose-900 dark:text-rose-200">{arcError}</p>
+            <p class="text-xs text-rose-700/80 dark:text-rose-300/70 mt-0.5">Your prompt is still in the box — edit it and try again.</p>
+          </div>
+          <button
+            type="button"
+            onclick={() => (arcError = '')}
+            aria-label="Dismiss error"
+            class="text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 p-1 rounded-lg cursor-pointer">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      {/if}
 
       <!-- Canvas Grid State -->
       {#if cards.length === 0}
@@ -731,7 +788,7 @@ export default function SolaDashboard() {
                   <div class="min-w-0">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">{card.title}</h4>
                     {#if card.subtitle}
-                      <p class="text-xs text-slate-400 truncate">{card.subtitle}</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{card.subtitle}</p>
                     {/if}
                   </div>
                 </div>
@@ -754,7 +811,7 @@ export default function SolaDashboard() {
                   <!-- Duplicate -->
                   <button
                     onclick={(e) => duplicateCard(card, e)}
-                    class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+                    class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
                     title="Duplicate Card">
                     <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
@@ -762,7 +819,7 @@ export default function SolaDashboard() {
                   <!-- Remove -->
                   <button
                     onclick={(e) => removeCard(card.id, e)}
-                    class="p-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
+                    class="p-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
                     title="Delete Card">
                     <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
@@ -778,7 +835,7 @@ export default function SolaDashboard() {
                       <span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold {c.badgeBg} {c.textDark} {c.badgeBorder}">{card.delta}</span>
                     {/if}
                   </div>
-                  <div class="mt-3 text-xs text-slate-400 flex items-center justify-between font-mono">
+                  <div class="mt-3 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between font-mono">
                     <span>Direct editable value</span>
                     <span class="{c.textDark} font-bold">Zero-VDOM</span>
                   </div>
@@ -818,7 +875,7 @@ export default function SolaDashboard() {
                       max="100"
                       bind:value={card.value}
                       class="w-full {c.accent} cursor-pointer h-2 bg-slate-100 dark:bg-white/10 rounded-lg appearance-none" />
-                    <div class="flex justify-between text-xs font-mono text-slate-400">
+                    <div class="flex justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
                       <span>0% (Min)</span>
                       <span>50% (Mid)</span>
                       <span>100% (Max)</span>
@@ -834,7 +891,7 @@ export default function SolaDashboard() {
                       </svg>
                       <div class="absolute inset-0 flex flex-col items-center justify-center font-mono">
                         <span class="text-lg font-black text-slate-900 dark:text-white">{card.value}</span>
-                        <span class="text-xs text-slate-400 font-bold uppercase">Val</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Val</span>
                       </div>
                     </div>
                     <input
@@ -891,7 +948,7 @@ export default function SolaDashboard() {
                       <span class="w-2 h-2 rounded-full {c.bg}"></span>
                       <span class="font-bold text-xs text-slate-900 dark:text-white">{card.title}</span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
                   </div>
                 {/if}
               </div>
@@ -921,7 +978,7 @@ export default function SolaDashboard() {
         <div class="space-y-3.5 text-xs pt-3">
           <!-- Active Card Badge -->
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex items-center justify-between">
-            <span class="text-xs font-mono text-slate-400">Selected Node</span>
+            <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Selected Node</span>
             <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">{activeCard.type}</span>
           </div>
 
@@ -1029,7 +1086,7 @@ export default function SolaDashboard() {
             </div>
             <div>
               <h3 class="font-bold text-sm text-slate-900 dark:text-white">Export Sola Canvas</h3>
-              <p class="text-xs text-slate-400">Zero-VDOM native code generator</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Zero-VDOM native code generator</p>
             </div>
           </div>
           <button

@@ -96,7 +96,7 @@
           <span class="text-xs font-mono bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30 font-bold">
             0.2ms Signal Bus
           </span>
-          <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
         </div>
       </button>
 
@@ -117,7 +117,7 @@
           <button 
             type="button"
             onclick={closeAll}
-            class="text-slate-400 hover:text-white p-1 cursor-pointer"
+            class="text-slate-500 dark:text-slate-400 hover:text-white p-1 cursor-pointer"
             aria-label="Close HUD">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
@@ -131,7 +131,7 @@
               {intents.find(i => i.id === selectedIntentKey)?.label}
             </span>
           </div>
-          <p class="text-xs text-slate-400 mt-0.5">
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             {intents.find(i => i.id === selectedIntentKey)?.desc}
           </p>
         </div>
@@ -145,7 +145,7 @@
               <GaugeCard config={{ title: "SLA Margin", value: 18, max: 60, unit: "m", icon: "clock" }} />
             </div>
             <div class="p-3 rounded-xl bg-slate-950  border border-slate-800 flex items-center justify-between text-xs">
-              <span class="text-slate-400 font-mono">INC-9402 • Checkout Spill</span>
+              <span class="text-slate-500 dark:text-slate-400 font-mono">INC-9402 • Checkout Spill</span>
               <span class="text-rose-400 font-mono font-bold">12m to SLA</span>
             </div>
 
@@ -213,14 +213,14 @@
           <button 
             type="button"
             onclick={() => isExpanded = false}
-            class="text-slate-400 hover:text-white p-1 cursor-pointer"
+            class="text-slate-500 dark:text-slate-400 hover:text-white p-1 cursor-pointer"
             aria-label="Close HUD">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
         <!-- Explainer -->
-        <p class="text-xs text-slate-400 leading-relaxed">
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
           1-thumb mobile triggers to generate and preview zero-VDOM components on your screen:
         </p>
 
@@ -241,7 +241,7 @@
                   {intent.label}
                 </span>
               </div>
-              <span class="text-xs font-mono text-slate-400 flex items-center gap-1 mt-2">
+              <span class="text-xs font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-2">
                 <span>Preview</span>
                 <svg class="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </span>

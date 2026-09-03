@@ -184,7 +184,7 @@
   </div>
 
   <!-- X-Axis Labels -->
-  <div class="flex justify-between items-center px-4 pt-2 text-xs font-mono text-slate-400">
+  <div class="flex justify-between items-center px-4 pt-2 text-xs font-mono text-slate-500 dark:text-slate-400">
     {#each data as d, i}
       <span class={hoveredIndex === i ? 'text-blue-500 font-bold' : ''}>{d.label}</span>
     {/each}

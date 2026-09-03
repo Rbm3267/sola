@@ -182,7 +182,7 @@
           <button
             type="button"
             onclick={() => (filterQuery = '')}
-            class="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
             aria-label="Clear filter"
           >
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

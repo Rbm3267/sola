@@ -84,7 +84,7 @@
             <!-- Primitives Showcase -->
             <div class="space-y-5">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Tactile Buttons & Actions</span>
+                <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tactile Buttons & Actions</span>
                 <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600">Eased Motion</span>
               </div>
 
@@ -144,11 +144,11 @@
               />
               <div class="grid grid-cols-2 gap-3 text-xs font-mono">
                 <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/80 dark:border-white/10">
-                  <span class="text-slate-400 text-xs block">Frame Time</span>
+                  <span class="text-slate-500 dark:text-slate-400 text-xs block">Frame Time</span>
                   <span class="text-base font-extrabold text-blue-600 dark:text-blue-400">0.32ms</span>
                 </div>
                 <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/80 dark:border-white/10">
-                  <span class="text-slate-400 text-xs block">VDOM Diffing Overhead</span>
+                  <span class="text-slate-500 dark:text-slate-400 text-xs block">VDOM Diffing Overhead</span>
                   <span class="text-base font-extrabold text-slate-900 dark:text-white">0.00ms</span>
                 </div>
               </div>
@@ -157,10 +157,10 @@
           {:else}
             <!-- Tokens & Theme Systems -->
             <div class="space-y-4">
-              <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Core Design System Tokens</div>
+              <div class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Core Design System Tokens</div>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="p-3 bg-slate-950 text-white rounded-2xl border border-slate-800 space-y-1">
-                  <span class="text-xs font-mono text-slate-400 block">Obsidian Dark</span>
+                  <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block">Obsidian Dark</span>
                   <span class="text-xs font-bold font-mono text-blue-400">#090D19</span>
                 </div>
                 <div class="p-3 bg-slate-50 text-slate-900 rounded-2xl border border-slate-200 space-y-1">
@@ -188,26 +188,26 @@
           <div>
             <!-- Framework Selector Header -->
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Multi-Target Output</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Multi-Target Output</span>
               <div class="flex items-center gap-1">
                 <button
                   onclick={() => (selectedFramework = 'sola')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   .sola
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'react')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   React 19
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'svelte')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   Svelte 5
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'html')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   HTML
                 </button>
               </div>
@@ -221,7 +221,7 @@
 
           <!-- Bottom Actions -->
           <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 mt-6">
-            <span class="text-xs text-slate-400">Zero runtime overhead</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400">Zero runtime overhead</span>
             <div class="flex items-center gap-2 w-full sm:w-auto">
               <a
                 href="/components"

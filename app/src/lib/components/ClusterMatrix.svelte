@@ -126,19 +126,19 @@
         <span class="w-2.5 h-2.5 rounded-full {getStatusColor(hoveredNode.status)}"></span>
         <div>
           <span class="text-xs font-mono font-bold text-slate-200">{hoveredNode.label}</span>
-          <span class="text-xs font-mono text-slate-400 block">Region: {hoveredNode.region || 'global'} • Status: {hoveredNode.status.toUpperCase()}</span>
+          <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block">Region: {hoveredNode.region || 'global'} • Status: {hoveredNode.status.toUpperCase()}</span>
         </div>
       </div>
       <div class="flex items-center gap-4 text-right">
         {#if hoveredNode.load !== undefined}
           <div>
-            <span class="text-xs font-mono text-slate-400 block uppercase">CPU Load</span>
+            <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block uppercase">CPU Load</span>
             <span class="text-xs font-mono font-bold {hoveredNode.load > 80 ? 'text-rose-400' : 'text-blue-400'}">{hoveredNode.load}%</span>
           </div>
         {/if}
         {#if hoveredNode.latency}
           <div>
-            <span class="text-xs font-mono text-slate-400 block uppercase">Latency</span>
+            <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block uppercase">Latency</span>
             <span class="text-xs font-mono font-bold text-sky-400">{hoveredNode.latency}</span>
           </div>
         {/if}

@@ -61,7 +61,7 @@
   <div class="overflow-x-auto">
     <table class="w-full text-left font-mono text-xs">
       <thead>
-        <tr class="border-b border-slate-100 dark:border-white/[0.04] text-xs text-slate-400 uppercase">
+        <tr class="border-b border-slate-100 dark:border-white/[0.04] text-xs text-slate-500 dark:text-slate-400 uppercase">
           <th class="pb-2.5 font-bold">Column Name</th>
           <th class="pb-2.5 font-bold">Data Type</th>
           <th class="pb-2.5 font-bold text-center">Attributes</th>
@@ -88,7 +88,7 @@
               {:else if !col.isNullable}
                 <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 font-bold">NOT NULL</span>
               {:else}
-                <span class="text-xs text-slate-400">NULL</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">NULL</span>
               {/if}
             </td>
             <td class="py-2.5 text-right text-slate-500 dark:text-slate-400">
@@ -107,7 +107,7 @@
     </table>
   </div>
 
-  <div class="flex items-center justify-between text-xs font-mono text-slate-400 pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04]">
+  <div class="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400 pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04]">
     <span>Zero-VDOM Relational Explorer</span>
     <span>Auto-Inferred Schema</span>
   </div>

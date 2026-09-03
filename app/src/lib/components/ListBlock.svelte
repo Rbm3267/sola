@@ -25,7 +25,7 @@
       <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
       <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">{config.title}</span>
     </div>
-    <span class="text-xs font-mono font-semibold text-slate-400">{config.items?.length || 0} entities</span>
+    <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">{config.items?.length || 0} entities</span>
   </div>
 
   <!-- Item List -->
@@ -39,7 +39,7 @@
           </div>
           <div class="min-w-0">
             <div class="text-xs font-bold text-slate-900 dark:text-white truncate font-mono">{item.label}</div>
-            <div class="text-xs text-slate-400 truncate">{item.description}</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 truncate">{item.description}</div>
           </div>
         </div>
 

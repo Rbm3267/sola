@@ -108,7 +108,7 @@
 
     <!-- Final Value Highlight -->
     <div class="text-right">
-      <span class="text-xs font-mono text-slate-400 block uppercase">Net Realized</span>
+      <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block uppercase">Net Realized</span>
       <span class="text-lg font-black text-slate-950 dark:text-slate-50 font-mono tracking-tight text-blue-600 dark:text-blue-400">
         {steps[steps.length - 1]?.formattedValue || '$191,040'}
       </span>
@@ -148,7 +148,7 @@
     {/each}
   </div>
 
-  <div class="flex items-center justify-between text-xs font-mono text-slate-400 pt-3 border-t border-slate-100 dark:border-white/[0.04]">
+  <div class="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-100 dark:border-white/[0.04]">
     <span>Zero-VDOM Financial Split Stream</span>
     <span>Auto-Reconciled • 0.2ms Signal</span>
   </div>

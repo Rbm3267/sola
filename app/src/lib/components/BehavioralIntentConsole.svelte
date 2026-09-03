@@ -87,7 +87,7 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Dual-Driver Persona:</span>
+          <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Dual-Driver Persona:</span>
           <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-500/20' : 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'}">
             {metrics.persona === 'sre_commander' ? 'SRE Incident Commander' : metrics.persona === 'finops_auditor' ? 'FinOps Cloud Auditor' : 'Visual Explorer'}
           </span>
@@ -101,15 +101,15 @@
     <!-- Live Telemetry Readout Chips -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto relative z-10 font-mono text-xs">
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
-        <span class="text-xs text-slate-400 font-bold uppercase">Typing Cadence</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Typing Cadence</span>
         <span class="text-amber-600 dark:text-amber-400 font-black">{metrics.typingVelocityCps} chars/sec</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
-        <span class="text-xs text-slate-400 font-bold uppercase">Hover Dwell</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Hover Dwell</span>
         <span class="text-sky-600 dark:text-sky-400 font-black">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5 col-span-2 sm:col-span-1">
-        <span class="text-xs text-slate-400 font-bold uppercase">Rage Click Vector</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Rage Click Vector</span>
         <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 dark:text-rose-400 font-black animate-pulse' : 'text-slate-700 dark:text-slate-300 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
       </div>
     </div>
@@ -119,7 +119,7 @@
   <!-- Interactive Test Playground Bar -->
   <div class="bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
     <div class="flex-1 w-full flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] rounded-2xl px-4 py-2.5 focus-within:border-amber-400 focus-within:bg-white dark:bg-white/[0.02] transition-all">
-      <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      <svg class="w-4 h-4 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       <input 
         type="text"
         bind:value={testInput}

@@ -71,7 +71,7 @@
         {/if}
         <span>{config.trend}</span>
       </div>
-      <span class="text-slate-400 text-xs font-medium">vs last period</span>
+      <span class="text-slate-500 dark:text-slate-400 text-xs font-medium">vs last period</span>
     </div>
   {/if}
 </div>

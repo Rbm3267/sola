@@ -297,7 +297,7 @@ export function SolaWidget({ title, value }) {
   <!-- Mobile Sticky Header (Tailwind Style) -->
   <div class="lg:hidden sticky top-16 z-30 bg-white/90 dark:bg-[#090d19]/90 backdrop-blur-xl border-b border-slate-900/[0.03] dark:border-white/[0.04] px-4 py-3 flex items-center justify-between shadow-2xs">
     <div class="flex items-center gap-2 text-xs font-mono">
-      <span class="text-slate-400">{currentGroup.name}</span>
+      <span class="text-slate-500 dark:text-slate-400">{currentGroup.name}</span>
       <span class="text-slate-300 dark:text-slate-700">/</span>
       <span class="font-bold text-slate-900 dark:text-white truncate max-w-[180px]">{currentItem.title}</span>
     </div>
@@ -314,7 +314,7 @@ export function SolaWidget({ title, value }) {
     <div class="lg:hidden bg-white/95 dark:bg-[#090d19]/95 border-b border-slate-900/[0.04] dark:border-white/[0.06] p-5 space-y-6 shadow-2xl">
       {#each groups as grp}
         <div>
-          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 mb-2">{grp.name}</h5>
+          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">{grp.name}</h5>
           <div class="space-y-1">
             {#each grp.items as item}
               <button 
@@ -347,7 +347,7 @@ export function SolaWidget({ title, value }) {
           placeholder="Quick search... ⌘K"
           class="w-full pl-8 pr-4 py-2 bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-blue-500 dark:focus:border-blue-400 shadow-2xs transition-all"
         />
-        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 absolute left-2.5 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
 
       <!-- Navigation Hierarchy -->
@@ -393,7 +393,7 @@ export function SolaWidget({ title, value }) {
         <div class="p-6 rounded-3xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-xs font-mono text-slate-900 dark:text-blue-200 leading-relaxed whitespace-pre-wrap relative shadow-xs">
           <button 
             onclick={() => (aiAnswer = '')}
-            class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white text-base font-bold cursor-pointer">
+            class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white text-base font-bold cursor-pointer">
             &times;
           </button>
           <div class="flex items-center gap-2 mb-3 text-blue-800 dark:text-blue-400 font-bold uppercase tracking-wider text-xs">
@@ -442,14 +442,14 @@ export function SolaWidget({ title, value }) {
                   <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
                   <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
                   <span class="w-3 h-3 rounded-full bg-blue-500/80"></span>
-                  <span class="text-xs font-mono text-slate-400 ml-2">Terminal</span>
+                  <span class="text-xs font-mono text-slate-500 dark:text-slate-400 ml-2">Terminal</span>
                 </div>
                 <!-- Package Manager Tabs -->
                 <div class="flex items-center bg-slate-800 p-0.5 rounded-lg text-xs font-mono">
                   {#each (['npm', 'pnpm', 'yarn', 'bun'] as const) as pm}
                     <button 
                       onclick={() => packageManager = pm}
-                      class="px-2 py-0.5 rounded transition-all cursor-pointer {packageManager === pm ? 'bg-blue-500 text-white font-bold' : 'text-slate-400 hover:text-white'}">
+                      class="px-2 py-0.5 rounded transition-all cursor-pointer {packageManager === pm ? 'bg-blue-500 text-white font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                       {pm}
                     </button>
                   {/each}
@@ -479,7 +479,7 @@ export function SolaWidget({ title, value }) {
 
             <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
               <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-                <span class="text-xs font-mono text-slate-400">Terminal</span>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Terminal</span>
                 <span class="text-xs font-mono text-slate-500">{packageManager}</span>
               </div>
               <div class="p-5 flex items-center justify-between font-mono text-xs text-blue-400 overflow-x-auto">
@@ -506,7 +506,7 @@ export function SolaWidget({ title, value }) {
 
             <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
               <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-                <span class="text-xs font-mono text-slate-400">vite.config.ts</span>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">vite.config.ts</span>
                 <span class="text-xs font-mono text-slate-500">TypeScript</span>
               </div>
               <div class="p-5 relative font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -559,7 +559,7 @@ export function SolaWidget({ title, value }) {
           <!-- Code Window -->
           <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-xl overflow-hidden">
             <div class="px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-              <span class="text-xs font-mono text-slate-400">MetricCard.sola</span>
+              <span class="text-xs font-mono text-slate-500 dark:text-slate-400">MetricCard.sola</span>
               <span class="text-xs font-mono text-slate-500">Single-File Component</span>
             </div>
             <div class="p-5 relative font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -589,7 +589,7 @@ export function SolaWidget({ title, value }) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               <div class="space-y-3">
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Card Title Prop</label>
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Title Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxTitle}
@@ -597,7 +597,7 @@ export function SolaWidget({ title, value }) {
                   />
                 </div>
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Card Value Prop</label>
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Value Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxValue}
@@ -864,7 +864,7 @@ export function SolaWidget({ title, value }) {
           <button 
             onclick={() => activeSection = prevItem.id}
             class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-blue-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-left transition-all group cursor-pointer shadow-2xs">
-            <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+            <div class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
               <svg class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
               <span>Previous</span>
             </div>
@@ -880,7 +880,7 @@ export function SolaWidget({ title, value }) {
           <button 
             onclick={() => activeSection = nextItem.id}
             class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-blue-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-right transition-all group cursor-pointer shadow-2xs ml-auto w-full sm:w-auto sm:min-w-[200px]">
-            <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
+            <div class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
               <span>Next</span>
               <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </div>

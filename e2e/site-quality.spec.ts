@@ -293,3 +293,107 @@ test('a version on screen names the package it belongs to', async ({ page }) => 
     expect(footer, `footer should attribute the ${pkg} version`).toContain(pkg);
   }
 });
+
+test('Studio Arc surfaces failure instead of silently doing nothing', async ({ page }) => {
+  // Arc sent a field the endpoint never read, so every request came back 400.
+  // A 400 does not throw, so the catch never ran, the components check quietly
+  // failed, and the finally block wiped the prompt: no spinner, no error, no
+  // output, and the user's words gone. Driven here against a forced failure.
+  await page.setViewportSize(DESKTOP);
+  await page.route('**/api/intent', (route) =>
+    route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'Upstream refused the request.' }) })
+  );
+
+  await page.goto('/studio');
+  await page.waitForLoadState('networkidle');
+
+  const input = page.locator('input[placeholder*="Describe"], textarea[placeholder*="Describe"]').first();
+  const prompt = 'Realtime revenue waterfall and p99 latency gauge';
+  await input.fill(prompt);
+  await page.getByRole('button', { name: /Generate with Arc/i }).click();
+
+  const alert = page.getByRole('alert');
+  await expect(alert, 'a failed generation must say so').toBeVisible({ timeout: 15000 });
+  await expect(alert).toContainText('Upstream refused the request.');
+
+  // The prompt has to survive, or there is nothing to retry with.
+  await expect(input).toHaveValue(prompt);
+});
+
+test('light-mode text contrast does not regress', async ({ page }) => {
+  // Light mode was far worse than dark and is the default theme. These counts
+  // are a ratchet measured after the fixes, not a target — they may fall,
+  // never rise. Elements painted by a CSS gradient are skipped: backgroundColor
+  // cannot describe a gradient, so they cannot be judged this way.
+  const budget: Record<string, number> = {
+    '/': 20, '/docs': 11, '/components': 5, '/studio': 12, '/community': 43,
+    '/demo': 12, '/demo/ai': 38, '/preview': 6, '/overview': 1, '/privacy': 1
+  };
+
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.setViewportSize(DESKTOP);
+
+  for (const [path, allowed] of Object.entries(budget)) {
+    await page.goto(path);
+    await page.waitForLoadState('networkidle');
+    const failures = await page.evaluate(() => {
+      type C = { r: number; g: number; b: number; a: number };
+      const parse = (c: string): C => {
+        const m = (c || '').match(/[\d.]+/g) ?? ['0', '0', '0'];
+        return { r: +m[0], g: +m[1], b: +m[2], a: m[3] === undefined ? 1 : +m[3] };
+      };
+      const over = (f: C, b: C): C => ({
+        r: f.r * f.a + b.r * (1 - f.a), g: f.g * f.a + b.g * (1 - f.a),
+        b: f.b * f.a + b.b * (1 - f.a), a: 1
+      });
+      const lum = (c: C) => {
+        const f = (v: number) => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
+        return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
+      };
+      let fails = 0;
+      for (const el of Array.from(document.querySelectorAll<HTMLElement>('body *'))) {
+        const own = Array.from(el.childNodes).filter((n) => n.nodeType === 3)
+          .map((n) => n.textContent?.trim() ?? '').join('');
+        if (!own) continue;
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+        let gradient = false;
+        for (let n: HTMLElement | null = el; n; n = n.parentElement) {
+          if (getComputedStyle(n).backgroundImage !== 'none') { gradient = true; break; }
+        }
+        if (gradient) continue;
+        const size = parseFloat(cs.fontSize);
+        const weight = Number(cs.fontWeight) || 400;
+        const large = size >= 24 || (size >= 18.66 && weight >= 700);
+        const stack: string[] = [];
+        for (let n: HTMLElement | null = el; n; n = n.parentElement) stack.push(getComputedStyle(n).backgroundColor);
+        let bg: C = { r: 255, g: 255, b: 255, a: 1 };
+        for (const c of stack.reverse()) { const q = parse(c); if (q.a > 0) bg = over(q, bg); }
+        const fg = over(parse(cs.color), bg);
+        const ratio = (Math.max(lum(fg), lum(bg)) + 0.05) / (Math.min(lum(fg), lum(bg)) + 0.05);
+        if (ratio < (large ? 3 : 4.5)) fails++;
+      }
+      return fails;
+    });
+    expect(failures, `${path} contrast failures rose above the ratchet`).toBeLessThanOrEqual(allowed);
+  }
+});
+
+test('a reduced-motion preference is honoured', async ({ page }) => {
+  // There was no prefers-reduced-motion rule at all; ~80 elements kept
+  // animating for a user who asked the OS to stop motion.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize(DESKTOP);
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  const moving = await page.evaluate(() =>
+    Array.from(document.querySelectorAll<HTMLElement>('body *')).filter((el) => {
+      const cs = getComputedStyle(el);
+      const dur = parseFloat(cs.animationDuration) || 0;
+      const trans = parseFloat(cs.transitionDuration) || 0;
+      return dur > 0.05 || trans > 0.05;
+    }).length
+  );
+  expect(moving, 'elements still animating under reduced motion').toBe(0);
+});

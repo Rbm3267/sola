@@ -68,7 +68,7 @@
           </div>
           <!-- Decorative acronym line. Hidden on small screens, where at a
                legible 12px it wraps to three lines and crowds the header. -->
-          <span class="hidden sm:inline text-xs font-mono tracking-widest text-slate-400 dark:text-slate-500 leading-none uppercase whitespace-nowrap"><span class="text-blue-500 dark:text-blue-400 font-bold">A</span>mbient · <span class="text-indigo-500 dark:text-indigo-400 font-bold">I</span>ntent · <span class="text-violet-500 dark:text-violet-400 font-bold">R</span>untime</span>
+          <span class="hidden sm:inline text-xs font-mono tracking-widest text-slate-500 dark:text-slate-400 leading-none uppercase whitespace-nowrap"><span class="text-blue-700 dark:text-blue-400 font-bold">A</span>mbient · <span class="text-indigo-700 dark:text-indigo-400 font-bold">I</span>ntent · <span class="text-violet-700 dark:text-violet-400 font-bold">R</span>untime</span>
         </div>
       </a>
 

@@ -76,11 +76,11 @@
     </span>
     <span class="flex items-center gap-1 shrink-0">
       {#if value}
-        <button onclick={clear} class="p-0.5 rounded hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400" aria-label="Clear selection">
+        <button onclick={clear} class="p-0.5 rounded hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 dark:text-slate-400" aria-label="Clear selection">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       {/if}
-      <svg class="w-4 h-4 text-slate-400 transition-transform {isOpen ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 transition-transform {isOpen ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
     </span>
   </button>
 
@@ -117,7 +117,7 @@
             </span>
           </button>
         {:else}
-          <div class="px-3 py-4 text-sm text-slate-400 text-center">No results found</div>
+          <div class="px-3 py-4 text-sm text-slate-500 dark:text-slate-400 text-center">No results found</div>
         {/each}
       </div>
     </div>

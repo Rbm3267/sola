@@ -140,14 +140,14 @@
     <div class="space-y-4">
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div class="relative flex-1 max-w-md">
-          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           <input
             type="text"
             bind:value={searchQuery}
             placeholder="Search templates (e.g. revenue, funnel, dial, sprint, telemetry)..."
             class="w-full pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 font-sans shadow-2xs" />
           {#if searchQuery}
-            <button onclick={() => (searchQuery = '')} class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">&times;</button>
+            <button onclick={() => (searchQuery = '')} class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-600 text-xs">&times;</button>
           {/if}
         </div>
         <a
@@ -203,7 +203,7 @@
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider border border-white/25 bg-white/10 text-white/90">
                   Concept
                 </span>
-                <span class="text-xs font-mono text-white/50">
+                <span class="text-xs font-mono text-white/90">
                   {item.cards.length} Primitives · sample data
                 </span>
               </div>
@@ -214,12 +214,12 @@
                   {primaryCard?.value ?? '—'}
                 </div>
                 {#if primaryCard?.delta}
-                  <div class="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-white/70">
+                  <div class="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-white/90">
                     <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                     {primaryCard.delta}
                   </div>
                 {/if}
-                <div class="text-xs font-mono text-white/50 mt-1">{primaryCard?.title}</div>
+                <div class="text-xs font-mono text-white/90 mt-1">{primaryCard?.title}</div>
               </div>
 
               <!-- Decorative sparkline -->
@@ -323,7 +323,7 @@
             </div>
             <button
               onclick={() => (activeTemplateModal = null)}
-              class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white/70 hover:text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors text-lg leading-none">
+              class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors text-lg leading-none">
               &times;
             </button>
           </div>
@@ -331,7 +331,7 @@
 
         <!-- Code body -->
         <div class="flex-1 overflow-y-auto p-6 space-y-4">
-          <div class="flex items-center justify-between text-xs font-mono font-bold text-slate-400">
+          <div class="flex items-center justify-between text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
             <span>Template .sola Source</span>
             <button
               onclick={() => copySolaCode(activeTemplateModal!)}

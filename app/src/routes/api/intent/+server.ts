@@ -111,10 +111,21 @@ Formatting:
     }
 
     // Mode 2: Generative UI Intent Compiler (JSON Component AST)
-    const rawIntent = typeof data.intent === 'string' ? data.intent : '';
+    // Accept `prompt` as well as `intent`: callers reasonably reach for either,
+    // and reading only one of them turned a typo into a silent 400.
+    const rawIntent =
+      typeof data.intent === 'string' ? data.intent
+      : typeof data.prompt === 'string' ? data.prompt
+      : '';
     const prompt = rawIntent.trim();
-    if (!prompt || prompt.length > 1000) {
-      return json({ error: 'Invalid intent query. Maximum length is 1000 characters.' }, { status: 400 });
+    // Separate messages: an empty field and an over-long one are different
+    // mistakes, and reporting both as "maximum length" sent debugging the
+    // wrong way entirely.
+    if (!prompt) {
+      return json({ error: 'No intent provided. Send an intent string describing what to build.' }, { status: 400 });
+    }
+    if (prompt.length > 1000) {
+      return json({ error: `Intent is too long (${prompt.length} characters). The maximum is 1000.` }, { status: 400 });
     }
 
     const systemInstruction = `You are Sola's generative UI intent compiler.

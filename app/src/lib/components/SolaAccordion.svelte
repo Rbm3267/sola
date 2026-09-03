@@ -40,7 +40,7 @@
       >
         <span>{item.title}</span>
         <svg
-          class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0
+          class="w-4 h-4 text-slate-500 dark:text-slate-400 transition-transform duration-200 shrink-0
             {openIds.has(item.id) ? 'rotate-180' : ''}"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         ><path d="m6 9 6 6 6-6"/></svg>

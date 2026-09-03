@@ -35,7 +35,7 @@
           <span class="w-1.5 h-1.5 rounded-full {ev.type === 'success' ? 'bg-blue-500' : ev.type === 'warning' ? 'bg-amber-500' : 'bg-sky-500'}"></span>
           <span class="text-slate-800 dark:text-slate-200 font-medium">{ev.message}</span>
         </div>
-        <span class="text-xs text-slate-400 font-mono">{ev.timestamp}</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">{ev.timestamp}</span>
       </div>
     {/each}
   </div>

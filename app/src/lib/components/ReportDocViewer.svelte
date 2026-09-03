@@ -144,7 +144,7 @@
         <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20">
           {config.classification || 'Internal Technical Brief'}
         </span>
-        <span class="text-xs font-mono text-slate-400">
+        <span class="text-xs font-mono text-slate-500 dark:text-slate-400">
           {config.date || 'August 28, 2026'}
         </span>
       </div>
@@ -232,7 +232,7 @@
         <!-- Code Block if present -->
         {#if s.codeBlock}
           <div class="relative group mt-1">
-            <div class="absolute top-2.5 right-3 text-xs font-mono text-slate-400 uppercase">
+            <div class="absolute top-2.5 right-3 text-xs font-mono text-slate-500 dark:text-slate-400 uppercase">
               {s.codeBlock.language}
             </div>
             <pre class="p-4 rounded-2xl bg-slate-950 dark:bg-white text-sky-300 font-mono text-xs overflow-x-auto border border-slate-800 leading-relaxed"><code>{s.codeBlock.code}</code></pre>

@@ -127,7 +127,7 @@
     class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-sm text-slate-900 dark:text-white hover:border-slate-300 dark:hover:border-white/20 transition-all cursor-pointer shadow-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 {disabled ? 'opacity-50 pointer-events-none' : ''}"
   >
     <div class="flex items-center gap-2.5 truncate">
-      <svg class="w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
         <line x1="16" y1="2" x2="16" y2="6"/>
         <line x1="8" y1="2" x2="8" y2="6"/>
@@ -141,7 +141,7 @@
         {/if}
       </span>
     </div>
-    <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="m6 9 6 6 6-6"/>
     </svg>
   </button>
@@ -173,7 +173,7 @@
       <!-- Days Grid -->
       <div class="grid grid-cols-7 gap-1 text-center text-xs">
         {#each daysOfWeek as day}
-          <span class="text-xs font-semibold text-slate-400 py-1">{day}</span>
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1">{day}</span>
         {/each}
 
         {#each Array(firstDayOfWeek) as _}

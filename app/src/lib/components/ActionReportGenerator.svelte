@@ -129,7 +129,7 @@
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-        <span class="text-xs font-mono font-bold text-slate-400 uppercase">On-Demand Technical Report Generator</span>
+        <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">On-Demand Technical Report Generator</span>
       </div>
       <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
         {config?.title || 'System Architecture & Incident Report Engine'}
@@ -195,9 +195,9 @@
     </div>
   {:else if !isGenerating}
     <div class="p-8 border-2 border-dashed border-slate-200 dark:border-white/[0.04] rounded-2xl text-center flex flex-col items-center gap-2">
-      <svg class="w-8 h-8 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <svg class="w-8 h-8 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <p class="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">Select a template above and click "Generate Technical Report"</p>
-      <p class="text-xs font-mono text-slate-400">Produces rich, self-contained HTML/Markdown documents with export buttons.</p>
+      <p class="text-xs font-mono text-slate-500 dark:text-slate-400">Produces rich, self-contained HTML/Markdown documents with export buttons.</p>
     </div>
   {/if}
 

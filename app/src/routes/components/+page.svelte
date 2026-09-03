@@ -143,7 +143,7 @@
 
         <!-- Search Input -->
         <div class="w-full md:w-80 relative">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 dark:text-slate-400">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
           <input 
@@ -172,7 +172,7 @@
       
       <!-- Left Column: Component List Directory (4 cols) -->
       <div class="lg:col-span-4 flex flex-col gap-3">
-        <div class="flex items-center justify-between px-1 text-xs font-mono font-bold text-slate-400">
+        <div class="flex items-center justify-between px-1 text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
           <span>CATALOG ({filteredComponents.length})</span>
           <span>{PUBLISHED_COUNT} published in v{VERSIONS.ui}</span>
         </div>
@@ -197,7 +197,7 @@
                     Published
                   </span>
                 {:else}
-                  <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400">
+                  <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400">
                     Preview
                   </span>
                 {/if}
@@ -207,7 +207,7 @@
                 {comp.description}
               </p>
 
-              <div class="flex items-center justify-between pt-1 text-xs font-mono text-slate-400">
+              <div class="flex items-center justify-between pt-1 text-xs font-mono text-slate-500 dark:text-slate-400">
                 <span class="text-blue-600 dark:text-blue-400 font-bold">{comp.category}</span>
                 <span>.{comp.componentName}</span>
               </div>
@@ -225,7 +225,7 @@
             <div class="flex items-center gap-2 text-xs font-mono font-bold text-blue-600 dark:text-blue-400 mb-1">
               <span>{selectedComponent.category}</span>
               <span>•</span>
-              <span class="text-slate-400">{selectedComponent.componentName}.sola</span>
+              <span class="text-slate-500 dark:text-slate-400">{selectedComponent.componentName}.sola</span>
             </div>
             <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               {selectedComponent.name}
@@ -332,15 +332,15 @@
             {:else if selectedComponent.componentName === 'SolaTabs'}
               <div class="w-full space-y-6">
                 <div>
-                  <p class="text-xs font-mono text-slate-400 mb-2 uppercase tracking-wider">Underline</p>
+                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Underline</p>
                   <SolaTabs variant="underline" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
                 </div>
                 <div>
-                  <p class="text-xs font-mono text-slate-400 mb-2 uppercase tracking-wider">Pill</p>
+                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Pill</p>
                   <SolaTabs variant="pill" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
                 </div>
                 <div>
-                  <p class="text-xs font-mono text-slate-400 mb-2 uppercase tracking-wider">Segmented Control</p>
+                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Segmented Control</p>
                   <SolaTabs variant="segment" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
                 </div>
               </div>
@@ -540,7 +540,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               {#if liveProps.title !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Title Prop</label>
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Title Prop</label>
                   <input 
                     type="text" 
                     bind:value={liveProps.title} 
@@ -551,7 +551,7 @@
 
               {#if liveProps.value !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Value Prop</label>
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Value Prop</label>
                   <input 
                     type="text" 
                     bind:value={liveProps.value} 
@@ -562,7 +562,7 @@
 
               {#if liveProps.trend !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Trend Badge</label>
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Trend Badge</label>
                   <input 
                     type="text" 
                     bind:value={liveProps.trend} 
@@ -573,7 +573,7 @@
 
               {#if liveProps.percentage !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">
                     Percentage ({liveProps.percentage}%)
                   </label>
                   <input 
@@ -588,7 +588,7 @@
 
               {#if liveProps.color !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-400 uppercase mb-1">Accent Theme</label>
+                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Accent Theme</label>
                   <select 
                     bind:value={liveProps.color}
                     class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-blue-500">

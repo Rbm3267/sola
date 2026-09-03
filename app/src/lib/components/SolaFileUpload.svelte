@@ -83,7 +83,7 @@
     <h4 class="text-sm font-bold text-slate-900 dark:text-white">
       Click to upload or drag & drop files
     </h4>
-    <p class="text-xs text-slate-400 mt-1">
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
       Supports {accept} (Max {maxSizeMb}MB)
     </p>
   </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="min-w-0">
               <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{file.name}</p>
-              <p class="text-xs text-slate-400 font-mono">{file.size}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">{file.size}</p>
             </div>
           </div>
 
@@ -113,7 +113,7 @@
             <button
               type="button"
               onclick={() => removeFile(idx)}
-              class="p-1 rounded-lg text-slate-400 hover:text-rose-500 transition-colors"
+              class="p-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-500 transition-colors"
             >
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M18 6 6 18"/>

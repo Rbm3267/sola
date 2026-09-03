@@ -42,7 +42,7 @@
             {flowIndex}% Flow Index
           </span>
         </div>
-        <div class="text-xs text-slate-400 font-mono flex items-center gap-2 mt-0.5">
+        <div class="text-xs text-slate-500 dark:text-slate-400 font-mono flex items-center gap-2 mt-0.5">
           <span>Telemetry Bus: Active</span>
           <span>•</span>
           <span>{frictionCount} Friction Events</span>
@@ -64,7 +64,7 @@
       <button 
         type="button"
         onclick={() => isExpanded = !isExpanded}
-        class="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer"
+        class="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer"
         aria-label="Toggle details">
         <svg class="w-4 h-4 transition-transform {isExpanded ? 'rotate-180' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </button>

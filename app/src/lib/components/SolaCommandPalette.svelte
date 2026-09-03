@@ -172,7 +172,7 @@
               query = '';
               inputEl?.focus();
             }}
-            class="p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+            class="p-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
             aria-label="Clear search query"
           >
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -248,7 +248,7 @@
                         class="flex-shrink-0 px-2 py-0.5 text-xs font-mono font-medium rounded-md
                           {isActive
                             ? 'bg-white dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30'
-                            : 'bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10'} shadow-xs"
+                            : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10'} shadow-xs"
                       >
                         {cmd.shortcut}
                       </kbd>

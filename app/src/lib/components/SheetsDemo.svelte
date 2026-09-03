@@ -114,7 +114,7 @@
 &lt;GaugeCard title="Cluster CPU" value="&#123;cluster.cpu&#125;%" /&gt;{/if}</code></pre>
         </div>
 
-        <div class="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+        <div class="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
           <span>Polling interval: 15s</span>
           <span class="text-blue-400 font-bold">Auto-Synchronized</span>
         </div>
@@ -126,7 +126,7 @@
         <div>
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-2">
-              <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
+              <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 {activeMode === 'sheets' ? 'Google Sheet Stream: Finance Operations' : 'PostgreSQL Stream: Cloud Nodes'}
               </span>
             </div>
@@ -196,7 +196,7 @@
           </div>
         </div>
 
-        <div class="mt-8 pt-4 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-400">
+        <div class="mt-8 pt-4 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
           <span>Zero VDOM • Direct DOM Mutator</span>
           <span class="text-slate-600 dark:text-slate-400 font-bold">Latency: 0.2ms</span>
         </div>

@@ -314,7 +314,7 @@
       <form class="flex items-center gap-2 sm:gap-3 w-full relative z-10" onsubmit={(e) => { e.preventDefault(); submitIntent(); }}>
         
         <!-- Left Status / Command Prompt -->
-        <div class="pl-3 sm:pl-4 shrink-0 text-slate-400">
+        <div class="pl-3 sm:pl-4 shrink-0 text-slate-500 dark:text-slate-400">
           {#if isLoading}
             <svg class="w-5 h-5 animate-spin text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4m-3.93 7.07l-2.83-2.83M7.76 7.76L4.93 4.93"/></svg>
           {:else if isListening}
@@ -324,7 +324,7 @@
               <span class="w-1.5 h-3 bg-rose-500 rounded-full animate-bounce [animation-delay:0.3s]"></span>
             </div>
           {:else}
-            <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+            <svg class="w-5 h-5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
           {/if}
         </div>
         
@@ -359,7 +359,7 @@
           disabled={isLoading || !intentQuery.trim()}
           aria-label="Submit intent"
           style={!isLoading && intentQuery.trim() ? "background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;" : ""}
-          class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl font-bold transition-all active:scale-[0.97] disabled:bg-slate-100 dark:bg-white/[0.08] disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
+          class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl font-bold transition-all active:scale-[0.97] disabled:bg-slate-100 dark:bg-white/[0.08] disabled:text-slate-500 dark:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md shrink-0 cursor-pointer"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </button>
@@ -368,7 +368,7 @@
 
     <!-- Suggestions Row -->
     <div class="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto">
-      <span class="text-xs font-semibold text-slate-400">Suggestions:</span>
+      <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Suggestions:</span>
       {#each sampleIntents as sample}
         <button 
           onclick={() => pickSample(sample)}
@@ -433,7 +433,7 @@
       <!-- Presets bar in sub-row with clean border -->
       {#if viewMode === 'custom'}
         <div class="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100 dark:border-white/[0.04]">
-          <span class="text-xs font-mono font-medium text-slate-400 uppercase mr-1">Presets:</span>
+          <span class="text-xs font-mono font-medium text-slate-500 dark:text-slate-400 uppercase mr-1">Presets:</span>
           <button 
             onclick={() => loadPreset('servicenow')}
             class="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-white/[0.08] transition-all active:scale-[0.97] cursor-pointer flex items-center gap-2">

@@ -140,7 +140,7 @@
           <span class="w-2 h-2 rounded-full {isCircuitBreakerActive ? 'bg-amber-400' : 'bg-blue-400'}"></span>
           <span>Sentinel Friction &amp; Self-Healing Simulator</span>
         </h3>
-        <p class="text-xs text-slate-400 mt-0.5">
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
           Simulate real-world user rage-clicks or backend stalls to test autonomous fallback containment.
         </p>
       </div>
@@ -162,7 +162,7 @@
           <span class="text-xs font-bold text-white group-hover:text-blue-400 font-mono">1. User Action Tap</span>
           <span class="w-2 h-2 rounded-full bg-blue-400"></span>
         </div>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
           Click 1x for normal flow. Click 3x rapidly to simulate a <strong>Rage-Click Burst</strong>.
         </p>
       </button>
@@ -176,7 +176,7 @@
           <span class="text-xs font-bold text-white group-hover:text-amber-400 font-mono">2. Simulate 504 Timeout</span>
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
         </div>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
           Simulates a dead upstream API endpoint to test graceful cache fallback.
         </p>
       </button>
@@ -190,7 +190,7 @@
           <span class="text-xs font-bold text-white group-hover:text-sky-400 font-mono">3. Restore Nominal State</span>
           <span class="w-2 h-2 rounded-full bg-sky-400"></span>
         </div>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
           Clears circuit-breaker alerts and restores Flow Index to 99.8%.
         </p>
       </button>
@@ -211,7 +211,7 @@
           <div class="text-xs font-bold text-white font-mono">
             {isCircuitBreakerActive ? 'Self-Healing Circuit Breaker Engaged' : 'Component Surface Operating Nominally'}
           </div>
-          <div class="text-xs text-slate-400 font-mono mt-0.5">
+          <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
             {isCircuitBreakerActive ? 'Serving cached signal snapshot with isolated event boundary' : 'Direct event propagation • 0% drop rate'}
           </div>
         </div>
@@ -249,7 +249,7 @@
           </div>
           <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-xs shrink-0">
             <span>{ev.target}</span>
-            <span class="text-slate-400 font-bold">{ev.latency}</span>
+            <span class="text-slate-500 dark:text-slate-400 font-bold">{ev.latency}</span>
             <span>{ev.timestamp}</span>
           </div>
         </div>

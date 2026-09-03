@@ -197,7 +197,7 @@
               </div>
             </div>
           </div>
-          <span class="text-xs text-slate-400 font-mono">streaming · SSE</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">streaming · SSE</span>
         </div>
 
         <!-- Messages -->
@@ -231,7 +231,7 @@
           <button
             onclick={sendMessage}
             disabled={chatStreaming || !chatInput.trim()}
-            class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 text-white font-medium text-sm px-5 py-2.5 rounded-xl transition-colors disabled:cursor-not-allowed"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-500 dark:text-slate-400 text-white font-medium text-sm px-5 py-2.5 rounded-xl transition-colors disabled:cursor-not-allowed"
           >
             Send
           </button>
@@ -252,7 +252,7 @@
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
         <!-- Default variant -->
         <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Default</p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Default</p>
           <div class="flex flex-wrap gap-2">
             {#each actions as action}
               <button
@@ -276,7 +276,7 @@
 
         <!-- Compact variant -->
         <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Compact</p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Compact</p>
           <div class="flex flex-wrap gap-1.5">
             {#each actions as action}
               <button
@@ -317,7 +317,7 @@
         <!-- Interactive slider -->
         <div>
           <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">score prop (drag to change)</span>
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">score prop (drag to change)</span>
             <span class="font-mono text-sm font-semibold" style="color: {badgeColor().fg}">{badgeScore.toFixed(2)}</span>
           </div>
           <input
@@ -339,7 +339,7 @@
 
         <!-- Size variants -->
         <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">All tiers · sizes sm / md / lg</p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">All tiers · sizes sm / md / lg</p>
           <div class="space-y-3">
             {#each [
               { score: 0.94, tier: 'high',    fg: '#059669', bg: '#ecfdf5', label: 'High' },
@@ -418,7 +418,7 @@
             <span class="font-semibold text-slate-900 dark:text-white">AI Analysis</span>
             <button
               onclick={() => { sheetOpen = false; sheetContent = null; }}
-              class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-lg"
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-lg"
             >×</button>
           </div>
 
@@ -445,7 +445,7 @@
                 </div>
                 <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">{sheetContent.title}</h3>
                 <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">{sheetContent.body}</p>
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Recommended actions</p>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Recommended actions</p>
                 <ol class="space-y-2">
                   {#each sheetContent.items as item, i}
                     <li class="flex items-start gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3">
@@ -495,13 +495,13 @@
       <div class="grid gap-6 md:grid-cols-2">
         <!-- Spacing scale -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Spacing — <code class="font-mono normal-case">--sola-space-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Spacing — <code class="font-mono normal-case">--sola-space-*</code></p>
           <div class="space-y-2">
             {#each spaceSteps as step}
               <div class="flex items-center gap-3">
-                <div class="w-20 text-xs font-mono text-slate-400 text-right flex-shrink-0">{step.name}</div>
+                <div class="w-20 text-xs font-mono text-slate-500 dark:text-slate-400 text-right flex-shrink-0">{step.name}</div>
                 <div class="bg-blue-500 rounded-sm flex-shrink-0" style="width: {step.px * 2}px; height: 10px;"></div>
-                <div class="text-xs text-slate-400 font-mono">{step.px}px</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono">{step.px}px</div>
               </div>
             {/each}
           </div>
@@ -509,7 +509,7 @@
 
         <!-- Semantic alert palette -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Alert severity — <code class="font-mono normal-case">--sola-alert-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Alert severity — <code class="font-mono normal-case">--sola-alert-*</code></p>
           <div class="space-y-2">
             {#each alertRoles as role}
               <div
@@ -525,7 +525,7 @@
 
         <!-- Type scale -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Type scale — <code class="font-mono normal-case">--sola-font-size-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Type scale — <code class="font-mono normal-case">--sola-font-size-*</code></p>
           <div class="space-y-3">
             {#each [
               { name: 'sm',  px: 12, use: 'Labels, metadata' },
@@ -547,7 +547,7 @@
 
         <!-- Corner radius -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Corner radius — <code class="font-mono normal-case">--sola-radius-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Corner radius — <code class="font-mono normal-case">--sola-radius-*</code></p>
           <div class="flex flex-wrap gap-4 items-end">
             {#each [
               { name: 'sm',   r: 2,    size: 36, use: 'badges' },
@@ -562,8 +562,8 @@
                   class="bg-blue-100 dark:bg-blue-950/40 border-2 border-blue-400 dark:border-blue-600"
                   style="width:{step.size}px;height:{step.size}px;border-radius:{step.r}px;"
                 ></div>
-                <span class="text-xs font-mono text-slate-400">{step.name}</span>
-                <span class="text-xs text-slate-300 dark:text-slate-600">{step.use}</span>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">{step.name}</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">{step.use}</span>
               </div>
             {/each}
           </div>

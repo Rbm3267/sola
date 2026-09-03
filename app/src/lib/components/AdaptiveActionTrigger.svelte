@@ -211,7 +211,7 @@
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
             <span>Surfaced via Hover Dwell</span>
           </span>
-          <span class="text-xs text-slate-400">Urgency: {(urgency * 100).toFixed(0)}%</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400">Urgency: {(urgency * 100).toFixed(0)}%</span>
         </div>
         <div>
           <div class="font-bold text-slate-950 dark:text-slate-50 text-xs">{action.title}</div>
@@ -334,7 +334,7 @@
 
     <!-- Details -->
     <div class="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.04] rounded-2xl p-4 flex flex-col gap-2">
-      <div class="text-xs uppercase font-bold text-slate-400">Estimated blast radius impact</div>
+      <div class="text-xs uppercase font-bold text-slate-500 dark:text-slate-400">Estimated blast radius impact</div>
       <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-sans font-medium">
         {action.blastRadiusMessage || 'Direct system change requested. Please review payload before commit.'}
       </p>
@@ -342,7 +342,7 @@
 
     <!-- Swipe-to-Confirm Slider Track -->
     <div class="relative w-full h-12 bg-slate-100 dark:bg-white/[0.08] border border-slate-200/80 dark:border-white/[0.04] rounded-2xl overflow-hidden flex items-center justify-center select-none">
-      <span class="text-xs font-bold text-slate-400 uppercase tracking-widest pointer-events-none">
+      <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pointer-events-none">
         {swipeProgress > 20 ? '' : 'Swipe right to execute'}
       </span>
 
