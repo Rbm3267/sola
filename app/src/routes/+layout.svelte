@@ -3,7 +3,10 @@
 	// Without this the site never loaded the tokens package, so every
 	// var(--sola-*) in a compiled .sola component silently used its light-mode
 	// fallback and dark mode could not work.
-	import '@sola-air-ui/tokens/css';
+	// Imported by relative path, not by package name. A bare specifier here
+	// resolves through the local workspace symlink but not in a clean CI
+	// install, which failed the production build twice.
+	import '../../../packages/tokens/src/tokens.css';
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { theme } from '$lib/stores/theme.svelte';
