@@ -16,7 +16,7 @@
     minEventsForSuggestion: 2
   });
 
-  let fields = $state({ destination: '', dates: '', travellers: '' });
+  let fields = $state({ destination: '', dates: '', travelers: '' });
   let suggestion = $state<Suggestion>(null);
   let resolving = $state(false);
   let events = $state<string[]>([]);
@@ -52,7 +52,7 @@
   // Resolution is local so the page has no server dependency and no API key;
   // what is real is the observation, the gate, and the prompt Sentinel builds.
   function resolveLocally(prompt: string): Suggestion {
-    const { destination, dates, travellers } = fields;
+    const { destination, dates, travelers } = fields;
     if (destination && !dates) {
       return {
         label: `Add dates for ${destination.trim()}`,
@@ -60,17 +60,17 @@
         confidence: 0.82
       };
     }
-    if (destination && dates && !travellers) {
+    if (destination && dates && !travelers) {
       return {
-        label: 'How many travelling?',
+        label: 'How many traveling?',
         action: `Pricing for ${destination.trim()} changes sharply above four people.`,
         confidence: 0.74
       };
     }
-    if (destination && dates && travellers) {
+    if (destination && dates && travelers) {
       return {
         label: 'Ready to compare fares',
-        action: `Search ${destination.trim()} for ${travellers.trim()} on ${dates.trim()}.`,
+        action: `Search ${destination.trim()} for ${travelers.trim()} on ${dates.trim()}.`,
         confidence: 0.91
       };
     }
@@ -99,7 +99,7 @@
   });
 
   function reset() {
-    fields = { destination: '', dates: '', travellers: '' };
+    fields = { destination: '', dates: '', travelers: '' };
     suggestion = null;
     events = [];
     hasInteracted = false;
@@ -166,12 +166,12 @@
         </label>
 
         <label class="flex flex-col gap-1.5">
-          <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Travellers</span>
+          <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Travelers</span>
           <input
-            bind:value={fields.travellers}
-            oninput={(e) => handleInput('travellers', (e.currentTarget as HTMLInputElement).value)}
-            onfocus={() => handleFocus('travellers')}
-            onblur={() => handleBlur('travellers', fields.travellers)}
+            bind:value={fields.travelers}
+            oninput={(e) => handleInput('travelers', (e.currentTarget as HTMLInputElement).value)}
+            onfocus={() => handleFocus('travelers')}
+            onblur={() => handleBlur('travelers', fields.travelers)}
             placeholder="2 adults"
             class="px-3.5 py-2.5 text-sm rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all" />
         </label>
