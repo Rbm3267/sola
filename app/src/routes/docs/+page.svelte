@@ -379,14 +379,14 @@ export function SolaWidget({ title, value }) {
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <span>Sola AIR v{VERSIONS.solaAir}</span>
         </div>
-        <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
+        <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">
           Single-file zero-VDOM reactivity for the ambient web.
         </p>
       </div>
     </aside>
 
     <!-- 2. Center Article Reader (Tailwind Prose & Code Blocks) -->
-    <main class="flex-1 w-full min-w-0 space-y-12">
+    <main id="main-content" class="flex-1 w-full min-w-0 space-y-12">
       
       <!-- AI Answer Callout (if active) -->
       {#if aiAnswer}
@@ -409,11 +409,11 @@ export function SolaWidget({ title, value }) {
         <article class="space-y-8">
           <!-- Article Header -->
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Getting Started</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Getting Started</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Installation & Setup
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Get started with Sola by creating a new standalone project or integrating the compiler into your existing Vite setup.
             </p>
           </header>
@@ -421,7 +421,7 @@ export function SolaWidget({ title, value }) {
           <!-- Tailwind Style Callout Note -->
           <div class="border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-500/10 p-4 rounded-r-2xl space-y-1">
             <h4 class="text-xs font-semibold text-blue-950 dark:text-blue-400 font-mono">Zero-VDOM Runtime Note</h4>
-            <p class="text-xs text-blue-900 dark:text-blue-300 leading-relaxed">
+            <p class="text-xs text-blue-900 dark:text-blue-300 leading-relaxed max-w-[68ch]">
               Sola compiles directly to standard ES modules without virtual DOM reconciliation. No runtime react-dom or large framework wrappers required.
             </p>
           </div>
@@ -431,7 +431,7 @@ export function SolaWidget({ title, value }) {
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2.5">
               <span>Creating a new project</span>
             </h2>
-            <p class="text-sm text-slate-600 dark:text-slate-400">
+            <p class="text-sm text-slate-600 dark:text-slate-400 max-w-[68ch]">
               The fastest way to get started is with the official CLI initializer, which sets up Vite, UnoCSS, and Sola compiler hooks automatically:
             </p>
 
@@ -473,7 +473,7 @@ export function SolaWidget({ title, value }) {
           <!-- Step 2: Existing Vite Project -->
           <section class="space-y-4 pt-4">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Adding to an existing Vite app</h2>
-            <p class="text-sm text-slate-600 dark:text-slate-400">
+            <p class="text-sm text-slate-600 dark:text-slate-400 max-w-[68ch]">
               If you already have a Vite application, install the Sola core runtime and Vite compiler plugin:
             </p>
 
@@ -500,7 +500,7 @@ export function SolaWidget({ title, value }) {
           <!-- Step 3: Vite Plugin Config -->
           <section class="space-y-4 pt-4">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Configuring Vite</h2>
-            <p class="text-sm text-slate-600 dark:text-slate-400">
+            <p class="text-sm text-slate-600 dark:text-slate-400 max-w-[68ch]">
               Add the Sola plugin to your <code>vite.config.ts</code>:
             </p>
 
@@ -529,11 +529,11 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'syntax'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Component Architecture</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Component Architecture</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               The .sola Format
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Anatomy of single-file components compiling into reactive native DOM nodes.
             </p>
           </header>
@@ -542,17 +542,17 @@ export function SolaWidget({ title, value }) {
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
               <span class="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 uppercase">Part 1</span>
               <h4 class="font-semibold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt;</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>) and handlers.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Defines reactive signals (<code>$state</code>, <code>$derived</code>) and handlers.</p>
             </div>
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
               <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
               <h4 class="font-semibold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Standard declarative markup with <code>&#123;expression&#125;</code> bindings.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Standard declarative markup with <code>&#123;expression&#125;</code> bindings.</p>
             </div>
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
               <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
               <h4 class="font-semibold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt;</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Auto-scoped CSS hashed at compile time with 0 global collisions.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Auto-scoped CSS hashed at compile time with 0 global collisions.</p>
             </div>
           </div>
 
@@ -616,18 +616,18 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'api-reactivity'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Core Concepts</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Core Concepts</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Reactivity & Signals
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Fine-grained state tracking primitives designed for zero overhead.
             </p>
           </header>
 
           <section class="space-y-3">
             <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">createSignal(initialValue)</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Creates a local reactive state tuple. Invoking the getter registers subscriptions; calling the setter notifies dependencies.
             </p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -637,7 +637,7 @@ export function SolaWidget({ title, value }) {
 
           <section class="space-y-3">
             <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">createDerived(fn)</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Creates a memoized computation that automatically re-evaluates only when its dependencies change.
             </p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -647,7 +647,7 @@ export function SolaWidget({ title, value }) {
 
           <section class="space-y-3">
             <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">createEffect(callback)</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Executes side effects and automatically reruns whenever accessed signals change.
             </p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -660,18 +660,18 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'api-macros'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Core Concepts</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Core Concepts</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Compiler Macros
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Compile-time macros for ambient generative resolution and remote data signals.
             </p>
           </header>
 
           <section class="space-y-3">
             <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">$intent(prompt, options)</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Translates natural language descriptions into live compiled UI trees at compile time.
             </p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -681,7 +681,7 @@ export function SolaWidget({ title, value }) {
 
           <section class="space-y-3">
             <h3 class="text-base font-bold font-mono text-slate-900 dark:text-white">$data(sourceUri, options)</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Binds component fields directly to WebSocket or HTTP/2 SSE signals from Google Sheets or PostgreSQL.
             </p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -694,11 +694,11 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'engine'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Architecture</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Architecture</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Zero-VDOM Engine
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               How Sola compiles components into direct DOM operations.
             </p>
           </header>
@@ -710,11 +710,11 @@ export function SolaWidget({ title, value }) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
               <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.9 kB Bundle</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">No third-party runtime dependencies.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">No third-party runtime dependencies.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
               <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">No Diff Step</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Only the DOM nodes a changed signal owns are written to.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Only the DOM nodes a changed signal owns are written to.</p>
             </div>
           </div>
         </article>
@@ -723,11 +723,11 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'host-embedding'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Host Embedding
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Sola components are plain functions — mount them into any DOM container from any host framework or enterprise platform.
             </p>
           </header>
@@ -742,7 +742,7 @@ export function SolaWidget({ title, value }) {
           <section class="space-y-6">
             <div class="space-y-1">
               <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">With a Bundler (ESM)</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">For environments with a build step — Vite, webpack, Rollup, esbuild, or any bundler that resolves npm packages. Install <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/core</code>, pre-compile <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">.sola</code> files to JS with the CLI, then import and mount normally inside any TypeScript or JavaScript source file.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">For environments with a build step — Vite, webpack, Rollup, esbuild, or any bundler that resolves npm packages. Install <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/core</code>, pre-compile <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">.sola</code> files to JS with the CLI, then import and mount normally inside any TypeScript or JavaScript source file.</p>
             </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{bundlerEmbedCode}</code></pre>
@@ -750,7 +750,7 @@ export function SolaWidget({ title, value }) {
 
             <div class="space-y-1">
               <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Without a Bundler (IIFE)</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">For environments with no build step — plain <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">&lt;script&gt;</code> tags, CMS platforms, portals. Load <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola-core.iife.min.js</code> as a global script, compile your component with <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">--target iife</code>, then mount via <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">window.ComponentName(container, props)</code>.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">For environments with no build step — plain <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">&lt;script&gt;</code> tags, CMS platforms, portals. Load <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola-core.iife.min.js</code> as a global script, compile your component with <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">--target iife</code>, then mount via <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">window.ComponentName(container, props)</code>.</p>
             </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{noBundlerEmbedCode}</code></pre>
@@ -762,11 +762,11 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'relay-saas'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Sola Relay SaaS
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Deploying Sola Relay close to private database clusters.
             </p>
           </header>
@@ -790,18 +790,18 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'mcp'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">AI Tooling</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">AI Tooling</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               MCP Server
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               Give any MCP-compatible AI agent (Claude Code, Cursor, Copilot) direct access to the Sola compiler and API reference — no context window stuffing required.
             </p>
           </header>
 
           <section class="space-y-3">
             <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Installation</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Add <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/mcp</code> to your Claude Code or editor MCP config. The server runs locally as a stdio process — no API keys, no network calls.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">Add <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/mcp</code> to your Claude Code or editor MCP config. The server runs locally as a stdio process — no API keys, no network calls.</p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{mcpInstallCode}</code></pre>
             </div>
@@ -809,7 +809,7 @@ export function SolaWidget({ title, value }) {
 
           <section class="space-y-3">
             <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Exposed Tools & Resources</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">The MCP server exposes two tools and one resource. An agent reads <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola://docs</code> to learn the syntax, then calls <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">compile_component</code> to produce runnable JS.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">The MCP server exposes two tools and one resource. An agent reads <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola://docs</code> to learn the syntax, then calls <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">compile_component</code> to produce runnable JS.</p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{mcpToolsCode}</code></pre>
             </div>
@@ -817,7 +817,7 @@ export function SolaWidget({ title, value }) {
 
           <section class="space-y-3">
             <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Agent Workflow</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">How a coding agent uses the MCP end-to-end — from reading the spec to writing compiled output to disk.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">How a coding agent uses the MCP end-to-end — from reading the spec to writing compiled output to disk.</p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{mcpAgentCode}</code></pre>
             </div>
@@ -826,15 +826,15 @@ export function SolaWidget({ title, value }) {
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
               <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">compile_component</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Compile any .sola source to a JS ES module + scoped CSS. Returns structured JSON with line-level error details on failure.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Compile any .sola source to a JS ES module + scoped CSS. Returns structured JSON with line-level error details on failure.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
               <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">validate_component</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Check a .sola source for errors without emitting the full compiled output. Useful for pre-flight checks before writing files.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Check a .sola source for errors without emitting the full compiled output. Useful for pre-flight checks before writing files.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
               <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">sola://docs</h4>
-              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Full Sola API reference as plain text — template syntax, runes, compiler output format. Read once at session start.</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal max-w-[68ch]">Full Sola API reference as plain text — template syntax, runes, compiler output format. Read once at session start.</p>
             </div>
           </div>
         </article>
@@ -843,11 +843,11 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'llm-spec'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 max-w-[68ch]">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               AI Prompting Spec
             </h1>
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed pt-1 max-w-[68ch]">
               System prompt context for Claude 3.5 Sonnet, GPT-4o, and Gemini 2.5 Flash models.
             </p>
           </header>

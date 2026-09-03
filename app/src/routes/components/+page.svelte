@@ -123,7 +123,7 @@
 <div class="min-h-screen bg-[#fafafa] dark:bg-[#090d19] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
   <Navbar />
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col gap-8">
+  <main id="main-content" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col gap-8">
     
     <!-- Hero Header -->
     <header class="flex flex-col gap-4 border-b border-slate-900/[0.03] dark:border-white/[0.04] pb-6">
@@ -203,7 +203,7 @@
                 {/if}
               </div>
 
-              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed max-w-[68ch]">
                 {comp.description}
               </p>
 
@@ -230,7 +230,7 @@
             <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               {selectedComponent.name}
             </h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-[68ch]">
               {selectedComponent.tagline}
             </p>
           </div>
@@ -332,15 +332,15 @@
             {:else if selectedComponent.componentName === 'SolaTabs'}
               <div class="w-full space-y-6">
                 <div>
-                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Underline</p>
+                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider max-w-[68ch]">Underline</p>
                   <SolaTabs variant="underline" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
                 </div>
                 <div>
-                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Pill</p>
+                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider max-w-[68ch]">Pill</p>
                   <SolaTabs variant="pill" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
                 </div>
                 <div>
-                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Segmented Control</p>
+                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider max-w-[68ch]">Segmented Control</p>
                   <SolaTabs variant="segment" tabs={liveProps.tabs || []} activeTab={liveProps.activeTab || ''} />
                 </div>
               </div>
@@ -495,7 +495,7 @@
               </div>
             {:else if selectedComponent.componentName === 'SolaHoverCard'}
               <div class="w-full flex flex-col items-center justify-center gap-4 py-12">
-                <p class="text-sm text-slate-600 dark:text-slate-300">
+                <p class="text-sm text-slate-600 dark:text-slate-300 max-w-[68ch]">
                   Hover over the handle to preview metadata:
                   <SolaHoverCard handle="@sola-architecture" title="Sola Architecture" description="Zero-VDOM, direct reactive graph bindings with no diffing between a signal write and the DOM." />
                 </p>

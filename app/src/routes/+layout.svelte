@@ -34,6 +34,13 @@
 	<link rel="canonical" href="https://sola-air.dev" />
 </svelte:head>
 
+<a
+	href="#main-content"
+	class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-slate-900 focus:text-white focus:text-sm focus:font-semibold focus:shadow-lg"
+>
+	Skip to content
+</a>
+
 <div class="min-h-screen flex flex-col w-full transition-colors duration-200">
 	{@render children()}
 	<SiteFooter />

@@ -76,7 +76,7 @@
   <!-- Soft Ambient Glow -->
   <div class="absolute top-0 inset-x-0 h-[450px] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(16,185,129,0.06),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(16,185,129,0.1),rgba(9,13,25,0))] pointer-events-none"></div>
 
-  <main class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+  <main id="main-content" class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
     
     <!-- Hero Header -->
     <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -89,7 +89,7 @@
         Preview UI Components on <span class="bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 bg-clip-text text-transparent">Any Live Web App</span>
       </h1>
       
-      <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 font-normal leading-relaxed">
+      <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 font-normal leading-relaxed max-w-[68ch]">
         Inject isolated zero-VDOM Shadow DOM preview cards directly over any live web platform (production, staging, or localhost). Choose between a free-floating draggable HUD or 1-click DOM element anchoring.
       </p>
 
@@ -125,7 +125,7 @@
           <span class="text-xs font-mono uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400">Mode 1</span>
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Free-Floating Draggable HUD</h3>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           The preview card docks automatically in the viewport corner. Grab the header bar to drag the component freely anywhere on your screen, or use the 1-tap snap toggle to cycle corner positions.
         </p>
       </div>
@@ -139,7 +139,7 @@
           <span class="text-xs font-mono uppercase tracking-wider font-semibold text-sky-600 dark:text-sky-400">Mode 2</span>
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Target Element Selector (Click to Anchor)</h3>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           Click <strong>🎯 Target Element</strong>. The extension highlights any container on your webpage with an emerald outline. Click any section (e.g. your app's header, sidebar, or metric container) to anchor the card directly next to it.
         </p>
       </div>
@@ -153,7 +153,7 @@
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-2">
         <div>
           <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Interactive Live Workflow Demo</h2>
-          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Watch the Chrome Side Panel inject and anchor a component onto an active website</p>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-[68ch]">Watch the Chrome Side Panel inject and anchor a component onto an active website</p>
         </div>
 
         <!-- 4 Step Tabs -->
@@ -229,7 +229,7 @@
               <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-4">
                 <div>
                   <h3 class="text-lg font-bold text-slate-900 dark:text-white">Active Cloud Console</h3>
-                  <p class="text-xs text-slate-500 dark:text-slate-400">Live host page DOM (e.g. internal dashboard, cloud admin, or local server)</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">Live host page DOM (e.g. internal dashboard, cloud admin, or local server)</p>
                 </div>
                 <span class="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-white/5 text-xs font-mono font-semibold text-slate-500">
                   Host DOM
@@ -281,7 +281,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                   <div>
                     <h4 class="text-base font-bold text-white">{selectedComponent}</h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Zero-VDOM pure SVG reactive telemetry card rendered directly inside closed Shadow DOM.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-[68ch]">Zero-VDOM pure SVG reactive telemetry card rendered directly inside closed Shadow DOM.</p>
                   </div>
                   <div class="p-3 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-between font-mono">
                     <span class="text-xs text-slate-300">Throughput:</span>
@@ -300,7 +300,7 @@
               </div>
             {:else}
               <div class="my-6 p-8 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-3xl text-center space-y-2 bg-slate-50/50 dark:bg-white/[0.01]">
-                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Click "View in My UI" in the Side Panel on the right to anchor an isolated zero-VDOM component overlay right here.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium max-w-[68ch]">Click "View in My UI" in the Side Panel on the right to anchor an isolated zero-VDOM component overlay right here.</p>
                 <button
                   onclick={() => { isSidePanelOpen = true; isCardInjected = true; activeAnimationStep = 3; isTargetHovered = true; }}
                   class="px-4 py-2 rounded-xl bg-blue-500 text-slate-950 font-semibold text-xs hover:bg-blue-400 cursor-pointer shadow-xs">
@@ -344,7 +344,7 @@
                       <span class="text-xs">Telemetry Stream</span>
                       <span class="text-xs font-mono text-blue-600 font-semibold">Anchor →</span>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-normal mt-0.5">Zero-VDOM pure SVG live chart</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-normal mt-0.5 max-w-[68ch]">Zero-VDOM pure SVG live chart</p>
                   </button>
 
                   <!-- Item 2 -->
@@ -355,7 +355,7 @@
                       <span class="text-xs">Haptic Rotary Dial</span>
                       <span class="text-xs font-mono text-blue-600 font-semibold">Anchor →</span>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-normal mt-0.5">Tactile rate-limiting throttle</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-normal mt-0.5 max-w-[68ch]">Tactile rate-limiting throttle</p>
                   </button>
 
                   <!-- Item 3 -->
@@ -366,7 +366,7 @@
                       <span class="text-xs">Date Range Picker</span>
                       <span class="text-xs font-mono text-blue-600 font-semibold">Anchor →</span>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-normal mt-0.5">Calendar matrix range filter</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-normal mt-0.5 max-w-[68ch]">Calendar matrix range filter</p>
                   </button>
                 </div>
               </div>
@@ -395,7 +395,7 @@
           1
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Install Chrome Extension</h3>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           Install from the Chrome Web Store or load the unpacked <code>sola-extension.zip</code> in Developer Mode.
         </p>
       </div>
@@ -405,7 +405,7 @@
           2
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Open on Any Web App</h3>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           Navigate to your target app (e.g. <code>localhost:3000</code> or your cloud dashboard) and click the Sola icon in your browser toolbar.
         </p>
       </div>
@@ -415,7 +415,7 @@
           3
         </div>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Drag or Anchor to Element</h3>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           Drag the card freely with your mouse or click "Target Element" to anchor the component directly to any container on your page!
         </p>
       </div>

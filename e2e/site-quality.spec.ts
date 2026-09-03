@@ -453,3 +453,54 @@ test('weight is not doing the work of hierarchy', async ({ page }) => {
     expect(share, `${path}: share of text at weight 700+`).toBeLessThan(0.3);
   }
 });
+
+test('a component dropped on the Studio canvas shows its sample data', async ({ page }) => {
+  // createCardFromCatalog emitted card types the renderer had no branch for —
+  // status, form, node_graph, table, code, datepicker — and `status` was the
+  // catch-all. Those all fell through to a placeholder sentence, so most of the
+  // palette looked empty once dropped.
+  await page.setViewportSize(DESKTOP);
+  const ids = ['dynamic-form', 'cluster-matrix', 'status-radar', 'sola-data-table', 'sola-code-block'];
+
+  for (const id of ids) {
+    await page.goto(`/studio?add=${id}`);
+    await page.waitForLoadState('networkidle');
+    const text = await page.evaluate(() => {
+      const cards = Array.from(document.querySelectorAll('main [class*="col-span"]'));
+      return cards.length ? (cards[cards.length - 1] as HTMLElement).innerText : '';
+    });
+    expect(text, `${id} rendered the empty placeholder`)
+      .not.toContain('Direct fine-grained reactive component instance');
+    expect(text.replace(/\s/g, '').length, `${id} rendered almost nothing`).toBeGreaterThan(40);
+  }
+});
+
+test('Arc renders cards whichever key the model uses for the component name', async ({ page }) => {
+  // Production answers have come back as { type: "DataCard" } and local ones as
+  // { component: "DataCard" }. Trusting `type` as a card type put a component
+  // name where a card type belongs, so nothing matched and every generated card
+  // fell through to the placeholder.
+  await page.setViewportSize(DESKTOP);
+
+  for (const key of ['type', 'component'] as const) {
+    await page.route('**/api/intent', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{ [key]: 'DataCard', colSpan: 1, config: { title: 'Q3 Revenue', value: '$4.82M', trend: '+18.4%' } }])
+      })
+    );
+
+    await page.goto('/studio');
+    await page.waitForLoadState('networkidle');
+    const input = page.locator('input[placeholder*="Describe"], textarea[placeholder*="Describe"]').first();
+    await input.fill('q3 revenue');
+    await page.getByRole('button', { name: /Generate with Arc/i }).click();
+
+    const canvas = page.locator('main');
+    // The title is uppercased by CSS, so match the text as authored.
+    await expect(canvas, `key "${key}" produced no usable card`).toContainText(/Q3 Revenue/i, { timeout: 10000 });
+    await expect(canvas).toContainText('$4.82M');
+    await page.unroute('**/api/intent');
+  }
+});

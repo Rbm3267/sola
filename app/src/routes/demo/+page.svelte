@@ -288,8 +288,14 @@
   }
 </script>
 
+<svelte:head>
+  <title>Ambient Intent Playground — Sola AIR</title>
+  <meta name="description" content="Describe an interface in words and watch Sola compile the components live." />
+</svelte:head>
+
 <div class="flex flex-col w-full">
   <Navbar />
+  <main id="main-content" class="contents">
   
   <!-- Precision Monochromatic Grid Texture -->
   <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:24px_24px] opacity-30 dark:opacity-20 pointer-events-none"></div>
@@ -304,7 +310,7 @@
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">
         Ambient Intent Playground
       </h1>
-      <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed font-normal">
+      <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed font-normal max-w-[68ch]">
         Speak or type any intent. Generated cards live in a <strong>fully configurable production grid</strong> with real-time resizing, reordering, and live parameter editing.
       </p>
     </div>
@@ -556,7 +562,7 @@
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
         </div>
         <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono mb-1">Canvas is Clean</h3>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 max-w-[68ch]">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
         <button 
           onclick={() => loadPreset('finance')}
           style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
@@ -568,6 +574,7 @@
   {/if}
 
   </div>
+  </main>
 </div>
 
 <!-- Live Widget Config Modal -->

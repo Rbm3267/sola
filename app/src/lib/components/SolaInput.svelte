@@ -70,11 +70,11 @@
     {/if}
   </div>
   {#if error}
-    <p class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+    <p class="mt-1.5 text-xs text-rose-500 flex items-center gap-1 max-w-[68ch]">
       <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
       {error}
     </p>
   {:else if hint}
-    <p class="mt-1.5 text-xs text-slate-400 dark:text-slate-500">{hint}</p>
+    <p class="mt-1.5 text-xs text-slate-400 dark:text-slate-500 max-w-[68ch]">{hint}</p>
   {/if}
 </div>

@@ -23,7 +23,7 @@
       {page.status === 404 ? 'Page Not Found' : 'Something went wrong'}
     </h1>
 
-    <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
+    <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed max-w-[68ch]">
       {page.error?.message || "The reactive component or route you requested could not be located in the Sola runtime."}
     </p>
 

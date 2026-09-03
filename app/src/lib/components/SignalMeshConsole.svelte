@@ -71,7 +71,7 @@
             <span>4 Linked Widgets</span>
           </span>
         </div>
-        <p class="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5">
+        <p class="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5 max-w-[68ch]">
           Zero-VDOM bus: modifying one widget triggers instant microtask signal mutations across all subscribers (sub-0.2ms).
         </p>
       </div>
@@ -113,7 +113,7 @@
           <div class="text-center">
             <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
             <div class="text-2xl font-black text-slate-950 dark:text-slate-50 font-mono mt-0.5">{nodeCount} Nodes Active</div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Use slider to adjust cluster replica quota</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-[68ch]">Use slider to adjust cluster replica quota</p>
           </div>
 
           <!-- Interactive Slider -->

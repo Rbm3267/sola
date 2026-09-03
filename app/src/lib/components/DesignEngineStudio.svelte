@@ -34,7 +34,7 @@
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
         {PUBLISHED_COUNT} published primitives. Multi-framework portability.
       </h2>
-      <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed font-normal">
+      <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed font-normal max-w-[68ch]">
         From foundation buttons and date pickers to high-frequency telemetry charts and resizable NOC splitters — handcrafted with eased motion and no virtual DOM diffing.
       </p>
     </div>
@@ -176,7 +176,7 @@
                   <span class="text-xs font-semibold font-mono text-slate-950">#0EA5E9</span>
                 </div>
               </div>
-              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-[68ch]">
                 Pre-calculated WCAG AAA mathematical luminance curves ensure pixel-perfect legibility and optical contrast across all 28 components.
               </p>
             </div>

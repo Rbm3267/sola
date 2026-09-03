@@ -215,7 +215,7 @@
         </div>
         <div>
           <div class="font-semibold text-slate-950 dark:text-slate-50 text-xs">{action.title}</div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{action.description}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed max-w-[68ch]">{action.description}</p>
         </div>
         <button 
           onclick={handleTrigger}
@@ -260,7 +260,7 @@
           <svg class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
           <span>Sync failed</span>
         </div>
-        <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">{syncFailedMessage}</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal max-w-[68ch]">{syncFailedMessage}</p>
         <div class="flex items-center gap-2 mt-1">
           <button 
             onclick={commitIntent}
@@ -335,7 +335,7 @@
     <!-- Details -->
     <div class="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.04] rounded-2xl p-4 flex flex-col gap-2">
       <div class="text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">Estimated blast radius impact</div>
-      <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-sans font-medium">
+      <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-sans font-medium max-w-[68ch]">
         {action.blastRadiusMessage || 'Direct system change requested. Please review payload before commit.'}
       </p>
     </div>

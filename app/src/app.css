@@ -108,3 +108,21 @@ nav::-webkit-scrollbar,
     scroll-behavior: auto !important;
   }
 }
+
+/* Reading measure.
+ *
+ * Nothing constrained line length, so body copy ran to 100-156 characters —
+ * roughly twice a comfortable measure, which makes the eye lose its place on
+ * every return sweep. `prose-measure` caps a text column; it is opt-in so
+ * layout text (labels, table cells, code) is unaffected.
+ */
+.prose-measure > p,
+.prose-measure > ul,
+.prose-measure > ol,
+.prose-measure > blockquote {
+  max-width: 68ch;
+}
+
+.measure {
+  max-width: 68ch;
+}

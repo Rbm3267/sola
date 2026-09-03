@@ -289,6 +289,66 @@
   }
 
   // --- Component Factory ---
+  // Values arrive either bare (75) or already carrying a unit ("1.2%").
+  function withPercent(v: string | number): string {
+    const t = String(v ?? '').trim();
+    return t.endsWith('%') ? t : t + '%';
+  }
+
+  // Turn whatever a catalog component carries as defaultConfig into something
+  // visible on the canvas, so a dropped component shows real sample data
+  // instead of a placeholder sentence.
+  function configPreview(card: StudioCard): { label: string; value: string }[] {
+    const cfg = card.config ?? {};
+    const skip = new Set(['sola', 'react', 'svelte', 'html', 'icon', 'color', 'variant', 'size', 'position']);
+    const rows: { label: string; value: string }[] = [];
+    for (const [k, v] of Object.entries(cfg)) {
+      if (skip.has(k) || v == null || v === '') continue;
+      let text: string;
+      if (Array.isArray(v)) {
+        if (v.length === 0) continue;
+        text = v.slice(0, 3).map((x) => (typeof x === 'object' && x ? (x.label ?? x.title ?? x.name ?? JSON.stringify(x)) : String(x))).join(', ');
+        if (v.length > 3) text += ` +${v.length - 3}`;
+      } else if (typeof v === 'object') {
+        continue;
+      } else {
+        text = String(v);
+      }
+      rows.push({ label: k.replace(/([A-Z])/g, ' $1').replace(/^./, (m) => m.toUpperCase()), value: text.slice(0, 42) });
+      if (rows.length >= 5) break;
+    }
+    return rows;
+  }
+
+  function tablePreview(card: StudioCard) {
+    const cfg: any = card.config ?? {};
+    const columns: string[] = Array.isArray(cfg.columns) && cfg.columns.length
+      ? cfg.columns.map((c: any) => (typeof c === 'object' ? (c.label ?? c.key ?? '') : String(c))).slice(0, 4)
+      : ['Name', 'Value', 'Status'];
+    const source: any[] = Array.isArray(cfg.rows) ? cfg.rows : Array.isArray(cfg.items) ? cfg.items : [];
+    const rows = source.slice(0, 3).map((r: any) =>
+      typeof r === 'object' && r !== null
+        ? columns.map((_, i) => String(Object.values(r)[i] ?? '—')).slice(0, columns.length)
+        : columns.map((_, i) => (i === 0 ? String(r) : '—'))
+    );
+    return {
+      columns,
+      rows: rows.length ? rows : [
+        ['cluster-eu-1', '1,204', 'Healthy'].slice(0, columns.length),
+        ['cluster-us-2', '842', 'Degraded'].slice(0, columns.length)
+      ]
+    };
+  }
+
+  function codePreview(card: StudioCard): string {
+    const cfg: any = card.config ?? {};
+    return String(cfg.code ?? cfg.sola ?? cfg.snippet ?? `<script>
+  let count = $state(0);
+<\/script>
+
+<span>{count}</span>`);
+  }
+
   function createCardFromCatalog(item: CatalogComponent): StudioCard {
     const newId = 'c_' + Math.random().toString(36).substring(2, 8);
     const cat = item.category;
@@ -417,22 +477,36 @@
       }
 
       // Map the generator's component names onto the canvas card types.
+      // The model is not consistent about the key: production answers have come
+      // back with { type: "DataCard" } and local ones with
+      // { component: "DataCard" }. Trusting `type` blindly put a component name
+      // where a card type belongs, so no renderer branch matched and every
+      // generated card fell through to the placeholder.
       const TYPE_BY_COMPONENT: Record<string, string> = {
-        GaugeCard: 'radial_dial', DataCard: 'stat', StatGrid: 'stat',
+        GaugeCard: 'progress', DataCard: 'stat', StatGrid: 'stat',
         Chart: 'chart', SolaChart: 'chart', FlowWaterfall: 'waterfall',
-        Table: 'table', ListBlock: 'feed', StreamView: 'feed',
+        Table: 'table', SolaDataTable: 'table', ListBlock: 'feed', StreamView: 'feed',
         DynamicForm: 'status', IncidentTriageMatrix: 'table',
-        TactileDialCard: 'slider', ProgressSteps: 'progress'
+        TactileDialCard: 'radial_dial', ProgressSteps: 'progress',
+        SolaCodeBlock: 'code', MarkdownViewer: 'code'
       };
+      const CARD_TYPES = new Set([
+        'stat', 'progress', 'slider', 'radial_dial', 'waterfall',
+        'chart', 'feed', 'table', 'code', 'status'
+      ]);
 
       pushHistory();
       const generated: StudioCard[] = items.map((item: any, i: number) => {
         const config = item.config ?? {};
+        // Either key may hold the component name; only accept a value that is
+        // genuinely one of the canvas card types.
+        const named = item.component ?? item.type ?? '';
+        const cardType = CARD_TYPES.has(item.type) ? item.type : (TYPE_BY_COMPONENT[named] ?? 'stat');
         return {
           id: 'arc_' + i + '_' + Math.random().toString(36).substring(2, 6),
-          type: item.type ?? TYPE_BY_COMPONENT[item.component] ?? 'stat',
-          title: config.title ?? item.title ?? item.component ?? 'Telemetry Node',
-          subtitle: config.subtitle ?? item.subtitle ?? 'Generated from your intent',
+          type: cardType,
+          title: config.title ?? item.title ?? named ?? 'Telemetry Node',
+          subtitle: config.subtitle ?? config.subtext ?? item.subtitle ?? 'Generated from your intent',
           cols: (item.colSpan ?? item.cols ?? (i === 0 ? 2 : 1)) as 1 | 2 | 3,
           value: config.value ?? item.value ?? '—',
           delta: config.trend ?? config.delta ?? item.delta,
@@ -675,7 +749,7 @@ export default function SolaDashboard() {
                       + Add
                     </button>
                   </div>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{item.tagline || item.description}</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[68ch]">{item.tagline || item.description}</p>
                 </div>
               </div>
             {/each}
@@ -685,7 +759,7 @@ export default function SolaDashboard() {
     {/if}
 
     <!-- 2B. Central Interactive Live Canvas -->
-    <main
+    <main id="main-content"
       ondragover={(e) => onDragOver(e, 'canvas-root')}
       ondrop={(e) => onDrop(e)}
       class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 flex flex-col gap-6 max-w-7xl mx-auto w-full">
@@ -729,8 +803,8 @@ export default function SolaDashboard() {
           class="mt-3 flex items-start gap-2.5 rounded-2xl border border-rose-200 dark:border-rose-500/25 bg-rose-50 dark:bg-rose-500/10 px-4 py-3">
           <svg class="w-4 h-4 mt-0.5 shrink-0 text-rose-600 dark:text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.5"/></svg>
           <div class="flex-1">
-            <p class="text-sm text-rose-900 dark:text-rose-200">{arcError}</p>
-            <p class="text-xs text-rose-700/80 dark:text-rose-300/70 mt-0.5">Your prompt is still in the box — edit it and try again.</p>
+            <p class="text-sm text-rose-900 dark:text-rose-200 max-w-[68ch]">{arcError}</p>
+            <p class="text-xs text-rose-700/80 dark:text-rose-300/70 mt-0.5 max-w-[68ch]">Your prompt is still in the box — edit it and try again.</p>
           </div>
           <button
             type="button"
@@ -792,7 +866,7 @@ export default function SolaDashboard() {
                   <div class="min-w-0">
                     <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">{card.title}</h4>
                     {#if card.subtitle}
-                      <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{card.subtitle}</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[68ch]">{card.subtitle}</p>
                     {/if}
                   </div>
                 </div>
@@ -851,7 +925,7 @@ export default function SolaDashboard() {
                         <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" class="text-slate-100 dark:text-white/5"/>
                         <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="{Number(card.value)}, 100" stroke-linecap="round" class="{c.text}"/>
                       </svg>
-                      <span class="absolute inset-0 flex items-center justify-center text-xs font-mono font-semibold">{card.value}%</span>
+                      <span class="absolute inset-0 flex items-center justify-center text-xs font-mono font-semibold">{withPercent(card.value)}</span>
                     </div>
                     <div class="space-y-1.5 flex-1">
                       <div class="flex justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
@@ -870,7 +944,7 @@ export default function SolaDashboard() {
                 {:else if card.type === 'slider'}
                   <div class="space-y-3 py-2">
                     <div class="flex justify-between items-center font-mono">
-                      <span class="text-2xl font-black text-slate-900 dark:text-white">{card.value}%</span>
+                      <span class="text-2xl font-black text-slate-900 dark:text-white">{withPercent(card.value)}</span>
                       <span class="text-xs {c.textDark} font-semibold">Live Signal</span>
                     </div>
                     <input
@@ -946,13 +1020,48 @@ export default function SolaDashboard() {
                     </div>
                   </div>
 
+                {:else if card.type === 'table'}
+                  <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-white/5">
+                    <table class="w-full text-xs">
+                      <thead class="bg-slate-50 dark:bg-white/[0.02]">
+                        <tr>
+                          {#each tablePreview(card).columns as col}
+                            <th class="text-left font-semibold text-slate-600 dark:text-slate-300 px-2.5 py-1.5">{col}</th>
+                          {/each}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {#each tablePreview(card).rows as row}
+                          <tr class="border-t border-slate-100 dark:border-white/5">
+                            {#each row as cell}
+                              <td class="px-2.5 py-1.5 text-slate-700 dark:text-slate-300 font-mono">{cell}</td>
+                            {/each}
+                          </tr>
+                        {/each}
+                      </tbody>
+                    </table>
+                  </div>
+
+                {:else if card.type === 'code'}
+                  <pre class="p-3 rounded-xl bg-slate-900 dark:bg-black/40 overflow-x-auto"><code class="text-xs font-mono text-slate-100">{codePreview(card)}</code></pre>
+
                 {:else}
-                  <div class="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-white/5">
-                    <div class="flex items-center gap-2">
-                      <span class="w-2 h-2 rounded-full {c.bg}"></span>
-                      <span class="font-semibold text-xs text-slate-900 dark:text-white">{card.title}</span>
-                    </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
+                  <!-- Every other catalog component landed here and rendered a
+                       title plus a stock sentence, so most of the palette showed
+                       no data at all once dropped. The mock data was already on
+                       the card as `config`; this surfaces it. -->
+                  <div class="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-white/5 space-y-1.5">
+                    {#each configPreview(card) as row}
+                      <div class="flex items-baseline justify-between gap-3 text-xs">
+                        <span class="text-slate-500 dark:text-slate-400 shrink-0">{row.label}</span>
+                        <span class="font-mono text-slate-800 dark:text-slate-200 text-right truncate">{row.value}</span>
+                      </div>
+                    {:else}
+                      <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full {c.bg}"></span>
+                        <span class="font-semibold text-xs text-slate-900 dark:text-white">{card.title}</span>
+                      </div>
+                    {/each}
                   </div>
                 {/if}
               </div>
@@ -1090,7 +1199,7 @@ export default function SolaDashboard() {
             </div>
             <div>
               <h3 class="font-semibold text-sm text-slate-900 dark:text-white">Export Sola Canvas</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Zero-VDOM native code generator</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">Zero-VDOM native code generator</p>
             </div>
           </div>
           <button

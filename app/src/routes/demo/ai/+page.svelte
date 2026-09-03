@@ -152,9 +152,15 @@
   });
 </script>
 
+<svelte:head>
+  <title>AI Interaction Primitives — Sola AIR</title>
+  <meta name="description" content="Conversation threads, action strips, confidence badges and intent sheets, running live." />
+</svelte:head>
+
+
 <Navbar />
 
-<main class="min-h-screen bg-slate-50 dark:bg-slate-950 pt-16">
+<main id="main-content" class="min-h-screen bg-slate-50 dark:bg-slate-950 pt-16">
 
   <!-- ── Page header ──────────────────────────────────────────────────────── -->
   <section class="max-w-5xl mx-auto px-6 pt-16 pb-10">
@@ -181,7 +187,7 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">ConversationThread</h2>
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/ui/ai/conversation-thread</code>
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Streaming chat UI with SSE support. Connects directly to any <code class="font-mono">$intent</code> endpoint via <code class="font-mono">configureIntent()</code>.</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-[68ch]">Streaming chat UI with SSE support. Connects directly to any <code class="font-mono">$intent</code> endpoint via <code class="font-mono">configureIntent()</code>.</p>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -246,13 +252,13 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">ActionStrip</h2>
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/ui/ai/action-strip</code>
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Contextual action chips surfaced after an AI response. Surfaces the most relevant follow-up actions inline.</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-[68ch]">Contextual action chips surfaced after an AI response. Surfaces the most relevant follow-up actions inline.</p>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
         <!-- Default variant -->
         <div>
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Default</p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 max-w-[68ch]">Default</p>
           <div class="flex flex-wrap gap-2">
             {#each actions as action}
               <button
@@ -276,7 +282,7 @@
 
         <!-- Compact variant -->
         <div>
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Compact</p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 max-w-[68ch]">Compact</p>
           <div class="flex flex-wrap gap-1.5">
             {#each actions as action}
               <button
@@ -296,7 +302,7 @@
         </div>
 
         {#if lastAction}
-          <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-mono max-w-[68ch]">
             <span class="text-blue-600 dark:text-blue-400">onaction</span> → "{lastAction}"
           </p>
         {/if}
@@ -310,7 +316,7 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">ConfidenceBadge</h2>
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/ui/ai/confidence-badge</code>
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">AI certainty indicator derived from a 0–1 score signal. Tiers: high ≥ 0.85, medium ≥ 0.55, low &lt; 0.55.</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-[68ch]">AI certainty indicator derived from a 0–1 score signal. Tiers: high ≥ 0.85, medium ≥ 0.55, low &lt; 0.55.</p>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
@@ -339,7 +345,7 @@
 
         <!-- Size variants -->
         <div>
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">All tiers · sizes sm / md / lg</p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 max-w-[68ch]">All tiers · sizes sm / md / lg</p>
           <div class="space-y-3">
             {#each [
               { score: 0.94, tier: 'high',    fg: '#059669', bg: '#ecfdf5', label: 'High' },
@@ -386,7 +392,7 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">IntentSheet</h2>
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/ui/ai/intent-sheet</code>
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Slide-in overlay driven by a <code class="font-mono">$intent</code> signal. Shows shimmer during load, structured result when resolved.</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-[68ch]">Slide-in overlay driven by a <code class="font-mono">$intent</code> signal. Shows shimmer during load, structured result when resolved.</p>
       </div>
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
@@ -444,8 +450,8 @@
                   Intent resolved
                 </div>
                 <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">{sheetContent.title}</h3>
-                <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">{sheetContent.body}</p>
-                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Recommended actions</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 max-w-[68ch]">{sheetContent.body}</p>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 max-w-[68ch]">Recommended actions</p>
                 <ol class="space-y-2">
                   {#each sheetContent.items as item, i}
                     <li class="flex items-start gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3">
@@ -486,7 +492,7 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Design Tokens</h2>
           <code class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">@sola-air-ui/tokens</code>
         </div>
-        <p class="text-sm text-slate-500 dark:text-slate-400">
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-[68ch]">
           CSS custom properties covering spacing, type scale, and semantic alert levels —
           open, platform-agnostic, ships as <code class="font-mono">--sola-*</code> variables.
         </p>
@@ -495,7 +501,7 @@
       <div class="grid gap-6 md:grid-cols-2">
         <!-- Spacing scale -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Spacing — <code class="font-mono normal-case">--sola-space-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 max-w-[68ch]">Spacing — <code class="font-mono normal-case">--sola-space-*</code></p>
           <div class="space-y-2">
             {#each spaceSteps as step}
               <div class="flex items-center gap-3">
@@ -509,7 +515,7 @@
 
         <!-- Semantic alert palette -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Alert severity — <code class="font-mono normal-case">--sola-alert-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 max-w-[68ch]">Alert severity — <code class="font-mono normal-case">--sola-alert-*</code></p>
           <div class="space-y-2">
             {#each alertRoles as role}
               <div
@@ -525,7 +531,7 @@
 
         <!-- Type scale -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Type scale — <code class="font-mono normal-case">--sola-font-size-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 max-w-[68ch]">Type scale — <code class="font-mono normal-case">--sola-font-size-*</code></p>
           <div class="space-y-3">
             {#each [
               { name: 'sm',  px: 12, use: 'Labels, metadata' },
@@ -547,7 +553,7 @@
 
         <!-- Corner radius -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Corner radius — <code class="font-mono normal-case">--sola-radius-*</code></p>
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 max-w-[68ch]">Corner radius — <code class="font-mono normal-case">--sola-radius-*</code></p>
           <div class="flex flex-wrap gap-4 items-end">
             {#each [
               { name: 'sm',   r: 2,    size: 36, use: 'badges' },
@@ -576,7 +582,7 @@
       <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">What Sola AIR gives you</h2>
       <div class="grid md:grid-cols-2 gap-6 text-sm">
         <div>
-          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The runtime</p>
+          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2 max-w-[68ch]">The runtime</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Zero-VDOM — changes go straight to the DOM</li>
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> <code class="font-mono text-xs">$state</code>, <code class="font-mono text-xs">$derived</code>, <code class="font-mono text-xs">$intent</code> as first-class primitives</li>
@@ -585,7 +591,7 @@
           </ul>
         </div>
         <div>
-          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The AI layer</p>
+          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2 max-w-[68ch]">The AI layer</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Provider-agnostic <code class="font-mono text-xs">$intent</code> — your server, your model</li>
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Anthropic · OpenAI · Gemini · Ollama adapters included</li>

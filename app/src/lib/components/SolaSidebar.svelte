@@ -67,7 +67,7 @@
         {#if !collapsed}
           <div class="truncate">
             <h2 class="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">Sola Core</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Enterprise</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-mono max-w-[68ch]">Enterprise</p>
           </div>
         {/if}
       </div>
@@ -134,8 +134,8 @@
       </div>
       {#if !collapsed}
         <div class="truncate min-w-0">
-          <p class="text-xs font-semibold text-slate-900 dark:text-white truncate">Sola Admin</p>
-          <p class="text-xs text-slate-500 dark:text-slate-400 truncate">admin@sola-air.dev</p>
+          <p class="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[68ch]">Sola Admin</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[68ch]">admin@sola-air.dev</p>
         </div>
       {/if}
     </div>

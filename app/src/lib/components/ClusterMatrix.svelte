@@ -70,7 +70,7 @@
         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
         <h3 class="text-base font-bold text-slate-950 dark:text-slate-50 tracking-tight font-mono">{config.title || 'Cluster Topology Matrix'}</h3>
       </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400">{config.subtitle || `${nodes.length} Nodes Distributed Across 6 Global Regions`}</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">{config.subtitle || `${nodes.length} Nodes Distributed Across 6 Global Regions`}</p>
     </div>
 
     <!-- Aggregate Status Pills -->

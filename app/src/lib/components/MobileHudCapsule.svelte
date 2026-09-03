@@ -131,7 +131,7 @@
               {intents.find(i => i.id === selectedIntentKey)?.label}
             </span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-[68ch]">
             {intents.find(i => i.id === selectedIntentKey)?.desc}
           </p>
         </div>
@@ -220,7 +220,7 @@
         </div>
 
         <!-- Explainer -->
-        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           1-thumb mobile triggers to generate and preview zero-VDOM components on your screen:
         </p>
 

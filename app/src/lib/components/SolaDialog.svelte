@@ -50,7 +50,7 @@
           <div>
             <h2 id="dialog-title" class="text-lg font-bold text-slate-900 dark:text-white">{title}</h2>
             {#if description}
-              <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{description}</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-[68ch]">{description}</p>
             {/if}
           </div>
           <button

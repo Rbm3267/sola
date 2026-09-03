@@ -98,6 +98,6 @@
 
   </div>
 
-  <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono">{config.subtext || 'Precision rotary adjustment with 0.2ms microtask reactivity'}</p>
+  <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono max-w-[68ch]">{config.subtext || 'Precision rotary adjustment with 0.2ms microtask reactivity'}</p>
 
 </div>

@@ -151,7 +151,7 @@
       <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
         {config.title || 'SRE Architecture Postmortem Brief'}
       </h3>
-      <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">
+      <p class="text-xs text-slate-500 dark:text-slate-400 font-mono max-w-[68ch]">
         Author: {config.author || 'Principal Systems Architect'} • Format: Native HTML/Markdown
       </p>
     </div>
@@ -188,7 +188,7 @@
           <span>{s.heading}</span>
         </h4>
         
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           {s.content}
         </p>
 

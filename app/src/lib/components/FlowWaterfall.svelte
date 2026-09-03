@@ -103,7 +103,7 @@
         <span class="w-2 h-2 rounded-full bg-blue-500"></span>
         <h3 class="text-base font-bold text-slate-950 dark:text-slate-50 tracking-tight font-mono">{displayTitle}</h3>
       </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400">{displaySubtitle}</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">{displaySubtitle}</p>
     </div>
 
     <!-- Final Value Highlight -->

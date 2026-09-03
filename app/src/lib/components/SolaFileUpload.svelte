@@ -83,7 +83,7 @@
     <h4 class="text-sm font-semibold text-slate-900 dark:text-white">
       Click to upload or drag & drop files
     </h4>
-    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-[68ch]">
       Supports {accept} (Max {maxSizeMb}MB)
     </p>
   </div>
@@ -101,8 +101,8 @@
               </svg>
             </div>
             <div class="min-w-0">
-              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{file.name}</p>
-              <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">{file.size}</p>
+              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[68ch]">{file.name}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 font-mono max-w-[68ch]">{file.size}</p>
             </div>
           </div>
 

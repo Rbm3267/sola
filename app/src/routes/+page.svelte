@@ -9,6 +9,12 @@
   import { CATALOG_COUNT } from '$lib/data/site';
 </script>
 
+<svelte:head>
+  <title>Sola AIR — UI that suggests before it is asked</title>
+  <meta name="description" content="A zero-VDOM reactive runtime whose UI observes behaviour and resolves suggestions before the user asks." />
+</svelte:head>
+
+
 <div class="flex flex-col w-full bg-white dark:bg-[#090d19] text-slate-900 dark:text-white transition-colors duration-300 min-h-screen">
   <Navbar />
   
@@ -17,6 +23,7 @@
   
   <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col pt-4 w-full">
 
+<main id="main-content" class="contents">
     <!-- 1. Universal Interactive Hero -->
     <InteractiveHero />
 
@@ -45,7 +52,7 @@
             <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
               Sola Design Studio
             </h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Drag-and-drop generative canvas with {CATALOG_COUNT} components and live signal simulators.
             </p>
           </div>
@@ -64,7 +71,7 @@
             <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
               "View in My UI" Extension
             </h3>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               Manifest V3 Chrome extension that injects a closed Shadow DOM sandbox on any active web app with zero CSS collisions.
             </p>
           </div>
@@ -84,7 +91,7 @@
             <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
               Written in Sola
             </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
               One page of this site is compiled from a single <code class="font-mono text-xs">.sola</code> file, with a live signal and its source linked. Read the source and compare it with what your browser is running.
             </p>
           </div>
@@ -169,5 +176,6 @@
         </div>
       </div>
     </section>
+</main>
   </div>
 </div>

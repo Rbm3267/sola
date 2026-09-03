@@ -136,7 +136,7 @@
     <div class="grid grid-cols-1 md:grid-cols-5">
       <!-- The form a person actually fills in -->
       <div class="md:col-span-3 p-6 sm:p-7 flex flex-col gap-4 border-b md:border-b-0 md:border-r border-slate-100 dark:border-white/5">
-        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           Type into a field, then stop for a moment. The observation and the
           gate are the real Sentinel from
           <code class="font-mono text-xs bg-slate-100 dark:bg-white/5 px-1 py-0.5 rounded">@sola-air-ui/core</code>;

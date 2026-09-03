@@ -52,8 +52,8 @@
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
     </svg>
   </div>
-  <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">Right-Click Anywhere Inside</p>
-  <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Triggers Sola Context Menu with keyboard shortcuts</p>
+  <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 max-w-[68ch]">Right-Click Anywhere Inside</p>
+  <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-[68ch]">Triggers Sola Context Menu with keyboard shortcuts</p>
 </div>
 
 {#if isOpen}

@@ -43,7 +43,7 @@
           {config.table || 'public.incident'}
         </h3>
       </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400">Relational Schema Definition & Foreign Key Constraints</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">Relational Schema Definition & Foreign Key Constraints</p>
     </div>
 
     <!-- Stats Pill -->

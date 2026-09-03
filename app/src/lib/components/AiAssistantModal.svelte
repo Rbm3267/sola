@@ -190,7 +190,7 @@
             </div>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-              <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Active · Ambient Intent Runtime</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 font-mono max-w-[68ch]">Active · Ambient Intent Runtime</p>
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@
 
       <!-- Quick Prompts — wrapped, never overflows -->
       <div class="px-4 pt-3 pb-2 border-t border-slate-100 dark:border-white/[0.06] bg-white dark:bg-[#0b0f1e] shrink-0">
-        <p class="text-xs font-mono font-semibold uppercase text-slate-500 dark:text-slate-400 mb-2">Suggestions</p>
+        <p class="text-xs font-mono font-semibold uppercase text-slate-500 dark:text-slate-400 mb-2 max-w-[68ch]">Suggestions</p>
         <div class="flex flex-wrap gap-1.5">
           {#each quickPrompts as qp}
             <button

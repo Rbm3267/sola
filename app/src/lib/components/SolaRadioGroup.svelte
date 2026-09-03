@@ -48,7 +48,7 @@
           <div>
             <span class="text-sm font-medium text-slate-900 dark:text-white">{opt.label}</span>
             {#if opt.description}
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{opt.description}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 max-w-[68ch]">{opt.description}</p>
             {/if}
           </div>
         </div>
@@ -72,7 +72,7 @@
         <div>
           <span class="text-sm text-slate-700 dark:text-slate-300">{opt.label}</span>
           {#if opt.description}
-            <p class="text-xs text-slate-500 dark:text-slate-400">{opt.description}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[68ch]">{opt.description}</p>
           {/if}
         </div>
       </label>
