@@ -126,6 +126,29 @@ export class SolaSentinel {
     return revisit;
   }
 
+  // Typing is the signal the ambient-intent story is actually about — noticing
+  // hesitation mid-thought, not after the user has moved on. Until this existed
+  // the observer only saw focus and blur, so "type, then stop for a moment"
+  // could never fire: typing produced no events at all.
+  recordFieldInput(fieldId, value, ts = now()) {
+    const text = String(value ?? '');
+    const preview = text.length > FIELD_TEXT_PREVIEW_MAX_CHARS
+      ? text.slice(-FIELD_TEXT_PREVIEW_MAX_CHARS)
+      : text;
+    const last = this.fieldHistory[this.fieldHistory.length - 1];
+    // Collapse a run of keystrokes in one field into a single evolving event,
+    // so a 40-character sentence does not evict the rest of the buffer.
+    if (last && last.type === 'input' && last.fieldId === fieldId) {
+      last.valuePreview = preview;
+      last.valueLength = text.length;
+      last.timestamp = ts;
+      this.lastActivityAt = ts;
+      this._recomputeFlowIndex(ts);
+      return;
+    }
+    this._pushFieldEvent({ type: 'input', fieldId, valuePreview: preview, valueLength: text.length, timestamp: ts });
+  }
+
   recordFieldBlur(fieldId, value, ts = now()) {
     const text = String(value ?? '');
     const preview = text.length > FIELD_TEXT_PREVIEW_MAX_CHARS
@@ -157,6 +180,11 @@ export class SolaSentinel {
         return e.revisit
           ? `User returned to field "${e.fieldId}".`
           : `User focused field "${e.fieldId}".`;
+      }
+      if (e.type === 'input') {
+        return e.valueLength === 0
+          ? `User cleared field "${e.fieldId}".`
+          : `User is typing in "${e.fieldId}": "${e.valuePreview}"`;
       }
       if (e.valueLength === 0) return `User left field "${e.fieldId}" empty.`;
       return `Field "${e.fieldId}" now contains: "${e.valuePreview}"`;

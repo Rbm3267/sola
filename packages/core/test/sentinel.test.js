@@ -160,3 +160,32 @@ test('buildPrompt describes focus, revisit, empty, and filled fields in order', 
   assert.match(prompt, /User returned to field "short_description"/);
   assert.match(prompt, /Respond as compact JSON only/);
 });
+
+test('typing alone can clear the significance gate — no blur required', () => {
+  const sentinel = createSentinel('typing', {
+    idleThresholdMs: 0, minSuggestIntervalMs: 0, minEventsForSuggestion: 2
+  });
+  sentinel.recordFieldFocus('city', 1000);
+  sentinel.recordFieldInput('city', 'Lis', 1100);
+  sentinel.recordFieldInput('city', 'Lisbon', 1200);
+
+  assert.equal(sentinel.checkSignificance(3000), true);
+  assert.match(sentinel.buildPrompt(), /User is typing in "city": "Lisbon"/);
+});
+
+test('a run of keystrokes in one field collapses into one evolving event', () => {
+  const sentinel = createSentinel('typing');
+  sentinel.recordFieldFocus('q', 1000);
+  for (let i = 1; i <= 20; i++) sentinel.recordFieldInput('q', 'x'.repeat(i), 1000 + i);
+
+  const inputs = sentinel.fieldHistory.filter((e) => e.type === 'input');
+  assert.equal(inputs.length, 1, 'one event, not twenty');
+  assert.equal(inputs[0].valueLength, 20, 'holds the latest value');
+});
+
+test('typing in a different field starts a new event', () => {
+  const sentinel = createSentinel('typing');
+  sentinel.recordFieldInput('a', 'one', 1000);
+  sentinel.recordFieldInput('b', 'two', 1100);
+  assert.equal(sentinel.fieldHistory.filter((e) => e.type === 'input').length, 2);
+});

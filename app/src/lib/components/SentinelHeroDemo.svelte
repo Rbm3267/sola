@@ -34,6 +34,16 @@
     pushEvent(revisit ? `returned to "${id}"` : `focused "${id}"`);
   }
 
+  function handleInput(id: string, value: string) {
+    sentinel.recordFieldInput(id, value);
+    // One line per field, updated in place — the buffer should read like the
+    // observer's own state, not an append-only log of keystrokes.
+    const line = value ? `typing in "${id}": ${value.length} chars` : `cleared "${id}"`;
+    const withoutSameField = events.filter((e) => !e.startsWith(`typing in "${id}"`) && !e.startsWith(`cleared "${id}"`));
+    events = [...withoutSameField.slice(-3), line];
+    flowIndex = sentinel.flowIndex;
+  }
+
   function handleBlur(id: string, value: string) {
     sentinel.recordFieldBlur(id, value);
     pushEvent(value ? `left "${id}" with ${value.length} chars` : `left "${id}" empty`);
@@ -127,13 +137,17 @@
       <!-- The form a person actually fills in -->
       <div class="md:col-span-3 p-6 sm:p-7 flex flex-col gap-4 border-b md:border-b-0 md:border-r border-slate-100 dark:border-white/5">
         <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          Type into a field, then stop for a moment.
+          Type into a field, then stop for a moment. The observation and the
+          gate are the real Sentinel from
+          <code class="font-mono text-xs bg-slate-100 dark:bg-white/5 px-1 py-0.5 rounded">@sola-air-ui/core</code>;
+          the suggestion itself is resolved locally so this page needs no API key.
         </p>
 
         <label class="flex flex-col gap-1.5">
           <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Destination</span>
           <input
             bind:value={fields.destination}
+            oninput={(e) => handleInput('destination', (e.currentTarget as HTMLInputElement).value)}
             onfocus={() => handleFocus('destination')}
             onblur={() => handleBlur('destination', fields.destination)}
             placeholder="Lisbon"
@@ -144,6 +158,7 @@
           <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Dates</span>
           <input
             bind:value={fields.dates}
+            oninput={(e) => handleInput('dates', (e.currentTarget as HTMLInputElement).value)}
             onfocus={() => handleFocus('dates')}
             onblur={() => handleBlur('dates', fields.dates)}
             placeholder="12–19 October"
@@ -154,6 +169,7 @@
           <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Travellers</span>
           <input
             bind:value={fields.travellers}
+            oninput={(e) => handleInput('travellers', (e.currentTarget as HTMLInputElement).value)}
             onfocus={() => handleFocus('travellers')}
             onblur={() => handleBlur('travellers', fields.travellers)}
             placeholder="2 adults"

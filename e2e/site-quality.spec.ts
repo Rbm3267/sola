@@ -87,17 +87,20 @@ test('the hero demonstrates the thing the headline claims', async ({ page }) => 
   // Nothing suggested until the user actually does something.
   await expect(page.getByText('the form has not been touched')).toBeVisible();
 
-  // Type, then stop — the significance gate should fire on the pause.
+  // Exactly what the on-screen copy tells the visitor to do: type, then stop.
+  // No blur. Sentinel could previously only observe focus and blur, so typing
+  // produced no events and the panel said "Waiting for a pause…" forever.
   await destination.click();
-  await destination.fill('Lisbon');
-  await page.getByPlaceholder('12–19 October').click();
+  await destination.type('Lisbon', { delay: 40 });
 
   const suggestion = page.locator('[role="status"]').filter({ hasText: 'Add dates' });
   await expect(suggestion).toBeVisible({ timeout: 8000 });
   await expect(suggestion).toContainText('confidence');
 
-  // The observer buffer must reflect real events, not a canned script.
+  // The observer buffer must reflect real events, not a canned script — and it
+  // must show the typing, which is the behaviour the thesis is about.
   await expect(page.getByText(/focused "destination"/)).toBeVisible();
+  await expect(page.getByText(/typing in "destination"/)).toBeVisible();
 });
 
 test('every repository link points at the real repository', async ({ page }) => {
