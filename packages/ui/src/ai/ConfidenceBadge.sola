@@ -86,7 +86,7 @@
 
   .tier-unknown {
     background: var(--sola-surface-1, #f8fafc);
-    color: var(--sola-color-neutral-500, #64748b);
+    color: var(--sola-text-secondary, #64748b);
     border-color: var(--sola-border-subtle, #e2e8f0);
   }
   .tier-unknown .dot { background: #94a3b8; }

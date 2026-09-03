@@ -83,8 +83,13 @@
     color: var(--ov-ink);
   }
 
+  /* Three states, not two. An explicit choice stamps data-theme on the root;
+     with nothing stamped the OS preference decides. Keying only on the media
+     query — as this did — meant the site's own theme toggle never reached this
+     page, so a dark-OS visitor viewing the site in light mode got dark tokens
+     on a light ground. */
   @media (prefers-color-scheme: dark) {
-    .sola-overview-root {
+    :root:not([data-theme="light"]) .sola-overview-root {
       --ov-ink: #f8fafc;
       --ov-ink-2: #94a3b8;
       --ov-surface: rgba(15, 23, 42, 0.8);
@@ -95,6 +100,18 @@
       --ov-accent-line: rgba(16, 185, 129, 0.3);
       --ov-on-accent: #052e23;
     }
+  }
+
+  :root[data-theme="dark"] .sola-overview-root {
+      --ov-ink: #f8fafc;
+      --ov-ink-2: #94a3b8;
+      --ov-surface: rgba(15, 23, 42, 0.8);
+      --ov-surface-2: rgba(255, 255, 255, 0.04);
+      --ov-line: rgba(255, 255, 255, 0.1);
+      --ov-accent: #10b981;
+      --ov-accent-soft: rgba(16, 185, 129, 0.12);
+      --ov-accent-line: rgba(16, 185, 129, 0.3);
+      --ov-on-accent: #052e23;
   }
 
   .hero-section {

@@ -90,7 +90,7 @@
 
   .action-chip.default {
     background: var(--sola-surface-2, #f1f5f9);
-    color: var(--sola-color-neutral-700, #334155);
+    color: var(--sola-text-primary, #334155);
     border-color: var(--sola-border-subtle, #e2e8f0);
   }
   .action-chip.default:hover:not(.disabled) {

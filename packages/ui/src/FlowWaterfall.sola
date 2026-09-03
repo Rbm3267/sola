@@ -108,7 +108,7 @@
   .wf-row.positive .wf-row-dot { background: var(--sola-color-primary-500, #10b981); }
   .wf-row.negative .wf-row-dot { background: #f43f5e; }
   .wf-row.total .wf-row-dot { background: #6366f1; }
-  .wf-row-name { font-size: 12px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--sola-color-neutral-700, #334155); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wf-row-name { font-size: 12px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--sola-text-primary, #334155); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .wf-row-bar-track { flex: 1; max-width: 220px; height: 14px; background: rgba(203, 213, 225, 0.5); border-radius: 999px; padding: 2px; }
   .wf-row-bar-fill { height: 100%; border-radius: 999px; background: #94a3b8; transition: width 0.5s ease; }
@@ -116,7 +116,7 @@
   .wf-row.negative .wf-row-bar-fill { background: #f43f5e; }
   .wf-row.total .wf-row-bar-fill { background: #6366f1; }
 
-  .wf-row-value { min-width: 84px; text-align: right; font-size: 12px; font-weight: 900; font-family: ui-monospace, monospace; color: var(--sola-color-neutral-500, #64748b); }
+  .wf-row-value { min-width: 84px; text-align: right; font-size: 12px; font-weight: 900; font-family: ui-monospace, monospace; color: var(--sola-text-secondary, #64748b); }
   .wf-row.positive .wf-row-value { color: var(--sola-color-primary-700, #047857); }
   .wf-row.negative .wf-row-value { color: #be123c; }
   .wf-row.total .wf-row-value { color: #4f46e5; }

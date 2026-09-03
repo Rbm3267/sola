@@ -79,7 +79,7 @@
   .row-label {
     font-size: 14px;
     font-weight: 600;
-    color: var(--sola-color-neutral-800, #1e293b);
+    color: var(--sola-text-primary, #1e293b);
   }
 
   .row-desc {

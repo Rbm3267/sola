@@ -22,7 +22,7 @@
     border-radius: 16px;
   }
 
-  .sola-canvas-light { background: var(--sola-surface-0, #ffffff); color: var(--sola-color-neutral-800, #1e293b); }
+  .sola-canvas-light { background: var(--sola-surface-0, #ffffff); color: var(--sola-text-primary, #1e293b); }
   .sola-canvas-dark  { background: #090d19; color: var(--sola-color-neutral-50, #f8fafc); }
 
   .sola-canvas-pad-none       { padding: 0; }

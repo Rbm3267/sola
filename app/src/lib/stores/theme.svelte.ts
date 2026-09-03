@@ -24,7 +24,15 @@ export class ThemeState {
 
   applyTheme() {
     if (typeof document !== 'undefined') {
-      document.documentElement.classList.toggle('dark', this.isDark);
+      const root = document.documentElement;
+      // Two markers, deliberately. `.dark` is what the utility classes key off.
+      // `data-theme` is what the design tokens and compiled .sola components
+      // key off, and it must be set for BOTH states: without an explicit
+      // "light" the tokens fall back to `prefers-color-scheme`, so a visitor on
+      // a dark OS viewing the site in light mode got light page chrome with
+      // dark token values — white text on white cards.
+      root.classList.toggle('dark', this.isDark);
+      root.dataset.theme = this.isDark ? 'dark' : 'light';
     }
   }
 }

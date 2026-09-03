@@ -18,7 +18,7 @@
 
   .default {
     background: var(--sola-surface-2, #f1f5f9);
-    color: var(--sola-color-neutral-500, #64748b);
+    color: var(--sola-text-secondary, #64748b);
   }
 
   .success {

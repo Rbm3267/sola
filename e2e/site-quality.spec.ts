@@ -192,3 +192,51 @@ test('Studio is usable on a phone', async ({ page }) => {
   expect(box!.width, 'canvas must not be squeezed by a docked palette')
     .toBeGreaterThan(PHONE.width * 0.85);
 });
+
+// The site marks its theme with a `.dark` class, while design tokens and
+// compiled .sola components key off `data-theme` / prefers-color-scheme. When
+// only one of those was set, a visitor on a dark OS viewing the site in light
+// mode got dark token values on a light ground — white text on white cards,
+// measured at 1.10:1. All four combinations must be legible.
+for (const osTheme of ['light', 'dark'] as const) {
+  for (const siteTheme of ['light', 'dark'] as const) {
+    test(`text is legible with OS ${osTheme} and site ${siteTheme}`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: osTheme });
+      await page.setViewportSize(DESKTOP);
+
+      for (const path of ['/', '/demo', '/overview']) {
+        await page.goto(path);
+        await page.evaluate((t) => localStorage.setItem('sola_theme', t), siteTheme);
+        await page.reload({ waitUntil: 'networkidle' });
+
+        const ratio = await page.evaluate(() => {
+          const el = document.querySelector('.dash-title, .hero-heading, h1');
+          if (!el) return 21;
+          const parse = (c: string) => {
+            const m = (c || '').match(/[\d.]+/g) ?? ['0', '0', '0'];
+            return { r: +m[0], g: +m[1], b: +m[2], a: m[3] === undefined ? 1 : +m[3] };
+          };
+          type C = { r: number; g: number; b: number; a: number };
+          const over = (f: C, b: C): C => ({
+            r: f.r * f.a + b.r * (1 - f.a), g: f.g * f.a + b.g * (1 - f.a),
+            b: f.b * f.a + b.b * (1 - f.a), a: 1
+          });
+          const lum = (c: C) => {
+            const f = (v: number) => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
+            return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
+          };
+          // Composite the whole ancestor background stack; a near-transparent
+          // overlay must not be mistaken for a solid one.
+          const stack: string[] = [];
+          for (let n: Element | null = el; n; n = n.parentElement) stack.push(getComputedStyle(n).backgroundColor);
+          let bg: C = { r: 255, g: 255, b: 255, a: 1 };
+          for (const c of stack.reverse()) { const p = parse(c); if (p.a > 0) bg = over(p, bg); }
+          const fg = over(parse(getComputedStyle(el).color), bg);
+          return (Math.max(lum(fg), lum(bg)) + 0.05) / (Math.min(lum(fg), lum(bg)) + 0.05);
+        });
+
+        expect(ratio, `${path} heading contrast (OS ${osTheme}, site ${siteTheme})`).toBeGreaterThan(4.5);
+      }
+    });
+  }
+}

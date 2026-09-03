@@ -153,7 +153,7 @@
 
   .dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
   .dial-value { font-size: 26px; font-weight: 900; color: #020617; font-family: ui-monospace, monospace; letter-spacing: -0.02em; }
-  .dial-hint { font-size: 10px; font-family: ui-monospace, monospace; color: var(--sola-color-neutral-500, #64748b); margin-top: 2px; }
+  .dial-hint { font-size: 10px; font-family: ui-monospace, monospace; color: var(--sola-text-secondary, #64748b); margin-top: 2px; }
 
-  .dial-subtext { font-size: 12px; color: var(--sola-color-neutral-500, #64748b); margin-top: 8px; font-family: ui-monospace, monospace; }
+  .dial-subtext { font-size: 12px; color: var(--sola-text-secondary, #64748b); margin-top: 8px; font-family: ui-monospace, monospace; }
 </style>

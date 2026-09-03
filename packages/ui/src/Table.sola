@@ -82,7 +82,7 @@
 
   td {
     padding: 12px 16px;
-    color: var(--sola-color-neutral-700, #334155);
+    color: var(--sola-text-primary, #334155);
     border-bottom: 1px solid var(--sola-surface-2, #f1f5f9);
   }
 
