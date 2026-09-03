@@ -43,9 +43,9 @@
   <div class="w-full flex items-center justify-between mb-4">
     <div class="flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-      <h3 class="text-xs font-mono font-black text-slate-900 dark:text-white uppercase tracking-wider">{config.title || 'Rotary Touch Controller'}</h3>
+      <h3 class="text-xs font-mono font-semibold text-slate-900 dark:text-white uppercase tracking-wider">{config.title || 'Rotary Touch Controller'}</h3>
     </div>
-    <span class="text-xs font-mono bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 px-2 py-0.5 rounded-full font-bold">
+    <span class="text-xs font-mono bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 px-2 py-0.5 rounded-full font-semibold">
       1-Thumb Rotary
     </span>
   </div>

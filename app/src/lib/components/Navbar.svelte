@@ -62,8 +62,8 @@
         <SolaLogo size="sm" />
         <div class="flex flex-col gap-0.5">
           <div class="flex items-center gap-2">
-            <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white font-sans leading-none">Sola <span class="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">AIR</span></span>
-            <span class="text-xs font-mono font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 px-2 py-0.5 rounded-full">v{version}</span>
+            <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white font-sans leading-none">Sola <span class="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">AIR</span></span>
+            <span class="text-xs font-mono font-semibold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 px-2 py-0.5 rounded-full">v{version}</span>
           </div>
           <!-- Decorative acronym line. Hidden on small screens, where at a
                legible 12px it wraps to three lines and crowds the header. -->
@@ -122,7 +122,7 @@
           <span class="font-medium text-slate-700 dark:text-slate-300 hidden sm:inline">Ask Sola AIR...</span>
           <span class="font-medium text-slate-700 dark:text-slate-300 sm:hidden">AIR</span>
         </div>
-        <kbd class="hidden sm:inline text-xs font-mono bg-slate-200/60 dark:bg-white/10 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-400 font-bold">⌘K</kbd>
+        <kbd class="hidden sm:inline text-xs font-mono bg-slate-200/60 dark:bg-white/10 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-400 font-semibold">⌘K</kbd>
       </button>
 
       <!-- Theme Toggle -->

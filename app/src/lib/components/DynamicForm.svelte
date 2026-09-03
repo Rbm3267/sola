@@ -26,10 +26,10 @@
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest font-mono">{config.title}</span>
+        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-widest font-mono">{config.title}</span>
       </div>
       <div class="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
-        <span class="px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-900 font-bold text-xs border border-amber-200 dark:border-amber-500/20/80">POST</span>
+        <span class="px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-900 font-semibold text-xs border border-amber-200 dark:border-amber-500/20/80">POST</span>
         <span class="text-slate-600 dark:text-slate-400 font-semibold">{config.endpoint}</span>
       </div>
     </div>
@@ -43,7 +43,7 @@
   <form onsubmit={handleSubmit} class="flex flex-col gap-4 relative z-10">
     {#each config.fields as field}
       <div class="flex flex-col gap-1.5">
-        <label for={field.name} class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider font-mono">
+        <label for={field.name} class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider font-mono">
           {field.label} {#if field.required}<span class="text-amber-600 dark:text-amber-400">*</span>{/if}
         </label>
         <div class="relative">
@@ -63,7 +63,7 @@
     <button 
       type="submit" 
       style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-      class="mt-3 w-full font-bold text-sm text-white tracking-wide py-3.5 px-6 rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.3)] hover:shadow-[0_8px_26px_rgba(245,158,11,0.4)] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2">
+      class="mt-3 w-full font-semibold text-sm text-white tracking-wide py-3.5 px-6 rounded-2xl shadow-[0_6px_20px_rgba(245,158,11,0.3)] hover:shadow-[0_8px_26px_rgba(245,158,11,0.4)] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2">
       {#if submitted}
         <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         <span class="text-white font-bold">Request Dispatched</span>

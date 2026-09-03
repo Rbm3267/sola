@@ -23,7 +23,7 @@
   <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-white/[0.04] relative z-10">
     <div class="flex items-center gap-2">
       <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
-      <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">{config.title}</span>
+      <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">{config.title}</span>
     </div>
     <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">{config.items?.length || 0} entities</span>
   </div>
@@ -38,13 +38,13 @@
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
           </div>
           <div class="min-w-0">
-            <div class="text-xs font-bold text-slate-900 dark:text-white truncate font-mono">{item.label}</div>
+            <div class="text-xs font-semibold text-slate-900 dark:text-white truncate font-mono">{item.label}</div>
             <div class="text-xs text-slate-500 dark:text-slate-400 truncate">{item.description}</div>
           </div>
         </div>
 
         {#if badge}
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold font-mono border {badge.bg} shrink-0">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold font-mono border {badge.bg} shrink-0">
             <span class="w-1.5 h-1.5 rounded-full {badge.dot} animate-pulse"></span>
             <span>{item.status}</span>
           </div>

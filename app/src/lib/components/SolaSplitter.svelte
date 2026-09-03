@@ -53,7 +53,7 @@
   >
     <div class="flex items-center gap-2 mb-3">
       <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
-      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">Pane A (Telemetry)</h4>
+      <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">Pane A (Telemetry)</h4>
     </div>
     <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
       Real-time signal ingestion pipeline. Drag the divider handle to resize panes fluidly.
@@ -79,7 +79,7 @@
   >
     <div class="flex items-center gap-2 mb-3">
       <div class="w-2.5 h-2.5 rounded-full bg-sky-500"></div>
-      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">Pane B (Inspector)</h4>
+      <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white">Pane B (Inspector)</h4>
     </div>
     <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
       Active node graph inspection & compiler output stream.

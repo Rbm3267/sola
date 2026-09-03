@@ -129,11 +129,11 @@
     <header class="flex flex-col gap-4 border-b border-slate-900/[0.03] dark:border-white/[0.04] pb-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-400 text-xs font-mono font-bold mb-2 shadow-2xs">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-400 text-xs font-mono font-semibold mb-2 shadow-2xs">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <span>Sola Component Catalog</span>
           </div>
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             Foundational UI Building Blocks
           </h1>
           <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
@@ -160,7 +160,7 @@
         {#each categories as category}
           <button 
             onclick={() => activeCategory = category}
-            class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-blue-500 text-white font-bold shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer shadow-2xs {activeCategory === category ? 'bg-blue-500 text-white font-semibold shadow-sm' : 'bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'}">
             {category}
           </button>
         {/each}
@@ -172,7 +172,7 @@
       
       <!-- Left Column: Component List Directory (4 cols) -->
       <div class="lg:col-span-4 flex flex-col gap-3">
-        <div class="flex items-center justify-between px-1 text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+        <div class="flex items-center justify-between px-1 text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">
           <span>CATALOG ({filteredComponents.length})</span>
           <span>{PUBLISHED_COUNT} published in v{VERSIONS.ui}</span>
         </div>
@@ -186,18 +186,18 @@
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   <span class="w-2 h-2 rounded-full {selectedComponent.id === comp.id ? 'bg-blue-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-700'}"></span>
-                  <span class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <span class="font-semibold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {comp.name}
                   </span>
                 </div>
                 <!-- A reader needs to know whether they can install this today
                      or whether it only exists in this catalog. -->
                 {#if isPublished(comp)}
-                  <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20">
+                  <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20">
                     Published
                   </span>
                 {:else}
-                  <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400">
+                  <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-400">
                     Preview
                   </span>
                 {/if}
@@ -222,7 +222,7 @@
         <!-- Component Header & Actions -->
         <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <div class="flex items-center gap-2 text-xs font-mono font-bold text-blue-600 dark:text-blue-400 mb-1">
+            <div class="flex items-center gap-2 text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 mb-1">
               <span>{selectedComponent.category}</span>
               <span>•</span>
               <span class="text-slate-500 dark:text-slate-400">{selectedComponent.componentName}.sola</span>
@@ -238,7 +238,7 @@
           <!-- Open in Studio Action Button -->
           <a 
             href="/studio?add={selectedComponent.id}" 
-            class="px-5 py-2.5 rounded-xl bg-slate-950 dark:bg-blue-500 text-white dark:text-white hover:bg-slate-800 dark:hover:bg-blue-400 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer shrink-0">
+            class="px-5 py-2.5 rounded-xl bg-slate-950 dark:bg-blue-500 text-white dark:text-white hover:bg-slate-800 dark:hover:bg-blue-400 font-semibold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer shrink-0">
             <span>Drop in Studio</span>
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
@@ -249,11 +249,11 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
+              <h3 class="text-xs font-semibold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
                 Live Interactive Stage
               </h3>
             </div>
-            <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border border-blue-200 dark:border-blue-500/20">
+            <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-semibold border border-blue-200 dark:border-blue-500/20">
               Compiled DOM
             </span>
           </div>
@@ -513,17 +513,17 @@
                   <svg class="w-7 h-7 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                 </div>
                 <div class="text-center">
-                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">{selectedComponent.name}</h4>
+                  <h4 class="font-semibold text-sm text-slate-900 dark:text-white">{selectedComponent.name}</h4>
                   <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs leading-relaxed">{selectedComponent.description}</p>
                 </div>
                 <div class="w-full bg-slate-950 rounded-xl p-4 text-xs font-mono text-blue-300 overflow-x-auto">
                   <pre><code>{selectedComponent.codeSnippets.sola}</code></pre>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-mono font-bold border border-amber-200 dark:border-amber-500/20">
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-mono font-semibold border border-amber-200 dark:border-amber-500/20">
                     Schema Ready
                   </span>
-                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 text-xs font-mono font-bold border border-slate-200 dark:border-white/10">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 text-xs font-mono font-semibold border border-slate-200 dark:border-white/10">
                     Use via @sola-air-ui/ui
                   </span>
                 </div>
@@ -533,14 +533,14 @@
 
           <!-- Live Props Customizer / Playground Controls -->
           <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 space-y-4">
-            <h4 class="text-xs font-bold font-mono text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+            <h4 class="text-xs font-semibold font-mono text-slate-800 dark:text-slate-200 uppercase tracking-wider">
               Component Properties Playground
             </h4>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               {#if liveProps.title !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Title Prop</label>
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Title Prop</label>
                   <input 
                     type="text" 
                     bind:value={liveProps.title} 
@@ -551,7 +551,7 @@
 
               {#if liveProps.value !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Value Prop</label>
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Value Prop</label>
                   <input 
                     type="text" 
                     bind:value={liveProps.value} 
@@ -562,7 +562,7 @@
 
               {#if liveProps.trend !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Trend Badge</label>
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Trend Badge</label>
                   <input 
                     type="text" 
                     bind:value={liveProps.trend} 
@@ -573,7 +573,7 @@
 
               {#if liveProps.percentage !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">
                     Percentage ({liveProps.percentage}%)
                   </label>
                   <input 
@@ -588,7 +588,7 @@
 
               {#if liveProps.color !== undefined}
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Accent Theme</label>
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Accent Theme</label>
                   <select 
                     bind:value={liveProps.color}
                     class="w-full bg-white dark:bg-[#090d19] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white font-medium focus:outline-none focus:border-blue-500">
@@ -607,7 +607,7 @@
         <!-- Multi-Target Code Generator Box -->
         <div class="bg-white dark:bg-[#0f172a]/80 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/5 pb-3">
-            <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
+            <h3 class="text-xs font-semibold font-mono text-slate-900 dark:text-white uppercase tracking-wider">
               Component Code Export
             </h3>
 
@@ -641,7 +641,7 @@
             <pre class="bg-slate-950 text-blue-300 p-5 rounded-2xl font-mono text-xs overflow-x-auto leading-relaxed shadow-inner border border-slate-800"><code>{activeCodeSnippet}</code></pre>
             <button 
               onclick={() => copyCode(activeCodeSnippet)}
-              class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
+              class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
               {#if copied}
                 <svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span class="text-blue-400">Copied!</span>

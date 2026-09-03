@@ -181,10 +181,10 @@
 
           <div>
             <div class="flex items-center gap-2">
-              <h2 id="arc-title" class="text-sm font-black text-slate-900 dark:text-white tracking-tight">
+              <h2 id="arc-title" class="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">
                 Sola <span class="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">AIR</span>
               </h2>
-              <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-300 font-mono text-xs font-bold tracking-wide">
+              <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-300 font-mono text-xs font-semibold tracking-wide">
                 Intent Intelligence
               </span>
             </div>
@@ -214,7 +214,7 @@
 
         {#each messages as msg, idx}
           <div class="flex flex-col gap-1 {msg.role === 'user' ? 'items-end' : 'items-start'}">
-            <span class="text-xs font-mono font-bold uppercase text-slate-500 dark:text-slate-400 px-1">
+            <span class="text-xs font-mono font-semibold uppercase text-slate-500 dark:text-slate-400 px-1">
               {msg.role === 'user' ? 'You' : 'Sola AIR'}
               {#if msg.timestamp}<span class="font-normal text-slate-300 dark:text-slate-600 ml-1">· {msg.timestamp}</span>{/if}
             </span>
@@ -251,7 +251,7 @@
 
       <!-- Quick Prompts — wrapped, never overflows -->
       <div class="px-4 pt-3 pb-2 border-t border-slate-100 dark:border-white/[0.06] bg-white dark:bg-[#0b0f1e] shrink-0">
-        <p class="text-xs font-mono font-bold uppercase text-slate-500 dark:text-slate-400 mb-2">Suggestions</p>
+        <p class="text-xs font-mono font-semibold uppercase text-slate-500 dark:text-slate-400 mb-2">Suggestions</p>
         <div class="flex flex-wrap gap-1.5">
           {#each quickPrompts as qp}
             <button
@@ -278,7 +278,7 @@
           type="submit"
           disabled={isLoading || !prompt.trim()}
           aria-label="Send"
-          class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition-all shadow-sm shadow-blue-600/20 flex items-center gap-1.5 cursor-pointer shrink-0">
+          class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-xs transition-all shadow-sm shadow-blue-600/20 flex items-center gap-1.5 cursor-pointer shrink-0">
           Send
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </button>

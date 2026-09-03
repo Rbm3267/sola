@@ -36,10 +36,10 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/[0.04] mb-5">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-sky-400 font-mono font-black text-xs">
+        <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-sky-400 font-mono font-semibold text-xs">
           TABLE
         </span>
-        <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">
+        <h3 class="text-base font-bold text-slate-950 dark:text-slate-50 tracking-tight font-mono">
           {config.table || 'public.incident'}
         </h3>
       </div>
@@ -78,15 +78,15 @@
               <span>{col.name}</span>
             </td>
             <td class="py-2.5 text-slate-600 dark:text-slate-400">
-              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 text-xs font-bold">
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 text-xs font-semibold">
                 {col.type}
               </span>
             </td>
             <td class="py-2.5 text-center">
               {#if col.isPrimary}
-                <span class="px-1.5 py-0.5 rounded text-xs bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 font-bold">PK</span>
+                <span class="px-1.5 py-0.5 rounded text-xs bg-amber-50 dark:bg-amber-500/10 text-amber-900 border border-amber-200 dark:border-amber-500/20 font-semibold">PK</span>
               {:else if !col.isNullable}
-                <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 font-bold">NOT NULL</span>
+                <span class="px-1.5 py-0.5 rounded text-xs bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 font-semibold">NOT NULL</span>
               {:else}
                 <span class="text-xs text-slate-500 dark:text-slate-400">NULL</span>
               {/if}

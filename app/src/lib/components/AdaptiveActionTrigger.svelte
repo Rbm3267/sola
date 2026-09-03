@@ -207,14 +207,14 @@
         transition:fly={{ y: 8, duration: 200 }}
         class="p-4 rounded-2xl bg-white/95 dark:bg-white/[0.02] backdrop-blur-2xl text-slate-900 dark:text-white border border-amber-200 dark:border-amber-500/20 shadow-xl flex flex-col gap-2.5 font-mono text-xs max-w-sm">
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.04] pb-1.5">
-          <span class="text-xs uppercase font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+          <span class="text-xs uppercase font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
             <span>Surfaced via Hover Dwell</span>
           </span>
           <span class="text-xs text-slate-500 dark:text-slate-400">Urgency: {(urgency * 100).toFixed(0)}%</span>
         </div>
         <div>
-          <div class="font-bold text-slate-950 dark:text-slate-50 text-xs">{action.title}</div>
+          <div class="font-semibold text-slate-950 dark:text-slate-50 text-xs">{action.title}</div>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{action.description}</p>
         </div>
         <button 
@@ -236,7 +236,7 @@
       <button 
         onclick={handleTrigger}
         disabled={isExecuting}
-        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-mono text-xs font-bold shadow-lg hover:shadow-xl transition-all cursor-pointer animate-pulse active:scale-95">
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-mono text-xs font-semibold shadow-lg hover:shadow-xl transition-all cursor-pointer animate-pulse active:scale-95">
         <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         <span>{isExecuting ? 'Executing Mitigation...' : `Emergency Action: ${action.title}`}</span>
       </button>
@@ -320,10 +320,10 @@
 
     <div class="flex items-start justify-between">
       <div>
-        <span class="px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300 font-bold text-xs uppercase tracking-wider">
+        <span class="px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300 font-semibold text-xs uppercase tracking-wider">
           Tier 2 hard mutation
         </span>
-        <h3 class="text-sm font-bold text-slate-950 dark:text-slate-50 mt-1">{action.title}</h3>
+        <h3 class="text-sm font-semibold text-slate-950 dark:text-slate-50 mt-1">{action.title}</h3>
       </div>
       <button 
         onclick={() => isDrawerOpen = false}
@@ -334,7 +334,7 @@
 
     <!-- Details -->
     <div class="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.04] rounded-2xl p-4 flex flex-col gap-2">
-      <div class="text-xs uppercase font-bold text-slate-500 dark:text-slate-400">Estimated blast radius impact</div>
+      <div class="text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">Estimated blast radius impact</div>
       <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-sans font-medium">
         {action.blastRadiusMessage || 'Direct system change requested. Please review payload before commit.'}
       </p>
@@ -342,7 +342,7 @@
 
     <!-- Swipe-to-Confirm Slider Track -->
     <div class="relative w-full h-12 bg-slate-100 dark:bg-white/[0.08] border border-slate-200/80 dark:border-white/[0.04] rounded-2xl overflow-hidden flex items-center justify-center select-none">
-      <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pointer-events-none">
+      <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest pointer-events-none">
         {swipeProgress > 20 ? '' : 'Swipe right to execute'}
       </span>
 

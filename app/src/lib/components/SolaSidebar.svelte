@@ -66,7 +66,7 @@
         </div>
         {#if !collapsed}
           <div class="truncate">
-            <h2 class="text-sm font-black text-slate-900 dark:text-white tracking-tight">Sola Core</h2>
+            <h2 class="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">Sola Core</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Enterprise</p>
           </div>
         {/if}
@@ -88,7 +88,7 @@
       {#each groups as group}
         <div>
           {#if group.title && !collapsed}
-            <div class="px-3 pb-1.5 text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase font-mono">
+            <div class="px-3 pb-1.5 text-xs font-semibold tracking-widest text-slate-500 dark:text-slate-400 uppercase font-mono">
               {group.title}
             </div>
           {/if}
@@ -98,7 +98,7 @@
               <button
                 type="button"
                 onclick={() => selectItem(item)}
-                class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer {item.disabled ? 'opacity-40 pointer-events-none' : ''} {isSelected ? 'bg-blue-500 text-slate-950 shadow-xs shadow-blue-500/20 font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'}"
+                class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer {item.disabled ? 'opacity-40 pointer-events-none' : ''} {isSelected ? 'bg-blue-500 text-slate-950 shadow-xs shadow-blue-500/20 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'}"
                 title={collapsed ? item.label : undefined}
               >
                 <div class="flex items-center gap-2.5 min-w-0">
@@ -114,7 +114,7 @@
                 </div>
 
                 {#if item.badge && !collapsed}
-                  <span class="px-1.5 py-0.5 text-xs font-mono font-bold rounded-md {isSelected ? 'bg-slate-950 text-blue-400' : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">
+                  <span class="px-1.5 py-0.5 text-xs font-mono font-semibold rounded-md {isSelected ? 'bg-slate-950 text-blue-400' : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">
                     {item.badge}
                   </span>
                 {/if}
@@ -129,12 +129,12 @@
   <!-- Bottom: Profile Footer -->
   <div class="p-3 border-t border-slate-100 dark:border-white/5">
     <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer overflow-hidden">
-      <div class="w-8 h-8 rounded-full bg-blue-600 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0">
+      <div class="w-8 h-8 rounded-full bg-blue-600 text-slate-950 font-semibold text-xs flex items-center justify-center shrink-0">
         SA
       </div>
       {#if !collapsed}
         <div class="truncate min-w-0">
-          <p class="text-xs font-bold text-slate-900 dark:text-white truncate">Sola Admin</p>
+          <p class="text-xs font-semibold text-slate-900 dark:text-white truncate">Sola Admin</p>
           <p class="text-xs text-slate-500 dark:text-slate-400 truncate">admin@sola-air.dev</p>
         </div>
       {/if}

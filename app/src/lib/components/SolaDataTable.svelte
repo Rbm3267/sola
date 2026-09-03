@@ -225,7 +225,7 @@
               <th
                 scope="col"
                 style={col.width ? `width: ${col.width}` : undefined}
-                class="px-4 {compact ? 'py-2.5' : 'py-3.5'} text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 {col.sortable !== false ? 'cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors' : ''}"
+                class="px-4 {compact ? 'py-2.5' : 'py-3.5'} text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 {col.sortable !== false ? 'cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors' : ''}"
                 onclick={() => handleSort(col.key, col.sortable)}
               >
                 <div class="inline-flex items-center gap-1.5 {alignClassMap[col.align || 'left']}">

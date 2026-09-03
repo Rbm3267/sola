@@ -121,7 +121,7 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <span class="text-xs font-mono font-bold text-slate-600 dark:text-slate-300 tracking-wider uppercase">
+        <span class="text-xs font-mono font-semibold text-slate-600 dark:text-slate-300 tracking-wider uppercase">
           Sentinel · observing
         </span>
       </div>
@@ -191,7 +191,7 @@
             </div>
           {:else if suggestion}
             <div class="rounded-2xl border border-emerald-200/70 dark:border-emerald-500/20 bg-emerald-50/70 dark:bg-emerald-500/5 p-4 flex flex-col gap-1.5" role="status" aria-live="polite">
-              <span class="text-sm font-bold text-emerald-900 dark:text-emerald-300">{suggestion.label}</span>
+              <span class="text-sm font-semibold text-emerald-900 dark:text-emerald-300">{suggestion.label}</span>
               <span class="text-sm text-emerald-800/90 dark:text-emerald-200/80 leading-relaxed">{suggestion.action}</span>
               <span class="text-xs font-mono text-emerald-700/70 dark:text-emerald-400/60 mt-0.5">
                 confidence {Math.round(suggestion.confidence * 100)}%

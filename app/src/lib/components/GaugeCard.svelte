@@ -38,9 +38,9 @@
   <div class="flex justify-between items-center mb-5 relative z-10">
     <div class="flex items-center gap-2.5">
       <span class="w-2 h-2 rounded-full {activeColor.bg} animate-pulse"></span>
-      <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-mono">{config.title}</span>
+      <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-mono">{config.title}</span>
     </div>
-    <span class="text-xs font-mono font-bold bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-md">
+    <span class="text-xs font-mono font-semibold bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-md">
       Live Gauge
     </span>
   </div>
@@ -78,7 +78,7 @@
           style="transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);"
         />
       </svg>
-      <div class="absolute text-xs font-black font-mono {activeColor.text}">
+      <div class="absolute text-xs font-semibold font-mono {activeColor.text}">
         {pct}%
       </div>
     </div>

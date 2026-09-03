@@ -118,7 +118,7 @@
       />
     </g>
     
-    <text x="50%" y="55%" text-anchor="middle" class="font-mono text-sm font-bold fill-slate-700 pointer-events-none">
+    <text x="50%" y="55%" text-anchor="middle" class="font-mono text-sm font-semibold fill-slate-700 pointer-events-none">
       {Math.round(value)}
     </text>
   </svg>

@@ -37,7 +37,7 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
       <div class="col-span-2 md:col-span-1">
-        <span class="block text-sm font-bold text-slate-900 dark:text-white">Sola AIR</span>
+        <span class="block text-sm font-semibold text-slate-900 dark:text-white">Sola AIR</span>
         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[30ch]">
           A zero-VDOM runtime whose UI can suggest before it is asked.
         </p>

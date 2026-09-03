@@ -419,3 +419,37 @@ test('the command palette opens, traps focus, and gives it back', async ({ page 
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
 });
+
+test('every page has exactly one h1', async ({ page }) => {
+  // /studio had none, so nothing announced the page; /demo had two, because a
+  // library component emitted an h1 of its own — a component cannot know it is
+  // the page's main heading.
+  await page.setViewportSize(DESKTOP);
+  for (const path of ALL_PAGES) {
+    await page.goto(path);
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('h1'), `${path} should have exactly one h1`).toHaveCount(1);
+  }
+});
+
+test('weight is not doing the work of hierarchy', async ({ page }) => {
+  // 46% of visible text sat at weight 700 or heavier, so nothing was emphasised
+  // because everything was. Headings keep their weight; supporting text does not.
+  await page.setViewportSize(DESKTOP);
+  for (const path of ['/', '/components', '/studio', '/docs']) {
+    await page.goto(path);
+    await page.waitForLoadState('networkidle');
+    const share = await page.evaluate(() => {
+      let bold = 0, total = 0;
+      for (const el of Array.from(document.querySelectorAll<HTMLElement>('body *'))) {
+        const own = Array.from(el.childNodes).filter((n) => n.nodeType === 3)
+          .map((n) => n.textContent?.trim() ?? '').join('');
+        if (!own || getComputedStyle(el).display === 'none') continue;
+        total++;
+        if ((Number(getComputedStyle(el).fontWeight) || 400) >= 700) bold++;
+      }
+      return total ? bold / total : 0;
+    });
+    expect(share, `${path}: share of text at weight 700+`).toBeLessThan(0.3);
+  }
+});

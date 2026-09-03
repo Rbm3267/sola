@@ -28,7 +28,7 @@
     
     <!-- Section Header -->
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-semibold mb-3">
         <span>@sola-air-ui/ui • Foundational Design System</span>
       </div>
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 dark:text-white tracking-tight mb-4">
@@ -50,7 +50,7 @@
             <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
             <div class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-white/20"></div>
           </div>
-          <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Sola Design System Inspector
           </span>
         </div>
@@ -59,17 +59,17 @@
         <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/5 p-1 rounded-xl">
           <button
             onclick={() => (activeTab = 'components')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'components' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'components' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-semibold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
             Interactive Primitives
           </button>
           <button
             onclick={() => (activeTab = 'telemetry')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'telemetry' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'telemetry' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-semibold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
             Telemetry & Charts
           </button>
           <button
             onclick={() => (activeTab = 'tokens')}
-            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'tokens' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
+            class="px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {activeTab === 'tokens' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 font-semibold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'}">
             Tokens & Signals
           </button>
         </div>
@@ -84,8 +84,8 @@
             <!-- Primitives Showcase -->
             <div class="space-y-5">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tactile Buttons & Actions</span>
-                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600">Eased Motion</span>
+                <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tactile Buttons & Actions</span>
+                <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600">Eased Motion</span>
               </div>
 
               <!-- Buttons Row -->
@@ -157,23 +157,23 @@
           {:else}
             <!-- Tokens & Theme Systems -->
             <div class="space-y-4">
-              <div class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Core Design System Tokens</div>
+              <div class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Core Design System Tokens</div>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="p-3 bg-slate-950 text-white rounded-2xl border border-slate-800 space-y-1">
                   <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block">Obsidian Dark</span>
-                  <span class="text-xs font-bold font-mono text-blue-400">#090D19</span>
+                  <span class="text-xs font-semibold font-mono text-blue-400">#090D19</span>
                 </div>
                 <div class="p-3 bg-slate-50 text-slate-900 rounded-2xl border border-slate-200 space-y-1">
                   <span class="text-xs font-mono text-slate-500 block">Clean Ivory</span>
-                  <span class="text-xs font-bold font-mono text-slate-900">#FAFAFA</span>
+                  <span class="text-xs font-semibold font-mono text-slate-900">#FAFAFA</span>
                 </div>
                 <div class="p-3 bg-blue-500 text-slate-950 rounded-2xl space-y-1">
                   <span class="text-xs font-mono text-slate-950/70 block">Primary Blue</span>
-                  <span class="text-xs font-bold font-mono text-slate-950">#3B82F6</span>
+                  <span class="text-xs font-semibold font-mono text-slate-950">#3B82F6</span>
                 </div>
                 <div class="p-3 bg-sky-500 text-slate-950 rounded-2xl space-y-1">
                   <span class="text-xs font-mono text-slate-950/70 block">Signal Sky</span>
-                  <span class="text-xs font-bold font-mono text-slate-950">#0EA5E9</span>
+                  <span class="text-xs font-semibold font-mono text-slate-950">#0EA5E9</span>
                 </div>
               </div>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -188,26 +188,26 @@
           <div>
             <!-- Framework Selector Header -->
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Multi-Target Output</span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Multi-Target Output</span>
               <div class="flex items-center gap-1">
                 <button
                   onclick={() => (selectedFramework = 'sola')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-semibold cursor-pointer transition-colors {selectedFramework === 'sola' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   .sola
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'react')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-semibold cursor-pointer transition-colors {selectedFramework === 'react' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   React 19
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'svelte')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-semibold cursor-pointer transition-colors {selectedFramework === 'svelte' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   Svelte 5
                 </button>
                 <button
                   onclick={() => (selectedFramework = 'html')}
-                  class="px-2 py-0.5 rounded text-xs font-bold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
+                  class="px-2 py-0.5 rounded text-xs font-semibold cursor-pointer transition-colors {selectedFramework === 'html' ? 'bg-blue-500 text-slate-950' : 'text-slate-500 dark:text-slate-400 hover:text-white'}">
                   HTML
                 </button>
               </div>
@@ -225,7 +225,7 @@
             <div class="flex items-center gap-2 w-full sm:w-auto">
               <a
                 href="/components"
-                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs transition-all shadow-xs">
+                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-semibold text-xs transition-all shadow-xs">
                 <span>View all {CATALOG_COUNT} components</span>
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>

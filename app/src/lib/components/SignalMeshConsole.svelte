@@ -63,10 +63,10 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <h3 class="text-base sm:text-lg font-black text-slate-950 dark:text-slate-50 font-sans tracking-tight">
+          <h3 class="text-base sm:text-lg font-bold text-slate-950 dark:text-slate-50 font-sans tracking-tight">
             Ambient Signal Telemetry Mesh
           </h3>
-          <span class="text-xs font-mono font-bold uppercase bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <span class="text-xs font-mono font-semibold uppercase bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
             <span>4 Linked Widgets</span>
           </span>
@@ -79,20 +79,20 @@
 
     <!-- Quick Presets -->
     <div class="flex items-center gap-1.5 self-stretch sm:self-auto overflow-x-auto no-scrollbar">
-      <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mr-1">Throttle:</span>
+      <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mr-1">Throttle:</span>
       <button 
         onclick={() => handleNodeChange(16)}
-        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 16 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
+        class="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold cursor-pointer transition-all {nodeCount === 16 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
         Low (16)
       </button>
       <button 
         onclick={() => handleNodeChange(36)}
-        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 36 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
+        class="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold cursor-pointer transition-all {nodeCount === 36 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
         Optimal (36)
       </button>
       <button 
         onclick={() => handleNodeChange(84)}
-        class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all {nodeCount === 84 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
+        class="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold cursor-pointer transition-all {nodeCount === 84 ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200'}">
         High Scale (84)
       </button>
     </div>
@@ -104,14 +104,14 @@
     <!-- Widget 1: Rotary Touch Controller -->
     <div class="lg:col-span-4 flex flex-col gap-4">
       <div class="relative group">
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
           <span>Source Signal Publisher</span>
         </div>
         
         <div class="bg-white dark:bg-white/[0.02] border border-slate-200/90 dark:border-white/[0.04] rounded-3xl p-6 shadow-xs flex flex-col items-center gap-4">
           <div class="text-center">
-            <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
+            <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Topic: aws/cluster/worker_nodes</span>
             <div class="text-2xl font-black text-slate-950 dark:text-slate-50 font-mono mt-0.5">{nodeCount} Nodes Active</div>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Use slider to adjust cluster replica quota</p>
           </div>
@@ -160,7 +160,7 @@
         
         <!-- Subscriber Gauge -->
         <div class="relative group">
-          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
             <span>Signal Subscriber 1</span>
           </div>
@@ -176,7 +176,7 @@
 
         <!-- Live Telemetry Log -->
         <div class="relative group">
-          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+          <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
             <span>Live Signal Bus Stream</span>
           </div>
@@ -184,7 +184,7 @@
           <div class="bg-slate-950 dark:bg-white border border-slate-800 rounded-3xl p-5 shadow-xl h-full flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
-                <span class="text-xs font-mono font-bold text-slate-300">telemetry://signal-bus</span>
+                <span class="text-xs font-mono font-semibold text-slate-300">telemetry://signal-bus</span>
                 <span class="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/30">0.2ms Subtask</span>
               </div>
               
@@ -210,7 +210,7 @@
 
       <!-- Subscriber 2: Dynamic FinOps Waterfall -->
       <div class="relative group">
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
           <span>Signal Subscriber 2 • FinOps Ledger</span>
         </div>

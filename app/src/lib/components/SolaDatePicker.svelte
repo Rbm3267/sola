@@ -162,7 +162,7 @@
         <button onclick={prevMonth} class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 transition-colors">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <span class="text-xs font-bold text-slate-900 dark:text-white">
+        <span class="text-xs font-semibold text-slate-900 dark:text-white">
           {months[currentMonth]} {currentYear}
         </span>
         <button onclick={nextMonth} class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 transition-colors">
@@ -188,7 +188,7 @@
             type="button"
             onclick={() => selectDate(dayNum)}
             class="h-8 rounded-lg text-xs font-medium transition-colors cursor-pointer
-              {selected ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : ''}
+              {selected ? 'bg-blue-500 text-slate-950 font-semibold shadow-xs' : ''}
               {inRange ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : ''}
               {!selected && !inRange ? 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5' : ''}"
           >

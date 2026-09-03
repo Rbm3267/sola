@@ -32,7 +32,7 @@
         <span class="live-beacon"></span>
         <span class="badge-text">Native Zero-VDOM Sola Runtime</span>
       </div>
-      <h1 class="dash-title">{title}</h1>
+      <h2 class="dash-title">{title}</h2>
       <p class="dash-desc">Fine-grained signal subscriptions writing straight to the DOM, with no diff step.</p>
     </div>
     

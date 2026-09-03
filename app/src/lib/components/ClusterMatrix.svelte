@@ -68,25 +68,25 @@
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-        <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">{config.title || 'Cluster Topology Matrix'}</h3>
+        <h3 class="text-base font-bold text-slate-950 dark:text-slate-50 tracking-tight font-mono">{config.title || 'Cluster Topology Matrix'}</h3>
       </div>
       <p class="text-xs text-slate-500 dark:text-slate-400">{config.subtitle || `${nodes.length} Nodes Distributed Across 6 Global Regions`}</p>
     </div>
 
     <!-- Aggregate Status Pills -->
     <div class="flex items-center gap-1.5 flex-wrap justify-end">
-      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20/80 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold">
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20/80 text-blue-800 dark:text-blue-300 text-xs font-mono font-semibold">
         <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
         {nominalCount} Nominal
       </span>
       {#if warningCount > 0}
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-bold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20/80 text-amber-900 text-xs font-mono font-semibold">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
           {warningCount} Degraded
         </span>
       {/if}
       {#if criticalCount > 0}
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20/80 text-rose-900 text-xs font-mono font-bold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20/80 text-rose-900 text-xs font-mono font-semibold">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
           {criticalCount} Critical
         </span>
@@ -108,7 +108,7 @@
           <span class="w-3.5 h-3.5 rounded-lg shadow-sm {getStatusColor(node.status)}"></span>
         </div>
 
-        <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 truncate max-w-full text-center">
+        <span class="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 truncate max-w-full text-center">
           {node.id}
         </span>
         
@@ -125,7 +125,7 @@
       <div class="flex items-center gap-2.5">
         <span class="w-2.5 h-2.5 rounded-full {getStatusColor(hoveredNode.status)}"></span>
         <div>
-          <span class="text-xs font-mono font-bold text-slate-200">{hoveredNode.label}</span>
+          <span class="text-xs font-mono font-semibold text-slate-200">{hoveredNode.label}</span>
           <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block">Region: {hoveredNode.region || 'global'} • Status: {hoveredNode.status.toUpperCase()}</span>
         </div>
       </div>
@@ -133,13 +133,13 @@
         {#if hoveredNode.load !== undefined}
           <div>
             <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block uppercase">CPU Load</span>
-            <span class="text-xs font-mono font-bold {hoveredNode.load > 80 ? 'text-rose-400' : 'text-blue-400'}">{hoveredNode.load}%</span>
+            <span class="text-xs font-mono font-semibold {hoveredNode.load > 80 ? 'text-rose-400' : 'text-blue-400'}">{hoveredNode.load}%</span>
           </div>
         {/if}
         {#if hoveredNode.latency}
           <div>
             <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block uppercase">Latency</span>
-            <span class="text-xs font-mono font-bold text-sky-400">{hoveredNode.latency}</span>
+            <span class="text-xs font-mono font-semibold text-sky-400">{hoveredNode.latency}</span>
           </div>
         {/if}
       </div>

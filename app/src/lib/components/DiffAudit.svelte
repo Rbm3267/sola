@@ -55,21 +55,21 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/[0.04] mb-5">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-amber-400 font-mono font-black text-xs">
+        <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-amber-400 font-mono font-semibold text-xs">
           {config.entityId || 'CHG009842'}
         </span>
-        <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
+        <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase">
           {config.entityType || 'Enterprise Change Request'}
         </span>
       </div>
-      <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">
+      <h3 class="text-base font-bold text-slate-950 dark:text-slate-50 tracking-tight font-mono">
         {config.title || 'Upgrade Production Redis Cluster Capacity'}
       </h3>
     </div>
 
     <!-- Risk Level Pill -->
     <div class="flex items-center gap-2">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold border {getRiskBadge(config.riskLevel)}">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border {getRiskBadge(config.riskLevel)}">
         <span class="w-2 h-2 rounded-full bg-amber-500"></span>
         <span>Risk: {config.riskLevel || 'Moderate'} ({config.riskScore || 42}/100)</span>
       </span>
@@ -120,28 +120,28 @@
       {#if approvalState === 'idle'}
         <button 
           onclick={handleReject}
-          class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-all cursor-pointer">
+          class="px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-all cursor-pointer">
           Reject
         </button>
         <button 
           onclick={handleApprove}
           style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #ffffff !important;"
-          class="px-5 py-2 rounded-xl text-xs font-mono font-bold text-white shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-1.5">
+          class="px-5 py-2 rounded-xl text-xs font-mono font-semibold text-white shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span>Approve Change</span>
         </button>
       {:else if approvalState === 'approving'}
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold border border-blue-200 dark:border-blue-500/20">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 text-xs font-mono font-semibold border border-blue-200 dark:border-blue-500/20">
           <div class="w-3.5 h-3.5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
           <span>Dispatching Enterprise ACL Mutator...</span>
         </div>
       {:else if approvalState === 'approved'}
-        <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold border border-blue-200 dark:border-blue-500/20">
+        <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-800 dark:text-blue-300 text-xs font-mono font-semibold border border-blue-200 dark:border-blue-500/20">
           <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span>Change Request Approved</span>
         </div>
       {:else}
-        <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300 text-xs font-mono font-bold border border-rose-200 dark:border-rose-500/20">
+        <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-300 text-xs font-mono font-semibold border border-rose-200 dark:border-rose-500/20">
           <span>Change Request Rejected</span>
         </div>
       {/if}

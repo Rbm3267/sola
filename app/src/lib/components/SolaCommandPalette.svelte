@@ -191,7 +191,7 @@
         {:else}
           {#each groupedCommands as group}
             <div>
-              <div class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <div class="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 {group.name}
               </div>
               <div class="space-y-0.5">

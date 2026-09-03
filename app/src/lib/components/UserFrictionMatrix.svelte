@@ -136,7 +136,7 @@
   <div class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl flex flex-col gap-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div>
-        <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider flex items-center gap-2">
+        <h3 class="text-sm font-semibold text-white font-mono uppercase tracking-wider flex items-center gap-2">
           <span class="w-2 h-2 rounded-full {isCircuitBreakerActive ? 'bg-amber-400' : 'bg-blue-400'}"></span>
           <span>Sentinel Friction &amp; Self-Healing Simulator</span>
         </h3>
@@ -145,7 +145,7 @@
         </p>
       </div>
 
-      <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+      <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
         Live Interactive Testbed
       </span>
     </div>
@@ -159,7 +159,7 @@
         onclick={handleTestClick}
         class="p-4 rounded-2xl bg-slate-950 dark:bg-white border border-slate-800 hover:border-blue-500/50 text-left transition-all active:scale-[0.98] cursor-pointer group flex flex-col justify-between gap-2">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-white group-hover:text-blue-400 font-mono">1. User Action Tap</span>
+          <span class="text-xs font-semibold text-white group-hover:text-blue-400 font-mono">1. User Action Tap</span>
           <span class="w-2 h-2 rounded-full bg-blue-400"></span>
         </div>
         <p class="text-xs text-slate-500 dark:text-slate-400">
@@ -173,7 +173,7 @@
         onclick={simulateTimeout}
         class="p-4 rounded-2xl bg-slate-950 dark:bg-white border border-slate-800 hover:border-amber-500/50 text-left transition-all active:scale-[0.98] cursor-pointer group flex flex-col justify-between gap-2">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-white group-hover:text-amber-400 font-mono">2. Simulate 504 Timeout</span>
+          <span class="text-xs font-semibold text-white group-hover:text-amber-400 font-mono">2. Simulate 504 Timeout</span>
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
         </div>
         <p class="text-xs text-slate-500 dark:text-slate-400">
@@ -187,7 +187,7 @@
         onclick={resetTelemetry}
         class="p-4 rounded-2xl bg-slate-950 dark:bg-white border border-slate-800 hover:border-sky-500/50 text-left transition-all active:scale-[0.98] cursor-pointer group flex flex-col justify-between gap-2">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-white group-hover:text-sky-400 font-mono">3. Restore Nominal State</span>
+          <span class="text-xs font-semibold text-white group-hover:text-sky-400 font-mono">3. Restore Nominal State</span>
           <span class="w-2 h-2 rounded-full bg-sky-400"></span>
         </div>
         <p class="text-xs text-slate-500 dark:text-slate-400">
@@ -208,7 +208,7 @@
           {/if}
         </div>
         <div>
-          <div class="text-xs font-bold text-white font-mono">
+          <div class="text-xs font-semibold text-white font-mono">
             {isCircuitBreakerActive ? 'Self-Healing Circuit Breaker Engaged' : 'Component Surface Operating Nominally'}
           </div>
           <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
@@ -230,7 +230,7 @@
   <!-- Real-Time Telemetry Stream Log -->
   <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-3">
     <div class="flex items-center justify-between">
-      <span class="text-xs font-bold font-mono text-slate-300 uppercase tracking-wider">
+      <span class="text-xs font-semibold font-mono text-slate-300 uppercase tracking-wider">
         Live Telemetry &amp; Intent Dispatch Feed
       </span>
       <span class="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
@@ -242,7 +242,7 @@
       {#each events as ev (ev.id)}
         <div transition:slide={{ duration: 150 }} class="p-3 rounded-xl bg-slate-950 dark:bg-white border border-slate-850 flex items-center justify-between text-xs font-mono">
           <div class="flex items-center gap-3">
-            <span class="px-2 py-0.5 rounded text-xs font-bold uppercase {ev.status === 'nominal' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : (ev.status === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20')}">
+            <span class="px-2 py-0.5 rounded text-xs font-semibold uppercase {ev.status === 'nominal' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : (ev.status === 'warning' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20')}">
               {ev.type}
             </span>
             <span class="text-slate-300">{ev.message}</span>

@@ -39,13 +39,13 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/[0.04] mb-5">
     <div>
       <div class="flex items-center gap-2 mb-1.5">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-900 font-mono font-black text-xs">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-900 font-mono font-semibold text-xs">
           <span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
           {config.severity || 'P1 - Critical'}
         </span>
-        <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">{config.incidentId || 'INC009481'}</span>
+        <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">{config.incidentId || 'INC009481'}</span>
       </div>
-      <h3 class="text-base font-black text-slate-950 dark:text-slate-50 tracking-tight font-mono">
+      <h3 class="text-base font-bold text-slate-950 dark:text-slate-50 tracking-tight font-mono">
         {config.title || 'API Gateway High-Frequency Latency Spike (EU-West)'}
       </h3>
     </div>
@@ -54,7 +54,7 @@
     <div class="flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] p-2.5 rounded-2xl border border-slate-200 dark:border-white/[0.04]">
       <div class="text-right">
         <span class="text-xs font-mono text-slate-500 dark:text-slate-400 block uppercase">SLA Target Breach</span>
-        <span class="text-sm font-mono font-black text-rose-600 dark:text-rose-400">
+        <span class="text-sm font-mono font-semibold text-rose-600 dark:text-rose-400">
           {config.slaRemainingMin !== undefined ? `${config.slaRemainingMin}m 00s` : '11m 42s'}
         </span>
       </div>
@@ -76,7 +76,7 @@
 
   <!-- 1-Click Mitigation Playbooks -->
   <div>
-    <span class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 block uppercase mb-2.5">
+    <span class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 block uppercase mb-2.5">
       1-Click Incident Mitigation Playbooks:
     </span>
     
@@ -86,7 +86,7 @@
           <div class="flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
             <div>
-              <span class="text-xs font-mono font-bold text-slate-900 dark:text-white block">{pb.title}</span>
+              <span class="text-xs font-mono font-semibold text-slate-900 dark:text-white block">{pb.title}</span>
               <span class="text-xs font-mono text-slate-500 dark:text-slate-400">{pb.action} {pb.automated ? '• Automated Execution' : ''}</span>
             </div>
           </div>
@@ -95,7 +95,7 @@
             onclick={() => executeMitigation(pb.id)}
             disabled={executedPlaybook === pb.id}
             style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-            class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold text-white shadow-xs hover:shadow-md transition-all cursor-pointer">
+            class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold text-white shadow-xs hover:shadow-md transition-all cursor-pointer">
             {#if executedPlaybook === pb.id}
               <span>Executing...</span>
             {:else}

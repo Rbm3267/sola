@@ -15,11 +15,11 @@
 
   <main class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 py-20 max-w-xl mx-auto space-y-6">
     
-    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200/80 dark:border-rose-500/20 text-rose-700 dark:text-rose-400 font-mono text-xs font-bold">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200/80 dark:border-rose-500/20 text-rose-700 dark:text-rose-400 font-mono text-xs font-semibold">
       <span>Error {page.status || 404}</span>
     </div>
 
-    <h1 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
       {page.status === 404 ? 'Page Not Found' : 'Something went wrong'}
     </h1>
 
@@ -30,12 +30,12 @@
     <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
       <a
         href="/"
-        class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white text-xs font-bold transition-all shadow-xs cursor-pointer">
+        class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white text-xs font-semibold transition-all shadow-xs cursor-pointer">
         ← Return Home
       </a>
       <a
         href="/studio"
-        class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer">
+        class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 text-slate-800 dark:text-slate-200 text-xs font-semibold transition-all cursor-pointer">
         Launch Studio Canvas
       </a>
       <a

@@ -35,10 +35,10 @@
 
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono font-bold tracking-tight text-slate-200">
+          <span class="text-xs font-mono font-semibold tracking-tight text-slate-200">
             {isCircuitBreakerActive ? 'Sentinel Friction Triggered' : 'Sola Intent Sentinel'}
           </span>
-          <span class="text-xs font-mono font-bold px-2 py-0.5 rounded-full {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/15 text-blue-400 border border-blue-500/30'}">
+          <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full {isCircuitBreakerActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/15 text-blue-400 border border-blue-500/30'}">
             {flowIndex}% Flow Index
           </span>
         </div>
@@ -56,7 +56,7 @@
         <button 
           type="button"
           onclick={onReset}
-          class="px-2.5 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono text-xs font-bold transition-all cursor-pointer">
+          class="px-2.5 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold transition-all cursor-pointer">
           Reset Bus
         </button>
       {/if}

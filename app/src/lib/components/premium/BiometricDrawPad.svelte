@@ -71,7 +71,7 @@
 
 <div class="w-full flex flex-col gap-2">
   <div class="flex justify-between items-center px-1">
-    <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Signature Pad</span>
+    <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Signature Pad</span>
     <button onclick={clear} class="text-xs text-slate-400 hover:text-slate-700 dark:text-slate-300 font-mono uppercase cursor-pointer">Clear</button>
   </div>
 

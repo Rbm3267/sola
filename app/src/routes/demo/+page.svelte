@@ -298,10 +298,10 @@
     
     <!-- Title Area -->
     <div class="text-center max-w-2xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 text-xs font-mono font-semibold mb-3">
         <span>Sola Ambient Studio • Live Production Canvas</span>
       </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-[-0.035em] mb-2">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">
         Ambient Intent Playground
       </h1>
       <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed font-normal">
@@ -387,7 +387,7 @@
         <div class="flex items-center gap-1 bg-slate-100 dark:bg-white/[0.08] p-1 rounded-full border border-slate-200 dark:border-white/[0.04] select-none overflow-x-auto no-scrollbar">
           <button 
             onclick={() => viewMode = 'native'}
-            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'native' ? 'bg-blue-500 text-white font-bold shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
+            class="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer flex items-center gap-2 whitespace-nowrap {viewMode === 'native' ? 'bg-blue-500 text-white font-semibold shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'}">
             <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
             <span>Native .sola Zero-VDOM</span>
           </button>
@@ -476,7 +476,7 @@
         >
           <div class="flex items-center gap-3">
             <div class="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-sm font-mono font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Building Reactive DOM Tree...</span>
+            <span class="text-sm font-mono font-semibold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Building Reactive DOM Tree...</span>
           </div>
           <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">Zero-VDOM AST compilation via Gemini 3.6 Flash</span>
         </div>
@@ -555,12 +555,12 @@
         <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
         </div>
-        <h3 class="text-base font-black text-slate-900 dark:text-white font-mono mb-1">Canvas is Clean</h3>
+        <h3 class="text-base font-bold text-slate-900 dark:text-white font-mono mb-1">Canvas is Clean</h3>
         <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Speak your intent or load a starter preset to begin constructing your dashboard.</p>
         <button 
           onclick={() => loadPreset('finance')}
           style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-          class="font-bold text-xs text-white px-6 py-3 rounded-2xl transition-all cursor-pointer shadow-md">
+          class="font-semibold text-xs text-white px-6 py-3 rounded-2xl transition-all cursor-pointer shadow-md">
           Load Starter Preset
         </button>
       </div>
@@ -588,7 +588,7 @@
       role="document"
       class="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200 dark:border-white/[0.04] rounded-3xl p-6 max-w-md w-full shadow-2xl flex flex-col gap-4">
       <div class="flex justify-between items-center border-b border-slate-100 dark:border-white/[0.04] pb-3">
-        <h3 class="font-black text-slate-900 dark:text-white font-mono text-base flex items-center gap-2">
+        <h3 class="font-bold text-slate-900 dark:text-white font-mono text-base flex items-center gap-2">
           <span>Configure {editingWidget.component}</span>
         </h3>
         <button onclick={() => editingWidget = null} aria-label="Close configuration dialog" class="text-slate-400 hover:text-slate-700 dark:text-slate-300 cursor-pointer p-1">
@@ -598,7 +598,7 @@
 
       <div class="flex flex-col gap-3">
         <div>
-          <label for="widget-title-input" class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Title</label>
+          <label for="widget-title-input" class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Title</label>
           <input 
             id="widget-title-input"
             type="text" 
@@ -609,7 +609,7 @@
 
         {#if editingWidget.config.value !== undefined}
           <div>
-            <label for="widget-val-input" class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Primary Value</label>
+            <label for="widget-val-input" class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Primary Value</label>
             <input 
               id="widget-val-input"
               type="text" 
@@ -621,7 +621,7 @@
 
         {#if editingWidget.config.trend !== undefined}
           <div>
-            <label for="widget-trend-input" class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Trend Badge</label>
+            <label for="widget-trend-input" class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Trend Badge</label>
             <input 
               id="widget-trend-input"
               type="text" 
@@ -633,7 +633,7 @@
 
         {#if editingWidget.config.percentage !== undefined}
           <div>
-            <div class="flex justify-between text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">
+            <div class="flex justify-between text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">
               <span>Gauge Progress</span>
               <span>{editingWidget.config.percentage}%</span>
             </div>
@@ -652,7 +652,7 @@
         <button 
           onclick={() => editingWidget = null}
           style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: #ffffff !important;"
-          class="font-bold text-xs text-white px-6 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm">
+          class="font-semibold text-xs text-white px-6 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm">
           Done
         </button>
       </div>

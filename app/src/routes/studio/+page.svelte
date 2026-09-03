@@ -474,7 +474,7 @@ export default function SolaDashboard() {
         '  import { DataCard, GaugeCard, FlowWaterfall } from "@sola-air-ui/ui";\n' +
         '<' + '/script>\n\n' +
         '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8 bg-[#fafafa] dark:bg-[#090d19]">\n' +
-        cards.map(c => `  <!-- ${c.title} -->\n  <div class="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a] rounded-2xl border border-slate-200/90 dark:border-white/10 p-6 shadow-sm">\n    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">${c.title}</h3>\n    <div class="text-3xl font-bold font-mono text-slate-900 dark:text-white mt-2">${c.value}</div>\n  </div>`).join('\n') +
+        cards.map(c => `  <!-- ${c.title} -->\n  <div class="${c.cols === 3 ? 'lg:col-span-3 md:col-span-2' : c.cols === 2 ? 'md:col-span-2' : 'col-span-1'} bg-white dark:bg-[#0f172a] rounded-2xl border border-slate-200/90 dark:border-white/10 p-6 shadow-sm">\n    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">${c.title}</h3>\n    <div class="text-3xl font-bold font-mono text-slate-900 dark:text-white mt-2">${c.value}</div>\n  </div>`).join('\n') +
         '\n</div>';
     } else {
       return '<!-- Native Zero-VDOM .sola Mount -->\n' +
@@ -505,9 +505,13 @@ export default function SolaDashboard() {
       
       <!-- Left: Studio Title & Palette Toggle -->
       <div class="flex items-center gap-3">
+        <!-- The page had no h1 at all: nothing announced what it was, to a
+             screen reader or a search engine. Visually it is the toolbar
+             label the page already implied. -->
+        <h1 class="text-sm font-semibold text-slate-900 dark:text-white whitespace-nowrap hidden sm:block">Studio</h1>
         <button
           onclick={() => (paletteOpen = !paletteOpen)}
-          class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer {paletteOpen ? 'bg-blue-500 text-slate-950 shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}"
+          class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer {paletteOpen ? 'bg-blue-500 text-slate-950 shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}"
           title={paletteOpen ? 'Hide Component Palette' : 'Show Component Palette'}>
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
           <span class="hidden sm:inline">Palette</span>
@@ -517,8 +521,8 @@ export default function SolaDashboard() {
         <div class="h-4 w-px bg-slate-200 dark:bg-white/10 hidden sm:block"></div>
 
         <div class="flex items-center gap-2">
-          <span class="font-bold tracking-tight text-slate-900 dark:text-white text-xs whitespace-nowrap">Canvas</span>
-          <span class="px-2 py-0.5 text-xs font-mono font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 rounded-full border border-blue-200/60 dark:border-blue-500/20">
+          <span class="font-semibold tracking-tight text-slate-900 dark:text-white text-xs whitespace-nowrap">Canvas</span>
+          <span class="px-2 py-0.5 text-xs font-mono font-semibold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 rounded-full border border-blue-200/60 dark:border-blue-500/20">
             {cards.length} {cards.length === 1 ? 'card' : 'cards'}
           </span>
         </div>
@@ -536,13 +540,13 @@ export default function SolaDashboard() {
 
           {#if presetMenuOpen}
             <div class="absolute right-0 sm:left-0 mt-2 w-64 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl p-1.5 z-50 animate-[fadeSlide_120ms_ease-out]">
-              <div class="px-3 py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
+              <div class="px-3 py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
                 Starter Templates
               </div>
               {#each Object.entries(samplePresets) as [key, preset]}
                 <button
                   onclick={() => loadSample(key)}
-                  class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold' : 'text-slate-800 dark:text-slate-200'}">
+                  class="w-full text-left p-2 rounded-xl text-xs hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer {selectedPresetKey === key ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-semibold' : 'text-slate-800 dark:text-slate-200'}">
                   <div class="font-bold">{preset.label}</div>
                   <div class="text-xs text-slate-500 dark:text-slate-400 font-normal">{preset.desc}</div>
                 </button>
@@ -550,7 +554,7 @@ export default function SolaDashboard() {
               <div class="my-1 border-t border-slate-100 dark:border-white/5"></div>
               <button
                 onclick={clearCanvas}
-                class="w-full text-left px-3 py-2 rounded-xl text-xs {confirmClearCanvas ? 'bg-rose-500 text-white font-bold' : 'text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 font-semibold'} transition-all cursor-pointer">
+                class="w-full text-left px-3 py-2 rounded-xl text-xs {confirmClearCanvas ? 'bg-rose-500 text-white font-semibold' : 'text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 font-semibold'} transition-all cursor-pointer">
                 {confirmClearCanvas ? 'Tap again to confirm clear' : 'Clear Canvas'}
               </button>
             </div>
@@ -562,7 +566,7 @@ export default function SolaDashboard() {
       <div class="flex items-center gap-2">
         <button
           onclick={() => (exportModalOpen = true)}
-          class="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border border-transparent dark:border-white/10 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer">
+          class="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border border-transparent dark:border-white/10 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
@@ -592,8 +596,8 @@ export default function SolaDashboard() {
         <div class="p-4 border-b border-slate-100 dark:border-white/5 space-y-3 sticky top-0 bg-white/95 dark:bg-[#090d19]/95 backdrop-blur-xl z-10">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">Primitives</span>
-              <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">Drag & Drop</span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white font-mono">Primitives</span>
+              <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold">Drag & Drop</span>
             </div>
             <button onclick={() => (paletteOpen = false)} class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
@@ -618,7 +622,7 @@ export default function SolaDashboard() {
             {#each catalogCategories as cat}
               <button
                 onclick={() => (componentCategory = cat)}
-                class="px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-blue-500 text-slate-950 font-bold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
+                class="px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {componentCategory === cat ? 'bg-blue-500 text-slate-950 font-semibold shadow-xs' : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}">
                 {cat}
               </button>
             {/each}
@@ -664,10 +668,10 @@ export default function SolaDashboard() {
 
                 <div class="min-w-0 flex-1">
                   <div class="flex items-center justify-between gap-1">
-                    <span class="font-bold text-xs text-slate-900 dark:text-white truncate">{item.name}</span>
+                    <span class="font-semibold text-xs text-slate-900 dark:text-white truncate">{item.name}</span>
                     <button
                       onclick={() => addCatalogComponent(item)}
-                      class="text-xs font-mono text-blue-600 dark:text-blue-400 hover:text-blue-500 font-bold px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-500/20 cursor-pointer">
+                      class="text-xs font-mono text-blue-600 dark:text-blue-400 hover:text-blue-500 font-semibold px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-500/20 cursor-pointer">
                       + Add
                     </button>
                   </div>
@@ -692,7 +696,7 @@ export default function SolaDashboard() {
           <div class="w-6 h-6 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
           </div>
-          <span class="text-xs font-mono font-bold text-slate-900 dark:text-white">Arc</span>
+          <span class="text-xs font-mono font-semibold text-slate-900 dark:text-white">Arc</span>
         </div>
 
         <input
@@ -706,7 +710,7 @@ export default function SolaDashboard() {
         <button
           onclick={generateWithArc}
           disabled={isGeneratingArc || !arcPromptInput.trim()}
-          class="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs shadow-blue-500/20">
+          class="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-slate-950 font-semibold text-xs rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs shadow-blue-500/20">
           {#if isGeneratingArc}
             <span class="w-3 h-3 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
             <span>Synthesizing...</span>
@@ -749,7 +753,7 @@ export default function SolaDashboard() {
           <div class="flex items-center gap-2">
             <button
               onclick={() => addComponent('stat')}
-              class="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-slate-950 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer">
+              class="px-4 py-2 bg-blue-500 hover:bg-blue-400 text-slate-950 rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer">
               + Add Metric Tile
             </button>
             <button
@@ -786,7 +790,7 @@ export default function SolaDashboard() {
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
                   </div>
                   <div class="min-w-0">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">{card.title}</h4>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">{card.title}</h4>
                     {#if card.subtitle}
                       <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{card.subtitle}</p>
                     {/if}
@@ -796,7 +800,7 @@ export default function SolaDashboard() {
                 <!-- Right Inline Quick Controls -->
                 <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                   <!-- Width Span Pills -->
-                  <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-lg border border-slate-200/60 dark:border-white/10 text-xs font-mono font-bold">
+                  <div class="flex items-center bg-slate-100 dark:bg-white/5 p-0.5 rounded-lg border border-slate-200/60 dark:border-white/10 text-xs font-mono font-semibold">
                     <button
                       onclick={(e) => setCols(card, 1, e)}
                       class="px-1.5 py-0.5 rounded {card.cols === 1 ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-2xs' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}">1x</button>
@@ -832,7 +836,7 @@ export default function SolaDashboard() {
                   <div class="flex items-baseline justify-between">
                     <span class="text-3xl font-black font-mono tracking-tight text-slate-900 dark:text-white">{card.value}</span>
                     {#if card.delta}
-                      <span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold {c.badgeBg} {c.textDark} {c.badgeBorder}">{card.delta}</span>
+                      <span class="px-2 py-0.5 rounded-md text-xs font-mono font-semibold {c.badgeBg} {c.textDark} {c.badgeBorder}">{card.delta}</span>
                     {/if}
                   </div>
                   <div class="mt-3 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between font-mono">
@@ -847,7 +851,7 @@ export default function SolaDashboard() {
                         <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" class="text-slate-100 dark:text-white/5"/>
                         <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="{Number(card.value)}, 100" stroke-linecap="round" class="{c.text}"/>
                       </svg>
-                      <span class="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold">{card.value}%</span>
+                      <span class="absolute inset-0 flex items-center justify-center text-xs font-mono font-semibold">{card.value}%</span>
                     </div>
                     <div class="space-y-1.5 flex-1">
                       <div class="flex justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
@@ -867,7 +871,7 @@ export default function SolaDashboard() {
                   <div class="space-y-3 py-2">
                     <div class="flex justify-between items-center font-mono">
                       <span class="text-2xl font-black text-slate-900 dark:text-white">{card.value}%</span>
-                      <span class="text-xs {c.textDark} font-bold">Live Signal</span>
+                      <span class="text-xs {c.textDark} font-semibold">Live Signal</span>
                     </div>
                     <input
                       type="range"
@@ -890,8 +894,8 @@ export default function SolaDashboard() {
                         <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="{(Number(card.value) / 100) * 251.2} 251.2" class="{c.text} transition-all duration-75" />
                       </svg>
                       <div class="absolute inset-0 flex flex-col items-center justify-center font-mono">
-                        <span class="text-lg font-black text-slate-900 dark:text-white">{card.value}</span>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Val</span>
+                        <span class="text-lg font-bold text-slate-900 dark:text-white">{card.value}</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase">Val</span>
                       </div>
                     </div>
                     <input
@@ -921,7 +925,7 @@ export default function SolaDashboard() {
                   <div class="space-y-2 py-1">
                     <div class="flex items-baseline justify-between font-mono">
                       <span class="text-2xl font-black text-slate-900 dark:text-white">{card.value}</span>
-                      <span class="text-xs font-bold {c.textDark} px-2 py-0.5 rounded {c.badgeBg}">Direct DOM</span>
+                      <span class="text-xs font-semibold {c.textDark} px-2 py-0.5 rounded {c.badgeBg}">Direct DOM</span>
                     </div>
                     <div class="h-16 flex items-end gap-1.5 pt-2">
                       {#each [40, 25, 60, 45, 80, 55, 90, 70, 85, 65, 95, 75] as height, idx}
@@ -946,7 +950,7 @@ export default function SolaDashboard() {
                   <div class="p-3 bg-slate-50 dark:bg-white/[0.02] rounded-xl border border-slate-100 dark:border-white/5">
                     <div class="flex items-center gap-2">
                       <span class="w-2 h-2 rounded-full {c.bg}"></span>
-                      <span class="font-bold text-xs text-slate-900 dark:text-white">{card.title}</span>
+                      <span class="font-semibold text-xs text-slate-900 dark:text-white">{card.title}</span>
                     </div>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Direct fine-grained reactive component instance.</p>
                   </div>
@@ -966,7 +970,7 @@ export default function SolaDashboard() {
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
           <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white font-mono">Properties</h3>
+            <h3 class="font-semibold text-xs uppercase tracking-wider text-slate-900 dark:text-white font-mono">Properties</h3>
           </div>
           <button
             onclick={() => (activeCardId = null)}
@@ -979,7 +983,7 @@ export default function SolaDashboard() {
           <!-- Active Card Badge -->
           <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/70 dark:border-white/5 flex items-center justify-between">
             <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Selected Node</span>
-            <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">{activeCard.type}</span>
+            <span class="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400">{activeCard.type}</span>
           </div>
 
           <!-- Title -->
@@ -1081,11 +1085,11 @@ export default function SolaDashboard() {
         
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
+            <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 font-semibold text-xs">
               &lt;/&gt;
             </div>
             <div>
-              <h3 class="font-bold text-sm text-slate-900 dark:text-white">Export Sola Canvas</h3>
+              <h3 class="font-semibold text-sm text-slate-900 dark:text-white">Export Sola Canvas</h3>
               <p class="text-xs text-slate-500 dark:text-slate-400">Zero-VDOM native code generator</p>
             </div>
           </div>
@@ -1100,17 +1104,17 @@ export default function SolaDashboard() {
         <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 p-1 rounded-xl">
           <button
             onclick={() => (exportTab = 'react')}
-            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'react' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
+            class="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer {exportTab === 'react' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
             React 19
           </button>
           <button
             onclick={() => (exportTab = 'svelte')}
-            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'svelte' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
+            class="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer {exportTab === 'svelte' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
             Svelte 5
           </button>
           <button
             onclick={() => (exportTab = 'webcomponent')}
-            class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer {exportTab === 'webcomponent' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
+            class="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer {exportTab === 'webcomponent' ? 'bg-white dark:bg-blue-500 text-slate-900 dark:text-slate-950 shadow-xs' : 'text-slate-500 dark:text-slate-400'}">
             Native .sola
           </button>
         </div>
@@ -1120,7 +1124,7 @@ export default function SolaDashboard() {
           <pre class="bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs font-mono overflow-x-auto max-h-72 border border-white/5">{generatedCode}</pre>
           <button
             onclick={copyCode}
-            class="absolute top-3 right-3 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer {copyNotification ? 'bg-blue-500 text-slate-950' : 'bg-white/10 hover:bg-white/20 text-white'}">
+            class="absolute top-3 right-3 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer {copyNotification ? 'bg-blue-500 text-slate-950' : 'bg-white/10 hover:bg-white/20 text-white'}">
             {copyNotification ? 'Copied!' : 'Copy Code'}
           </button>
         </div>

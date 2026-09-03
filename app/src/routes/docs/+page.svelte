@@ -303,7 +303,7 @@ export function SolaWidget({ title, value }) {
     </div>
     <button 
       onclick={() => (isMobileNavOpen = !isMobileNavOpen)}
-      class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 shadow-2xs cursor-pointer">
+      class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 shadow-2xs cursor-pointer">
       <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       <span>Menu</span>
     </button>
@@ -314,15 +314,15 @@ export function SolaWidget({ title, value }) {
     <div class="lg:hidden bg-white/95 dark:bg-[#090d19]/95 border-b border-slate-900/[0.04] dark:border-white/[0.06] p-5 space-y-6 shadow-2xl">
       {#each groups as grp}
         <div>
-          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">{grp.name}</h5>
+          <h5 class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">{grp.name}</h5>
           <div class="space-y-1">
             {#each grp.items as item}
               <button 
                 onclick={() => { activeSection = item.id; isMobileNavOpen = false; }}
-                class="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between {activeSection === item.id ? 'bg-blue-500/10 text-blue-800 dark:text-blue-400 font-bold border border-blue-500/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
+                class="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between {activeSection === item.id ? 'bg-blue-500/10 text-blue-800 dark:text-blue-400 font-semibold border border-blue-500/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'}">
                 <span>{item.title}</span>
                 {#if item.badge}
-                  <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-800 dark:text-blue-300 font-bold">{item.badge}</span>
+                  <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-800 dark:text-blue-300 font-semibold">{item.badge}</span>
                 {/if}
               </button>
             {/each}
@@ -353,7 +353,7 @@ export function SolaWidget({ title, value }) {
       <!-- Navigation Hierarchy -->
       {#each groups as grp}
         <div class="space-y-2">
-          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200 px-3">
+          <h5 class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200 px-3">
             {grp.name}
           </h5>
           <ul class="border-l border-slate-200 dark:border-white/10 space-y-1">
@@ -361,10 +361,10 @@ export function SolaWidget({ title, value }) {
               <li>
                 <button 
                   onclick={() => activeSection = item.id}
-                  class="w-full text-left pl-4 pr-3 py-1.5 text-xs transition-all duration-150 cursor-pointer flex items-center justify-between border-l -ml-px {activeSection === item.id ? 'border-blue-500 font-bold text-blue-700 dark:text-blue-400 bg-blue-500/5 dark:bg-blue-500/10 rounded-r-lg' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400'}">
+                  class="w-full text-left pl-4 pr-3 py-1.5 text-xs transition-all duration-150 cursor-pointer flex items-center justify-between border-l -ml-px {activeSection === item.id ? 'border-blue-500 font-semibold text-blue-700 dark:text-blue-400 bg-blue-500/5 dark:bg-blue-500/10 rounded-r-lg' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400'}">
                   <span class="truncate">{item.title}</span>
                   {#if item.badge}
-                    <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-800 dark:text-blue-300 font-bold">{item.badge}</span>
+                    <span class="text-xs font-mono px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-800 dark:text-blue-300 font-semibold">{item.badge}</span>
                   {/if}
                 </button>
               </li>
@@ -396,7 +396,7 @@ export function SolaWidget({ title, value }) {
             class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white text-base font-bold cursor-pointer">
             &times;
           </button>
-          <div class="flex items-center gap-2 mb-3 text-blue-800 dark:text-blue-400 font-bold uppercase tracking-wider text-xs">
+          <div class="flex items-center gap-2 mb-3 text-blue-800 dark:text-blue-400 font-semibold uppercase tracking-wider text-xs">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
             <span>Sola Arc Intelligence Response</span>
           </div>
@@ -409,7 +409,7 @@ export function SolaWidget({ title, value }) {
         <article class="space-y-8">
           <!-- Article Header -->
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Getting Started</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Getting Started</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Installation & Setup
             </h1>
@@ -420,7 +420,7 @@ export function SolaWidget({ title, value }) {
 
           <!-- Tailwind Style Callout Note -->
           <div class="border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-500/10 p-4 rounded-r-2xl space-y-1">
-            <h4 class="text-xs font-bold text-blue-950 dark:text-blue-400 font-mono">Zero-VDOM Runtime Note</h4>
+            <h4 class="text-xs font-semibold text-blue-950 dark:text-blue-400 font-mono">Zero-VDOM Runtime Note</h4>
             <p class="text-xs text-blue-900 dark:text-blue-300 leading-relaxed">
               Sola compiles directly to standard ES modules without virtual DOM reconciliation. No runtime react-dom or large framework wrappers required.
             </p>
@@ -461,7 +461,7 @@ export function SolaWidget({ title, value }) {
                   onclick={() => handleCopy(scaffoldCmds[packageManager], 'scaffold')}
                   class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0 ml-4">
                   {#if copiedId === 'scaffold'}
-                    <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
+                    <span class="text-xs text-blue-400 font-semibold px-1">Copied!</span>
                   {:else}
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   {/if}
@@ -488,7 +488,7 @@ export function SolaWidget({ title, value }) {
                   onclick={() => handleCopy(installCmds[packageManager], 'install')}
                   class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0 ml-4">
                   {#if copiedId === 'install'}
-                    <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
+                    <span class="text-xs text-blue-400 font-semibold px-1">Copied!</span>
                   {:else}
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   {/if}
@@ -515,7 +515,7 @@ export function SolaWidget({ title, value }) {
                   onclick={() => handleCopy(viteConfigCode, 'vite-cfg')}
                   class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer">
                   {#if copiedId === 'vite-cfg'}
-                    <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
+                    <span class="text-xs text-blue-400 font-semibold px-1">Copied!</span>
                   {:else}
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   {/if}
@@ -529,7 +529,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'syntax'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Component Architecture</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Component Architecture</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               The .sola Format
             </h1>
@@ -540,18 +540,18 @@ export function SolaWidget({ title, value }) {
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
-              <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 uppercase">Part 1</span>
-              <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt;</h4>
+              <span class="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 uppercase">Part 1</span>
+              <h4 class="font-semibold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;script&gt;</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Defines reactive signals (<code>$state</code>, <code>$derived</code>) and handlers.</p>
             </div>
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
-              <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
-              <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
+              <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase">Part 2</span>
+              <h4 class="font-semibold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">HTML Template</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Standard declarative markup with <code>&#123;expression&#125;</code> bindings.</p>
             </div>
             <div class="p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-2xs">
-              <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
-              <h4 class="font-bold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt;</h4>
+              <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase">Part 3</span>
+              <h4 class="font-semibold font-mono text-slate-900 dark:text-white text-xs mt-1 mb-1">&lt;style&gt;</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Auto-scoped CSS hashed at compile time with 0 global collisions.</p>
             </div>
           </div>
@@ -568,7 +568,7 @@ export function SolaWidget({ title, value }) {
                 onclick={() => handleCopy(syntaxExample, 'syntax')}
                 class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer">
                 {#if copiedId === 'syntax'}
-                  <span class="text-xs text-blue-400 font-bold px-1">Copied!</span>
+                  <span class="text-xs text-blue-400 font-semibold px-1">Copied!</span>
                 {:else}
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 {/if}
@@ -581,15 +581,15 @@ export function SolaWidget({ title, value }) {
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-                <h3 class="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase tracking-wider">Live Synchronized Sandbox</h3>
+                <h3 class="text-xs font-semibold font-mono text-slate-900 dark:text-white uppercase tracking-wider">Live Synchronized Sandbox</h3>
               </div>
-              <span class="text-xs font-mono bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full font-bold">Native DOM</span>
+              <span class="text-xs font-mono bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-0.5 rounded-full font-semibold">Native DOM</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               <div class="space-y-3">
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Title Prop</label>
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Title Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxTitle}
@@ -597,7 +597,7 @@ export function SolaWidget({ title, value }) {
                   />
                 </div>
                 <div>
-                  <label class="block text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Value Prop</label>
+                  <label class="block text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Card Value Prop</label>
                   <input 
                     type="text" 
                     bind:value={sandboxValue}
@@ -616,7 +616,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'api-reactivity'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Core Concepts</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Core Concepts</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Reactivity & Signals
             </h1>
@@ -660,7 +660,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'api-macros'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Core Concepts</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Core Concepts</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Compiler Macros
             </h1>
@@ -694,7 +694,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'engine'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Architecture</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Architecture</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Zero-VDOM Engine
             </h1>
@@ -709,11 +709,11 @@ export function SolaWidget({ title, value }) {
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.9 kB Bundle</h4>
+              <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">3.9 kB Bundle</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">No third-party runtime dependencies.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">No Diff Step</h4>
+              <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">No Diff Step</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Only the DOM nodes a changed signal owns are written to.</p>
             </div>
           </div>
@@ -723,7 +723,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'host-embedding'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Host Embedding
             </h1>
@@ -733,7 +733,7 @@ export function SolaWidget({ title, value }) {
           </header>
 
           <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">React 19 Hook Wrapper</h3>
+            <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">React 19 Hook Wrapper</h3>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{reactEmbedCode}</code></pre>
             </div>
@@ -741,7 +741,7 @@ export function SolaWidget({ title, value }) {
 
           <section class="space-y-6">
             <div class="space-y-1">
-              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">With a Bundler (ESM)</h3>
+              <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">With a Bundler (ESM)</h3>
               <p class="text-xs text-slate-500 dark:text-slate-400">For environments with a build step — Vite, webpack, Rollup, esbuild, or any bundler that resolves npm packages. Install <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/core</code>, pre-compile <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">.sola</code> files to JS with the CLI, then import and mount normally inside any TypeScript or JavaScript source file.</p>
             </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -749,7 +749,7 @@ export function SolaWidget({ title, value }) {
             </div>
 
             <div class="space-y-1">
-              <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Without a Bundler (IIFE)</h3>
+              <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Without a Bundler (IIFE)</h3>
               <p class="text-xs text-slate-500 dark:text-slate-400">For environments with no build step — plain <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">&lt;script&gt;</code> tags, CMS platforms, portals. Load <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola-core.iife.min.js</code> as a global script, compile your component with <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">--target iife</code>, then mount via <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">window.ComponentName(container, props)</code>.</p>
             </div>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
@@ -762,7 +762,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'relay-saas'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Sola Relay SaaS
             </h1>
@@ -772,14 +772,14 @@ export function SolaWidget({ title, value }) {
           </header>
 
           <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">1. Dockerfile</h3>
+            <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">1. Dockerfile</h3>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{dockerfileCode}</code></pre>
             </div>
           </section>
 
           <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">2. Nginx Reverse Proxy</h3>
+            <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">2. Nginx Reverse Proxy</h3>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{nginxCode}</code></pre>
             </div>
@@ -790,7 +790,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'mcp'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">AI Tooling</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">AI Tooling</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               MCP Server
             </h1>
@@ -800,7 +800,7 @@ export function SolaWidget({ title, value }) {
           </header>
 
           <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Installation</h3>
+            <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Installation</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400">Add <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">@sola-air-ui/mcp</code> to your Claude Code or editor MCP config. The server runs locally as a stdio process — no API keys, no network calls.</p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{mcpInstallCode}</code></pre>
@@ -808,7 +808,7 @@ export function SolaWidget({ title, value }) {
           </section>
 
           <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Exposed Tools & Resources</h3>
+            <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Exposed Tools & Resources</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400">The MCP server exposes two tools and one resource. An agent reads <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">sola://docs</code> to learn the syntax, then calls <code class="font-mono bg-slate-100 dark:bg-white/10 px-1 rounded">compile_component</code> to produce runnable JS.</p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{mcpToolsCode}</code></pre>
@@ -816,7 +816,7 @@ export function SolaWidget({ title, value }) {
           </section>
 
           <section class="space-y-3">
-            <h3 class="text-sm font-bold font-mono text-slate-900 dark:text-white">Agent Workflow</h3>
+            <h3 class="text-sm font-semibold font-mono text-slate-900 dark:text-white">Agent Workflow</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400">How a coding agent uses the MCP end-to-end — from reading the spec to writing compiled output to disk.</p>
             <div class="rounded-2xl bg-slate-950 border border-slate-800 p-5 font-mono text-xs text-blue-300 leading-relaxed overflow-x-auto">
               <pre><code>{mcpAgentCode}</code></pre>
@@ -825,15 +825,15 @@ export function SolaWidget({ title, value }) {
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">compile_component</h4>
+              <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">compile_component</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Compile any .sola source to a JS ES module + scoped CSS. Returns structured JSON with line-level error details on failure.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">validate_component</h4>
+              <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">validate_component</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Check a .sola source for errors without emitting the full compiled output. Useful for pre-flight checks before writing files.</p>
             </div>
             <div class="p-5 border border-slate-200/80 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
-              <h4 class="font-bold text-slate-900 dark:text-white text-xs mb-1 font-mono">sola://docs</h4>
+              <h4 class="font-semibold text-slate-900 dark:text-white text-xs mb-1 font-mono">sola://docs</h4>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">Full Sola API reference as plain text — template syntax, runes, compiler output format. Read once at session start.</p>
             </div>
           </div>
@@ -843,7 +843,7 @@ export function SolaWidget({ title, value }) {
       {:else if activeSection === 'llm-spec'}
         <article class="space-y-8">
           <header class="space-y-2 pb-6 border-b border-slate-900/[0.04] dark:border-white/[0.05]">
-            <p class="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
+            <p class="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Deployment & Adapters</p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               AI Prompting Spec
             </h1>
@@ -864,11 +864,11 @@ export function SolaWidget({ title, value }) {
           <button 
             onclick={() => activeSection = prevItem.id}
             class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-blue-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-left transition-all group cursor-pointer shadow-2xs">
-            <div class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
+            <div class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
               <svg class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
               <span>Previous</span>
             </div>
-            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <div class="text-sm font-semibold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {prevItem.title}
             </div>
           </button>
@@ -880,11 +880,11 @@ export function SolaWidget({ title, value }) {
           <button 
             onclick={() => activeSection = nextItem.id}
             class="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-blue-500/40 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-right transition-all group cursor-pointer shadow-2xs ml-auto w-full sm:w-auto sm:min-w-[200px]">
-            <div class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
+            <div class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
               <span>Next</span>
               <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </div>
-            <div class="text-sm font-bold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <div class="text-sm font-semibold text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {nextItem.title}
             </div>
           </button>

@@ -87,12 +87,12 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Dual-Driver Persona:</span>
-          <span class="text-xs font-mono font-black uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-500/20' : 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'}">
+          <span class="text-xs font-mono font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">Dual-Driver Persona:</span>
+          <span class="text-xs font-mono font-semibold uppercase px-2.5 py-0.5 rounded-full border {metrics.persona === 'sre_commander' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' : metrics.persona === 'finops_auditor' ? 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-500/20' : 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'}">
             {metrics.persona === 'sre_commander' ? 'SRE Incident Commander' : metrics.persona === 'finops_auditor' ? 'FinOps Cloud Auditor' : 'Visual Explorer'}
           </span>
         </div>
-        <h3 class="text-lg font-black font-sans mt-0.5 text-slate-950 dark:text-slate-50">
+        <h3 class="text-lg font-bold font-sans mt-0.5 text-slate-950 dark:text-slate-50">
           Dual-Driver ActionContract Protocol (Data + Behavior)
         </h3>
       </div>
@@ -101,16 +101,16 @@
     <!-- Live Telemetry Readout Chips -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full lg:w-auto relative z-10 font-mono text-xs">
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
-        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Typing Cadence</span>
-        <span class="text-amber-600 dark:text-amber-400 font-black">{metrics.typingVelocityCps} chars/sec</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase">Typing Cadence</span>
+        <span class="text-amber-600 dark:text-amber-400 font-bold">{metrics.typingVelocityCps} chars/sec</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5">
-        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Hover Dwell</span>
-        <span class="text-sky-600 dark:text-sky-400 font-black">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase">Hover Dwell</span>
+        <span class="text-sky-600 dark:text-sky-400 font-bold">{metrics.activeDwellTarget ? `${metrics.activeDwellTarget}` : 'None'}</span>
       </div>
       <div class="p-3 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.04] flex flex-col gap-0.5 col-span-2 sm:col-span-1">
-        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Rage Click Vector</span>
-        <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 dark:text-rose-400 font-black animate-pulse' : 'text-slate-700 dark:text-slate-300 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase">Rage Click Vector</span>
+        <span class="{metrics.rageClickCount >= 2 ? 'text-rose-600 dark:text-rose-400 font-bold animate-pulse' : 'text-slate-700 dark:text-slate-300 font-bold'}">{metrics.rageClickCount} Clicks / 600ms</span>
       </div>
     </div>
 
@@ -132,7 +132,7 @@
     <div class="flex items-center gap-2 shrink-0">
       <button 
         onclick={resetState}
-        class="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-all cursor-pointer">
+        class="px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-all cursor-pointer">
         Reset Vectors
       </button>
     </div>
@@ -143,7 +143,7 @@
     <div 
       transition:fly={{ y: -8, duration: 200 }}
       class="p-4 rounded-2xl bg-blue-950/80 border border-blue-800/80 text-blue-300 font-mono text-xs flex flex-col gap-1 shadow-sm">
-      <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Playbook Execution Audit Log:</span>
+      <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Playbook Execution Audit Log:</span>
       {#each actionLog as log}
         <div>{log}</div>
       {/each}
@@ -165,7 +165,7 @@
         ontouchend={() => handleTouchEnd('incident')}
         class="relative group cursor-pointer transition-all">
         
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
           <span>Enterprise Incident (Hold to inspect)</span>
         </div>
@@ -203,7 +203,7 @@
         ontouchend={() => handleNodeClick('degraded-node')}
         class="relative group cursor-pointer transition-all">
         
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
           <span>AWS Worker (Tap 3x rapidly)</span>
         </div>
@@ -238,7 +238,7 @@
         ontouchend={() => handleTouchEnd('finops')}
         class="relative group cursor-pointer transition-all">
         
-        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold shadow-sm flex items-center gap-1.5">
+        <div class="absolute -top-3 left-4 z-20 px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-semibold shadow-sm flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
           <span>FinOps Revenue (Hold to inspect)</span>
         </div>

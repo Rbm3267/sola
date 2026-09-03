@@ -83,13 +83,13 @@
   <!-- Header -->
   <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-white/5">
     <div>
-      <h3 class="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{title}</h3>
+      <h3 class="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">{title}</h3>
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>
     </div>
     {#if hoveredIndex !== null && data[hoveredIndex]}
       <div class="flex items-center gap-2 px-2.5 py-1 bg-slate-100 dark:bg-white/10 rounded-xl">
         <span class="text-xs text-slate-500 dark:text-slate-400">{data[hoveredIndex].label}:</span>
-        <span class="text-xs font-bold font-mono text-slate-900 dark:text-white">{data[hoveredIndex].value}</span>
+        <span class="text-xs font-semibold font-mono text-slate-900 dark:text-white">{data[hoveredIndex].value}</span>
       </div>
     {/if}
   </div>

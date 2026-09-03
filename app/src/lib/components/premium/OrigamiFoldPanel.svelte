@@ -25,7 +25,7 @@
       class="absolute top-0 left-0 w-full h-1/2 bg-slate-100 dark:bg-white/[0.08] border border-slate-300 rounded-t-2xl shadow-sm origin-bottom overflow-hidden flex flex-col justify-end p-4"
       style="transform: rotateX({$foldAngle}deg); backface-visibility: hidden; filter: brightness({1 - ($foldAngle / 90) * 0.5});"
     >
-      <div class="text-xl font-black text-slate-800 dark:text-slate-200">Origami Data</div>
+      <div class="text-xl font-bold text-slate-800 dark:text-slate-200">Origami Data</div>
       <div class="text-xs text-slate-500 dark:text-slate-400">Top section of the folding panel.</div>
     </div>
 

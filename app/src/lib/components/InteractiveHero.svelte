@@ -20,7 +20,7 @@
 <div class="flex flex-col items-center text-center max-w-5xl mx-auto pt-6 md:pt-12 pb-16 relative w-full">
   
   <!-- Floating Luminous Announcement Badge -->
-  <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold mb-6 shadow-2xs">
+  <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-semibold mb-6 shadow-2xs">
     <span class="flex h-2 w-2 relative">
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -46,7 +46,7 @@
          not a drag-and-drop canvas. -->
     <a
       href="/docs"
-      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white shadow-md shadow-slate-900/10 dark:shadow-blue-500/20 hover:-translate-y-0.5 text-center text-sm flex items-center justify-center gap-2 cursor-pointer">
+      class="px-6 py-3 rounded-2xl font-semibold transition-all duration-200 bg-slate-900 hover:bg-slate-800 text-white dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white shadow-md shadow-slate-900/10 dark:shadow-blue-500/20 hover:-translate-y-0.5 text-center text-sm flex items-center justify-center gap-2 cursor-pointer">
       <span>Get started</span>
       <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
@@ -54,7 +54,7 @@
     <!-- Secondary CTA -->
     <a
       href="/components"
-      class="px-6 py-3 rounded-2xl font-bold transition-all duration-200 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-xs hover:-translate-y-0.5 text-center text-sm flex items-center justify-center gap-2 cursor-pointer">
+      class="px-6 py-3 rounded-2xl font-semibold transition-all duration-200 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-white/10 shadow-xs hover:-translate-y-0.5 text-center text-sm flex items-center justify-center gap-2 cursor-pointer">
       <span>Browse components</span>
     </a>
     

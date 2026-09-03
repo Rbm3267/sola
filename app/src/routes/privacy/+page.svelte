@@ -17,11 +17,11 @@
   <main class="relative z-10 flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
     <!-- Header -->
     <div class="border-b border-slate-100 dark:border-white/5 pb-8 mb-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-bold mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 text-blue-800 dark:text-blue-300 text-xs font-mono font-semibold mb-3">
         <span class="w-2 h-2 rounded-full bg-blue-500"></span>
         <span>Official Privacy Policy</span>
       </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
         Privacy Policy
       </h1>
       <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-mono mt-2">
@@ -92,7 +92,7 @@
         <div class="divide-y divide-slate-200 dark:divide-white/5 border border-slate-200/80 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[#0c1222]">
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded">activeTab</span>
+              <span class="font-mono text-xs font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded">activeTab</span>
               <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Current Tab Access</span>
             </div>
             <p class="text-xs text-slate-600 dark:text-slate-400">
@@ -102,7 +102,7 @@
 
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded">scripting</span>
+              <span class="font-mono text-xs font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded">scripting</span>
               <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Shadow DOM Isolation Injection</span>
             </div>
             <p class="text-xs text-slate-600 dark:text-slate-400">
@@ -112,7 +112,7 @@
 
           <div class="p-4 space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded">sidePanel</span>
+              <span class="font-mono text-xs font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded">sidePanel</span>
               <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">Side Panel Component Palette</span>
             </div>
             <p class="text-xs text-slate-600 dark:text-slate-400">

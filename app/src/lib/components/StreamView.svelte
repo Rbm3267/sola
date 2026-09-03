@@ -20,7 +20,7 @@
   <div class="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.04] pb-3 mb-4">
     <div class="flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-      <span class="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">{config.title || 'Live Stream'}</span>
+      <span class="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 uppercase tracking-wider">{config.title || 'Live Stream'}</span>
     </div>
     <span class="text-xs font-mono bg-slate-100 dark:bg-white/[0.08] text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full border border-slate-200 dark:border-white/[0.04]">
       0 ms Latency

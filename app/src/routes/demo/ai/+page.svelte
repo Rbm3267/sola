@@ -162,7 +162,7 @@
       <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
       AI Component Suite · @sola-air-ui/ui
     </div>
-    <h1 class="text-4xl font-bold text-slate-900 dark:text-white tracking-tight mb-3">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">
       AI Components
     </h1>
     <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
@@ -188,7 +188,7 @@
         <!-- Chat header -->
         <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-slate-800">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold">AI</div>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-semibold">AI</div>
             <div>
               <div class="text-sm font-semibold text-slate-900 dark:text-white">Sola Assistant</div>
               <div class="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
@@ -449,7 +449,7 @@
                 <ol class="space-y-2">
                   {#each sheetContent.items as item, i}
                     <li class="flex items-start gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3">
-                      <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                      <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-xs font-semibold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                       <span class="text-sm text-slate-700 dark:text-slate-300 leading-snug">{item}</span>
                     </li>
                   {/each}
@@ -576,7 +576,7 @@
       <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">What Sola AIR gives you</h2>
       <div class="grid md:grid-cols-2 gap-6 text-sm">
         <div>
-          <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The runtime</p>
+          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The runtime</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Zero-VDOM — changes go straight to the DOM</li>
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> <code class="font-mono text-xs">$state</code>, <code class="font-mono text-xs">$derived</code>, <code class="font-mono text-xs">$intent</code> as first-class primitives</li>
@@ -585,7 +585,7 @@
           </ul>
         </div>
         <div>
-          <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The AI layer</p>
+          <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">The AI layer</p>
           <ul class="space-y-1.5 text-slate-600 dark:text-slate-400">
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Provider-agnostic <code class="font-mono text-xs">$intent</code> — your server, your model</li>
             <li class="flex items-center gap-2"><span class="text-blue-500">✓</span> Anthropic · OpenAI · Gemini · Ollama adapters included</li>

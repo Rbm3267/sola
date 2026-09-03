@@ -129,9 +129,9 @@
     <div>
       <div class="flex items-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-        <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">On-Demand Technical Report Generator</span>
+        <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase">On-Demand Technical Report Generator</span>
       </div>
-      <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
         {config?.title || 'System Architecture & Incident Report Engine'}
       </h3>
       <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
@@ -143,7 +143,7 @@
     <button 
       onclick={handleGenerate}
       disabled={isGenerating}
-      class="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold flex items-center gap-2 transition-all active:scale-[0.97] cursor-pointer shadow-md disabled:opacity-60 shrink-0">
+      class="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-semibold flex items-center gap-2 transition-all active:scale-[0.97] cursor-pointer shadow-md disabled:opacity-60 shrink-0">
       {#if isGenerating}
         <svg class="w-4 h-4 animate-spin text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
         <span>Generating ({progress}%)...</span>
@@ -157,7 +157,7 @@
   <!-- Parameter Config Ribbon -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/80 dark:bg-white/[0.04] p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.04] text-xs font-mono">
     <div class="flex flex-col gap-1.5">
-      <label for="report-template-select" class="text-slate-500 dark:text-slate-400 font-bold uppercase text-xs">Report Template:</label>
+      <label for="report-template-select" class="text-slate-500 dark:text-slate-400 font-semibold uppercase text-xs">Report Template:</label>
       <select 
         id="report-template-select"
         bind:value={reportType}
@@ -169,7 +169,7 @@
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label for="target-env-select" class="text-slate-500 dark:text-slate-400 font-bold uppercase text-xs">Target Infrastructure / Environment:</label>
+      <label for="target-env-select" class="text-slate-500 dark:text-slate-400 font-semibold uppercase text-xs">Target Infrastructure / Environment:</label>
       <select 
         id="target-env-select"
         bind:value={environment}
@@ -196,7 +196,7 @@
   {:else if !isGenerating}
     <div class="p-8 border-2 border-dashed border-slate-200 dark:border-white/[0.04] rounded-2xl text-center flex flex-col items-center gap-2">
       <svg class="w-8 h-8 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <p class="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">Select a template above and click "Generate Technical Report"</p>
+      <p class="text-xs font-mono text-slate-500 dark:text-slate-400 font-semibold">Select a template above and click "Generate Technical Report"</p>
       <p class="text-xs font-mono text-slate-500 dark:text-slate-400">Produces rich, self-contained HTML/Markdown documents with export buttons.</p>
     </div>
   {/if}

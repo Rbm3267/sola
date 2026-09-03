@@ -88,12 +88,12 @@
             <span class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-ping absolute opacity-75"></span>
             <span class="w-2.5 h-2.5 rounded-full bg-blue-500 relative shadow-sm"></span>
           </div>
-          <span class="text-xs font-mono font-black text-slate-100 tracking-tight">Mobile Command Surface</span>
+          <span class="text-xs font-mono font-semibold text-slate-100 tracking-tight">Mobile Command Surface</span>
         </div>
 
         <!-- Latency Micro-Badge -->
         <div class="flex items-center gap-2">
-          <span class="text-xs font-mono bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30 font-bold">
+          <span class="text-xs font-mono bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30 font-semibold">
             0.2ms Signal Bus
           </span>
           <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
@@ -109,7 +109,7 @@
           <button 
             type="button"
             onclick={() => selectedIntentKey = null}
-            class="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-300 hover:text-white cursor-pointer">
+            class="flex items-center gap-1.5 text-xs font-mono font-semibold text-slate-300 hover:text-white cursor-pointer">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
             <span>Back to Intents</span>
           </button>
@@ -127,7 +127,7 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-            <span class="text-xs font-bold text-white font-mono uppercase tracking-wider">
+            <span class="text-xs font-semibold text-white font-mono uppercase tracking-wider">
               {intents.find(i => i.id === selectedIntentKey)?.label}
             </span>
           </div>
@@ -193,7 +193,7 @@
           <a 
             href="/studio" 
             onclick={closeAll}
-            class="w-full py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 dark:text-slate-50 font-mono font-bold text-xs text-center transition-all">
+            class="w-full py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 dark:text-slate-50 font-mono font-semibold text-xs text-center transition-all">
             Open in Studio Editor →
           </a>
         </div>
@@ -208,7 +208,7 @@
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-            <span class="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">Mobile Command Surface</span>
+            <span class="text-xs font-mono font-semibold text-slate-200 uppercase tracking-wider">Mobile Command Surface</span>
           </div>
           <button 
             type="button"
@@ -233,11 +233,11 @@
               class="p-3 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-850 text-left transition-all cursor-pointer group flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-xs font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-blue-400 font-bold border border-slate-700">
+                  <span class="text-xs font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-blue-400 font-semibold border border-slate-700">
                     {intent.badge}
                   </span>
                 </div>
-                <span class="text-xs font-mono font-bold text-slate-100 group-hover:text-blue-400 block truncate">
+                <span class="text-xs font-mono font-semibold text-slate-100 group-hover:text-blue-400 block truncate">
                   {intent.label}
                 </span>
               </div>
