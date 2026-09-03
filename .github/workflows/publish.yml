@@ -27,6 +27,12 @@ jobs:
       - name: Build Packages
         run: npm run build
 
+      - name: Publish @sola-air-ui/sentinel
+        run: npm publish --provenance
+        working-directory: packages/sentinel
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish @sola/core
         run: npm publish --provenance
         working-directory: packages/core

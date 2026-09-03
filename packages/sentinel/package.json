@@ -1,0 +1,58 @@
+{
+  "name": "@sola-air-ui/sentinel",
+  "version": "1.0.0",
+  "description": "Ambient behaviour observation: notice when someone hesitates on a form, and describe what you saw. Framework-agnostic, zero dependencies.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./react": {
+      "types": "./types/react.d.ts",
+      "default": "./src/react.js"
+    },
+    "./svelte": {
+      "types": "./types/svelte.d.ts",
+      "default": "./src/svelte.js"
+    }
+  },
+  "files": [
+    "src",
+    "types"
+  ],
+  "scripts": {
+    "test": "node --test test/sentinel.test.js"
+  },
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "ambient",
+    "intent",
+    "behaviour",
+    "forms",
+    "hesitation",
+    "ux",
+    "react",
+    "svelte",
+    "sola"
+  ],
+  "license": "MIT",
+  "homepage": "https://sola-air.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola-air"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

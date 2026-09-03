@@ -18,6 +18,7 @@
     "types"
   ],
   "dependencies": {
+    "@sola-air-ui/sentinel": "^1.0.0",
     "esbuild": "^0.21.5"
   },
   "keywords": [
