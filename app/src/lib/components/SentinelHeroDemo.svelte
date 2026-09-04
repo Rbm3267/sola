@@ -1,20 +1,25 @@
 <script lang="ts">
   // The pitch, as one interaction: a real form, watched by the real Sentinel
-  // from @sola-air-ui/core. Focus a field, type, then pause — Sentinel's
+  // from @sola-air-ui/sentinel. Focus a field, type, then pause — Sentinel's
   // significance gate fires and a suggestion resolves. Nothing here is faked;
-  // the observer buffer shown alongside is the same object driving the gate.
-  import { createSentinel } from '@sola-air-ui/core';
+  // the observer buffer shown alongside reads the same fieldHistory driving
+  // the gate. observe() wires every field by delegation — nothing below calls
+  // recordFieldFocus/Input/Blur by hand, which is the whole point of the package.
+  import { observe, type SolaSentinel, type FieldEvent } from '@sola-air-ui/sentinel';
   import { onMount } from 'svelte';
 
   type Suggestion = { label: string; action: string; confidence: number } | null;
 
-  let sentinel = createSentinel('hero-demo', {
+  const SENTINEL_OPTIONS = {
     // Tightened from the defaults so the demo responds at the pace of someone
     // trying it out, rather than making them wait to see anything happen.
     idleThresholdMs: 900,
     minSuggestIntervalMs: 3000,
     minEventsForSuggestion: 2
-  });
+  };
+
+  let root = $state<HTMLDivElement>();
+  let handle: ReturnType<typeof observe> | null = null;
 
   let fields = $state({ destination: '', dates: '', travelers: '' });
   let suggestion = $state<Suggestion>(null);
@@ -23,30 +28,32 @@
   let flowIndex = $state(99.8);
   let hasInteracted = $state(false);
 
-  function pushEvent(line: string) {
-    events = [...events.slice(-4), line];
+  function describe(e: FieldEvent): string {
+    if (e.type === 'focus') return e.revisit ? `returned to "${e.fieldId}"` : `focused "${e.fieldId}"`;
+    if (e.type === 'input') return e.valueLength ? `typing in "${e.fieldId}": ${e.valueLength} chars` : `cleared "${e.fieldId}"`;
+    return e.valueLength ? `left "${e.fieldId}" with ${e.valueLength} chars` : `left "${e.fieldId}" empty`;
+  }
+
+  // observe()'s own listener runs in the capture phase, so by the time this
+  // (bubble-phase) handler fires, Sentinel's fieldHistory already reflects the
+  // event — this only mirrors the buffer that is actually driving the gate.
+  function syncBuffer(sentinel: SolaSentinel) {
     flowIndex = sentinel.flowIndex;
-  }
+    hasInteracted = sentinel.fieldHistory.length > 0;
 
-  function handleFocus(id: string) {
-    const revisit = sentinel.recordFieldFocus(id);
-    hasInteracted = true;
-    pushEvent(revisit ? `returned to "${id}"` : `focused "${id}"`);
-  }
-
-  function handleInput(id: string, value: string) {
-    sentinel.recordFieldInput(id, value);
-    // One line per field, updated in place — the buffer should read like the
-    // observer's own state, not an append-only log of keystrokes.
-    const line = value ? `typing in "${id}": ${value.length} chars` : `cleared "${id}"`;
-    const withoutSameField = events.filter((e) => !e.startsWith(`typing in "${id}"`) && !e.startsWith(`cleared "${id}"`));
-    events = [...withoutSameField.slice(-3), line];
-    flowIndex = sentinel.flowIndex;
-  }
-
-  function handleBlur(id: string, value: string) {
-    sentinel.recordFieldBlur(id, value);
-    pushEvent(value ? `left "${id}" with ${value.length} chars` : `left "${id}" empty`);
+    const last = sentinel.fieldHistory[sentinel.fieldHistory.length - 1];
+    if (!last) return;
+    const line = describe(last);
+    if (last.type === 'input') {
+      // One line per field, updated in place — the buffer should read like the
+      // observer's own state, not an append-only log of keystrokes.
+      const withoutSameField = events.filter(
+        (e) => !e.startsWith(`typing in "${last.fieldId}"`) && !e.startsWith(`cleared "${last.fieldId}"`)
+      );
+      events = [...withoutSameField.slice(-3), line];
+    } else {
+      events = [...events.slice(-4), line];
+    }
   }
 
   // Resolution is local so the page has no server dependency and no API key;
@@ -81,21 +88,41 @@
     };
   }
 
+  function onSuggest(prompt: string) {
+    resolving = true;
+    // A short delay stands in for the model round-trip $intent would make.
+    setTimeout(() => {
+      suggestion = resolveLocally(prompt);
+      resolving = false;
+    }, 420);
+  }
+
+  // observe()'s own poll replaces the hand-rolled setInterval; this handler
+  // piggybacks on the same field events observe() is already listening for
+  // (added on the same root, so it runs after observe()'s capture-phase
+  // listener has already recorded them), purely to mirror them into the
+  // demo's display. It reads handle.sentinel fresh each call, so it keeps
+  // working across a reset() without being re-attached itself.
+  function onFieldEvent() {
+    if (handle) syncBuffer(handle.sentinel);
+  }
+
+  function attach() {
+    if (!root) return;
+    handle = observe(root, { name: 'hero-demo', ...SENTINEL_OPTIONS, onSuggest });
+  }
+
   onMount(() => {
-    const timer = setInterval(() => {
-      if (!sentinel.checkSignificance()) return;
-      const prompt = sentinel.buildPrompt();
-      if (!prompt) return;
-
-      resolving = true;
-      // A short delay stands in for the model round-trip $intent would make.
-      setTimeout(() => {
-        suggestion = resolveLocally(prompt);
-        resolving = false;
-      }, 420);
-    }, 250);
-
-    return () => clearInterval(timer);
+    attach();
+    root?.addEventListener('focusin', onFieldEvent);
+    root?.addEventListener('input', onFieldEvent);
+    root?.addEventListener('focusout', onFieldEvent);
+    return () => {
+      handle?.disconnect();
+      root?.removeEventListener('focusin', onFieldEvent);
+      root?.removeEventListener('input', onFieldEvent);
+      root?.removeEventListener('focusout', onFieldEvent);
+    };
   });
 
   function reset() {
@@ -104,11 +131,8 @@
     events = [];
     hasInteracted = false;
     flowIndex = 99.8;
-    sentinel = createSentinel('hero-demo', {
-      idleThresholdMs: 900,
-      minSuggestIntervalMs: 3000,
-      minEventsForSuggestion: 2
-    });
+    handle?.disconnect();
+    attach();
   }
 </script>
 
@@ -133,23 +157,22 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-5">
+    <div class="grid grid-cols-1 md:grid-cols-5" bind:this={root}>
       <!-- The form a person actually fills in -->
       <div class="md:col-span-3 p-6 sm:p-7 flex flex-col gap-4 border-b md:border-b-0 md:border-r border-slate-100 dark:border-white/5">
         <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[68ch]">
           Type into a field, then stop for a moment. The observation and the
           gate are the real Sentinel from
-          <code class="font-mono text-xs bg-slate-100 dark:bg-white/5 px-1 py-0.5 rounded">@sola-air-ui/core</code>;
-          the suggestion itself is resolved locally so this page needs no API key.
+          <code class="font-mono text-xs bg-slate-100 dark:bg-white/5 px-1 py-0.5 rounded">@sola-air-ui/sentinel</code>,
+          watching this form the same way <code class="font-mono text-xs bg-slate-100 dark:bg-white/5 px-1 py-0.5 rounded">observe()</code>
+          would watch any of yours — no per-field wiring below. The suggestion
+          itself is resolved locally so this page needs no API key.
         </p>
 
         <label class="flex flex-col gap-1.5">
           <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Destination</span>
           <input
             bind:value={fields.destination}
-            oninput={(e) => handleInput('destination', (e.currentTarget as HTMLInputElement).value)}
-            onfocus={() => handleFocus('destination')}
-            onblur={() => handleBlur('destination', fields.destination)}
             placeholder="Lisbon"
             class="px-3.5 py-2.5 text-sm rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all" />
         </label>
@@ -158,9 +181,6 @@
           <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Dates</span>
           <input
             bind:value={fields.dates}
-            oninput={(e) => handleInput('dates', (e.currentTarget as HTMLInputElement).value)}
-            onfocus={() => handleFocus('dates')}
-            onblur={() => handleBlur('dates', fields.dates)}
             placeholder="12–19 October"
             class="px-3.5 py-2.5 text-sm rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all" />
         </label>
@@ -169,9 +189,6 @@
           <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Travelers</span>
           <input
             bind:value={fields.travelers}
-            oninput={(e) => handleInput('travelers', (e.currentTarget as HTMLInputElement).value)}
-            onfocus={() => handleFocus('travelers')}
-            onblur={() => handleBlur('travelers', fields.travelers)}
             placeholder="2 adults"
             class="px-3.5 py-2.5 text-sm rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all" />
         </label>

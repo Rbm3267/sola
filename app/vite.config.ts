@@ -78,6 +78,7 @@ export default defineConfig({
 			'@sola-air-ui/core': path.resolve(__dirname, '../packages/core/src/index.js'),
 			'@sola-air-ui/compiler': path.resolve(__dirname, '../packages/compiler/src/index.js'),
 			'@sola-air-ui/ui': path.resolve(__dirname, '../packages/ui/src'),
+			'@sola-air-ui/sentinel': path.resolve(__dirname, '../packages/sentinel/src/index.js'),
 			// tokens was missing here, so its bare specifier fell through to node
 			// resolution and broke the production build.
 			'@sola-air-ui/tokens': path.resolve(__dirname, '../packages/tokens/src')
