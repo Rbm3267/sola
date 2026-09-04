@@ -5,6 +5,10 @@ __tests__/
 *.spec.*
 smoke_test.*
 
+# Superseded by the plain-JS src/*.js this package now ships (see src/*.d.ts
+# for the types) - kept in the working tree only until they're deleted.
+src/*.ts
+
 # Ignore environment & keys
 .env
 .env.*

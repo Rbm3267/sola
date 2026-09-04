@@ -2,7 +2,7 @@
 
 Sola Behavioral Intent Engine for [Sola AIR](https://sola-air.dev) — real-time implicit UI adaptation based on interaction telemetry (typing velocity, hover dwell, rage-click detection) instead of explicit user settings. 100% client-side: no keystrokes are logged, only local timing vectors, and nothing leaves the device.
 
-> **Experimental.** This package is real, working code, but it currently has no automated test coverage and ships TypeScript source directly rather than a compiled build. Expect the API to move before 1.0.
+> **Experimental.** This package is real, working code, but it currently has no automated test coverage. Expect the API to move before 1.0.
 
 ## Install
 

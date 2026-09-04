@@ -3,14 +3,27 @@
   "version": "0.1.0",
   "description": "Sola Behavioral Intent Engine: Real-time implicit generative UI adaptation based on human interaction telemetry.",
   "type": "module",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
   },
+  "files": [
+    "src/*.js",
+    "src/*.d.ts",
+    "README.md"
+  ],
   "keywords": ["sola", "behavior", "generative-ui", "telemetry", "signals"],
   "author": "Sola Architecture Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbm3267/sola-air"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
